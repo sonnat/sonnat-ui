@@ -12,7 +12,6 @@
 [![license](https://img.shields.io/github/license/sonnat/sonnat-ui?color=EA475B&style=for-the-badge)](https://github.com/sonnat/sonnat-ui/blob/main/LICENSE)
 [![npm latest package](https://img.shields.io/npm/v/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://www.npmjs.com/package/@sonnat/ui)
 [![npm downloads](https://img.shields.io/npm/dm/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://www.npmjs.com/package/@sonnat/ui)
-[![dependencies](https://img.shields.io/librariesio/release/npm/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://github.com/sonnat/sonnat-ui)
 [![minzipped size](https://img.shields.io/bundlephobia/minzip/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://github.com/sonnat/sonnat-ui)
 [![minified size](https://img.shields.io/bundlephobia/min/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://github.com/sonnat/sonnat-ui)
 
