@@ -13,7 +13,6 @@
 [![npm latest package](https://img.shields.io/npm/v/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://www.npmjs.com/package/@sonnat/ui)
 [![npm downloads](https://img.shields.io/npm/dm/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://www.npmjs.com/package/@sonnat/ui)
 [![minzipped size](https://img.shields.io/bundlephobia/minzip/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://github.com/sonnat/sonnat-ui)
-[![minified size](https://img.shields.io/bundlephobia/min/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://github.com/sonnat/sonnat-ui)
 
 </div>
 
@@ -35,7 +34,7 @@ Visit [https://ui.sonnat.design/docs](https://sonnat.design) to view the full do
 
 ## Community
 
-The Next.js community can be found on [GitHub Discussions](https://github.com/sonnat/sonnat-ui/discussions), where you can ask questions, voice ideas, and share your projects.
+The Sonnat-UI community can be found on [Github Discussions](https://github.com/sonnat/sonnat-ui/discussions), where you can ask questions, voice ideas, and share your projects.
 
 To chat with other community members you can join the [Sonnat Discord](https://sonnat.design).
 
