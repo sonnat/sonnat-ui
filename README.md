@@ -10,9 +10,9 @@
 [React](https://reactjs.org/) components components using [Sonnat Design System](https://sonnat.design) for faster web development.
 
 [![license](https://img.shields.io/github/license/sonnat/sonnat-ui?color=EA475B&style=for-the-badge)](https://github.com/sonnat/sonnat-ui/blob/main/LICENSE)
-[![npm latest package](https://img.shields.io/npm/v/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://www.npmjs.com/package/@sonnat/ui)
-[![npm downloads](https://img.shields.io/npm/dm/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://www.npmjs.com/package/@sonnat/ui)
-[![minzipped size](https://img.shields.io/bundlephobia/minzip/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://github.com/sonnat/sonnat-ui)
+[![npm latest package](https://img.shields.io/npm/v/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://www.npmjs.com/package/@mimshins/sonnat)
+[![npm downloads](https://img.shields.io/npm/dm/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://www.npmjs.com/package/@mimshins/sonnat)
+[![minzipped size](https://img.shields.io/bundlephobia/minzip/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://www.npmjs.com/package/@mimshins/sonnat)
 
 </div>
 
@@ -20,25 +20,25 @@
 
 <div align="center">
 
-[![Follow on Twitter](https://img.shields.io/twitter/follow/sonnatdesign?color=EA475B&label=follow%20us%20on%20twitter&style=for-the-badge)](https://twitter.com/sonnatdesign)
+[![Follow us on Twitter](https://img.shields.io/twitter/follow/sonnatdesign?color=EA475B&label=follow%20us%20on%20twitter&style=for-the-badge)](https://twitter.com/sonnatdesign)
 
 </div>
 
-## Getting Started
+### Getting Started
 
-Visit [https://ui.sonnat.design/docs/getting-started](https://sonnat.design) to get started with Sonnat-UI.
+Visit [https://dev.sonnat.design/docs/getting-started](https://sonnat.design) to get started with Sonnat-UI.
 
-## Documentation
+### Documentation
 
-Visit [https://ui.sonnat.design/docs](https://sonnat.design) to view the full documentation.
+Visit [https://dev.sonnat.design/docs](https://sonnat.design) to view the full documentation.
 
-## Community
+### Community
 
 The Sonnat-UI community can be found on [Github Discussions](https://github.com/sonnat/sonnat-ui/discussions), where you can ask questions, voice ideas, and share your projects.
 
 To chat with other community members you can join the [Sonnat Discord](https://sonnat.design).
 
-## Authors
+### Authors
 
 - Mostafa Shamsitabar ([@mimshins](https://twitter.com/mimshins))
 - Mahdi Rahman
