@@ -26,11 +26,11 @@
 
 ### Getting Started
 
-Visit [https://dev.sonnat.design/docs/getting-started](https://sonnat.design) to get started with Sonnat-UI.
+Visit [https://sonnat-ui.dev/docs/getting-started](https://sonnat.design) to get started with Sonnat-UI.
 
 ### Documentation
 
-Visit [https://dev.sonnat.design/docs](https://sonnat.design) to view the full documentation.
+Visit [https://sonnat-ui.dev/docs](https://sonnat.design) to view the full documentation.
 
 ### Community
 
