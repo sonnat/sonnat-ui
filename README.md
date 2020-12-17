@@ -41,4 +41,4 @@ To chat with other community members you can join the [Sonnat Discord](https://s
 ### Authors
 
 - Mostafa Shamsitabar ([@mimshins](https://twitter.com/mimshins))
-- Mahdi Rahman
+- Mahdi Rahman ([@bblndtctv](https://twitter.com/bblndtctv))
