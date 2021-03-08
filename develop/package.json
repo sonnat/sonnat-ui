@@ -1,0 +1,41 @@
+{
+  "name": "develop",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {},
+  "scripts": {
+    "start": "npm-run-all -p build serve",
+    "build": "webpack -w",
+    "serve": "nodemon --ignore ./build --exec babel-node -- server.js",
+    "prod": "cross-env NODE_ENV=production npm run start",
+    "dev": "cross-env NODE_ENV=development npm run start"
+  },
+  "devDependencies": {
+    "@sonnat/ui": "1.0.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "browserslist": {
+    "production": [
+      "cover 95%",
+      "last 4 versions",
+      "not ie <= 9"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md,json,scss}": "prettier --write"
+  }
+}

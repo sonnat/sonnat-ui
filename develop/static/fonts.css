@@ -1,0 +1,236 @@
+@font-face {
+  font-family: "IRANSans";
+  font-style: normal;
+  font-weight: 900;
+  src: url("./font/eot/IRANSansWeb_Black.eot");
+  src: url("./font/eot/IRANSansWeb_Black.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-8 */ url("./font/woff2/IRANSansWeb_Black.woff2") format("woff2"),
+    /* FF39+,Chrome36+, Opera24+*/ url("./font/woff/IRANSansWeb_Black.woff")
+      format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/ url("./font/ttf/IRANSansWeb_Black.ttf")
+      format("truetype");
+}
+
+@font-face {
+  font-family: "IRANSans";
+  font-style: normal;
+  font-weight: bold;
+  src: url("./font/eot/IRANSansWeb_Bold.eot");
+  src: url("./font/eot/IRANSansWeb_Bold.eot?#iefix") format("embedded-opentype"),
+    /* IE6-8 */ url("./font/woff2/IRANSansWeb_Bold.woff2") format("woff2"),
+    /* FF39+,Chrome36+, Opera24+*/ url("./font/woff/IRANSansWeb_Bold.woff")
+      format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/ url("./font/ttf/IRANSansWeb_Bold.ttf")
+      format("truetype");
+}
+
+@font-face {
+  font-family: "IRANSans";
+  font-style: normal;
+  font-weight: 500;
+  src: url("./font/eot/IRANSansWeb_Medium.eot");
+  src: url("./font/eot/IRANSansWeb_Medium.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-8 */ url("./font/woff2/IRANSansWeb_Medium.woff2") format("woff2"),
+    /* FF39+,Chrome36+, Opera24+*/ url("./font/woff/IRANSansWeb_Medium.woff")
+      format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/ url("./font/ttf/IRANSansWeb_Medium.ttf")
+      format("truetype");
+}
+
+@font-face {
+  font-family: "IRANSans";
+  font-style: normal;
+  font-weight: 300;
+  src: url("./font/eot/IRANSansWeb_Light.eot");
+  src: url("./font/eot/IRANSansWeb_Light.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-8 */ url("./font/woff2/IRANSansWeb_Light.woff2") format("woff2"),
+    /* FF39+,Chrome36+, Opera24+*/ url("./font/woff/IRANSansWeb_Light.woff")
+      format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/ url("./font/ttf/IRANSansWeb_Light.ttf")
+      format("truetype");
+}
+
+@font-face {
+  font-family: "IRANSans";
+  font-style: normal;
+  font-weight: 200;
+  src: url("./font/eot/IRANSansWeb_UltraLight.eot");
+  src: url("./font/eot/IRANSansWeb_UltraLight.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-8 */ url("./font/woff2/IRANSansWeb_UltraLight.woff2") format("woff2"),
+    /* FF39+,Chrome36+, Opera24+*/
+      url("./font/woff/IRANSansWeb_UltraLight.woff") format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("./font/ttf/IRANSansWeb_UltraLight.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "IRANSans";
+  font-style: normal;
+  font-weight: normal;
+  src: url("./font/eot/IRANSansWeb.eot");
+  src: url("./font/eot/IRANSansWeb.eot?#iefix") format("embedded-opentype"),
+    /* IE6-8 */ url("./font/woff2/IRANSansWeb.woff2") format("woff2"),
+    /* FF39+,Chrome36+, Opera24+*/ url("./font/woff/IRANSansWeb.woff")
+      format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/ url("./font/ttf/IRANSansWeb.ttf")
+      format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./font/eot/Roboto-Regular-webfont.eot");
+  src: url("./font/eot/Roboto-Regular-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    /* FF39+,Chrome36+, Opera24+*/
+      url("./font/woff/Roboto-Regular-webfont.woff") format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("./font/ttf/Roboto-Regular-webfont.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Roboto";
+  font-style: italic;
+  font-weight: 400;
+  src: url("./font/eot/Roboto-Italic-webfont.eot");
+  src: url("./font/eot/Roboto-Italic-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    /* FF39+,Chrome36+, Opera24+*/ url("./font/woff/Roboto-Italic-webfont.woff")
+      format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("./font/ttf/Roboto-Italic-webfont.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  src: url("./font/eot/Roboto-Medium-webfont.eot");
+  src: url("./font/eot/Roboto-Medium-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    /* FF39+,Chrome36+, Opera24+*/ url("./font/woff/Roboto-Medium-webfont.woff")
+      format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("./font/ttf/Roboto-Medium-webfont.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: italic;
+  font-weight: 500;
+  src: url("./font/eot/Roboto-MediumItalic-webfont.eot");
+  src: url("./font/eot/Roboto-MediumItalic-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    /* FF39+,Chrome36+, Opera24+*/
+      url("./font/woff/Roboto-MediumItalic-webfont.woff") format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("./font/ttf/Roboto-MediumItalic-webfont.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 300;
+  src: url("./font/eot/Roboto-Light-webfont.eot");
+  src: url("./font/eot/Roboto-Light-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    /* FF39+,Chrome36+, Opera24+*/ url("./font/woff/Roboto-Light-webfont.woff")
+      format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("./font/ttf/Roboto-Light-webfont.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: italic;
+  font-weight: 300;
+  src: url("./font/eot/Roboto-LightItalic-webfont.eot");
+  src: url("./font/eot/Roboto-LightItalic-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    /* FF39+,Chrome36+, Opera24+*/
+      url("./font/woff/Roboto-LightItalic-webfont.woff") format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("./font/ttf/Roboto-LightItalic-webfont.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 100;
+  src: url("./font/eot/Roboto-Thin-webfont.eot");
+  src: url("./font/eot/Roboto-Thin-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    /* FF39+,Chrome36+, Opera24+*/ url("./font/woff/Roboto-Thin-webfont.woff")
+      format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("./font/ttf/Roboto-Thin-webfont.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: italic;
+  font-weight: 100;
+  src: url("./font/eot/Roboto-ThinItalic-webfont.eot");
+  src: url("./font/eot/Roboto-ThinItalic-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    /* FF39+,Chrome36+, Opera24+*/
+      url("./font/woff/Roboto-ThinItalic-webfont.woff") format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("./font/ttf/Roboto-ThinItalic-webfont.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  src: url("./font/eot/Roboto-Bold-webfont.eot");
+  src: url("./font/eot/Roboto-Bold-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    /* FF39+,Chrome36+, Opera24+*/ url("./font/woff/Roboto-Bold-webfont.woff")
+      format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("./font/ttf/Roboto-Bold-webfont.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: italic;
+  font-weight: 700;
+  src: url("./font/eot/Roboto-BoldItalic-webfont.eot");
+  src: url("./font/eot/Roboto-BoldItalic-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    /* FF39+,Chrome36+, Opera24+*/
+      url("./font/woff/Roboto-BoldItalic-webfont.woff") format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("./font/ttf/Roboto-BoldItalic-webfont.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 900;
+  src: url("./font/eot/Roboto-Black-webfont.eot");
+  src: url("./font/eot/Roboto-Black-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    /* FF39+,Chrome36+, Opera24+*/ url("./font/woff/Roboto-Black-webfont.woff")
+      format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("./font/ttf/Roboto-Black-webfont.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: italic;
+  font-weight: 900;
+  src: url("./font/eot/Roboto-BlackItalic-webfont.eot");
+  src: url("./font/eot/Roboto-BlackItalic-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    /* FF39+,Chrome36+, Opera24+*/
+      url("./font/woff/Roboto-BlackItalic-webfont.woff") format("woff"),
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+      url("./font/ttf/Roboto-BlackItalic-webfont.ttf") format("truetype");
+}
