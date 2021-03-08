@@ -2,7 +2,7 @@
 
 React component library using Sonnat Design System to build faster, elegant, and accessible web applications.
 
-### Installation
+## Installation
 
 To add `@sonnat/ui` to your project, run:
 
@@ -34,6 +34,6 @@ And make sure to add `sonnat-font-icon` like so:
 import "@sonnat/ui/static/sonnat-font-icon.min.css";
 ```
 
-### Documentation
+## Documentation
 
 Visit [https://sonnat.dev/docs](https://sonnat.design) to view the full documentation.
