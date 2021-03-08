@@ -7,7 +7,7 @@
 
 <div align="center">
 
-[React](https://reactjs.org/) component library using [Sonnat Design System](https://sonnat.design) for faster web development.
+[React](https://reactjs.org/) component library using [Sonnat Design System](https://sonnat.design) to build faster, elegant, and accessible web applications.
 
 [![license](https://img.shields.io/github/license/sonnat/sonnat-ui?color=EA475B&style=for-the-badge)](https://github.com/sonnat/sonnat-ui/blob/main/LICENSE)
 [![npm latest package](https://img.shields.io/npm/v/@mimshins/sonnat?color=EA475B&style=for-the-badge)](https://www.npmjs.com/package/@mimshins/sonnat)
@@ -40,5 +40,5 @@ To chat with other community members you can join the [Sonnat Discord](https://s
 
 ### Authors
 
-- Mostafa Shamsitabar ([@mimshins](https://twitter.com/mimshins))
-- Mahdi Rahman ([@bblndtctv](https://twitter.com/bblndtctv))
+- Mostafa Shamsitabar - lead engineer / maintainer ([@mimshins](https://twitter.com/mimshins))
+- Mahdi Rahman - design system manager ([@bblndtctv](https://twitter.com/bblndtctv))
