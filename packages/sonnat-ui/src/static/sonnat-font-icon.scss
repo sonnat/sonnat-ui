@@ -2,14 +2,14 @@
 
 @font-face {
   font-family: "#{$sonnat-icon-font-family}";
-  src: url("#{$sonnat-icon-font-path}/#{$sonnat-icon-font-family}.eot?1zdfes");
-  src: url("#{$sonnat-icon-font-path}/#{$sonnat-icon-font-family}.eot?1zdfes#iefix")
+  src: url("#{$sonnat-icon-font-path}/#{$sonnat-icon-font-family}.eot?h0154k");
+  src: url("#{$sonnat-icon-font-path}/#{$sonnat-icon-font-family}.eot?h0154k#iefix")
       format("embedded-opentype"),
-    url("#{$sonnat-icon-font-path}/#{$sonnat-icon-font-family}.ttf?1zdfes")
+    url("#{$sonnat-icon-font-path}/#{$sonnat-icon-font-family}.ttf?h0154k")
       format("truetype"),
-    url("#{$sonnat-icon-font-path}/#{$sonnat-icon-font-family}.woff?1zdfes")
+    url("#{$sonnat-icon-font-path}/#{$sonnat-icon-font-family}.woff?h0154k")
       format("woff"),
-    url("#{$sonnat-icon-font-path}/#{$sonnat-icon-font-family}.svg?1zdfes##{$sonnat-icon-font-family}")
+    url("#{$sonnat-icon-font-path}/#{$sonnat-icon-font-family}.svg?h0154k##{$sonnat-icon-font-family}")
       format("svg");
   font-weight: normal;
   font-style: normal;
@@ -32,21 +32,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.sonnat-icon-car-engine {
-  &:before {
-    content: $sonnat-icon-car-engine;
-  }
-}
-.sonnat-icon-car-hydraulics {
-  &:before {
-    content: $sonnat-icon-car-hydraulics;
-  }
-}
-.sonnat-icon-car-tires {
-  &:before {
-    content: $sonnat-icon-car-tires;
-  }
-}
 .sonnat-icon-account-cash-o {
   &:before {
     content: $sonnat-icon-account-cash-o;
@@ -232,6 +217,11 @@
     content: $sonnat-icon-building-variant-o;
   }
 }
+.sonnat-icon-building {
+  &:before {
+    content: $sonnat-icon-building;
+  }
+}
 .sonnat-icon-burger-menu {
   &:before {
     content: $sonnat-icon-burger-menu;
@@ -317,9 +307,19 @@
     content: $sonnat-icon-car-engine-o;
   }
 }
+.sonnat-icon-car-engine {
+  &:before {
+    content: $sonnat-icon-car-engine;
+  }
+}
 .sonnat-icon-car-hydraulics-o {
   &:before {
     content: $sonnat-icon-car-hydraulics-o;
+  }
+}
+.sonnat-icon-car-hydraulics {
+  &:before {
+    content: $sonnat-icon-car-hydraulics;
   }
 }
 .sonnat-icon-car-o {
@@ -345,6 +345,11 @@
 .sonnat-icon-car-tires-o {
   &:before {
     content: $sonnat-icon-car-tires-o;
+  }
+}
+.sonnat-icon-car-tires {
+  &:before {
+    content: $sonnat-icon-car-tires;
   }
 }
 .sonnat-icon-car {
@@ -642,6 +647,11 @@
     content: $sonnat-icon-dice-multiple-o;
   }
 }
+.sonnat-icon-discord {
+  &:before {
+    content: $sonnat-icon-discord;
+  }
+}
 .sonnat-icon-divar {
   &:before {
     content: $sonnat-icon-divar;
@@ -862,6 +872,11 @@
     content: $sonnat-icon-github-cat;
   }
 }
+.sonnat-icon-github {
+  &:before {
+    content: $sonnat-icon-github;
+  }
+}
 .sonnat-icon-gitlab {
   &:before {
     content: $sonnat-icon-gitlab;
@@ -910,6 +925,16 @@
 .sonnat-icon-history {
   &:before {
     content: $sonnat-icon-history;
+  }
+}
+.sonnat-icon-home-o {
+  &:before {
+    content: $sonnat-icon-home-o;
+  }
+}
+.sonnat-icon-home {
+  &:before {
+    content: $sonnat-icon-home;
   }
 }
 .sonnat-icon-house-inspection {
@@ -1337,6 +1362,16 @@
     content: $sonnat-icon-rotate-right;
   }
 }
+.sonnat-icon-school-o {
+  &:before {
+    content: $sonnat-icon-school-o;
+  }
+}
+.sonnat-icon-school {
+  &:before {
+    content: $sonnat-icon-school;
+  }
+}
 .sonnat-icon-script-o {
   &:before {
     content: $sonnat-icon-script-o;
@@ -1482,6 +1517,11 @@
     content: $sonnat-icon-store-o;
   }
 }
+.sonnat-icon-store {
+  &:before {
+    content: $sonnat-icon-store;
+  }
+}
 .sonnat-icon-table-of-contents {
   &:before {
     content: $sonnat-icon-table-of-contents;
@@ -1505,6 +1545,16 @@
 .sonnat-icon-telegram-o {
   &:before {
     content: $sonnat-icon-telegram-o;
+  }
+}
+.sonnat-icon-text-square-o {
+  &:before {
+    content: $sonnat-icon-text-square-o;
+  }
+}
+.sonnat-icon-text-square {
+  &:before {
+    content: $sonnat-icon-text-square;
   }
 }
 .sonnat-icon-texture-square-o {
@@ -1640,6 +1690,11 @@
 .sonnat-icon-weather-sunny-o {
   &:before {
     content: $sonnat-icon-weather-sunny-o;
+  }
+}
+.sonnat-icon-weather-sunny {
+  &:before {
+    content: $sonnat-icon-weather-sunny;
   }
 }
 .sonnat-icon-z-axis-rotate-counter-clockwise {
