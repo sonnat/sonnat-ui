@@ -47,7 +47,9 @@
     "prebuild": "rimraf ./dist && rimraf ./umd.entry.js && yarn build:umd-entry",
     "postbuild": "yarn size:check",
     "prerelease": "yarn build",
-    "release": "npm publish dist --tag latest"
+    "release": "npm publish ./dist --tag latest --access public",
+    "release:beta": "npm publish ./dist --tag beta --access public",
+    "release:alpha": "npm publish ./dist --tag alpha --access public"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17",

@@ -82,11 +82,7 @@ async function createPackageFile() {
     ...packageDataOther,
     main: "./index.js",
     module: "./esm/index.js",
-    types: "./index.d.ts",
-    publishConfig: {
-      access: "public",
-      registry: "https://registry.npmjs.org/"
-    }
+    types: "./index.d.ts"
   };
   const targetPath = path.resolve(buildPath, "./package.json");
 
