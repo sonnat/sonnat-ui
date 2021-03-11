@@ -1,5 +1,10 @@
 import * as React from "react";
 
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  ref?: React.Ref<HTMLInputElement>;
+}
+
 type BaseProps<P = {}> = P & {
   /**
    * Append to the classNames applied to the component so you can override or
@@ -31,13 +36,13 @@ type BaseProps<P = {}> = P & {
    *
    * This can be used to add a prefix, a suffix or an action to the leading of your input.
    */
-  leadingAdornment: React.ReactNode;
+  leadingAdornment?: React.ReactNode;
   /**
    * Leading adornment for this component.
    *
    * This can be used to add a prefix, a suffix or an action to the trailing of your input.
    */
-  trailingAdornment: React.ReactNode;
+  trailingAdornment?: React.ReactNode;
   /**
    * If `true`, the TextField will be rounded.
    * @default false
@@ -94,9 +99,7 @@ type BaseProps<P = {}> = P & {
    */
   type?: "text" | "email" | "password";
   /** The properties applied to the `input` element. */
-  inputProps?: {
-    ref: React.Ref<HTMLInputElement>;
-  } & React.HTMLAttributes<HTMLInputElement>;
+  inputProps?: InputProps;
   /**
    * The Callback fires when the state has changed.
    *

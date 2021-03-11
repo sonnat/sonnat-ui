@@ -1,5 +1,10 @@
 import * as React from "react";
 
+export interface InputProps
+  extends React.SelectHTMLAttributes<HTMLSelectElement | HTMLDivElement> {
+  ref?: React.Ref<HTMLSelectElement | HTMLDivElement>;
+}
+
 type BaseProps<P = {}> = P & {
   /** The content of the component. */
   children?: React.ReactNode;
@@ -103,9 +108,7 @@ type BaseProps<P = {}> = P & {
   /**
    * The properties applied to the `input` element.
    */
-  inputProps?: {
-    ref: React.Ref<HTMLSelectElement | HTMLDivElement>;
-  } & React.HTMLAttributes<HTMLSelectElement | HTMLDivElement>;
+  inputProps?: InputProps;
   /**
    * The Callback fires when the menu has opened.
    */

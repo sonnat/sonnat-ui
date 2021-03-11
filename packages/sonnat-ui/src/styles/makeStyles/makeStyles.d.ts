@@ -1,14 +1,14 @@
-/* eslint-disable no-unused-vars */
-import { ClassNameMap, Styles, MakeStylesOptions } from "../../utils/typings";
 import { DefaultTheme } from "../defaultTheme";
+import { Styles, StyleSheetFactoryOptions, Classes } from "jss";
+
+interface MakeStylesOptions extends StyleSheetFactoryOptions {
+  name?: string;
+}
 
 export default function makeStyles<
   Theme = DefaultTheme,
-  Props extends object = {},
-  ClassKey extends string = string
+  C extends string = string
 >(
-  styles: Styles<Theme, Props, ClassKey>,
-  options?: MakeStylesOptions
-): keyof Props extends never
-  ? (data?: any) => ClassNameMap<ClassKey>
-  : (data: Props) => ClassNameMap<ClassKey>;
+  styles: Styles<C> | ((theme: Theme) => Styles<C>),
+  options?: MakeStylesOptions<Theme>
+): (data?: unknown) => Classes<C>;

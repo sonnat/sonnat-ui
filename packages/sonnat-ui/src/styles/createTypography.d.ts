@@ -53,11 +53,6 @@ export interface VariantProps {
     Record<Extract<VariantSizes, "small">, OnlyNormalCSSRules>;
 }
 
-export interface TypographyUtils {
-  pxToRem: (size: number) => string;
-  remToPx: (size: number) => string;
-}
-
 export interface FontWeights {
   light: number;
   regular: number;
@@ -86,13 +81,13 @@ export interface Typography {
   fontSize: number;
   htmlFontSize: number;
   useText: (textProperties: {
-    fontSize: CSSProperties["fontSize"];
-    fontWeight: CSSProperties["fontWeight"];
-    lineHeight: CSSProperties["lineHeight"];
-    color: CSSProperties["color"];
+    fontSize?: string | number;
+    fontWeight?: CSSProperties["fontWeight"];
+    lineHeight?: string | number;
+    color?: CSSProperties["color"];
   }) => CSSProperties;
-  pxToRem: Pick<TypographyUtils, "pxToRem">;
-  remToPx: Pick<TypographyUtils, "remToPx">;
+  pxToRem: (size: number) => string;
+  remToPx: (size: number) => string;
   variants: VariantProps;
 }
 

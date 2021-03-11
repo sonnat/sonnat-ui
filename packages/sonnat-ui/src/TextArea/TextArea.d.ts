@@ -1,5 +1,10 @@
 import * as React from "react";
 
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLTextAreaElement> {
+  ref?: React.Ref<HTMLTextAreaElement>;
+}
+
 type BaseProps<P = {}> = P & {
   /**
    * Append to the classNames applied to the component so you can override or
@@ -63,9 +68,7 @@ type BaseProps<P = {}> = P & {
    */
   hasError?: boolean;
   /** The properties applied to the `input` element. */
-  inputProps?: {
-    ref: React.Ref<HTMLTextAreaElement>;
-  } & React.HTMLAttributes<HTMLTextAreaElement>;
+  inputProps?: InputProps;
   /**
    * The Callback fires when the state has changed.
    *

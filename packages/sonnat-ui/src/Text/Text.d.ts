@@ -10,7 +10,7 @@ export type TextTypeMap<P = {}, N extends React.ElementType = "span"> = {
     /**
      * Applies the theme typography styles.
      */
-    variant:
+    variant?:
       | "h1"
       | "h2"
       | "h3"

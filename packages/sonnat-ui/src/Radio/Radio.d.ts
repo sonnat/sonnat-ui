@@ -1,5 +1,15 @@
 import * as React from "react";
 
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  ref?: React.Ref<HTMLInputElement>;
+}
+
+export interface LabelProps
+  extends React.LabelHTMLAttributes<HTMLLabelElement> {
+  ref?: React.Ref<HTMLLabelElement>;
+}
+
 type BaseProps<P = {}> = P & {
   /**
    * Append to the classNames applied to the component so you can override or
@@ -71,13 +81,9 @@ type BaseProps<P = {}> = P & {
   // eslint-disable-next-line no-unused-vars
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   /** The properties applied to the `input` element. */
-  inputProps?: {
-    ref: React.Ref<HTMLInputElement>;
-  } & React.HTMLAttributes<HTMLInputElement>;
+  inputProps?: InputProps;
   /** The properties applied to the `label` element. */
-  labelProps?: {
-    ref: React.Ref<HTMLLabelElement>;
-  } & React.LabelHTMLAttributes<HTMLLabelElement>;
+  labelProps?: LabelProps;
 };
 export type RadioProps<P = {}> = BaseProps<P> &
   Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;

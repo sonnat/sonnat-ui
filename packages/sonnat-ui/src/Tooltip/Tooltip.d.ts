@@ -13,7 +13,7 @@ type BaseProps<P = {}> = P & {
   /**
    * The text content of the tooltip.
    */
-  text: string;
+  text?: string;
   /**
    * Tooltip placement. It will be auto updated when it collide with the window.
    * @default "top"

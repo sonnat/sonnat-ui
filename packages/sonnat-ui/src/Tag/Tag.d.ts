@@ -9,7 +9,7 @@ type BaseProps<P = {}> = P & {
   /**
    * The label of the Tag.
    */
-  label: string;
+  label?: string;
   /**
    * The icon placed before the label.
    * The component will use it as a `sonnat-icon` identifier.
