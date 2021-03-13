@@ -1,7 +1,14 @@
 /* eslint-disable no-unused-vars */
 import { CSSProperties } from "react";
 import { DefaultTheme } from "../../styles/defaultTheme";
-import { StyleSheetFactoryOptions } from "jss";
+import {
+  Jss as DefaultJss,
+  StyleSheetFactoryOptions as JssStyleSheetFactoryOptions,
+  Styles as JssStyles,
+  Classes as JssClasses,
+  GenerateId as JssGenerateId,
+  SheetsRegistry as JssSheetsRegistry
+} from "jss";
 
 type GenerateStringUnion<T> = Extract<
   {
@@ -35,59 +42,17 @@ export type OverridableStringUnion<T, U = {}> = GenerateStringUnion<
   Overwrite<T, U>
 >;
 
-export type PropsFunc<Props extends object, T> = (props: Props) => T;
+export type GenerateClassName = JssGenerateId;
+export type SheetsRegistry = JssSheetsRegistry;
+export type Jss = DefaultJss;
+export type StyleSheetFactoryOptions = JssStyleSheetFactoryOptions;
 
-export type BaseCreateCSSProperties<Props extends object = {}> = {
-  [P in keyof CSSProperties]:
-    | CSSProperties[P]
-    | PropsFunc<Props, CSSProperties[P]>;
-};
-
-export interface CreateCSSProperties<Props extends object = {}>
-  extends BaseCreateCSSProperties<Props> {
-  // Allow pseudo selectors and media queries
-  [k: string]:
-    | BaseCreateCSSProperties<Props>[keyof BaseCreateCSSProperties<Props>]
-    | CreateCSSProperties<Props>;
-}
-
-/**
- * This is basically the API of JSS. It defines a Map<string, CSS>,
- * where
- * - the `keys` are the class (names) that will be created
- * - the `values` are objects that represent CSS rules (`React.CSSProperties`).
- *
- * if only `CSSProperties` are matched `Props` are inferred to `any`
- */
-export type StyleRules<
-  Props extends object = {},
-  ClassKey extends string = string
-> = Record<
-  ClassKey,
-  | CSSProperties
-  | CreateCSSProperties<Props>
-  | PropsFunc<Props, CreateCSSProperties<Props>>
->;
-
-export type StyleRulesCallback<
-  Theme,
-  Props extends object,
-  ClassKey extends string = string
-> = (theme: Theme) => StyleRules<Props, ClassKey>;
-
-export type Styles<
-  Theme,
-  Props extends object,
-  ClassKey extends string = string
-> = StyleRules<Props, ClassKey> | StyleRulesCallback<Theme, Props, ClassKey>;
-
-export type ClassNameMap<ClassKey extends string = string> = Record<
-  ClassKey,
-  string
->;
-
-export interface MakeStylesOptions<Theme = DefaultTheme>
-  extends StyleSheetFactoryOptions {
-  defaultTheme?: Theme;
+export interface MakeStylesOptions extends StyleSheetFactoryOptions {
   name?: string;
 }
+
+export type Styles<Theme = DefaultTheme, C extends string = string> =
+  | JssStyles<C>
+  | ((theme: Theme) => JssStyles<C>);
+
+export type Classes<C extends string = string> = JssClasses<C>;

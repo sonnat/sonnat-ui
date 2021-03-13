@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 import * as React from "react";
-import { SheetsRegistry, GenerateId } from "jss";
+import { GenerateClassName, SheetsRegistry } from "../../utils/typings";
 
 export interface ServerContextValue {
   sheetsRegistry: SheetsRegistry;
-  generateServerClassName: GenerateId;
+  generateServerClassName: GenerateClassName;
 }
 
 export declare const ServerContext: React.Context<ServerContextValue>;
@@ -12,7 +12,7 @@ export declare const ServerContext: React.Context<ServerContextValue>;
 export interface ServerProviderProps {
   children: React.ReactNode;
   sheetsRegistry: SheetsRegistry;
-  generateServerClassName: GenerateId;
+  generateServerClassName: GenerateClassName;
 }
 
 export default function ServerProvider(

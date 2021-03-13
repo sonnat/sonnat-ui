@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { DefaultTheme } from "../defaultTheme";
 
-export default function useDarkMode<T = DefaultTheme>(
+export default function useDarkMode<Theme = DefaultTheme>(
   isDarkMode: boolean,
-  theme: T
-): T;
+  theme: Theme
+): Theme;

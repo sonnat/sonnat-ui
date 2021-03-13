@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
-import { DefaultTheme } from "../defaultTheme";
 import * as React from "react";
+import { DefaultTheme } from "../defaultTheme";
 
 export interface ThemeProviderProps<Theme = DefaultTheme> {
   children: React.ReactNode;
-  theme: Partial<Theme> | ((outerTheme: Theme) => Theme);
+  theme: NonNullable<Theme> | ((outerTheme: Theme) => NonNullable<Theme>);
 }
 
-export default function ThemeProvider<T = DefaultTheme>(
-  props: ThemeProviderProps<T>
-): React.ReactElement<ThemeProviderProps<T>>;
+export default function ThemeProvider<Theme = DefaultTheme>(
+  props: ThemeProviderProps<Theme>
+): React.ReactElement<ThemeProviderProps<Theme>>;

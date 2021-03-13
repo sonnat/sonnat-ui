@@ -10,6 +10,11 @@ import { ThemeProvider as JssThemeProvider } from "react-jss";
 function ThemeProvider(props) {
   const { children, theme } = props;
 
+  if (theme == null)
+    throw new Error(
+      "[Sonnat]: `theme` prop is missing from the <ThemeProvider>!"
+    );
+
   return <JssThemeProvider theme={theme}>{children}</JssThemeProvider>;
 }
 

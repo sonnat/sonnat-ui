@@ -1,3 +1,5 @@
 import { JssOptions } from "jss";
 
-export default function jssPreset(): Pick<JssOptions, "plugins">;
+export type JssPreset = Pick<JssOptions, "plugins">;
+
+export default function jssPreset(): JssPreset;

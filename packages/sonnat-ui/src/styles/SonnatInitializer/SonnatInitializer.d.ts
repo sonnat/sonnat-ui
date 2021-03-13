@@ -1,5 +1,5 @@
-import { GenerateId, Jss } from "jss";
 import * as React from "react";
+import { GenerateClassName, Jss } from "../../utils/typings";
 import { DefaultTheme } from "../defaultTheme";
 
 export interface SonnatInitializerOptions<Theme = DefaultTheme> {
@@ -14,7 +14,7 @@ export interface SonnatInitializerOptions<Theme = DefaultTheme> {
    */
   disableGeneration?: boolean;
   /** JSS's class name generator. */
-  generateClassName?: GenerateId;
+  generateClassName?: GenerateClassName;
   /**
    * By default, the styles are injected last in the <head> element of the page.
    * As a result, they gain more specificity than any other style sheet.

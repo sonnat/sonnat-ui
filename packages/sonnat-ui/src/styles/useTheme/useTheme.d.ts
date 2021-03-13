@@ -1,3 +1,3 @@
 import { DefaultTheme } from "../defaultTheme";
 
-export default function useTheme<T = DefaultTheme>(): T;
+export default function useTheme<Theme = DefaultTheme>(): Theme;

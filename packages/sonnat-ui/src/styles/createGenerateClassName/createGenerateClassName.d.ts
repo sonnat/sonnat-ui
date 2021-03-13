@@ -1,4 +1,4 @@
-import { GenerateId } from "jss";
+import { GenerateClassName } from "../../utils/typings";
 
 export interface GenerateClassNameOptions {
   disableGlobal?: boolean;
@@ -9,4 +9,4 @@ export interface GenerateClassNameOptions {
 export default function createGenerateClassName(
   // eslint-disable-next-line no-unused-vars
   options?: GenerateClassNameOptions
-): GenerateId;
+): GenerateClassName;
