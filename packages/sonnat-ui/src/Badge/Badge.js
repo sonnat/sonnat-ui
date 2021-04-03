@@ -72,7 +72,7 @@ const useStyles = makeStyles(
         backgroundColor: !darkMode
           ? colors.primary.origin
           : colors.primary.light,
-        color: colors.getConstrastColorOf(
+        color: colors.getContrastColorOf(
           !darkMode ? colors.primary.origin : colors.primary.light
         )
       },
@@ -80,7 +80,7 @@ const useStyles = makeStyles(
         backgroundColor: !darkMode
           ? colors.secondary.origin
           : colors.secondary.light,
-        color: colors.getConstrastColorOf(
+        color: colors.getContrastColorOf(
           !darkMode ? colors.secondary.origin : colors.secondary.light
         )
       },

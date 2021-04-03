@@ -479,7 +479,7 @@ const RangeSlider = React.memo(
             )
           : null,
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [widthPerStep]
+      [widthPerStep, localClass.step]
     );
 
     const calculateValue = track => {

@@ -41,7 +41,7 @@ const useStyles = makeStyles(
           lightness: -4
         })
       },
-      text: colors.getConstrastColorOf(filledPrimaryMainBg)
+      text: colors.getContrastColorOf(filledPrimaryMainBg)
     };
 
     const filledSecondary = {
@@ -56,7 +56,7 @@ const useStyles = makeStyles(
           lightness: -4
         })
       },
-      text: colors.getConstrastColorOf(filledSecondaryMainBg)
+      text: colors.getContrastColorOf(filledSecondaryMainBg)
     };
 
     return {

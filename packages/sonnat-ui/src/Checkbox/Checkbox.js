@@ -176,7 +176,7 @@ const useStyles = makeStyles(
           fill: "none",
           strokeLinecap: "round",
           strokeLinejoin: "round",
-          stroke: colors.getConstrastColorOf(
+          stroke: colors.getContrastColorOf(
             !darkMode ? colors.primary.origin : colors.primary.light
           ),
           strokeWidth: "2",
@@ -186,7 +186,7 @@ const useStyles = makeStyles(
         },
         "& line": {
           opacity: 0,
-          stroke: colors.getConstrastColorOf(
+          stroke: colors.getContrastColorOf(
             !darkMode ? colors.primary.origin : colors.primary.light
           )
         }

@@ -26,7 +26,7 @@ export default function createVariantColors(theme) {
         ? colors.createBlackColor({ alpha: 0.6 })
         : colors.createWhiteColor({ alpha: 0.5 })
     },
-    text: colors.getConstrastColorOf(filledDefaultMainBg)
+    text: colors.getContrastColorOf(filledDefaultMainBg)
   };
 
   const filledPrimary = {
@@ -41,7 +41,7 @@ export default function createVariantColors(theme) {
         lightness: -4
       })
     },
-    text: colors.getConstrastColorOf(filledPrimaryMainBg)
+    text: colors.getContrastColorOf(filledPrimaryMainBg)
   };
 
   const filledSecondary = {
@@ -56,7 +56,7 @@ export default function createVariantColors(theme) {
         lightness: -4
       })
     },
-    text: colors.getConstrastColorOf(filledSecondaryMainBg)
+    text: colors.getContrastColorOf(filledSecondaryMainBg)
   };
 
   const outlinedDefault = {

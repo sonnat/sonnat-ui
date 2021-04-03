@@ -31,12 +31,12 @@ const useStyles = makeStyles(
 
     const filledPrimary = {
       background: filledPrimaryMainBg,
-      text: colors.getConstrastColorOf(filledPrimaryMainBg)
+      text: colors.getContrastColorOf(filledPrimaryMainBg)
     };
 
     const filledSecondary = {
       background: filledSecondaryMainBg,
-      text: colors.getConstrastColorOf(filledSecondaryMainBg)
+      text: colors.getContrastColorOf(filledSecondaryMainBg)
     };
 
     return {

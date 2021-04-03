@@ -36,7 +36,7 @@ const useStyles = makeStyles(
           lightness: -4
         })
       },
-      text: colors.getConstrastColorOf(mainBackground)
+      text: colors.getContrastColorOf(mainBackground)
     };
 
     return {

@@ -38,7 +38,7 @@ const useStyles = makeStyles(
           lightness: -4
         })
       },
-      text: colors.getConstrastColorOf(filledCheckedMainBg)
+      text: colors.getContrastColorOf(filledCheckedMainBg)
     };
 
     return {
