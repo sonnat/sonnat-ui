@@ -4,11 +4,11 @@ import usePreviousValue from "../../utils/usePreviousValue";
 import defaultTheme from "../defaultTheme";
 
 export default function useDarkMode(isDarkMode = false, theme = defaultTheme) {
-  const prevState = usePreviousValue(isDarkMode);
   const cachedTheme = React.useRef(theme);
+  const prevState = usePreviousValue(isDarkMode);
 
   const newTheme = React.useMemo(() => {
-    if (prevState != null && isDarkMode !== prevState) {
+    if (isDarkMode !== prevState) {
       return {
         ...cachedTheme.current,
         colors: {
