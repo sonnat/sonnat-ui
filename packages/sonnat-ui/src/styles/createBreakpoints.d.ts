@@ -30,7 +30,7 @@ export type BreakpointsInputs = Partial<
   {
     unit: string;
     step: number;
-  } & Pick<Breakpoints, "values">
+  } & Partial<Pick<Breakpoints, "values">>
 >;
 
 export default function createBreakpoints(

@@ -51,20 +51,20 @@ export interface Colors {
   createSecondaryColor: (hsla: HslaInputType) => string;
   createBlackColor: (hsla: HslaInputType) => string;
   createWhiteColor: (hsla: HslaInputType) => string;
-  getConstrastColorOf: (background: ColorInputType) => string;
+  getContrastColorOf: (background: ColorInputType) => string;
 }
 
 export interface ColorsInputs {
-  primary?: SystemColorVariant;
-  secondary?: SystemColorVariant;
-  error?: SystemColorVariant;
-  warning?: SystemColorVariant;
-  info?: SystemColorVariant;
-  success?: SystemColorVariant;
+  primary: Partial<SystemColorVariant>;
+  secondary: Partial<SystemColorVariant>;
+  error: Partial<SystemColorVariant>;
+  warning: Partial<SystemColorVariant>;
+  info: Partial<SystemColorVariant>;
+  success: Partial<SystemColorVariant>;
   contrastThreshold?: number;
-  text?: Partial<TextType>;
+  text: Partial<TextType>;
   divider?: string;
-  background?: Partial<BackgroundType>;
+  background: Partial<BackgroundType>;
 }
 
 declare const dark: DarkBaseColors;

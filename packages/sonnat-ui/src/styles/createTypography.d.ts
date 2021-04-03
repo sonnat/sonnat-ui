@@ -68,11 +68,11 @@ export interface FontFamilies {
 }
 
 export interface TypographyInputs {
-  fontSize: number;
-  htmlFontSize: number;
-  ltrFontFamily: string;
-  rtlFontFamily: string;
-  monospaceFontFamily: string;
+  fontSize?: number;
+  htmlFontSize?: number;
+  ltrFontFamily?: string;
+  rtlFontFamily?: string;
+  monospaceFontFamily?: string;
 }
 
 export interface Typography {

@@ -9,6 +9,8 @@ export interface ZIndexes {
   popover: number;
 }
 
-export interface ZIndexesInputs extends Partial<ZIndexes> {}
+export interface ZIndexesInputs extends Partial<ZIndexes> {
+  [P: string]: any;
+}
 
 export default function createZIndexes(zIndexes: ZIndexesInputs): ZIndexes;

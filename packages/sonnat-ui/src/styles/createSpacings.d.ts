@@ -4,6 +4,8 @@ export interface Spacings {
   space: number;
 }
 
-export interface SpacingsInputs extends Partial<Spacings> {}
+export interface SpacingsInputs extends Partial<Spacings> {
+  [P: string]: any;
+}
 
 export default function createSpacings(spacings: SpacingsInputs): Spacings;
