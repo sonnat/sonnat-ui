@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import createClass from "classnames";
 import makeStyles from "../styles/makeStyles";
@@ -220,11 +220,7 @@ const Text = React.memo(
 
     const localClass = useStyles();
 
-    const variantKey = useMemo(
-      () => getCorrectVariantKey(variant, size, weight, localClass),
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      [variant, size, weight]
-    );
+    const variantKey = getCorrectVariantKey(variant, size, weight, localClass);
 
     return (
       <HTMLTag

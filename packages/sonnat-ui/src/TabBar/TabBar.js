@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import createClass from "classnames";
 import { withResizeDetector } from "react-resize-detector";
@@ -200,23 +200,20 @@ const TabBar = React.memo(
       end: false
     });
 
-    const indicatorProps = useMemo(() => {
-      return {
-        className: localClass.indicatorSlider,
-        style: {
-          backgroundColor: indicatorState.bgColor,
-          left: indicatorState.x,
-          transform: `translateY(-100%) scaleX(${indicatorState.scaleX})`,
-          WebkitTransform: `translateY(-100%) scaleX(${indicatorState.scaleX})`,
-          MozTransform: `translateY(-100%) scaleX(${indicatorState.scaleX})`,
-          msTransform: `translateY(-100%) scaleX(${indicatorState.scaleX})`
-        },
-        ref: node => {
-          indicatorRef.current = node;
-        }
-      };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [indicatorState]);
+    const indicatorProps = {
+      className: localClass.indicatorSlider,
+      style: {
+        backgroundColor: indicatorState.bgColor,
+        left: indicatorState.x,
+        transform: `translateY(-100%) scaleX(${indicatorState.scaleX})`,
+        WebkitTransform: `translateY(-100%) scaleX(${indicatorState.scaleX})`,
+        MozTransform: `translateY(-100%) scaleX(${indicatorState.scaleX})`,
+        msTransform: `translateY(-100%) scaleX(${indicatorState.scaleX})`
+      },
+      ref: node => {
+        indicatorRef.current = node;
+      }
+    };
 
     const [value, setValue] = useControlled(
       activeTab,
