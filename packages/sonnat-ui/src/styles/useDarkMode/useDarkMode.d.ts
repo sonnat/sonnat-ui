@@ -3,5 +3,5 @@ import { DefaultTheme } from "../defaultTheme";
 
 export default function useDarkMode<Theme = DefaultTheme>(
   isDarkMode: boolean,
-  theme: Theme
+  theme?: Theme
 ): Theme;
