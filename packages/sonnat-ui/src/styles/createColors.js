@@ -47,30 +47,6 @@ export const light = {
   }
 };
 
-export const getConstrastColorOf = background => {
-  const contrastForeground =
-    calculateContrastRatio(background, dark.text.primary) >= contrastThreshold
-      ? dark.text.primary
-      : light.text.primary;
-
-  if (process.env.NODE_ENV !== "production") {
-    const contrast = calculateContrastRatio(background, contrastForeground);
-
-    if (contrast < 3) {
-      // eslint-disable-next-line no-console
-      console.error(
-        [
-          `Sonnat: The contrast ratio of ${contrast}:1 for ${contrastForeground} on ${background}`,
-          "falls below the WCAG recommended absolute minimum contrast ratio of 3:1.",
-          "https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast"
-        ].join("\n")
-      );
-    }
-  }
-
-  return contrastForeground;
-};
-
 const defaultSystemColors = {
   primary: {
     light: pallete.pink[300],
@@ -174,6 +150,7 @@ export default (colors, themeMode = "light") => {
     warning: warningInput = defaultSystemColors.warning,
     info: infoInput = defaultSystemColors.info,
     success: successInput = defaultSystemColors.success,
+    contrastThreshold: contrastThresholdInput = contrastThreshold,
     ...otherColors
   } = colors;
 
@@ -193,6 +170,31 @@ export default (colors, themeMode = "light") => {
   const createPrimaryColor = change => changeColor(primary.origin, change);
   const createSecondaryColor = change => changeColor(secondary.origin, change);
 
+  const getContrastColorOf = background => {
+    const contrastForeground =
+      calculateContrastRatio(background, dark.text.primary) >=
+      contrastThresholdInput
+        ? dark.text.primary
+        : light.text.primary;
+
+    if (process.env.NODE_ENV !== "production") {
+      const contrast = calculateContrastRatio(background, contrastForeground);
+
+      if (contrast < 3) {
+        // eslint-disable-next-line no-console
+        console.error(
+          [
+            `Sonnat: The contrast ratio of ${contrast}:1 for ${contrastForeground} on ${background}`,
+            "falls below the WCAG recommended absolute minimum contrast ratio of 3:1.",
+            "https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast"
+          ].join("\n")
+        );
+      }
+    }
+
+    return contrastForeground;
+  };
+
   return {
     ...deepMerge(
       {
@@ -207,12 +209,12 @@ export default (colors, themeMode = "light") => {
         createBlackColor,
         createSecondaryColor,
         createWhiteColor,
-        contrastThreshold,
-        getConstrastColorOf,
-        ...(isDark ? dark : light)
+        contrastThreshold: contrastThresholdInput,
+        getContrastColorOf
       },
       otherColors
     ),
+    ...(isDark ? dark : light),
     pallete,
     white,
     black
