@@ -42,7 +42,9 @@ export default function SonnatInitializer(props) {
   );
 
   if (nested) {
-    throw new Error("[Sonnat]: You cannot use nested `<SonnatInitializer>`!");
+    throw new Error(
+      "[Sonnat]: You cannot use `<SonnatInitializer>` as a nested provider!"
+    );
   }
 
   if (!isSsr && generateServerClassName) {
@@ -106,7 +108,6 @@ export default function SonnatInitializer(props) {
         jss={jss}
         generateId={generateId}
         disableStylesGeneration={disableGeneration}
-        injectFirst={injectFirst}
       >
         <ThemeProvider theme={theme}>{children}</ThemeProvider>
       </JssProvider>
