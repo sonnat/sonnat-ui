@@ -46,7 +46,7 @@ const useStyles = makeStyles(
           : { left: pxToRem(32) }),
         direction,
         fontFamily: fontFamily[direction],
-        appearance: "none",
+        appearance: "none !important",
         textDecoration: "none",
         position: "fixed",
         bottom: pxToRem(32),

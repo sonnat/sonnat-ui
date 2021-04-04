@@ -81,7 +81,7 @@ const reset = theme => ({
     borderStyle: "none"
   },
   button: {
-    WebkitAppearance: "button"
+    appearance: "button"
   },
   input: {
     overflow: "visible"
@@ -99,13 +99,13 @@ const reset = theme => ({
     overflow: "auto"
   },
   '[type="button"]': {
-    WebkitAppearance: "button"
+    appearance: "button"
   },
   '[type="reset"]': {
-    WebkitAppearance: "button"
+    appearance: "button"
   },
   '[type="submit"]': {
-    WebkitAppearance: "button"
+    appearance: "button"
   },
   "button::moz-focus-inner": {
     borderStyle: "none",
@@ -164,14 +164,14 @@ const reset = theme => ({
     height: "auto"
   },
   '[type="search"]': {
-    WebkitAppearance: "textfield",
+    appearance: "textfield",
     outlineOffset: "-2px"
   },
   '[type="search"]::webkit-search-decoration': {
-    WebkitAppearance: "none"
+    appearance: "none"
   },
   "::webkit-file-upload-button": {
-    WebkitAppearance: "button",
+    appearance: "button",
     font: "inherit"
   },
   details: {

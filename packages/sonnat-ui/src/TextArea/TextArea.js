@@ -48,9 +48,7 @@ const useStyles = makeStyles(
         resize: "none",
         padding: [[pxToRem(8), pxToRem(16)]],
         boxShadow: `0 0 0 0 ${colors.transparent}`,
-        WebkitAppearance: "none",
-        MozAppearance: "none",
-        appearance: "none",
+        appearance: "none !important",
         "&::-webkit-input-placeholder": useText({
           color: colors.text.hint
         }),

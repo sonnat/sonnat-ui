@@ -27,7 +27,7 @@ const useStyles = makeStyles(
         justifyContent: "center",
         position: "relative",
         padding: [[0, pxToRem(24)]],
-        WebkitAppearance: "none",
+        appearance: "none !important",
         cursor: "pointer",
         transition: "250ms ease",
         "&:hover": {

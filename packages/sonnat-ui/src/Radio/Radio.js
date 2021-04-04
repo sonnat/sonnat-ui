@@ -100,7 +100,7 @@ const useStyles = makeStyles(
         margin: 0,
         zIndex: "1",
         cursor: "inherit",
-        WebkitAppearance: "none",
+        appearance: "none !important",
         WebkitTapHighlightColor: "rgba(0, 0, 0, 0) !important"
       },
       button: {

@@ -57,9 +57,7 @@ const useStyles = makeStyles(
         flex: [[1, 1]],
         minWidth: 0,
         height: "100%",
-        WebkitAppearance: "none",
-        MozAppearance: "none",
-        appearance: "none",
+        appearance: "none !important",
         backgroundColor: colors.transparent
       },
       helperRow: {

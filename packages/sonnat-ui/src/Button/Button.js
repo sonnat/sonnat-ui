@@ -41,7 +41,7 @@ const useStyles = makeStyles(
         direction,
         fontFamily: fontFamily[direction],
         flexShrink: 0,
-        appearance: "none",
+        appearance: "none !important",
         textDecoration: "none",
         borderRadius: pxToRem(4),
         cursor: "pointer",

@@ -68,7 +68,7 @@ const useStyles = makeStyles(
         cursor: "inherit",
         opacity: 0,
         margin: 0,
-        WebkitAppearance: "none",
+        appearance: "none !important",
         WebkitTapHighlightColor: "rgba(0, 0, 0, 0) !important"
       },
       button: {
