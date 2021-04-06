@@ -51,21 +51,21 @@ const reset = theme => ({
     textDecoration: "underline dotted"
   },
   b: {
-    fontWeight: "bolder"
+    fontWeight: theme.typography.fontWeight.bold
   },
   strong: {
-    fontWeight: "bolder"
+    fontWeight: theme.typography.fontWeight.bold
   },
   code: {
-    fontFamily: "monospace, monospace",
+    fontFamily: theme.typography.fontFamily.monospace,
     fontSize: "1em"
   },
   kbd: {
-    fontFamily: "monospace, monospace",
+    fontFamily: theme.typography.fontFamily.monospace,
     fontSize: "1em"
   },
   samp: {
-    fontFamily: "monospace, monospace",
+    fontFamily: theme.typography.fontFamily.monospace,
     fontSize: "1em"
   },
   small: {
