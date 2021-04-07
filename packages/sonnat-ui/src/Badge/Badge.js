@@ -103,7 +103,7 @@ const useStyles = makeStyles(
       topLeft: {
         top: 0,
         left: 0,
-        "&$rectangularOverlapping": { top: "10%", left: "10%" },
+        "&$rectangularOverlapping": { top: "0", left: "0" },
         "&$circularOverlapping": { top: "15%", left: "15%" },
         "&$visible": { transform: "scale(1) translate(-50%, -50%)" },
         "&:not($visible)": { transform: "scale(0) translate(-50%, -50%)" }
@@ -111,7 +111,7 @@ const useStyles = makeStyles(
       topRight: {
         top: 0,
         right: 0,
-        "&$rectangularOverlapping": { top: "10%", right: "10%" },
+        "&$rectangularOverlapping": { top: "0", right: "0" },
         "&$circularOverlapping": { top: "15%", right: "15%" },
         "&$visible": { transform: "scale(1) translate(50%, -50%)" },
         "&:not($visible)": { transform: "scale(0) translate(50%, -50%)" }
@@ -119,7 +119,7 @@ const useStyles = makeStyles(
       bottomLeft: {
         bottom: 0,
         left: 0,
-        "&$rectangularOverlapping": { bottom: "10%", left: "10%" },
+        "&$rectangularOverlapping": { bottom: "0", left: "0" },
         "&$circularOverlapping": { bottom: "15%", left: "15%" },
         "&$visible": { transform: "scale(1) translate(-50%, 50%)" },
         "&:not($visible)": { transform: "scale(0) translate(-50%, 50%)" }
@@ -127,7 +127,7 @@ const useStyles = makeStyles(
       bottomRight: {
         bottom: 0,
         right: 0,
-        "&$rectangularOverlapping": { bottom: "10%", right: "10%" },
+        "&$rectangularOverlapping": { bottom: "0", right: "0" },
         "&$circularOverlapping": { bottom: "15%", right: "15%" },
         "&$visible": { transform: "scale(1) translate(50%, 50%)" },
         "&:not($visible)": { transform: "scale(0) translate(50%, 50%)" }
@@ -142,8 +142,8 @@ const Badge = React.memo(
     const {
       className,
       textContent,
-      parentProps,
-      childShape,
+      parentProps: parentPropsProp,
+      childShape = "rectangular",
       children: childrenProp,
       horizontalPosition = "right",
       verticalPosition = "top",
@@ -153,6 +153,8 @@ const Badge = React.memo(
       visible = true,
       ...otherProps
     } = props;
+
+    const { className: parentClassName, ...parentProps } = parentPropsProp;
 
     const localClass = useStyles();
 
@@ -186,14 +188,14 @@ const Badge = React.memo(
           className={createClass(
             localClass.root,
             localClass.relative,
+            parentClassName,
             className
           )}
           {...parentProps}
         >
           {createStandaloneBadge(
             createClass(positionClass, {
-              [localClass[`${childShape}Overlapping`]]:
-                childShape != null && hasValidChildShape
+              [localClass[`${childShape}Overlapping`]]: hasValidChildShape
             }),
             true
           )}
@@ -215,6 +217,7 @@ const Badge = React.memo(
             localClass.standalone,
             localClass.root,
             classes,
+            hasParent ? undefined : parentClassName,
             className,
             {
               [localClass.visible]: isVisible,
