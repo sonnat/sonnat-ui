@@ -2,7 +2,7 @@ import * as React from "react";
 
 type BaseProps<P = {}> = P & {
   /**
-   * If provided the badge will be added relative to this node.
+   * If provided the badge will be wrapped around this node.
    */
   children?: React.ReactElement;
   /**
@@ -33,13 +33,14 @@ type BaseProps<P = {}> = P & {
    */
   verticalPosition?: "top" | "bottom";
   /**
-   * The shape of the child the badge will overlap.
+   * The shape of the child the badge will be wrapped around.
    *
    * Set this for better positioning.
+   * * @default "rectangular"
    */
   childShape?: "rectangular" | "circular";
   /**
-   * The size of the badge when `variant="dot"`.
+   * The size of the badge when `variant="dotted"`.
    * @default "medium"
    */
   dotSize?: "large" | "medium" | "small";
