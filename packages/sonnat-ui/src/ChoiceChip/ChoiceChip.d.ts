@@ -19,6 +19,11 @@ type BaseProps<P = {}> = P & {
    */
   size?: "small" | "medium";
   /**
+   * The color of the chip.
+   * @default "default"
+   */
+  color?: "default" | "primary" | "secondary";
+  /**
    * The variant of the chip.
    * @default "filled"
    */
@@ -29,10 +34,20 @@ type BaseProps<P = {}> = P & {
    */
   rounded?: boolean;
   /**
-   * The default state of `checked`. Use when the component is not controlled.
+   * If `true`, the chip will be disabled.
    * @default false
    */
-  defaultChecked?: boolean;
+  disabled?: boolean;
+  /**
+   * The default state of `selected`. Use when the component is not controlled.
+   * @default false
+   */
+  defaultSelected?: boolean;
+  /**
+   * If `true`, the chip will be selected.
+   * @default false
+   */
+  selected?: boolean;
   /**
    * The Callback fires when the chip has selected/deselected.
    *
