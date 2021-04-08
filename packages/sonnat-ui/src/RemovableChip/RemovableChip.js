@@ -140,9 +140,32 @@ const useStyles = makeStyles(
       disabled: {
         pointerEvents: "none",
         "& $removeButton": { pointerEvents: "none" },
-        color: [colors.text.disabled, "!important"],
-        "& $icon, & $removeButtonIcon": {
-          color: [colors.text.disabled, "!important"]
+        "& $icon, & $removeButtonIcon": { pointerEvents: "none" },
+        "&:hover": {
+          // Reset on touch devices, it doesn't add specificity
+          "@media (hover: none)": {
+            backgroundColor: colors.transparent
+          }
+        }
+      },
+      filled: {
+        "&$disabled": {
+          backgroundColor: !darkMode
+            ? colors.pallete.grey[100]
+            : colors.pallete.grey[900],
+          color: !darkMode
+            ? colors.createBlackColor({ alpha: 0.32 })
+            : colors.createWhiteColor({ alpha: 0.12 }),
+          "& $icon, & $removeButtonIcon": {
+            color: !darkMode
+              ? colors.createBlackColor({ alpha: 0.32 })
+              : colors.createWhiteColor({ alpha: 0.12 })
+          }
+        }
+      },
+      outlined: {
+        "&$disabled": {
+          backgroundColor: colors.transparent
         }
       },
       filledDefault: {
@@ -173,12 +196,10 @@ const useStyles = makeStyles(
         border: `${pxToRem(1)} solid ${colors.divider}`,
         color: colors.text.secondary,
         "& $icon, & $removeButtonIcon": { color: colors.text.secondary },
-        "&$disabled": {
-          border: `${pxToRem(1)} solid ${
-            !darkMode
-              ? colors.createBlackColor({ alpha: 0.04 })
-              : colors.createWhiteColor({ alpha: 0.04 })
-          }`
+        "&$disabled, &[disabled]": {
+          borderColor: colors.divider,
+          color: colors.text.disabled,
+          "& $icon, & $removeButtonIcon": { color: colors.text.disabled }
         }
       },
       outlinedPrimary: {
@@ -211,11 +232,17 @@ const useStyles = makeStyles(
           }
         },
         "&$disabled": {
-          border: `${pxToRem(1)} solid ${
-            !darkMode
-              ? colors.createBlackColor({ alpha: 0.04 })
-              : colors.createWhiteColor({ alpha: 0.04 })
-          }`
+          color: !darkMode
+            ? colors.createPrimaryColor({ alpha: 0.32 })
+            : changeColor(colors.primary.light, { alpha: 0.32 }),
+          "& $icon, & $removeButtonIcon": {
+            color: !darkMode
+              ? colors.createPrimaryColor({ alpha: 0.32 })
+              : changeColor(colors.primary.light, { alpha: 0.32 })
+          },
+          borderColor: !darkMode
+            ? colors.createPrimaryColor({ alpha: 0.12 })
+            : changeColor(colors.primary.light, { alpha: 0.12 })
         }
       },
       outlinedSecondary: {
@@ -248,11 +275,17 @@ const useStyles = makeStyles(
           }
         },
         "&$disabled": {
-          border: `${pxToRem(1)} solid ${
-            !darkMode
-              ? colors.createBlackColor({ alpha: 0.04 })
-              : colors.createWhiteColor({ alpha: 0.04 })
-          }`
+          color: !darkMode
+            ? colors.createSecondaryColor({ alpha: 0.32 })
+            : changeColor(colors.secondary.light, { alpha: 0.32 }),
+          "& $icon, & $removeButtonIcon": {
+            color: !darkMode
+              ? colors.createSecondaryColor({ alpha: 0.32 })
+              : changeColor(colors.secondary.light, { alpha: 0.32 })
+          },
+          borderColor: !darkMode
+            ? colors.createSecondaryColor({ alpha: 0.12 })
+            : changeColor(colors.secondary.light, { alpha: 0.12 })
         }
       }
     };
@@ -266,7 +299,6 @@ const RemovableChip = React.memo(
       className,
       label,
       onRemove,
-      onClick,
       leadingIcon,
       rounded = false,
       disabled = false,
@@ -283,10 +315,7 @@ const RemovableChip = React.memo(
     const hasValidSize = allowedSizes.includes(size);
 
     const removeHandler = e => {
-      if (!disabled) {
-        if (onRemove) onRemove(e);
-        if (onClick) onClick(e);
-      }
+      if (!disabled && onRemove) onRemove(e);
     };
 
     return label ? (
@@ -295,11 +324,11 @@ const RemovableChip = React.memo(
         ref={ref}
         className={createClass(localClass.root, className, {
           [localClass[size]]: hasValidSize,
+          [localClass[variant]]: hasValidVariant,
           [localClass[camelCase(`${variant}-${color}`)]]:
             hasValidColor && hasValidVariant,
           [localClass.rounded]: rounded,
-          [localClass.disabled]: disabled,
-          [localClass.iconed]: leadingIcon
+          [localClass.disabled]: disabled
         })}
         {...otherProps}
       >
@@ -313,6 +342,7 @@ const RemovableChip = React.memo(
         <button
           className={localClass.removeButton}
           onClick={removeHandler}
+          disabled={disabled}
           tabIndex={disabled ? -1 : 0}
         >
           <Icon
@@ -334,7 +364,6 @@ RemovableChip.propTypes = {
   rounded: PropTypes.bool,
   disabled: PropTypes.bool,
   onRemove: PropTypes.func,
-  onClick: PropTypes.func,
   color: PropTypes.oneOf(allowedColors),
   variant: PropTypes.oneOf(allowedVariants),
   size: PropTypes.oneOf(allowedSizes)
