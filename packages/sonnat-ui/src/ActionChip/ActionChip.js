@@ -106,8 +106,35 @@ const useStyles = makeStyles(
       rounded: {
         borderRadius: pxToRem(16)
       },
-      filled: {},
-      outlined: {},
+      disabled: {
+        pointerEvents: "none",
+        "&:hover": {
+          // Reset on touch devices, it doesn't add specificity
+          "@media (hover: none)": {
+            backgroundColor: colors.transparent
+          }
+        }
+      },
+      filled: {
+        "&$disabled": {
+          backgroundColor: !darkMode
+            ? colors.pallete.grey[100]
+            : colors.pallete.grey[900],
+          color: !darkMode
+            ? colors.createBlackColor({ alpha: 0.32 })
+            : colors.createWhiteColor({ alpha: 0.12 }),
+          "& $icon": {
+            color: !darkMode
+              ? colors.createBlackColor({ alpha: 0.32 })
+              : colors.createWhiteColor({ alpha: 0.12 })
+          }
+        }
+      },
+      outlined: {
+        "&$disabled": {
+          backgroundColor: colors.transparent
+        }
+      },
       filledDefault: {
         backgroundColor: !darkMode
           ? colors.createBlackColor({ alpha: 0.04 })
@@ -180,6 +207,11 @@ const useStyles = makeStyles(
             ? colors.createBlackColor({ alpha: 0.12 })
             : colors.createWhiteColor({ alpha: 0.12 })
         },
+        "&$disabled": {
+          borderColor: colors.divider,
+          color: colors.text.disabled,
+          "& $icon": { color: colors.text.disabled }
+        },
         "&:hover": {
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": {
@@ -208,6 +240,19 @@ const useStyles = makeStyles(
             ? colors.createPrimaryColor({ alpha: 0.24 })
             : changeColor(colors.primary.light, { alpha: 0.24 })
         },
+        "&$disabled": {
+          color: !darkMode
+            ? colors.createPrimaryColor({ alpha: 0.32 })
+            : changeColor(colors.primary.light, { alpha: 0.32 }),
+          "& $icon": {
+            color: !darkMode
+              ? colors.createPrimaryColor({ alpha: 0.32 })
+              : changeColor(colors.primary.light, { alpha: 0.32 })
+          },
+          borderColor: !darkMode
+            ? colors.createPrimaryColor({ alpha: 0.12 })
+            : changeColor(colors.primary.light, { alpha: 0.12 })
+        },
         "&:hover": {
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": {
@@ -234,6 +279,19 @@ const useStyles = makeStyles(
             ? colors.createSecondaryColor({ alpha: 0.24 })
             : changeColor(colors.secondary.light, { alpha: 0.24 })
         },
+        "&$disabled": {
+          color: !darkMode
+            ? colors.createSecondaryColor({ alpha: 0.32 })
+            : changeColor(colors.secondary.light, { alpha: 0.32 }),
+          "& $icon": {
+            color: !darkMode
+              ? colors.createSecondaryColor({ alpha: 0.32 })
+              : changeColor(colors.secondary.light, { alpha: 0.32 })
+          },
+          borderColor: !darkMode
+            ? colors.createSecondaryColor({ alpha: 0.12 })
+            : changeColor(colors.secondary.light, { alpha: 0.12 })
+        },
         "&:hover": {
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": {
@@ -255,6 +313,7 @@ const ActionChip = React.memo(
       size = "medium",
       variant = "filled",
       color = "default",
+      disabled = false,
       rounded = false,
       ...otherProps
     } = props;
@@ -269,14 +328,15 @@ const ActionChip = React.memo(
       <div
         ref={ref}
         role="button"
-        tabIndex={0}
+        aria-disabled={disabled ? "true" : "false"}
+        tabIndex={disabled ? -1 : 0}
         className={createClass(localClass.root, className, {
           [localClass[size]]: hasValidSize,
           [localClass[variant]]: hasValidVariant,
           [localClass[camelCase(`${variant}-${color}`)]]:
             hasValidColor && hasValidVariant,
           [localClass.rounded]: rounded,
-          [localClass.iconed]: leadingIcon
+          [localClass.disabled]: disabled
         })}
         {...otherProps}
       >
@@ -298,6 +358,7 @@ ActionChip.propTypes = {
   label: PropTypes.string.isRequired,
   className: PropTypes.string,
   rounded: PropTypes.bool,
+  disabled: PropTypes.bool,
   leadingIcon: PropTypes.string,
   size: PropTypes.oneOf(allowedSizes),
   color: PropTypes.oneOf(allowedColors),

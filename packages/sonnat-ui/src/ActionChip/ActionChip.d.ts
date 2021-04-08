@@ -33,6 +33,11 @@ type BaseProps<P = {}> = P & {
    * @default false
    */
   rounded?: boolean;
+  /**
+   * If `true`, the chip will be disabled.
+   * @default false
+   */
+  disabled?: boolean;
 };
 
 export type ActionChipProps<P = {}> = BaseProps<P> &
