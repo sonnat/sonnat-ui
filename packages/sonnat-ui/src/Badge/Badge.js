@@ -142,7 +142,7 @@ const Badge = React.memo(
     const {
       className,
       textContent,
-      parentProps: parentPropsProp,
+      parentProps: parentPropsProp = {},
       childShape = "rectangular",
       children: childrenProp,
       horizontalPosition = "right",
