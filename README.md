@@ -18,17 +18,15 @@
 
 ### Getting Started
 
-Visit [https://sonnat.dev/docs/getting-started](https://sonnat.design) to get started with Sonnat-UI.
+Visit [https://sonnat.dev/docs/installation](https://sonnat-dev.vercel.app/docs/installation) to get started with Sonnat-UI.
 
 ### Documentation
 
-Visit [https://sonnat.dev/docs](https://sonnat.design) to view the full documentation.
+Visit [https://sonnat.dev/docs](https://sonnat-dev.vercel.app/docs) to view the full documentation.
 
 ### Community
 
 The Sonnat-UI community can be found on [Github Discussions](https://github.com/sonnat/sonnat-ui/discussions), where you can ask questions, voice ideas, and share your projects.
-
-To chat with other community members you can join the [Sonnat Discord](https://sonnat.design).
 
 ### Authors
 
