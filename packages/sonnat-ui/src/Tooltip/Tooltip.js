@@ -9,7 +9,8 @@ import {
   getOffsetFromWindow,
   onNextFrame,
   useForkRef,
-  setRef
+  setRef,
+  usePreviousValue
 } from "../utils";
 
 const componentName = "Tooltip";
@@ -185,13 +186,6 @@ const useStyles = makeStyles(
           }
         }
       },
-      dark: {
-        "& $container": {
-          backgroundColor: colors.pallete.grey[900],
-          "&:after": { backgroundColor: colors.pallete.grey[900] }
-        },
-        "& $text": { color: colors.white }
-      },
       floated: { transform: `translate(0, ${pxToRem(-8)}) scale(1)` },
       top: { transform: `translate(0, ${pxToRem(-8)}) scale(1)` },
       left: { transform: `translate(${pxToRem(-8)}, 0) scale(1)` },
@@ -206,7 +200,7 @@ const getMirrorPlacement = placement => {
   switch (placement) {
     case "top":
       return "bottom";
-    case "bottm":
+    case "bottom":
       return "top";
     case "left":
       return "right";
@@ -286,8 +280,8 @@ const createAnchorElement = (
 const checkBoundingCollision = (x, y, w, h, placement, triggersOn) => {
   const minX = 0;
   const minY = 0;
-  const maxX = window.innerWidth;
-  const maxY = window.innerHeight;
+  const maxX = document.body.scrollWidth;
+  const maxY = document.body.scrollHeight;
 
   const state = { horizontal: true, vertical: true };
 
@@ -400,7 +394,6 @@ const Tooltip = React.memo(
       open: openProp,
       style = {},
       tailed = false,
-      dark = false,
       placement = "top",
       triggersOn = "hover",
       ...otherProps
@@ -408,20 +401,22 @@ const Tooltip = React.memo(
 
     const localClass = useStyles();
 
-    const uniqueId = React.useRef(`tooltip${generateUniqueString()}`);
-
     const isInitialized = React.useRef(false);
+    const uniqueId = React.useRef(`tooltip${generateUniqueString()}`);
 
     const tooltipRef = React.useRef();
     const anchorRef = React.useRef();
     const tooltipRefHandle = useForkRef(tooltipRef, ref);
 
+    const prevPlacement = usePreviousValue(placement);
+
     const [isMounted, setMounted] = React.useState(false);
+    const [currentPlacement, setCurrentPlacement] = React.useState(placement);
+
     const [currentPosition, setCurrentPositon] = React.useState({
       top: 0,
       left: 0
     });
-    const [currentPlacement, setCurrentPlacement] = React.useState(placement);
 
     const [open, setOpen] = useControlled(
       openProp,
@@ -455,6 +450,19 @@ const Tooltip = React.memo(
         });
       }
     }, [isMounted, placement]);
+
+    React.useEffect(() => {
+      if (isMounted && isInitialized.current && prevPlacement !== placement) {
+        const { newPlacement, newPosition } = positioning(
+          placement,
+          tooltipRef.current,
+          anchorRef.current
+        );
+
+        setCurrentPositon(newPosition);
+        setCurrentPlacement(newPlacement);
+      }
+    }, [isMounted, placement, prevPlacement]);
 
     const anchorElement = createAnchorElement(
       children,
@@ -550,7 +558,6 @@ const Tooltip = React.memo(
               [localClass[currentPlacement]]: triggersOn !== "mouseMove",
               [localClass.tailed]: triggersOn !== "mouseMove" && tailed,
               [localClass.open]: open,
-              [localClass.dark]: dark,
               [localClass.floated]: triggersOn === "mouseMove"
             })}
             {...otherProps}
@@ -573,7 +580,6 @@ Tooltip.propTypes = {
   text: PropTypes.string.isRequired,
   children: PropTypes.element.isRequired,
   className: PropTypes.string,
-  dark: PropTypes.bool,
   open: PropTypes.bool,
   defaultOpen: PropTypes.bool,
   tailed: PropTypes.bool,
