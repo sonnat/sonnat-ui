@@ -26,24 +26,31 @@ type BaseProps<P = {}> = P & {
   triggersOn?: "hover" | "click" | "mouseMove";
   /**
    * 	If `true`, the tooltip will have an arrow tail.
-   * @default true
+   * @default false
    */
   tailed?: boolean;
   /**
-   * 	If `true`, the tooltip will be dark.
-   * @default true
-   */
-  dark?: boolean;
-  /**
    * 	If `true`, the tooltip will be open.
-   * @default true
    */
   open?: boolean;
   /**
    * 	If `true`, the tooltip will be open on mount. Use when the component is not controlled.
-   * @default true
    */
   defaultOpen?: boolean;
+  /**
+   * The Callback fires when the component requests to be closed.
+   *
+   * @param {object} event The event source of the callback.
+   */
+  // eslint-disable-next-line no-unused-vars
+  onClose?: (event: React.SyntheticEvent | Event) => void;
+  /**
+   * The Callback fires when the component requests to be opened.
+   *
+   * @param {object} event The event source of the callback.
+   */
+  // eslint-disable-next-line no-unused-vars
+  onOpen?: (event: React.SyntheticEvent | Event) => void;
 };
 
 export type TooltipProps<P = {}> = BaseProps<P> &

@@ -18,7 +18,7 @@ export type DividerTypeMap<P = {}, N extends React.ElementType = "hr"> = {
      */
     spaced?: boolean;
     /**
-     * If `true`, the divider will be 3-dots instead of a straight line.
+     * If `true`, the divider will be rendered as 3-dots instead of a straight line.
      *
      * You can't use `dotted` along with `vertical`!
      * @default false
