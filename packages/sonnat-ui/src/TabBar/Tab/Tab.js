@@ -6,7 +6,7 @@ import makeStyles from "../../styles/makeStyles";
 import { changeColor } from "../../styles/colorUtils";
 import TabBarContext from "../context";
 
-const componentName = "Tab";
+export const componentName = "Tab";
 
 const useStyles = makeStyles(
   theme => {
