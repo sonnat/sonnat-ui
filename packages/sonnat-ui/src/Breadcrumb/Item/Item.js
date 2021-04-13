@@ -32,6 +32,7 @@ const useStyles = makeStyles(
         ...(direction === "rtl"
           ? { marginLeft: pxToRem(4) }
           : { marginRight: pxToRem(4) }),
+        "& > a": { textDecoration: "none", color: "inherit" },
         "&:hover": {
           color: colors.text.primary,
           "&:after": {
@@ -52,8 +53,8 @@ const useStyles = makeStyles(
           flexShrink: "0",
           transition: "color 360ms ease, transform 360ms ease",
           ...(direction === "rtl"
-            ? { content: icons.variable.sonnatIconChevronLeft }
-            : { content: icons.variable.sonnatIconChevronRight })
+            ? { content: icons.variable.chevronLeft }
+            : { content: icons.variable.chevronRight })
         }
       }
     };
