@@ -95,8 +95,6 @@ const Breadcrumb = React.memo(
         console.error(
           "Sonnat: The Breadcrumb component doesn't accept a Fragment as a child."
         );
-
-        return null;
       }
 
       if (child.type.displayName !== childName) {
@@ -104,8 +102,6 @@ const Breadcrumb = React.memo(
         console.error(
           "Sonnat: The Breadcrumb component only accepts `Breadcrumb/Item` as a child."
         );
-
-        return null;
       }
 
       return React.cloneElement(child, {
