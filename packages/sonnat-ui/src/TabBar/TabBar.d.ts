@@ -8,45 +8,36 @@ type BaseProps<P = {}> = P & {
    * extend the styles.
    */
   className?: string;
-  /**
-   * The currently selected Tab.
-   * If you don't want any selected Tab, you can set this property to `""`.
-   */
+  /** The currently selected tab. */
   activeTab?: number | string;
-  /** The default selected Tab. Use when the component is not controlled. */
+  /** The default selected tab. Use when the component is not controlled. */
   defaultActiveTab?: number | string;
   /**
-   * If `true`, will invoke scrolling properties and
-   * allow for horizontally scrolling (or swiping) of the TabBar.
-   * @default false
-   */
-  scrollable?: boolean;
-  /**
-   * If `true`, will make the TabBar grow to use all the available space.
-   * @default false
-   */
-  fluid?: boolean;
-  /**
-   * If `true`, will make the TabBar and the Tabs dense.
+   * If `true`, will make the tabbar and the tabs dense.
    * @default false
    */
   dense?: boolean;
   /**
-   * Determine the behavior of scroll handles when TabBar is set to `scrollable`:
+   * Determine the behavior of scroll handles when tabbar is set to `scrollable`:
    * - `auto` will only present them when not all the items are visible.
    * - `off` will never present them.
    * @default "auto"
    */
   scrollHandleVisibility?: "auto" | "off";
   /**
+   * The variant of the tabbar.
+   * @default "fluid"
+   */
+  variant?: "scrollable" | "fluid";
+  /**
    * The Callback fires when the state has changed.
    *
-   * @param {React.SyntheticEvent} event The event source of the callback.
+   * @param {React.SyntheticEvent | Event} event The event source of the callback.
    * @param {number | string} identifier The identifier of the active Tab.
    */
   onChange?: (
     /* eslint-disable no-unused-vars */
-    event: React.SyntheticEvent,
+    event: React.SyntheticEvent | Event,
     identifier: number | string
     /* eslint-enable no-unused-vars */
   ) => void;
