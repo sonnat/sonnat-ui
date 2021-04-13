@@ -22,7 +22,7 @@ const useStyles = makeStyles(
           color: colors.text.secondary
         }),
         ...useDisableUserSelect(),
-        flexGrow: "1",
+        width: "100%",
         flexShrink: "0",
         paddingRight: pxToRem(16),
         paddingLeft: pxToRem(16),
@@ -30,6 +30,7 @@ const useStyles = makeStyles(
         alignItems: "center",
         minHeight: pxToRem(40),
         cursor: "pointer",
+        overflow: "hidden",
         transition: "color 240ms ease, background-color 240ms ease",
         "&:hover": {
           backgroundColor: !darkMode
