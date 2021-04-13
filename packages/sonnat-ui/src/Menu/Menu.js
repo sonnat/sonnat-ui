@@ -52,11 +52,13 @@ const useStyles = makeStyles(
         position: "absolute",
         zIndex: zIndexes.popover,
         direction,
-        fontFamily: fontFamily[direction]
+        fontFamily: fontFamily[direction],
+        outline: "none"
       },
       container: {
         marginTop: pxToRem(4),
         width: "100%",
+        height: "100%",
         borderRadius: pxToRem(4),
         boxShadow: !darkMode ? boxShadow.lightMode : boxShadow.darkMode,
         backgroundColor: !darkMode
@@ -73,6 +75,7 @@ const useStyles = makeStyles(
       },
       list: {
         width: "100%",
+        height: "100%",
         maxHeight: pxToRem(320),
         overflow: "auto",
         position: "relative",
@@ -99,7 +102,19 @@ const useStyles = makeStyles(
         justifyContent: "center",
         textAlign: "center"
       },
-      dense: { "& $list": { maxHeight: pxToRem(256) } }
+      searchable: {
+        "&$dense $list": {
+          height: `calc(100% - ${pxToRem(32)})`
+        },
+        "&:not($dense) $list": {
+          height: `calc(100% - ${pxToRem(40)})`
+        }
+      },
+      dense: {
+        "& $list": {
+          maxHeight: pxToRem(256)
+        }
+      }
     };
   },
   { name: `Sonnat${componentName}` }
@@ -151,6 +166,7 @@ const Menu = React.memo(
       searchPlaceholder: searchPlaceholderProp,
       searchEmptyStatementText: searchEmptyStatementTextProp,
       placement: placementProp,
+      style = {},
       role = "menu",
       open: openState = false,
       dense = false,
@@ -329,7 +345,6 @@ const Menu = React.memo(
 
         setMeta(newMeta);
       }
-
       reset();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [openState]);
@@ -452,9 +467,13 @@ const Menu = React.memo(
             tabIndex="-1"
             ref={ref}
             className={createClass(localClass.root, className, {
-              [localClass.dense]: dense
+              [localClass.dense]: dense,
+              [localClass.searchable]: searchable
             })}
-            style={meta}
+            style={{
+              ...style,
+              ...meta
+            }}
             {...otherProps}
           >
             {openState && (
@@ -466,7 +485,7 @@ const Menu = React.memo(
                       variant="filled"
                       placeholder={searchPlaceholder}
                       value={searchValue}
-                      size={dense ? "small" : undefined}
+                      size={dense ? "small" : "medium"}
                       onChange={throttle(e => {
                         searchChangeListener(e);
                       }, 250)}
@@ -506,6 +525,7 @@ Menu.propTypes = {
   ]),
   placement: PropTypes.oneOf(allowedPlacements),
   minWidth: PropTypes.number,
+  style: PropTypes.object,
   className: PropTypes.string,
   role: PropTypes.string,
   searchPlaceholder: PropTypes.string,
