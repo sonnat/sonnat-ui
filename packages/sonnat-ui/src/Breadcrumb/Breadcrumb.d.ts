@@ -13,7 +13,7 @@ type BaseProps<P = {}> = P & {
    */
   className?: string;
   /**
-   * If `true`, breadcrumb will only show the previous step.
+   * If `true`, the breadcrumb will only show the previous step.
    *
    * It's useful when rendering on mobile devices.
    * @default false
