@@ -15,6 +15,8 @@ type BaseProps<P = {}> = P & {
   disabled?: boolean;
   /**
    * If `true`, the item will be hidden.
+   * @internal
+   * @ignore
    * @default false
    */
   hide?: boolean;
