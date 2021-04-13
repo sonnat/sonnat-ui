@@ -1,17 +1,20 @@
-import React, { useEffect, useState, useRef } from "react";
-import PropTypes from "prop-types";
 import createClass from "classnames";
-import { withResizeDetector } from "react-resize-detector";
 import throttle from "lodash.throttle";
+import PropTypes from "prop-types";
+import React, { useEffect, useRef, useState } from "react";
+import { isFragment } from "react-is";
+import { withResizeDetector } from "react-resize-detector";
 import Icon from "../Icon";
-import TabBarContext from "./context";
 import { makeStyles, useTheme } from "../styles";
 import {
-  setRef,
-  useControlled,
+  detectScrollType,
   getNormalizedScrollLeft,
-  detectScrollType
+  setRef,
+  useConstantProp,
+  useControlled
 } from "../utils";
+import TabBarContext from "./context";
+import { componentName as childName } from "./Tab";
 
 const componentName = "TabBar";
 
@@ -152,25 +155,21 @@ const getIndexOfIdentifier = (value, map) => {
 const TabBar = React.memo(
   React.forwardRef(function TabBar(props, ref) {
     const {
-      className,
-      activeTab,
-      defaultActiveTab,
-      onChange,
-
       // These properties are passed from `react-resize-detector`.
       // We are trying to exclude them from the `otherProps` property.
-
       /* eslint-disable no-unused-vars, react/prop-types */
       targetRef,
       height: rootHeight,
       /* eslint-enable no-unused-vars, react/prop-types */
-
+      className,
+      activeTab,
+      defaultActiveTab,
+      onChange,
       children: childrenProp,
       width: parentWidth,
       scrollHandleVisibility = "auto",
-      scrollable = false,
+      variant = "scrollable",
       dense = false,
-      fluid = false,
       ...otherProps
     } = props;
 
@@ -178,6 +177,16 @@ const TabBar = React.memo(
     const theme = useTheme();
 
     const isRtl = theme.direction === "rtl";
+
+    const isFluid = useConstantProp(variant === "fluid", false, {
+      componentName,
+      propName: "variant"
+    });
+
+    const isScrollable = useConstantProp(variant === "scrollable", true, {
+      componentName,
+      propName: "variant"
+    });
 
     const padding = 0;
 
@@ -221,19 +230,23 @@ const TabBar = React.memo(
       componentName
     );
 
-    if (process.env.NODE_ENV !== "production") {
-      if (fluid && scrollable) {
-        // eslint-disable-next-line no-console
-        console.error(
-          "Sonnat: You can not use the `fluid={true}` and `scrollable={true}` properties " +
-            "at the same time on a `TabBar` component."
-        );
-      }
-    }
-
     let childIndex = 0;
     const children = React.Children.map(childrenProp, child => {
       if (!React.isValidElement(child)) return null;
+
+      if (isFragment(child)) {
+        // eslint-disable-next-line no-console
+        console.error(
+          "Sonnat: The TabBar component doesn't accept a Fragment as a child."
+        );
+      }
+
+      if (child.type.displayName !== childName) {
+        // eslint-disable-next-line no-console
+        console.error(
+          "Sonnat: The TabBar component only accepts `TabBar/Tab` as a child."
+        );
+      }
 
       const childIdentifier =
         child.props.identifier === undefined
@@ -299,16 +312,25 @@ const TabBar = React.memo(
             bottom: tabRect.bottom
           };
         } else if (process.env.NODE_ENV !== "production") {
+          let validValues = "";
+
+          if (identifierToIndex.keys) {
+            const idKeys = Array.from(identifierToIndex.keys());
+            validValues = idKeys.reduce((result, key, i) => {
+              return (result +=
+                (typeof key === "string" ? ` '${key}'` : ` ${key}`) +
+                (i < idKeys.length - 1 ? "," : ""));
+            }, "");
+          }
+
           // eslint-disable-next-line no-console
           console.error(
             [
-              `Sonnat: The identifier provided to the TabBar component is invalid. None of the TabBar's children match with \`${
+              `Sonnat: The identifier provided to the TabBar component is invalid. None of the TabBar's children match with ${typeof value} \`${
                 typeof value === "string" ? `'${value}'` : value
-              } (${typeof value})\`.`,
-              identifierToIndex.keys
-                ? `You can provide one of the following values: { ${Array.from(
-                    identifierToIndex.keys()
-                  ).join(", ")} }.`
+              }\`.`,
+              validValues.length > 0
+                ? `You can provide one of the following values: { ${validValues.trim()} }.`
                 : null
             ].join("\n")
           );
@@ -365,7 +387,7 @@ const TabBar = React.memo(
     };
 
     const updateScrollButtonState = () => {
-      if (scrollable && scrollHandleVisibility !== "off") {
+      if (isScrollable && scrollHandleVisibility !== "off") {
         const { scrollWidth, clientWidth } = scrollerRef.current;
 
         let showStartScrollButton;
@@ -468,15 +490,15 @@ const TabBar = React.memo(
       <TabBarContext.Provider
         value={{
           dense,
-          fluid,
-          scrollable,
+          fluid: isFluid,
+          scrollable: isScrollable,
           onChange: changeListener
         }}
       >
         <div
           className={createClass(localClass.root, className, {
-            [localClass.scrollable]: scrollable,
-            [localClass.fluid]: fluid
+            [localClass.scrollable]: isScrollable,
+            [localClass.fluid]: isFluid
           })}
           ref={node => {
             if (ref) setRef(ref, node);
@@ -484,7 +506,7 @@ const TabBar = React.memo(
           }}
           {...otherProps}
         >
-          {scrollable && (
+          {isScrollable && (
             <div
               aria-disabled={!scrollButtonsDisplayState.start}
               role="button"
@@ -495,7 +517,7 @@ const TabBar = React.memo(
             >
               <Icon
                 identifier={
-                  isRtl ? "arrow-right-large-o" : "arrow-left-large-o"
+                  isRtl ? "chevron-right-large" : "chevron-left-large"
                 }
                 className={localClass.faderIcon}
               />
@@ -517,7 +539,7 @@ const TabBar = React.memo(
               {children}
             </div>
           </div>
-          {scrollable && (
+          {isScrollable && (
             <div
               aria-disabled={!scrollButtonsDisplayState.end}
               role="button"
@@ -528,7 +550,7 @@ const TabBar = React.memo(
             >
               <Icon
                 identifier={
-                  isRtl ? "arrow-left-large-o" : "arrow-right-large-o"
+                  isRtl ? "chevron-left-large" : "chevron-right-large"
                 }
                 className={localClass.faderIcon}
               />
@@ -547,11 +569,10 @@ TabBar.propTypes = {
   className: PropTypes.string,
   activeTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   defaultActiveTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  scrollable: PropTypes.bool,
-  fluid: PropTypes.bool,
   dense: PropTypes.bool,
   width: PropTypes.number,
   scrollHandleVisibility: PropTypes.oneOf(["auto", "off"]),
+  variant: PropTypes.oneOf(["scrollable", "fluid"]),
   onChange: PropTypes.func
 };
 
