@@ -8,8 +8,7 @@ import { makeStyles, useTheme, useDarkMode, ThemeProvider } from "../styles";
 
 const componentName = "Snackbar";
 
-const allowedHorizontalPositions = ["left", "center", "right"];
-const allowedVerticalPositions = ["top", "bottom"];
+const allowedPlacements = ["left", "center", "right"];
 
 const useStyles = makeStyles(
   theme => {
@@ -40,6 +39,7 @@ const useStyles = makeStyles(
           : colors.pallete.grey[50],
         zIndex: popover,
         position: "fixed",
+        bottom: pxToRem(24),
         "& > :last-child$divider": { display: "none" },
         "& > :last-child$undoButton": {
           ...(direction === "rtl"
@@ -106,39 +106,25 @@ const useStyles = makeStyles(
         top: pxToRem(12),
         flexShrink: "0"
       },
+      left: { right: "auto", left: pxToRem(24) },
+      right: { right: pxToRem(24), left: "auto" },
+      center: {
+        right: "auto",
+        left: "50%",
+        transform: "translateX(-50%) scale(0.8)"
+      },
       open: {
         transform: "scale(1)",
         visibility: "visible",
         opacity: 1,
-        "&$topLeft": {},
-        "&$topRight": {},
-        "&$topCenter": { transform: "translateX(-50%) scale(1)" },
-        "&$bottomLeft": {},
-        "&$bottomRight": {},
-        "&$bottomCenter": { transform: "translateX(-50%) scale(1)" }
-      },
-      topLeft: { top: pxToRem(24), right: "auto", left: pxToRem(24) },
-      topRight: { top: pxToRem(24), right: pxToRem(24), left: "auto" },
-      topCenter: {
-        top: pxToRem(24),
-        right: "auto",
-        left: "50%",
-        transform: "translateX(-50%) scale(0.8)"
-      },
-      bottomLeft: { bottom: pxToRem(24), right: "auto", left: pxToRem(24) },
-      bottomRight: { bottom: pxToRem(24), right: pxToRem(24), left: "auto" },
-      bottomCenter: {
-        bottom: pxToRem(24),
-        right: "auto",
-        left: "50%",
-        transform: "translateX(-50%) scale(0.8)"
+        "&$left": {},
+        "&$right": {},
+        "&$center": { transform: "translateX(-50%) scale(1)" }
       }
     };
   },
   { name: `Sonnat${componentName}` }
 );
-
-const camelCase = s => s.replace(/-./g, x => x.toUpperCase()[1]);
 
 const Snackbar = React.memo(
   React.forwardRef(function Snackbar(props, ref) {
@@ -153,8 +139,7 @@ const Snackbar = React.memo(
       undoable = false,
       closable = false,
       undoButtonLabel = "Undo",
-      horizontalPosition = "center",
-      verticalPosition = "bottom",
+      placement = "center",
       ...otherProps
     } = props;
 
@@ -162,7 +147,7 @@ const Snackbar = React.memo(
     const theme = useTheme();
 
     const isDarkMode = theme.darkMode;
-    const newTheme = useDarkMode(theme, !isDarkMode);
+    const newTheme = useDarkMode(!isDarkMode, theme);
 
     const [isHidden, setHidden] = useState(open);
     const [isOpen, setOpen] = useState(false);
@@ -187,7 +172,7 @@ const Snackbar = React.memo(
           onTransitionEnd={transitionEndHandler}
           className={createClass(
             localClass.root,
-            localClass[camelCase(`${verticalPosition}-${horizontalPosition}`)],
+            localClass[placement],
             className,
             { [localClass.open]: isOpen }
           )}
@@ -236,8 +221,7 @@ Snackbar.propTypes = {
   className: PropTypes.string,
   icon: PropTypes.string,
   undoButtonLabel: PropTypes.string,
-  horizontalPosition: PropTypes.oneOf(allowedHorizontalPositions),
-  verticalPosition: PropTypes.oneOf(allowedVerticalPositions),
+  placement: PropTypes.oneOf(allowedPlacements),
   open: PropTypes.bool,
   closable: PropTypes.bool,
   undoable: PropTypes.bool,
