@@ -2,14 +2,14 @@ import * as React from "react";
 
 type BaseProps<P = {}> = P & {
   /** The text to display. */
-  text: React.ReactNode;
+  text?: string;
   /**
    * Append to the classNames applied to the component so you can override or
    * extend the styles.
    */
   className?: string;
   /**
-   * The text to display on the Undo Button.
+   * The text to display on the undo button.
    */
   undoButtonLabel?: string;
   /**
@@ -18,27 +18,22 @@ type BaseProps<P = {}> = P & {
    */
   icon?: string;
   /**
-   * The horizontal position of the Snackbar.
+   * The horizontal placement of the snackbar.
    * @default "center"
    */
-  horizontalPosition?: "left" | "center" | "right";
-  /**
-   * The vertical position of the Snackbar.
-   * @default "bottom"
-   */
-  verticalPosition?: "top" | "bottom";
+  placement?: "left" | "center" | "right";
   /**
    * If `true`, the component will be open.
    * @default false
    */
   open?: boolean;
   /**
-   * If `true`, the Snackbar will have Close Button.
+   * If `true`, the snackbar will have close button.
    * @default false
    */
   closable?: boolean;
   /**
-   * If `true`, the Snackbar will have Undo Button.
+   * If `true`, the snackbar will have undo button.
    * @default false
    */
   undoable?: boolean;
