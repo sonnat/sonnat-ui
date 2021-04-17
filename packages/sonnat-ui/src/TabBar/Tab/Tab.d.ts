@@ -1,7 +1,7 @@
 import * as React from "react";
 
 type BaseProps<P = {}> = P & {
-  /** The label of the Tab. */
+  /** The label of the tab. */
   label?: string;
   /**
    * Append to the classNames applied to the component so you can override or
@@ -14,20 +14,21 @@ type BaseProps<P = {}> = P & {
    */
   icon?: string;
   /**
-   * A unique identifier for the Tab.
-   * If not provided the index of the Tab will be considered as the identifier.
+   * A unique identifier for the tab.
+   * If not provided the index of the tab (which is zero-base)
+   * will be considered as the identifier.
    */
   identifier?: number | string;
   /**
-   * If `true`, the Tab will be active (selected).
+   * If `true`, the tab will be active (selected).
    * @default false
    */
   active?: boolean;
   /**
-   * The Callback fires when the Tab has been clicked.
+   * The Callback fires when the tab has been clicked.
    *
    * @param {React.MouseEvent<HTMLDivElement, MouseEvent>} event The event source of the callback.
-   * @param {number | string} identifier The identifier of the Tab.
+   * @param {number | string} identifier The identifier of the tab.
    */
   onClick?: (
     /* eslint-disable no-unused-vars */

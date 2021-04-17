@@ -18,9 +18,9 @@ type BaseProps<P = {}> = P & {
    */
   dense?: boolean;
   /**
-   * Determine the behavior of scroll handles when tabbar is set to `scrollable`:
-   * - `auto` will only present them when not all the items are visible.
-   * - `off` will never present them.
+   * Determines the behavior of scroll buttons when `variant="scrollable"`:
+   * - `auto` will automatically show them on overflow.
+   * - `off` wont show them.
    * @default "auto"
    */
   scrollHandleVisibility?: "auto" | "off";
