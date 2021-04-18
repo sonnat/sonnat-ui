@@ -17,7 +17,7 @@ type BaseProps<P = {}> = P & {
    */
   className?: string;
   /**
-   * If `label` text provided, a `<label>` will be rendered next to the checkbox.
+   * If `label` was provided, a `<label>` element will be rendered next to the checkbox.
    */
   label?: string;
   /** The name of the checkbox. */
@@ -35,7 +35,7 @@ type BaseProps<P = {}> = P & {
    */
   indeterminated?: boolean;
   /**
-   * If `true`, the checkbox will be readOnly.
+   * If `true`, the checkbox will be read-only.
    * @default false
    */
   readOnly?: boolean;
