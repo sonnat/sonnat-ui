@@ -4,6 +4,7 @@ import createClass from "classnames";
 import useFormControl from "../FormControl/useFormControl";
 import useEventListener from "../utils/useEventListener";
 import useForkRef from "../utils/useForkRef";
+import useControlled from "../utils/useControlled";
 import makeStyles from "../styles/makeStyles";
 import { changeColor } from "../styles/colorUtils";
 
@@ -250,13 +251,14 @@ const Switch = React.memo(
       onFocus,
       onBlur,
       label,
+      defaultChecked: defaultCheckedProp,
       value: valueProp,
       name: nameProp,
+      checked: checkedProp,
       inputProps = {},
       labelProps = {},
       readOnly = false,
       hasError = false,
-      checked = false,
       disabled = false,
       required = false,
       size = "medium",
@@ -273,10 +275,20 @@ const Switch = React.memo(
       onFocus: inputOnFocusProp,
       onBlur: inputOnBlurProp,
       readOnly: inputReadOnly = false,
+      checked: inputCheckedProp,
+      defaultChecked: inputDefaultChecked,
       ...otherInputProps
     } = inputProps;
 
     const { className: labelClassName, ...otherLabelProps } = labelProps;
+
+    const { current: defaultChecked } = useRef(
+      checked != null
+        ? undefined
+        : defaultCheckedProp != null
+        ? defaultCheckedProp
+        : false
+    );
 
     const inputRef = useRef();
     const inputRefHandler = useForkRef(inputRef, inputRefProp);
@@ -284,18 +296,35 @@ const Switch = React.memo(
     const localClass = useStyles();
     const formControl = useFormControl();
 
+    const [checked, setChecked] = useControlled(
+      checkedProp,
+      defaultChecked,
+      componentName
+    );
+
     const [isMounted, setMounted] = useState(false);
-    const [isChecked, setChecked] = useState(checked);
     const [isFocused, setFocused] = useState(false);
 
     const isReadOnly = !!inputReadOnly || !!readOnly;
 
+    if (inputCheckedProp != null) {
+      // eslint-disable-next-line no-console
+      console.error(
+        "Sonnat: do not pass the `checked` prop as a `inputProps` property!"
+      );
+    }
+    if (inputDefaultChecked != null) {
+      // eslint-disable-next-line no-console
+      console.error(
+        "Sonnat: do not pass the `defaultChecked` prop as a `inputProps` property!"
+      );
+    }
     if (inputNameProp != null && nameProp != null) {
       // eslint-disable-next-line no-console
       console.error(
         [
           "Sonnat: You are passing the `name` prop twice." +
-            "(one as `name` property and the other one as a property of `inputProps`)",
+            "(one as `name` prop and the other one as a property of `inputProps`)",
           `We are assuming \`name="${inputNameProp}"\`!`
         ].join("\n")
       );
@@ -305,7 +334,7 @@ const Switch = React.memo(
       console.error(
         [
           "Sonnat: You are passing the `value` prop twice." +
-            "(one as `value` property and the other one as a property of `inputProps`)",
+            "(one as `value` prop and the other one as a property of `inputProps`)",
           `We are assuming \`value="${inputValueProp}"\`!`
         ].join("\n")
       );
@@ -364,9 +393,9 @@ const Switch = React.memo(
         if (isMounted) {
           e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
-            if (onChange) onChange(e, !isChecked);
-            if (inputOnChangeProp) inputOnChangeProp(e, !isChecked);
-            setChecked(!isChecked);
+            if (onChange) onChange(e, !checked);
+            if (inputOnChangeProp) inputOnChangeProp(e, !checked);
+            setChecked(!checked);
           }
         }
       }
@@ -396,14 +425,14 @@ const Switch = React.memo(
           ),
           [localClass.disabled]: controlProps.disabled,
           [localClass.focused]: isFocused,
-          [localClass.checked]: isChecked
+          [localClass.checked]: checked
         })}
         {...otherProps}
       >
         <div className={localClass.cell}>
           <input
             id={id}
-            tabIndex={controlProps.disabled ? "-1" : "0"}
+            tabIndex={controlProps.disabled ? -1 : 0}
             name={controlProps.name}
             value={value}
             disabled={controlProps.disabled}
@@ -413,7 +442,7 @@ const Switch = React.memo(
             type="checkbox"
             onFocus={controlProps.onFocus}
             onBlur={controlProps.onBlur}
-            checked={isChecked}
+            checked={checked}
             ref={inputRefHandler}
             {...otherInputProps}
           />
@@ -447,6 +476,7 @@ Switch.propTypes = {
   value: PropTypes.string,
   readOnly: PropTypes.bool,
   checked: PropTypes.bool,
+  defaultChecked: PropTypes.bool,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
   hasError: PropTypes.bool,

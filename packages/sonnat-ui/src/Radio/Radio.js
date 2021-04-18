@@ -5,6 +5,7 @@ import useRadioGroup from "../RadioGroup/useRadioGroup";
 import useFormControl from "../FormControl/useFormControl";
 import useEventListener from "../utils/useEventListener";
 import useForkRef from "../utils/useForkRef";
+import useControlled from "../utils/useControlled";
 import makeStyles from "../styles/makeStyles";
 import { changeColor } from "../styles/colorUtils";
 
@@ -182,13 +183,14 @@ const RadioButton = React.memo(
       onFocus,
       onBlur,
       label,
+      defaultChecked: defaultCheckedProp,
       value: valueProp,
       name: nameProp,
+      checked: checkedProp,
       inputProps = {},
       labelProps = {},
       readOnly = false,
       hasError = false,
-      checked = false,
       disabled = false,
       required = false,
       ...otherProps
@@ -204,10 +206,20 @@ const RadioButton = React.memo(
       onFocus: inputOnFocusProp,
       onBlur: inputOnBlurProp,
       readOnly: inputReadOnly = false,
+      checked: inputCheckedProp,
+      defaultChecked: inputDefaultChecked,
       ...otherInputProps
     } = inputProps;
 
     const { className: labelClassName, ...otherLabelProps } = labelProps;
+
+    const { current: defaultChecked } = useRef(
+      checked != null
+        ? undefined
+        : defaultCheckedProp != null
+        ? defaultCheckedProp
+        : false
+    );
 
     const inputRef = useRef();
     const inputRefHandler = useForkRef(inputRef, inputRefProp);
@@ -216,18 +228,35 @@ const RadioButton = React.memo(
     const radioGroup = useRadioGroup();
     const formControl = useFormControl();
 
+    const [checked, setChecked] = useControlled(
+      checkedProp,
+      defaultChecked,
+      componentName
+    );
+
     const [isMounted, setMounted] = useState(false);
-    const [isChecked, setChecked] = useState(checked);
     const [isFocused, setFocused] = useState(false);
 
     const isReadOnly = !!inputReadOnly || !!readOnly;
 
+    if (inputCheckedProp != null) {
+      // eslint-disable-next-line no-console
+      console.error(
+        "Sonnat: do not pass the `checked` prop as a `inputProps` property!"
+      );
+    }
+    if (inputDefaultChecked != null) {
+      // eslint-disable-next-line no-console
+      console.error(
+        "Sonnat: do not pass the `defaultChecked` prop as a `inputProps` property!"
+      );
+    }
     if (inputNameProp != null && nameProp != null) {
       // eslint-disable-next-line no-console
       console.error(
         [
           "Sonnat: You are passing the `name` prop twice." +
-            "(one as `name` property and the other one as a property of `inputProps`)",
+            "(one as `name` prop and the other one as a property of `inputProps`)",
           `We are assuming \`name="${inputNameProp}"\`!`
         ].join("\n")
       );
@@ -237,7 +266,7 @@ const RadioButton = React.memo(
       console.error(
         [
           "Sonnat: You are passing the `value` prop twice." +
-            "(one as `value` property and the other one as a property of `inputProps`)",
+            "(one as `value` prop and the other one as a property of `inputProps`)",
           `We are assuming \`value="${inputValueProp}"\`!`
         ].join("\n")
       );
@@ -246,7 +275,7 @@ const RadioButton = React.memo(
     const name = inputNameProp || nameProp;
     const value = inputValueProp || valueProp;
 
-    const checkedState = radioGroup ? radioGroup.value === value : isChecked;
+    const checkedState = radioGroup ? radioGroup.value === value : checked;
 
     useEffect(() => {
       setMounted(true);
@@ -337,7 +366,7 @@ const RadioButton = React.memo(
             name={controlProps.name}
             value={value}
             id={id}
-            tabIndex={controlProps.disabled ? "-1" : "0"}
+            tabIndex={controlProps.disabled ? -1 : 0}
             disabled={controlProps.disabled}
             required={controlProps.required}
             className={createClass(localClass.input, inputClassNameProp)}
@@ -374,6 +403,7 @@ RadioButton.propTypes = {
   value: PropTypes.string,
   readOnly: PropTypes.bool,
   checked: PropTypes.bool,
+  defaultChecked: PropTypes.bool,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
   hasError: PropTypes.bool,
