@@ -43,6 +43,11 @@ type BaseProps<P = {}> = P & {
    */
   checked?: boolean;
   /**
+   * The default state of `checked`. Use when the component is not controlled.
+   * @default false
+   */
+  defaultChecked?: boolean;
+  /**
    * If `true`, the switch will be disabled.
    * @default false
    */

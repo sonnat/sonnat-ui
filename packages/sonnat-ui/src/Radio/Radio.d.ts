@@ -34,9 +34,12 @@ type BaseProps<P = {}> = P & {
   readOnly?: boolean;
   /**
    * If `true`, the radio will be checked.
-   * @default false
    */
   checked?: boolean;
+  /**
+   * The default state of `checked`. Use when the component is not controlled.
+   */
+  defaultChecked?: boolean;
   /**
    * If `true`, the radio will be disabled.
    * @default false
