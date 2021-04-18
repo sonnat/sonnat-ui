@@ -464,7 +464,7 @@ const Menu = React.memo(
       <MenuContext.Provider value={{ registerNode, dense }}>
         <PortalDestination aria-hidden={!openState}>
           <div
-            tabIndex="-1"
+            tabIndex={-1}
             ref={ref}
             className={createClass(localClass.root, className, {
               [localClass.dense]: dense,
@@ -497,7 +497,7 @@ const Menu = React.memo(
                     />
                   </div>
                 )}
-                <div className={localClass.list} role={role} tabIndex="-1">
+                <div className={localClass.list} role={role} tabIndex={-1}>
                   {isSearchResultEmpty && (
                     <div className={localClass.emptyStatement}>
                       {searchEmptyStatementText}

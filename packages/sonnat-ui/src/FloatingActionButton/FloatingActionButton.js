@@ -211,7 +211,7 @@ const FloatingActionButton = React.memo(
       <RootNode
         ref={ref}
         type="button"
-        tabIndex={disabled ? "-1" : "0"}
+        tabIndex={disabled ? -1 : 0}
         className={createClass(localClass.root, className, {
           [localClass.iconButton]: isIconButton,
           [localClass.disabled]: disabled,

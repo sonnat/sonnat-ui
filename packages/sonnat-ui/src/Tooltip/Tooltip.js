@@ -545,7 +545,7 @@ const Tooltip = React.memo(
       <React.Fragment>
         <PortalDestination aria-hidden={!open}>
           <div
-            tabIndex="-1"
+            tabIndex={-1}
             role="tooltip"
             ref={tooltipRefHandle}
             id={uniqueId.current}

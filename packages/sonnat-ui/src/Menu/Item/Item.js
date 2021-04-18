@@ -98,7 +98,7 @@ const MenuItem = React.memo(function MenuItem(props) {
       data-index={`${index}`}
       ref={itemRef}
       role="menuitem"
-      tabIndex={disabled || !isFocused ? "-1" : "0"}
+      tabIndex={disabled || !isFocused ? -1 : 0}
       onClick={e => {
         if (!disabled && onClick) onClick(e);
       }}

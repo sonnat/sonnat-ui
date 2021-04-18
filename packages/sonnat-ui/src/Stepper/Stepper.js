@@ -294,7 +294,7 @@ const Stepper = React.memo(
         {...otherProps}
       >
         <button
-          tabIndex={!permissions.addition ? "-1" : "0"}
+          tabIndex={!permissions.addition ? -1 : 0}
           disabled={!permissions.addition}
           className={createClass(localClass.action, localClass.addAction, {
             [localClass.disabled]: !permissions.addition
@@ -309,7 +309,7 @@ const Stepper = React.memo(
             id={inputIdProp}
             ref={handleInputRef}
             type="text"
-            tabIndex="-1"
+            tabIndex={-1}
             onChange={changeHandler}
             value={value}
             readOnly
@@ -318,7 +318,7 @@ const Stepper = React.memo(
           />
         </div>
         <button
-          tabIndex={!permissions.subtraction ? "-1" : "0"}
+          tabIndex={!permissions.subtraction ? -1 : 0}
           disabled={!permissions.subtraction}
           className={createClass(localClass.action, localClass.subtractAction, {
             [localClass.disabled]: !permissions.subtraction

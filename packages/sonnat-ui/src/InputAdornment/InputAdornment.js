@@ -111,7 +111,7 @@ const InputAdornment = React.memo(
       <div
         ref={ref}
         role={otherProps.onClick ? "button" : undefined}
-        tabIndex={otherProps.onClick ? "0" : undefined}
+        tabIndex={otherProps.onClick ? 0 : undefined}
         className={createClass(
           localClass.root,
           className,

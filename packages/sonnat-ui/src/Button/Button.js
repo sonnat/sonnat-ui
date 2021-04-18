@@ -602,7 +602,7 @@ const Button = React.memo(
     return isInvalid ? null : (
       <RootNode
         type="button"
-        tabIndex={disabled ? "-1" : "0"}
+        tabIndex={disabled ? -1 : 0}
         ref={ref}
         className={createClass(localClass.root, className, {
           [localClass[variant]]: hasValidVariant,

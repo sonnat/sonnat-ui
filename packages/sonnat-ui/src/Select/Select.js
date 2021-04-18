@@ -573,11 +573,11 @@ const Select = React.memo(
           onFocus: controlProps.onFocus,
           onBlur: controlProps.onBlur,
           onChange: e => controlProps.onChange(e, undefined),
-          tabIndex: controlProps.disabled ? "-1" : "0"
+          tabIndex: controlProps.disabled ? -1 : 0
         };
       } else
         inputProps = {
-          tabIndex: controlProps.disabled ? "-1" : "0",
+          tabIndex: controlProps.disabled ? -1 : 0,
           role: "button",
           "aria-haspopup": "listbox",
           "aria-disabled": controlProps.disabled,
