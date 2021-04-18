@@ -38,10 +38,10 @@ type BaseProps<P = {}> = P & {
   ) => void;
 };
 
-export type TabProps<P> = BaseProps<P> &
+export type TabProps<P = {}> = BaseProps<P> &
   Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-export interface TabFC<P> {
+export interface TabFC<P = {}> {
   // eslint-disable-next-line no-unused-vars
   (props: TabProps<P>): JSX.Element;
 }

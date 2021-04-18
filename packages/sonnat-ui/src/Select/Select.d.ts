@@ -146,10 +146,10 @@ type BaseProps<P = {}> = P & {
   onBlur?: (event: React.FocusEvent<HTMLSelectElement>) => void;
 };
 
-export type SelectProps<P> = BaseProps<P> &
+export type SelectProps<P = {}> = BaseProps<P> &
   Omit<React.ComponentPropsWithRef<"div" | "Select">, keyof BaseProps<P>>;
 
-export interface SelectFC<P> {
+export interface SelectFC<P = {}> {
   // eslint-disable-next-line no-unused-vars
   (props: SelectProps<P>): JSX.Element;
 }

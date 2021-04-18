@@ -56,7 +56,7 @@ type BaseProps<P = {}> = P & {
 export type TooltipProps<P = {}> = BaseProps<P> &
   Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-export interface TooltipFC<P> {
+export interface TooltipFC<P = {}> {
   // eslint-disable-next-line no-unused-vars
   (props: TooltipProps<P>): JSX.Element;
 }

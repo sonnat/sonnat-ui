@@ -22,10 +22,10 @@ type BaseProps<P = {}> = P & {
   variant?: "filled" | "outlined";
 };
 
-export type TagProps<P> = BaseProps<P> &
+export type TagProps<P = {}> = BaseProps<P> &
   Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-export interface TagFC<P> {
+export interface TagFC<P = {}> {
   // eslint-disable-next-line no-unused-vars
   (props: TagProps<P>): JSX.Element;
 }

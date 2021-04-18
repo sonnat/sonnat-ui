@@ -24,7 +24,7 @@ type BaseProps<P = {}> = P & {
 export type BreadcrumbProps<P = {}> = BaseProps<P> &
   Omit<React.ComponentPropsWithRef<"nav">, keyof BaseProps<P>>;
 
-export interface BreadcrumbFC<P> {
+export interface BreadcrumbFC<P = {}> {
   // eslint-disable-next-line no-unused-vars
   (props: BreadcrumbProps<P>): JSX.Element;
 }

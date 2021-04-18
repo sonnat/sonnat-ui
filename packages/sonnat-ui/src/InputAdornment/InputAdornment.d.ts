@@ -18,7 +18,7 @@ type BaseProps<P = {}> = P & {
 export type InputAdornmentProps<P = {}> = BaseProps<P> &
   Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-export interface InputAdornmentFC<P> {
+export interface InputAdornmentFC<P = {}> {
   // eslint-disable-next-line no-unused-vars
   (props: InputAdornmentProps<P>): JSX.Element;
 }

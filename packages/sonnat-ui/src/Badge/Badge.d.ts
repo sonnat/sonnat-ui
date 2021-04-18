@@ -64,7 +64,7 @@ type BaseProps<P = {}> = P & {
 export type BadgeProps<P = {}> = BaseProps<P> &
   Omit<React.ComponentPropsWithRef<"span">, keyof BaseProps<P>>;
 
-export interface BadgeFC<P> {
+export interface BadgeFC<P = {}> {
   // eslint-disable-next-line no-unused-vars
   (props: BadgeProps<P>): JSX.Element;
 }

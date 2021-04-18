@@ -20,10 +20,10 @@ type BaseProps<P = {}> = P & {
   size?: number;
 };
 
-export type ClipSpinnerProps<P> = BaseProps<P> &
+export type ClipSpinnerProps<P = {}> = BaseProps<P> &
   Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-export interface ClipSpinnerFC<P> {
+export interface ClipSpinnerFC<P = {}> {
   // eslint-disable-next-line no-unused-vars
   (props: ClipSpinnerProps<P>): JSX.Element;
 }

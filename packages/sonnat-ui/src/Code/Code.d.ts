@@ -21,7 +21,7 @@ type BaseProps<P = {}> = P & {
 export type CodeProps<P = {}> = BaseProps<P> &
   Omit<React.ComponentPropsWithRef<"code" | "pre">, keyof BaseProps<P>>;
 
-export interface CodeFC<P> {
+export interface CodeFC<P = {}> {
   // eslint-disable-next-line no-unused-vars
   (props: CodeProps<P>): JSX.Element;
 }

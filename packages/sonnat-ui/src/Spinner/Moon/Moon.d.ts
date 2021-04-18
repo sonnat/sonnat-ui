@@ -20,10 +20,10 @@ type BaseProps<P = {}> = P & {
   size?: number;
 };
 
-export type MoonSpinnerProps<P> = BaseProps<P> &
+export type MoonSpinnerProps<P = {}> = BaseProps<P> &
   Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-export interface MoonSpinnerFC<P> {
+export interface MoonSpinnerFC<P = {}> {
   // eslint-disable-next-line no-unused-vars
   (props: MoonSpinnerProps<P>): JSX.Element;
 }

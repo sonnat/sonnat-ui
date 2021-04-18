@@ -5,9 +5,9 @@ type BaseProps<P = {}> = P & {
   children?: React.ReactNode;
 };
 
-export type CssBaselineProps<P> = BaseProps<P>;
+export type CssBaselineProps<P = {}> = BaseProps<P>;
 
-export interface CssBaselineFC<P> {
+export interface CssBaselineFC<P = {}> {
   // eslint-disable-next-line no-unused-vars
   (props: CssBaselineProps<P>): JSX.Element;
 }

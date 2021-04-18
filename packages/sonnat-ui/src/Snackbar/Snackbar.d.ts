@@ -54,10 +54,10 @@ type BaseProps<P = {}> = P & {
   onTransitionEnd?: (event: React.TransitionEvent<HTMLDivElement>) => void;
 };
 
-export type SnackbarProps<P> = BaseProps<P> &
+export type SnackbarProps<P = {}> = BaseProps<P> &
   Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-export interface SnackbarFC<P> {
+export interface SnackbarFC<P = {}> {
   // eslint-disable-next-line no-unused-vars
   (props: SnackbarProps<P>): JSX.Element;
 }
