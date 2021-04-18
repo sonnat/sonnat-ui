@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import createClass from "classnames";
 import makeStyles from "../styles/makeStyles";
@@ -41,29 +41,16 @@ const RadioGroup = React.memo(
     const rootRef = useRef();
     const forkRef = useForkRef(ref, rootRef);
 
-    const [isMounted, setMounted] = useState(false);
-
     const [value, setValue] = useControlled(
       valueProp,
       defaultValue,
       componentName
     );
 
-    useEffect(() => {
-      setMounted(true);
-      return () => setMounted(false);
-    }, []);
-
-    const changeListener = useCallback(
-      e => {
-        if (isMounted) {
-          setValue(e.target.value);
-          if (onChange) onChange(e, e.target.value);
-        }
-      },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      [onChange, isMounted]
-    );
+    const changeListener = e => {
+      if (onChange) onChange(e, e.target.value);
+      setValue(e.target.value);
+    };
 
     return (
       <RadioGroupContext.Provider

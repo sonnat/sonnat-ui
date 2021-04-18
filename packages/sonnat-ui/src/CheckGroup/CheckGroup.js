@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import createClass from "classnames";
 import makeStyles from "../styles/makeStyles";
@@ -41,8 +41,6 @@ const CheckGroup = React.memo(
     const rootRef = useRef();
     const forkRef = useForkRef(ref, rootRef);
 
-    const [isMounted, setMounted] = useState(false);
-
     const { current: defaultValue } = useRef(
       valueProp != null
         ? undefined
@@ -63,34 +61,16 @@ const CheckGroup = React.memo(
       );
     }
 
-    useEffect(() => {
-      setMounted(true);
-      return () => setMounted(false);
-    }, []);
+    const changeListener = e => {
+      let newValue;
+      const isChecked = e.target.checked;
 
-    const changeListener = useCallback(
-      e => {
-        if (isMounted) {
-          const isChecked = e.target.checked;
+      if (!isChecked) newValue = value.filter(v => v !== e.target.value);
+      else newValue = value.concat(e.target.value);
 
-          if (!isChecked) {
-            setValue(values => {
-              const newValues = values.filter(v => v !== e.target.value);
-              if (onChange) onChange(e, newValues);
-              return newValues;
-            });
-          } else {
-            setValue(values => {
-              const newValues = values.concat(e.target.value);
-              if (onChange) onChange(e, newValues);
-              return newValues;
-            });
-          }
-        }
-      },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      [onChange, isMounted]
-    );
+      if (onChange) onChange(e, newValue);
+      setValue(newValue);
+    };
 
     return (
       <CheckGroupContext.Provider
