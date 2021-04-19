@@ -11,16 +11,16 @@ type BaseProps<P = {}> = P & {
    * extend the styles.
    */
   className?: string;
-  /** The name of the TextField. */
+  /** The name of the text field. */
   name?: string;
   /**
    * The text of the label in legend style.
    */
   legendLabel?: string;
-  /** The `placeholder` property of the TextField. */
+  /** The `placeholder` property of the text field. */
   placeholder?: string;
   /**
-   * The value of the TextField. The DOM API casts this to a string.
+   * The value of the text field. The DOM API casts this to a string.
    */
   value?: string;
   /**
@@ -32,64 +32,64 @@ type BaseProps<P = {}> = P & {
   /** The helper icon. */
   helperIcon?: React.ReactNode;
   /**
-   * Leading adornment for this component.
+   * The leading adornment for this component.
    *
-   * This can be used to add a prefix, a suffix or an action to the leading of your input.
+   * This can be used to add a prefix, an action, or an icon to the leading of your input.
    */
   leadingAdornment?: React.ReactNode;
   /**
-   * Leading adornment for this component.
+   * The trailing adornment for this component.
    *
-   * This can be used to add a prefix, a suffix or an action to the trailing of your input.
+   * This can be used to add a suffix, an action, or an icon to the trailing of your input.
    */
   trailingAdornment?: React.ReactNode;
   /**
-   * If `true`, the TextField will be rounded.
+   * If `true`, the text field will be rounded.
    * @default false
    */
   rounded?: boolean;
   /**
-   * If `true`, the TextField will be readOnly.
+   * If `true`, the text field will be readOnly.
    * @default false
    */
   readOnly?: boolean;
   /**
-   * If `true`, the TextField will be focused.
+   * If `true`, the text field will be focused.
    * @default false
    */
   focused?: boolean;
   /**
-   * If `true`, the TextField will be focused on mount.
+   * If `true`, the text field will be focused on mount.
    * @default false
    */
   autoFocus?: boolean;
   /**
-   * If `true`, the TextField will fill the entire width of the parent.
+   * If `true`, the text field will fill the entire width of the parent.
    * @default false
    */
   fluid?: boolean;
   /**
-   * If `true`, the TextField will be disabled.
+   * If `true`, the text field will be disabled.
    * @default false
    */
   disabled?: boolean;
   /**
-   * If `true`, the TextField will be required.
+   * If `true`, the text field will be required.
    * @default false
    */
   required?: boolean;
   /**
-   * If `true`, the TextField will indicate invalid input.
+   * If `true`, the text field will indicate invalid input.
    * @default false
    */
   hasError?: boolean;
   /**
-   * The size of the TextField.
+   * The size of the text field.
    * @default "medium"
    */
   size?: "medium" | "small";
   /**
-   * The variant of the TextField.
+   * The variant of the text field.
    * @default "outlined"
    */
   variant?: "filled" | "outlined";
@@ -104,7 +104,7 @@ type BaseProps<P = {}> = P & {
    * The Callback fires when the state has changed.
    *
    * @param {React.ChangeEvent<HTMLInputElement>} event The event source of the callback.
-   * @param {string} value The current value of the TextField.
+   * @param {string} value The current value of the text field.
    *
    * You can also pull out the current value by accessing `event.target.value` (string).
    */
@@ -115,14 +115,14 @@ type BaseProps<P = {}> = P & {
     /* eslint-enable no-unused-vars */
   ) => void;
   /**
-   * The Callback fires when the TextField has received focus.
+   * The Callback fires when the text field has received focus.
    *
    * @param {React.FocusEvent<HTMLInputElement>} event The event source of the callback.
    */
   // eslint-disable-next-line no-unused-vars
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
   /**
-   * The Callback fires when the TextField has lost focus.
+   * The Callback fires when the text field has lost focus.
    *
    * @param {React.FocusEvent<HTMLInputElement>} event The event source of the callback.
    */

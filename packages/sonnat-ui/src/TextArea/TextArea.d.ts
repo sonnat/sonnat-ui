@@ -11,12 +11,12 @@ type BaseProps<P = {}> = P & {
    * extend the styles.
    */
   className?: string;
-  /** The name of the TextArea. */
+  /** The name of the textarea. */
   name?: string;
-  /** The `placeholder` property of the TextArea. */
+  /** The `placeholder` property of the textarea. */
   placeholder?: string;
   /**
-   * The value of the TextArea. The DOM API casts this to a string.
+   * The value of the textarea. The DOM API casts this to a string.
    */
   value?: string;
   /**
@@ -28,42 +28,42 @@ type BaseProps<P = {}> = P & {
   /** The helper icon. */
   helperIcon?: React.ReactNode;
   /**
-   * If `true`, the TextArea will be vertically resizable.
+   * If `true`, the textarea will be vertically resizable.
    * @default false
    */
   resizable?: boolean;
   /**
-   * If `true`, the TextArea will be readOnly.
+   * If `true`, the textarea will be readOnly.
    * @default false
    */
   readOnly?: boolean;
   /**
-   * If `true`, the TextArea will be focused.
+   * If `true`, the textarea will be focused.
    * @default false
    */
   focused?: boolean;
   /**
-   * If `true`, the TextArea will be focused on mount.
+   * If `true`, the textarea will be focused on mount.
    * @default false
    */
   autoFocus?: boolean;
   /**
-   * If `true`, the TextArea will fill the entire width of the parent.
+   * If `true`, the textarea will fill the entire width of the parent.
    * @default false
    */
   fluid?: boolean;
   /**
-   * If `true`, the TextArea will be disabled.
+   * If `true`, the textarea will be disabled.
    * @default false
    */
   disabled?: boolean;
   /**
-   * If `true`, the TextArea will be required.
+   * If `true`, the textarea will be required.
    * @default false
    */
   required?: boolean;
   /**
-   * If `true`, the TextArea will indicate invalid input.
+   * If `true`, the textarea will indicate invalid input.
    * @default false
    */
   hasError?: boolean;
@@ -73,7 +73,7 @@ type BaseProps<P = {}> = P & {
    * The Callback fires when the state has changed.
    *
    * @param {React.ChangeEvent<HTMLTextAreaElement>} event The event source of the callback.
-   * @param {string} value The current value of the TextArea.
+   * @param {string} value The current value of the textarea.
    *
    * You can also pull out the current value by accessing `event.target.value` (string).
    */
@@ -84,14 +84,14 @@ type BaseProps<P = {}> = P & {
     /* eslint-enable no-unused-vars */
   ) => void;
   /**
-   * The Callback fires when the TextArea has received focus.
+   * The Callback fires when the textarea has received focus.
    *
    * @param {React.FocusEvent<HTMLTextAreaElement>} event The event source of the callback.
    */
   // eslint-disable-next-line no-unused-vars
   onFocus?: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
   /**
-   * The Callback fires when the TextArea has lost focus.
+   * The Callback fires when the textarea has lost focus.
    *
    * @param {React.FocusEvent<HTMLTextAreaElement>} event The event source of the callback.
    */
