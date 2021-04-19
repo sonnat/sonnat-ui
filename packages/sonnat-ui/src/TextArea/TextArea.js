@@ -4,7 +4,7 @@ import createClass from "classnames";
 import makeStyles from "../styles/makeStyles";
 import { changeColor } from "../styles/colorUtils";
 import { useFormControl } from "../FormControl";
-import { setRef, useEnhancedEffect, useControlled } from "../utils";
+import { setRef, useEnhancedEffect, useControlled, clamp } from "../utils";
 
 const componentName = "TextArea";
 
@@ -33,7 +33,7 @@ const useStyles = makeStyles(
         }
       },
       input: {
-        ...useText({ color: colors.text.primary }),
+        ...useText({ color: colors.text.primary, lineHeight: 1.5 }),
         flex: [[1, 1]],
         minWidth: 0,
         minHeight: pxToRem(120),
@@ -56,10 +56,64 @@ const useStyles = makeStyles(
         "&:-ms-input-placeholder": useText({ color: colors.text.hint }),
         "&:-moz-placeholder": useText({ color: colors.text.hint })
       },
+      helperRow: {
+        display: "flex",
+        marginTop: pxToRem(4),
+        padding: [[0, pxToRem(8)]]
+      },
+      helperContent: {
+        display: "flex",
+        margin: 0,
+        flex: [[1, 0]]
+      },
+      helperText: {
+        ...useText({
+          fontSize: pxToRem(12),
+          color: colors.text.secondary
+        })
+      },
+      helperIconWrapper: {
+        paddingTop: pxToRem(4),
+        ...(direction === "rtl"
+          ? { paddingLeft: pxToRem(4) }
+          : { paddingRight: pxToRem(4) })
+      },
+      helperIcon: {
+        color: colors.text.secondary,
+        width: pxToRem(16),
+        height: pxToRem(16),
+        maxWidth: pxToRem(16),
+        maxHeight: pxToRem(16),
+        fontSize: pxToRem(16)
+      },
+      charCount: {
+        ...useText({
+          fontSize: pxToRem(12),
+          color: colors.text.secondary
+        }),
+        ...(direction === "rtl"
+          ? { marginRight: pxToRem(8) }
+          : { marginLeft: pxToRem(8) }),
+        minWidth: "7.7ch",
+        display: "flex",
+        justifyContent: "flex-end",
+        flexShrink: 0
+      },
       fluid: { width: "100%" },
       errored: {
         "& $input": {
           borderColor: !darkMode ? colors.error.origin : colors.error.light
+        },
+        "&:not($disabled)": {
+          "& $charCount": {
+            color: !darkMode ? colors.error.origin : colors.error.light
+          },
+          "& $helperText": {
+            color: !darkMode ? colors.error.origin : colors.error.light
+          },
+          "& $helperIcon": {
+            color: !darkMode ? colors.error.origin : colors.error.light
+          }
         }
       },
       readOnly: {
@@ -104,6 +158,11 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
+const createHelperIcon = (helperIcon, className) =>
+  React.cloneElement(helperIcon, {
+    className: createClass(className, helperIcon.props.className)
+  });
+
 const TextArea = React.memo(
   React.forwardRef(function TextArea(props, ref) {
     const {
@@ -112,6 +171,8 @@ const TextArea = React.memo(
       onFocus,
       onChange,
       className,
+      helperText,
+      helperIcon,
       inputProps = {},
       defaultValue,
       name: nameProp,
@@ -177,12 +238,23 @@ const TextArea = React.memo(
     );
 
     const isInit = useRef(true);
+    const { current: initialValue } = useRef(
+      inputValueProp || valueProp || defaultValue
+    );
 
     const isReadOnly = !!inputReadOnlyProp || readOnly;
     const isAutoFocus = !!inputAutoFocusProp || autoFocus || focused;
+    const hasLimitedLength = !!otherInputProps.maxLength;
 
     const [isMounted, setMounted] = useState(false);
     const [isFocused, setFocused] = useState(isAutoFocus);
+    const [charCount, setCharCount] = useState(
+      clamp(
+        initialValue ? initialValue.length : 0,
+        0,
+        hasLimitedLength ? otherInputProps.maxLength : Infinity
+      )
+    );
 
     // inherit properties from FormControl
     const controlProps = {
@@ -220,6 +292,7 @@ const TextArea = React.memo(
             if (onChange) onChange(e, e.target.value);
             if (inputOnChangeProp) inputClassNameProp(e, e.target.value);
             setValue(e.target.value);
+            setCharCount(e.target.value.length);
           }
         }
       }
@@ -264,6 +337,7 @@ const TextArea = React.memo(
             if (inputOnChangeProp) inputOnChangeProp(undefined, "");
             inputRef.current.value = "";
             setValue("");
+            setCharCount(0);
           }
         }
       }
@@ -300,6 +374,25 @@ const TextArea = React.memo(
           }}
           {...otherInputProps}
         ></textarea>
+        {(!!helperText || !!otherInputProps.maxLength) && (
+          <div className={localClass.helperRow}>
+            {helperText && (
+              <p className={localClass.helperContent}>
+                {helperIcon && (
+                  <span className={localClass.helperIconWrapper}>
+                    {createHelperIcon(helperIcon, localClass.helperIcon)}
+                  </span>
+                )}
+                <span className={localClass.helperText}>{helperText}</span>
+              </p>
+            )}
+            {otherInputProps.maxLength && (
+              <div className={localClass.charCount}>
+                {charCount} / {otherInputProps.maxLength}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     );
   })
