@@ -331,7 +331,7 @@ const TextField = React.memo(
         <div
           ref={ref}
           className={createClass(localClass.root, className, {
-            [localClass.fluid]: fluid,
+            [localClass.fluid]: controlProps.fluid,
             [localClass[controlProps.size]]: allowedSizes.includes(
               controlProps.size
             )
