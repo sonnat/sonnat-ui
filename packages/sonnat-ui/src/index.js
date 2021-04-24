@@ -113,11 +113,11 @@ export * from "./Switch";
 export { default as Select } from "./Select";
 export * from "./Select";
 
-export { default as Stepper } from "./Stepper";
-export * from "./Stepper";
+export { default as InputStepper } from "./InputStepper";
+export * from "./InputStepper";
 
-export { default as RangeSlider } from "./RangeSlider";
-export * from "./RangeSlider";
+export { default as InputSlider } from "./InputSlider";
+export * from "./InputSlider";
 
 export { default as PageLoader } from "./PageLoader";
 export * from "./PageLoader";
