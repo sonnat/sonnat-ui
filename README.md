@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://sonnat.design">
+  <a href="https://www.sonnat.dev">
     <img src="https://sonnat.design/static/media/sonnat-logo-fill.svg" height="128">
     <h1 align="center">Sonnat-UI</h1>
   </a>
@@ -18,11 +18,11 @@
 
 ### Getting Started
 
-Visit [https://sonnat.dev/docs/installation](https://sonnat-dev.vercel.app/docs/installation) to get started with Sonnat-UI.
+Visit [https://sonnat.dev/docs/installation](https://www.sonnat.dev/docs/installation) to get started with Sonnat-UI.
 
 ### Documentation
 
-Visit [https://sonnat.dev/docs](https://sonnat-dev.vercel.app/docs) to view the full documentation.
+Visit [https://sonnat.dev/docs](https://www.sonnat.dev/docs) to view the full documentation.
 
 ### Community
 
@@ -30,5 +30,5 @@ The Sonnat-UI community can be found on [Github Discussions](https://github.com/
 
 ### Authors
 
-- Mostafa Shamsitabar - lead engineer / maintainer ([@mimshins](https://twitter.com/mimshins))
-- Mahdi Rahman - design system manager ([@bblndtctv](https://twitter.com/bblndtctv))
+- **Mostafa Shamsitabar** - Lead Engineer / Maintainer.<br/>([twitter](https://twitter.com/mimshins))
+- **Mahdi Rahman** - Design System Manager.<br/>([twitter](https://twitter.com/bblndtctv))

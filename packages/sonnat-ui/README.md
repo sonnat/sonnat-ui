@@ -36,4 +36,4 @@ import "@sonnat/ui/static/sonnat-font-icon.min.css";
 
 ## Documentation
 
-Visit [https://sonnat.dev/docs](https://sonnat.design) to view the full documentation.
+Visit [https://sonnat.dev/docs](https://www.sonnat.dev/docs) to view the full documentation.
