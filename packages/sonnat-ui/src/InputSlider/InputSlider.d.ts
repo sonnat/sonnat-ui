@@ -122,14 +122,14 @@ type BaseProps<P = {}> = P & {
   onDismount?: () => void;
 };
 
-export type RangeSliderProps<P = {}> = BaseProps<P> &
+export type InputSliderProps<P = {}> = BaseProps<P> &
   Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-export interface RangeSliderFC<P> {
+export interface InputSliderFC<P> {
   // eslint-disable-next-line no-unused-vars
-  (props: RangeSliderProps<P>): JSX.Element;
+  (props: InputSliderProps<P>): JSX.Element;
 }
 
-declare const RangeSlider: RangeSliderFC<{}>;
+declare const InputSlider: InputSliderFC<{}>;
 
-export default RangeSlider;
+export default InputSlider;

@@ -16,7 +16,7 @@ import {
 import makeStyles from "../styles/makeStyles";
 import { changeColor } from "../styles/colorUtils";
 
-const componentName = "RangeSlider";
+const componentName = "InputSlider";
 
 const allowedVariants = ["continuous", "discrete"];
 
@@ -268,8 +268,8 @@ const getClosestHandle = (xFromLeft, supOffset, infOffset) => {
       };
 };
 
-const RangeSlider = React.memo(
-  React.forwardRef(function RangeSlider(props, ref) {
+const InputSlider = React.memo(
+  React.forwardRef(function InputSlider(props, ref) {
     const {
       className,
       // Exclude from the `otherProps` property.
@@ -927,9 +927,9 @@ const RangeSlider = React.memo(
   })
 );
 
-RangeSlider.displayName = componentName;
+InputSlider.displayName = componentName;
 
-RangeSlider.propTypes = {
+InputSlider.propTypes = {
   className: PropTypes.string,
   max: PropTypes.number,
   min: PropTypes.number,
@@ -954,7 +954,7 @@ RangeSlider.propTypes = {
   variant: PropTypes.oneOf(allowedVariants)
 };
 
-export default withResizeDetector(RangeSlider, {
+export default withResizeDetector(InputSlider, {
   handleWidth: true,
   skipOnMount: true,
   handleHeight: false,
