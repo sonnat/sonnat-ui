@@ -11,7 +11,7 @@ import {
 import { clamp, useControlled, useForkRef } from "../utils";
 import makeStyles from "../styles/makeStyles";
 
-const componentName = "Stepper";
+const componentName = "InputStepper";
 const allowedSizes = ["medium", "small"];
 
 const useStyles = makeStyles(
@@ -165,8 +165,8 @@ const setNativeValue = (element, value) => {
   element.dispatchEvent(new Event("input", { bubbles: true }));
 };
 
-const Stepper = React.memo(
-  React.forwardRef(function Stepper(props, ref) {
+const InputStepper = React.memo(
+  React.forwardRef(function InputStepper(props, ref) {
     const {
       className,
       onChange,
@@ -243,7 +243,7 @@ const Stepper = React.memo(
 
     const [value, setValue] = useControlled(
       valueProp != null ? parseInt(valueProp) : undefined,
-      parseInt(defaultValue),
+      defaultValue != null ? parseInt(defaultValue) : undefined,
       componentName
     );
 
@@ -282,6 +282,11 @@ const Stepper = React.memo(
         updateActionVisibility(newValue);
       }
     };
+
+    React.useEffect(() => {
+      updateActionVisibility(value);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
       <div
@@ -332,9 +337,9 @@ const Stepper = React.memo(
   })
 );
 
-Stepper.displayName = componentName;
+InputStepper.displayName = componentName;
 
-Stepper.propTypes = {
+InputStepper.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string,
   disabled: PropTypes.bool,
@@ -350,4 +355,4 @@ Stepper.propTypes = {
   max: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 };
 
-export default Stepper;
+export default InputStepper;

@@ -6,10 +6,10 @@ type BaseProps<P = {}> = P & {
    * extend the styles.
    */
   className?: string;
-  /** The name of the Stepper. */
+  /** The name of the stepper. */
   name?: string;
   /**
-   * The value of the Stepper. The DOM API casts this to a string.
+   * The value of the stepper. The DOM API casts this to a string.
    */
   value?: number | string;
   /**
@@ -17,27 +17,27 @@ type BaseProps<P = {}> = P & {
    */
   defaultValue?: number | string;
   /**
-   * If `true`, the Stepper will fill the entire width of the parent.
+   * If `true`, the stepper will fill the entire width of the parent.
    * @default false
    */
   fluid?: boolean;
   /**
-   * If `true`, the Stepper will be disabled.
+   * If `true`, the stepper will be disabled.
    * @default false
    */
   disabled?: boolean;
   /**
-   * The size of the Stepper.
+   * The size of the stepper.
    * @default "medium"
    */
   size?: "medium" | "small";
   /**
-   * The minimum value the Stepper can hold.
+   * The minimum value the stepper can hold.
    * @default 0
    */
   min?: number;
   /**
-   * The maximum value the Stepper can hold.
+   * The maximum value the stepper can hold.
    * @default Infinity
    */
   max?: number;
@@ -49,7 +49,7 @@ type BaseProps<P = {}> = P & {
    * The Callback fires when the state has changed.
    *
    * @param {React.ChangeEvent<HTMLInputElement>} event The event source of the callback.
-   * @param {number} value The current value of the Stepper.
+   * @param {number} value The current value of the stepper.
    */
   onChange?: (
     /* eslint-disable no-unused-vars */
@@ -61,7 +61,7 @@ type BaseProps<P = {}> = P & {
    * The Callback fires when the add button has been clicked.
    *
    * @param {React.MouseEvent<HTMLButtonElement, MouseEvent>} event The event source of the callback.
-   * @param {number} value The current value of the Stepper.
+   * @param {number} value The current value of the stepper.
    */
   onAdd?: (
     /* eslint-disable no-unused-vars */
@@ -73,7 +73,7 @@ type BaseProps<P = {}> = P & {
    * The Callback fires when the subtract button has been clicked.
    *
    * @param {React.MouseEvent<HTMLButtonElement, MouseEvent>} event The event source of the callback.
-   * @param {number} value The current value of the Stepper.
+   * @param {number} value The current value of the stepper.
    */
   onSubtract?: (
     /* eslint-disable no-unused-vars */
@@ -82,14 +82,14 @@ type BaseProps<P = {}> = P & {
     /* eslint-enable no-unused-vars */
   ) => void;
 };
-export type StepperProps<P = {}> = BaseProps<P> &
+export type InputStepperProps<P = {}> = BaseProps<P> &
   Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-export interface StepperFC<P = {}> {
+export interface InputStepperFC<P = {}> {
   // eslint-disable-next-line no-unused-vars
-  (props: StepperProps<P>): JSX.Element;
+  (props: InputStepperProps<P>): JSX.Element;
 }
 
-declare const Stepper: StepperFC<{}>;
+declare const InputStepper: InputStepperFC<{}>;
 
-export default Stepper;
+export default InputStepper;
