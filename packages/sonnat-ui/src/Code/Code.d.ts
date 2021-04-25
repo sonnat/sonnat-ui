@@ -2,17 +2,17 @@ import * as React from "react";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component. */
-  children?: React.ReactNode;
+  children?: string;
   /**
    * Append to the classNames applied to the component so you can override or
    * extend the styles.
    */
   className?: string;
   /**
-   * Determine whether the component is code-block (`<pre>`) or not.
+   * Determine whether the component is code-block or not.
    *
-   * If `true`, the component will be rendered as a `<pre>` tag.
-   * otherwise, the component will be rendered as a `<code>` tag.
+   * If `true`, the component will be rendered as a `<pre>` element.
+   * otherwise, the component will be rendered as a `<code>` element.
    * @default false
    */
   codeBlock?: boolean;
