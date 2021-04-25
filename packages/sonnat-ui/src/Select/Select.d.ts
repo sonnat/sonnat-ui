@@ -16,7 +16,7 @@ type BaseProps<P = {}> = P & {
   /** The name of the Select. */
   name?: string;
   /**
-   * The `input` value. Providing an empty string will Select no options.
+   * The value of the select. Providing an empty string will Select no options.
    * Set to an empty string `''` if you don't want any of the available options to be selected.
    *
    * If the value is an object it must have reference equality with the option in order to be selected.
