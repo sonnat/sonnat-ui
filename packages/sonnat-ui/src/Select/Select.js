@@ -202,7 +202,7 @@ const Select = React.memo(
       rounded = false,
       hasError = false,
       required = false,
-      preventPageScrolling = true,
+      preventPageScrolling = false,
       ...otherProps
     } = props;
 
@@ -232,7 +232,13 @@ const Select = React.memo(
 
     const { current: isOpenControlled } = useRef(openProp != null);
     const { current: defaultValue } = useRef(
-      defaultValueProp ? defaultValueProp : multiple ? [] : ""
+      valueProp != null
+        ? undefined
+        : defaultValueProp != null
+        ? defaultValueProp
+        : multiple
+        ? []
+        : ""
     );
 
     const [value, setValue, isControlled] = useControlled(
@@ -646,22 +652,12 @@ const Select = React.memo(
     return (
       <div
         ref={ref}
-        className={createClass(localClass.root, {
+        className={createClass(localClass.root, className, {
           [localClass.fluid]: controlProps.fluid,
           [localClass[controlProps.size]]: allowedSizes.includes(
             controlProps.size
           )
         })}
-        onMouseDown={e => {
-          if (!controlProps.disabled) {
-            const chipSelector = `.${localClass.chip}`;
-            if (
-              !closest(e.target, chipSelector) &&
-              !menuRef.current.contains(e.target)
-            )
-              updateOpenState(!openState);
-          }
-        }}
         {...otherProps}
       >
         <InputBase
@@ -673,6 +669,16 @@ const Select = React.memo(
           fluid={controlProps.fluid}
           size={controlProps.size}
           variant={variant}
+          onMouseDown={e => {
+            if (!controlProps.disabled) {
+              const chipSelector = `.${localClass.chip}`;
+              if (
+                !closest(e.target, chipSelector) &&
+                !menuRef.current.contains(e.target)
+              )
+                updateOpenState(!openState);
+            }
+          }}
           leadingAdornment={leadingAdornment}
           trailingAdornment={
             <InputAdornment>
@@ -687,7 +693,7 @@ const Select = React.memo(
               </InputAdornment>
             </InputAdornment>
           }
-          className={createClass(localClass.base, className, {
+          className={createClass(localClass.base, {
             [localClass.open]: openState,
             [localClass.disabled]: controlProps.disabled,
             [localClass.errored]: controlProps.hasError
