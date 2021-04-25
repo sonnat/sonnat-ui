@@ -1122,10 +1122,10 @@
     webpack "^4.44.1"
     webpack-bundle-analyzer "^4.4.0"
 
-"@sonnat/ui@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@sonnat/ui/-/ui-1.0.0.tgz#8a84f15ce5dbce8473f6238aff9a433592ee62b7"
-  integrity sha512-Zr4r/Fw6STssrqlDQ7m9YoB9/fH6HMMJJ7mZFjlagvrel2XBdqqCW6n4XdfweZoK/94Lc6hr2M9hkb01+1p0IQ==
+"@sonnat/ui@latest":
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/@sonnat/ui/-/ui-1.0.15.tgz#4249f9d1cf240f4dfa79dd788dd835f5a227ee80"
+  integrity sha512-DeBvmA6uSXrPr+lfrcind5/yITDUJ+AYLqgpCvVgjGug+wcrYtYIh+xT7r8ZuTBHg13N9uN43CR7zGBbaFZVYg==
   dependencies:
     "@babel/runtime" "^7.13.6"
     classnames "^2.2.6"
