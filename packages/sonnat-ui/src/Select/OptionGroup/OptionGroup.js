@@ -7,15 +7,9 @@ import generateUniqueString from "../../utils/generateUniqueString";
 
 export const componentName = "SelectOptionGroup";
 
-const SelectOptionGroup = React.memo(function SelectOptionGroup(props) {
-  const {
-    className,
-    titleClassName,
-    title,
-    children: childrenProp,
-    ...otherProps
-  } = props;
-
+const SelectOptionGroup = React.memo(function SelectOptionGroup({
+  children: childrenProp
+}) {
   const children = React.Children.map(childrenProp, (child, index) => {
     if (!React.isValidElement(child)) return null;
 

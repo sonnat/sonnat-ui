@@ -4,18 +4,7 @@ import PropTypes from "prop-types";
 
 export const componentName = "SelectOption";
 
-const SelectOption = React.memo(function SelectOption(props) {
-  const {
-    className,
-    label,
-    children,
-    onClick,
-    onFocus,
-    onBlur,
-    disabled = false,
-    ...otherProps
-  } = props;
-
+const SelectOption = React.memo(function SelectOption({ children }) {
   return <React.Fragment>{children}</React.Fragment>;
 });
 
@@ -25,6 +14,7 @@ SelectOption.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   label: PropTypes.string,
+  value: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,

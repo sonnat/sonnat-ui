@@ -9,8 +9,12 @@ type BaseProps<P = {}> = P & {
    */
   className?: string;
   /**
-   * If a label is provided,
-   * the select component will use it as the item's display in the menu.
+   * The value of the option.
+   */
+  value: string;
+  /**
+   * If a label was provided,
+   * the select component will use it as the item's display value.
    *
    * It is mandatory to use it when the `children` prop contains
    * not just the label but also some extra HTMLElements as well.
