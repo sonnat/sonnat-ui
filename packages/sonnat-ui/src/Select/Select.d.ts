@@ -29,6 +29,18 @@ type BaseProps<P = {}> = P & {
   helperText?: string;
   /** The helper icon. */
   helperIcon?: React.ReactNode;
+  /**
+   * The leading adornment for this component.
+   *
+   * This can be used to add a prefix, an action, or an icon to the leading of your input.
+   */
+  leadingAdornment?: React.ReactNode;
+  /**
+   * The trailing adornment for this component.
+   *
+   * This can be used to add a suffix, an action, or an icon to the trailing of your input.
+   */
+  trailingAdornment?: React.ReactNode;
   /** The `placeholder` property of the Select. */
   placeholder?: string;
   /** The `placeholder` property of the search field. */
