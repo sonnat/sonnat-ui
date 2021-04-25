@@ -1,7 +1,7 @@
 {
   "main": "./dist/index.js",
   "name": "@sonnat/ui",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "React component library using Sonnat Design System to build faster, elegant, and accessible web applications.",
   "sideEffects": false,
   "license": "MIT",
