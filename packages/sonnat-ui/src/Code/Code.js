@@ -73,7 +73,7 @@ const Code = React.memo(
 Code.displayName = componentName;
 
 Code.propTypes = {
-  children: PropTypes.string,
+  children: PropTypes.node,
   className: PropTypes.string,
   codeBlock: PropTypes.bool
 };

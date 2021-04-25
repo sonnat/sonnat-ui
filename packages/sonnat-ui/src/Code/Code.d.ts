@@ -2,7 +2,7 @@ import * as React from "react";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component. */
-  children?: string;
+  children?: React.ReactNode;
   /**
    * Append to the classNames applied to the component so you can override or
    * extend the styles.
