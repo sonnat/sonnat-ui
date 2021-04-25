@@ -288,7 +288,7 @@ const Checkbox = React.memo(
     const { className: labelClassName, ...otherLabelProps } = labelProps;
 
     const { current: defaultChecked } = useRef(
-      checked != null
+      checkedProp != null
         ? undefined
         : defaultCheckedProp != null
         ? defaultCheckedProp
