@@ -37,7 +37,7 @@ const useStyles = makeStyles(
         display: "block",
         textAlign: "left",
         direction: "ltr",
-        fontSize: pxToRem(14),
+        fontSize: "0.875em",
         padding: pxToRem(16),
         backgroundColor: colors.transparent,
         border: `1px solid ${colors.divider}`,
