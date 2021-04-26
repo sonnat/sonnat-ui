@@ -11,11 +11,11 @@ type BaseProps<P = {}> = P & {
   /**
    * The value of the stepper. The DOM API casts this to a string.
    */
-  value?: number | string;
+  value?: number;
   /**
    * The default value. Use when the component is not controlled.
    */
-  defaultValue?: number | string;
+  defaultValue?: number;
   /**
    * If `true`, the stepper will fill the entire width of the parent.
    * @default false

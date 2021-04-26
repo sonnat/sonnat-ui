@@ -193,15 +193,15 @@ const InputStepper = React.memo(
       ...otherInputProps
     } = inputProps;
 
-    if (valueProp != null && isNaN(parseInt(valueProp))) {
+    if (valueProp != null && isNaN(valueProp)) {
       throw new Error(
         `[Sonnat]: Invalid \`value\` property supplied to \`${componentName}\` component. ` +
-          `Expected an \`integer\` or a \`string holding an integer\`.`
+          `Expected an \`integer\`.`
       );
-    } else if (defaultValueProp != null && isNaN(parseInt(defaultValueProp))) {
+    } else if (defaultValueProp != null && isNaN(defaultValueProp)) {
       throw new Error(
         `[Sonnat]: Invalid \`defaultValue\` property supplied to \`${componentName}\` component. ` +
-          `Expected an \`integer\` or a \`string holding an integer\`.`
+          `Expected an \`integer\`.`
       );
     }
 
@@ -228,33 +228,31 @@ const InputStepper = React.memo(
     const inputRef = useRef();
     const handleInputRef = useForkRef(inputRef, inputRefProp);
 
-    const { current: min } = useRef(
-      typeof minProp === "string" ? parseInt(minProp) : minProp
-    );
-    const { current: max } = useRef(
-      typeof maxProp === "string" ? parseInt(maxProp) : maxProp
-    );
+    const { current: min } = useRef(minProp);
+    const { current: max } = useRef(maxProp);
 
     const { current: defaultValue } = useRef(
       valueProp != null
         ? undefined
-        : clamp(defaultValueProp != null ? defaultValueProp : 0, min, max)
+        : Math.floor(
+            clamp(defaultValueProp != null ? defaultValueProp : 0, min, max)
+          )
     );
 
     const [value, setValue] = useControlled(
-      valueProp != null ? parseInt(valueProp) : undefined,
-      defaultValue != null ? parseInt(defaultValue) : undefined,
+      valueProp != null ? Math.floor(valueProp) : undefined,
+      defaultValue,
       componentName
     );
 
     const updateActionVisibility = newValue => {
-      if (parseInt(newValue) === min) dispatch(preventSubtraction());
-      else if (parseInt(newValue) === max) dispatch(preventAddition());
+      if (newValue === min) dispatch(preventSubtraction());
+      else if (newValue === max) dispatch(preventAddition());
       else dispatch(allowAdditionAndSubtraction());
     };
 
     const onAdd = e => {
-      const newValue = clamp(parseInt(value) + 1, min, max);
+      const newValue = clamp(value + 1, min, max);
 
       if (onAddProp) onAddProp(e, newValue);
       setValue(newValue);
@@ -263,7 +261,7 @@ const InputStepper = React.memo(
     };
 
     const onSubtract = e => {
-      const newValue = clamp(parseInt(value) - 1, min, max);
+      const newValue = clamp(value - 1, min, max);
 
       if (onSubtractProp) onSubtractProp(e, newValue);
       setValue(newValue);
@@ -279,14 +277,13 @@ const InputStepper = React.memo(
         if (onChange) onChange(e, newValue);
         if (inputOnChangeProp) inputOnChangeProp(e, newValue);
         setValue(newValue);
-        updateActionVisibility(newValue);
       }
     };
 
     React.useEffect(() => {
       updateActionVisibility(value);
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [value]);
 
     return (
       <div
@@ -349,10 +346,10 @@ InputStepper.propTypes = {
   onSubtract: PropTypes.func,
   inputProps: PropTypes.object,
   size: PropTypes.oneOf(allowedSizes),
-  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  defaultValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  min: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  max: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+  value: PropTypes.number,
+  defaultValue: PropTypes.number,
+  min: PropTypes.number,
+  max: PropTypes.number
 };
 
 export default InputStepper;
