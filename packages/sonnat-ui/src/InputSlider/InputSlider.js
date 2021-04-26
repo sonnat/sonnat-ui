@@ -279,7 +279,6 @@ const InputSlider = React.memo(
       onClick: onClickProp,
       /* eslint-enable no-unused-vars, react/prop-types */
       onChange,
-      defaultValue,
       onMount,
       onDismount,
       step: stepProp,
@@ -287,6 +286,7 @@ const InputSlider = React.memo(
       min: minProp,
       width: rootWidth = 0,
       value: valueProp,
+      defaultValue: defaultValueProp,
       onDragEnd: onDragEndProp,
       onDragStart: onDragStartProp,
       onDragging: onDraggingProp,
@@ -314,8 +314,12 @@ const InputSlider = React.memo(
 
     const { current: isDiscrete } = React.useRef(variant === "discrete");
     const { current: stepsCount } = React.useRef(
-      parseInt(isDiscrete ? (max - min) / step + 1 : 0)
+      Math.floor(isDiscrete ? (max - min) / step + 1 : 0)
     );
+
+    const bidirectionalCandidate =
+      (Array.isArray(valueProp) && valueProp.length === 2) ||
+      (Array.isArray(defaultValueProp) && defaultValueProp.length === 2);
 
     if (max <= min) {
       throw new Error(
@@ -335,13 +339,26 @@ const InputSlider = React.memo(
       );
     }
 
+    const { current: defaultValue } = React.useRef(
+      valueProp != null
+        ? undefined
+        : defaultValueProp != null
+        ? bidirectionalCandidate
+          ? [
+              clamp(defaultValueProp[0], min, max),
+              clamp(defaultValueProp[1], min, max)
+            ]
+          : clamp(defaultValueProp, min, max)
+        : 0
+    );
+
     const [value, setValue] = useControlled(
       valueProp,
-      valueProp == null && defaultValue == null ? max : defaultValue,
+      defaultValue,
       componentName
     );
 
-    const isBidirectional = useConstantProp(Array.isArray(value), false, {
+    const isBidirectional = useConstantProp(bidirectionalCandidate, false, {
       componentName,
       errorHandler: () => {
         return [
