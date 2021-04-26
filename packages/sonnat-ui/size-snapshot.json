@@ -1,7 +1,7 @@
 {
   "sonnat.prod.min.js": {
-    "bundled": 804810,
-    "minified": 326825,
-    "gzipped": 83816
+    "bundled": 804611,
+    "minified": 326587,
+    "gzipped": 83828
   }
 }
