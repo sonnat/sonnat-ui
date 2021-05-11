@@ -20,6 +20,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      mixins: { useIconWrapper },
       typography: { pxToRem, useText, fontFamily }
     } = theme;
 
@@ -66,19 +67,13 @@ const useStyles = makeStyles(
           color: colors.text.secondary
         })
       },
-      helperIconWrapper: {
-        paddingTop: pxToRem(4),
-        ...(direction === "rtl"
-          ? { paddingLeft: pxToRem(4) }
-          : { paddingRight: pxToRem(4) })
-      },
       helperIcon: {
+        ...useIconWrapper(16),
+        marginTop: pxToRem(4),
         color: colors.text.secondary,
-        width: pxToRem(16),
-        height: pxToRem(16),
-        maxWidth: pxToRem(16),
-        maxHeight: pxToRem(16),
-        fontSize: pxToRem(16)
+        ...(direction === "rtl"
+          ? { marginLeft: pxToRem(4) }
+          : { marginRight: pxToRem(4) })
       },
       charCount: {
         ...useText({
@@ -131,11 +126,6 @@ const useStyles = makeStyles(
   },
   { name: `Sonnat${componentName}` }
 );
-
-const createHelperIcon = (helperIcon, className) =>
-  React.cloneElement(helperIcon, {
-    className: createClass(className, helperIcon.props.className)
-  });
 
 const TextField = React.memo(
   React.forwardRef(function TextField(props, ref) {
@@ -403,9 +393,7 @@ const TextField = React.memo(
               {helperText && (
                 <p className={localClass.helperContent}>
                   {helperIcon && (
-                    <span className={localClass.helperIconWrapper}>
-                      {createHelperIcon(helperIcon, localClass.helperIcon)}
-                    </span>
+                    <i className={localClass.helperIcon}>{helperIcon}</i>
                   )}
                   <span className={localClass.helperText}>{helperText}</span>
                 </p>

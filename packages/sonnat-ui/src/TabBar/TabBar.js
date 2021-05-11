@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
 import { isFragment } from "react-is";
 import { withResizeDetector } from "react-resize-detector";
-import Icon from "../Icon";
+import { ChevronLeftLarge, ChevronRightLarge } from "../internals/icons";
 import { makeStyles, useTheme } from "../styles";
 import {
   detectScrollType,
@@ -24,6 +24,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      mixins: { useIconWrapper },
       typography: { pxToRem, fontFamily }
     } = theme;
 
@@ -126,6 +127,7 @@ const useStyles = makeStyles(
         visibility: "hidden"
       },
       faderIcon: {
+        ...useIconWrapper(16),
         color: colors.text.hint,
         transition: "color 360ms ease"
       },
@@ -515,12 +517,9 @@ const TabBar = React.memo(
               })}
               onClick={startScrollButtonHandler}
             >
-              <Icon
-                identifier={
-                  isRtl ? "chevron-right-large" : "chevron-left-large"
-                }
-                className={localClass.faderIcon}
-              />
+              <i className={localClass.faderIcon}>
+                {isRtl ? <ChevronRightLarge /> : <ChevronLeftLarge />}
+              </i>
             </div>
           )}
           <div
@@ -548,12 +547,9 @@ const TabBar = React.memo(
               })}
               onClick={endScrollButtonHandler}
             >
-              <Icon
-                identifier={
-                  isRtl ? "chevron-left-large" : "chevron-right-large"
-                }
-                className={localClass.faderIcon}
-              />
+              <i className={localClass.faderIcon}>
+                {isRtl ? <ChevronLeftLarge /> : <ChevronRightLarge />}
+              </i>
             </div>
           )}
         </div>

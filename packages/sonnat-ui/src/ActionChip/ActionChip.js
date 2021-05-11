@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import createClass from "classnames";
-import Icon from "../Icon";
 import makeStyles from "../styles/makeStyles";
 import { adjustColor, changeColor } from "../styles/colorUtils";
 
@@ -18,7 +17,7 @@ const useStyles = makeStyles(
       colors,
       direction,
       darkMode,
-      mixins: { useFontIconSize, useDisableUserSelect },
+      mixins: { useIconWrapper, useDisableUserSelect },
       typography: { pxToRem, useText, fontFamily }
     } = theme;
 
@@ -81,7 +80,7 @@ const useStyles = makeStyles(
           "color 360ms ease, background-color 360ms ease, border 360ms ease"
       },
       icon: {
-        ...useFontIconSize(16),
+        ...useIconWrapper(16),
         flexShrink: "0",
         transition: "color 360ms ease"
       },
@@ -341,10 +340,7 @@ const ActionChip = React.memo(
         {...otherProps}
       >
         {leadingIcon && (
-          <Icon
-            identifier={leadingIcon}
-            className={createClass(localClass.icon)}
-          />
+          <i className={createClass(localClass.icon)}>{leadingIcon}</i>
         )}
         {label}
       </div>
@@ -359,7 +355,7 @@ ActionChip.propTypes = {
   className: PropTypes.string,
   rounded: PropTypes.bool,
   disabled: PropTypes.bool,
-  leadingIcon: PropTypes.string,
+  leadingIcon: PropTypes.node,
   size: PropTypes.oneOf(allowedSizes),
   color: PropTypes.oneOf(allowedColors),
   variant: PropTypes.oneOf(allowedVariants)

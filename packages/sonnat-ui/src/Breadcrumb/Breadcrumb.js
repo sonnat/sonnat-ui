@@ -1,9 +1,9 @@
+import createClass from "classnames";
+import PropTypes from "prop-types";
 import React from "react";
 import { isFragment } from "react-is";
-import PropTypes from "prop-types";
-import createClass from "classnames";
-import { componentName as childName } from "./Item";
 import makeStyles from "../styles/makeStyles";
+import { componentName as childName } from "./Item";
 
 const componentName = "Breadcrumb";
 
@@ -41,7 +41,7 @@ const useStyles = makeStyles(
           margin: 0,
           color: colors.text.hint,
           pointerEvents: "none",
-          "&:after": {
+          "& > .sonnat__breadcrumb-item__separator": {
             display: "none"
           }
         }
@@ -52,14 +52,16 @@ const useStyles = makeStyles(
         },
         "& > $item:nth-last-child(2)": {
           margin: 0,
-          "&:hover:after": {
-            color: colors.text.primary,
-            transform: "rotate(180deg)"
+          "&:hover": {
+            "& > .sonnat__breadcrumb-item__separator": {
+              color: colors.text.primary,
+              transform: "rotate(180deg)"
+            },
+            "& ~ $item > .sonnat__breadcrumb-item__separator": {
+              transform: "rotate(0)"
+            }
           },
-          "&:hover:after ~ $item:after": {
-            transform: "rotate(0)"
-          },
-          "&:after": {
+          "& > .sonnat__breadcrumb-item__separator": {
             order: "-1",
             transform: "rotate(180deg)",
             ...(direction === "rtl"

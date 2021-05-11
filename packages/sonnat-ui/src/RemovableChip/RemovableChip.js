@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
 import createClass from "classnames";
-import Icon from "../Icon";
-import makeStyles from "../styles/makeStyles";
+import PropTypes from "prop-types";
+import React from "react";
+import Close from "../internals/icons/Close";
 import { changeColor } from "../styles/colorUtils";
+import makeStyles from "../styles/makeStyles";
 
 const componentName = "RemovableChip";
 const allowedVariants = ["filled", "outlined"];
@@ -18,7 +18,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      mixins: { useFontIconSize, useDisableUserSelect },
+      mixins: { useIconWrapper, useDisableUserSelect },
       typography: { pxToRem, useText, fontFamily }
     } = theme;
 
@@ -60,7 +60,7 @@ const useStyles = makeStyles(
           "color 360ms ease, background-color 360ms ease, border 360ms ease"
       },
       icon: {
-        ...useFontIconSize(16),
+        ...useIconWrapper(16),
         flexShrink: "0",
         transition: "color 360ms ease"
       },
@@ -333,10 +333,7 @@ const RemovableChip = React.memo(
         {...otherProps}
       >
         {leadingIcon && (
-          <Icon
-            identifier={leadingIcon}
-            className={createClass(localClass.icon)}
-          />
+          <i className={createClass(localClass.icon)}>{leadingIcon}</i>
         )}
         {label}
         <button
@@ -345,10 +342,9 @@ const RemovableChip = React.memo(
           disabled={disabled}
           tabIndex={disabled ? -1 : 0}
         >
-          <Icon
-            identifier="close"
-            className={createClass(localClass.removeButtonIcon)}
-          />
+          <i className={createClass(localClass.removeButtonIcon)}>
+            <Close />
+          </i>
         </button>
       </div>
     ) : null;
@@ -359,7 +355,7 @@ RemovableChip.displayName = componentName;
 
 RemovableChip.propTypes = {
   label: PropTypes.string.isRequired,
-  leadingIcon: PropTypes.string,
+  leadingIcon: PropTypes.node,
   className: PropTypes.string,
   rounded: PropTypes.bool,
   disabled: PropTypes.bool,

@@ -1,18 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 import createClass from "classnames";
+import { ChevronLeft, ChevronRight } from "../../internals/icons";
 import makeStyles from "../../styles/makeStyles";
+import useTheme from "../../styles/useTheme";
 
 export const componentName = "BreadcrumbItem";
 
 const useStyles = makeStyles(
   theme => {
     const {
-      icons,
       colors,
       direction,
-      typography: { pxToRem, useText },
-      mixins: { useFontIcon }
+      mixins: { useIconWrapper },
+      hacks: { backfaceVisibilityFix },
+      typography: { pxToRem, useText }
     } = theme;
 
     return {
@@ -35,27 +37,21 @@ const useStyles = makeStyles(
         "& > a": { textDecoration: "none", color: "inherit" },
         "&:hover": {
           color: colors.text.primary,
-          "&:after": {
+          "& > $separator": {
             color: colors.text.primary,
             transform: "rotate(180deg)"
           },
-          "& ~ $root:after": {
+          "& ~ $root > $separator": {
             transform: "rotate(180deg)"
           }
-        },
-        "&:after": {
-          ...useFontIcon(),
-          width: pxToRem(16),
-          height: pxToRem(16),
-          fontSize: pxToRem(16),
-          display: "block",
-          color: colors.text.secondary,
-          flexShrink: "0",
-          transition: "color 360ms ease, transform 360ms ease",
-          ...(direction === "rtl"
-            ? { content: icons.variable.chevronLeft }
-            : { content: icons.variable.chevronRight })
         }
+      },
+      separator: {
+        ...useIconWrapper(16),
+        ...backfaceVisibilityFix,
+        color: colors.text.secondary,
+        flexShrink: "0",
+        transition: "color 360ms ease, transform 360ms ease"
       }
     };
   },
@@ -67,6 +63,9 @@ const BreadcrumbItem = React.memo(
     const { className, children, ...otherProps } = props;
 
     const localClass = useStyles();
+    const theme = useTheme();
+
+    const isRtl = theme.direction === "rtl";
 
     return (
       <li
@@ -75,6 +74,14 @@ const BreadcrumbItem = React.memo(
         {...otherProps}
       >
         {children}
+        <i
+          className={createClass(
+            localClass.separator,
+            "sonnat__breadcrumb-item__separator"
+          )}
+        >
+          {isRtl ? <ChevronLeft /> : <ChevronRight />}
+        </i>
       </li>
     );
   })

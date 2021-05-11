@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import createClass from "classnames";
 import useInputBase from "../InputBase/useInputBase";
@@ -14,7 +14,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      mixins: { useFontIconSize },
+      mixins: { useIconWrapper },
       typography: { pxToRem, useText, fontWeight, fontFamily }
     } = theme;
 
@@ -62,7 +62,7 @@ const useStyles = makeStyles(
       },
       medium: {
         "&$textAdornment": { minWidth: pxToRem(24), fontSize: pxToRem(14) },
-        "&$iconAdornment": { "& > *": useFontIconSize(24) },
+        "&$iconAdornment": useIconWrapper(24),
         "& + *": {
           ...(direction === "rtl"
             ? { marginRight: pxToRem(8) }
@@ -75,7 +75,7 @@ const useStyles = makeStyles(
           fontSize: pxToRem(10),
           fontWeight: fontWeight.medium
         },
-        "&$iconAdornment": { "& > *": useFontIconSize(16) },
+        "&$iconAdornment": useIconWrapper(16),
         "& + *": {
           ...(direction === "rtl"
             ? { marginRight: pxToRem(4) }
@@ -101,17 +101,15 @@ const InputAdornment = React.memo(
 
     const localClass = useStyles();
 
+    const RootNode = variant === "icon" ? "i" : "div";
     const { size, disabled, hasError } = useInputBase();
-
-    const { current: hasValidVariant } = useRef(
-      allowedVariants.includes(variant)
-    );
+    const hasValidVariant = allowedVariants.includes(variant);
 
     return hasValidVariant ? (
-      <div
+      <RootNode
         ref={ref}
         role={otherProps.onClick ? "button" : undefined}
-        tabIndex={otherProps.onClick ? 0 : undefined}
+        tabIndex={otherProps.onClick ? (disabled ? -1 : 0) : undefined}
         className={createClass(
           localClass.root,
           className,
@@ -126,7 +124,7 @@ const InputAdornment = React.memo(
         {...otherProps}
       >
         {children}
-      </div>
+      </RootNode>
     ) : null;
   })
 );

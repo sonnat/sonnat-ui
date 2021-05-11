@@ -6,7 +6,7 @@ import createClass from "classnames";
 import TextField from "../TextField";
 import PortalDestination from "../PortalDestination";
 import InputAdornment from "../InputAdornment";
-import Icon from "../Icon";
+import Magnifier from "../internals/icons/Magnifier";
 import MenuContext from "./context";
 import { componentName as groupName } from "./ItemGroup";
 import { componentName as itemName } from "./Item";
@@ -491,7 +491,7 @@ const Menu = React.memo(
                       }, 250)}
                       leadingAdornment={
                         <InputAdornment variant="icon">
-                          <Icon identifier="magnifier" color="inherit" />
+                          <Magnifier />
                         </InputAdornment>
                       }
                     />

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import createClass from "classnames";
 import { withResizeDetector } from "react-resize-detector";
-import Icon from "../Icon";
+import { ChevronLeft, ChevronRight } from "../internals/icons";
 import {
   useEventListener,
   closest,
@@ -28,7 +28,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       hacks,
-      mixins: { useFontIconSize },
+      mixins: { useIconWrapper },
       typography: { pxToRem }
     } = theme;
 
@@ -155,7 +155,7 @@ const useStyles = makeStyles(
         }
       },
       handleIcon: {
-        ...useFontIconSize(16),
+        ...useIconWrapper(16),
         color: colors.createBlackColor({ alpha: 0.56 }),
         transition: "color 360ms ease"
       },
@@ -901,10 +901,9 @@ const InputSlider = React.memo(
             >
               <button className={localClass.handleCircle}>
                 {isBidirectional && (
-                  <Icon
-                    identifier="chevron-left"
-                    className={localClass.handleIcon}
-                  />
+                  <i className={localClass.handleIcon}>
+                    <ChevronLeft />
+                  </i>
                 )}
               </button>
             </div>
@@ -930,10 +929,9 @@ const InputSlider = React.memo(
                 }}
               >
                 <button className={localClass.handleCircle}>
-                  <Icon
-                    identifier="chevron-right"
-                    className={localClass.handleIcon}
-                  />
+                  <i className={localClass.handleIcon}>
+                    <ChevronRight />
+                  </i>
                 </button>
               </div>
             )}

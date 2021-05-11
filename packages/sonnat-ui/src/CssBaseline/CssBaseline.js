@@ -286,7 +286,6 @@ const cssVariables = theme => {
     return {
       "--snt-html-font-size": `${typography.htmlFontSize}px`,
       "--snt-base-font-size": `${typography.fontSize}px`,
-      "--snt-icon-font-family": typography.fontFamily.icon,
       "--snt-ltr-font-family": typography.fontFamily.ltr,
       "--snt-rtl-font-family": typography.fontFamily.rtl
     };

@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import createClass from "classnames";
-import Icon from "../Icon";
 import makeStyles from "../styles/makeStyles";
 
 const componentName = "Tag";
@@ -13,7 +12,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      mixins: { useFontIconSize },
+      mixins: { useIconWrapper },
       typography: { pxToRem, useText, fontFamily }
     } = theme;
 
@@ -37,7 +36,7 @@ const useStyles = makeStyles(
           : colors.createWhiteColor({ alpha: 0.04 })
       },
       icon: {
-        ...useFontIconSize(16),
+        ...useIconWrapper(16),
         ...(direction === "rtl"
           ? { marginRight: pxToRem(-4), marginLeft: pxToRem(4) }
           : { marginLeft: pxToRem(-4), marginRight: pxToRem(4) }),
@@ -66,7 +65,7 @@ const Tag = React.memo(
         })}
         {...otherProps}
       >
-        {icon && <Icon identifier={icon} className={localClass.icon} />}
+        {icon && <i className={localClass.icon}>{icon}</i>}
         {label}
       </div>
     );
@@ -76,7 +75,7 @@ const Tag = React.memo(
 Tag.displayName = componentName;
 
 Tag.propTypes = {
-  icon: PropTypes.string,
+  icon: PropTypes.node,
   label: PropTypes.string.isRequired,
   variant: PropTypes.oneOf(allowedVariants),
   className: PropTypes.string

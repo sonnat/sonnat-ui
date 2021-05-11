@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import createClass from "classnames";
+import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import Button from "../Button";
-import Icon from "../Icon";
+import CloseLarge from "../internals/icons/CloseLarge";
+import { makeStyles, ThemeProvider, useDarkMode, useTheme } from "../styles";
 import onNextFrame from "../utils/onNextFrame";
-import { makeStyles, useTheme, useDarkMode, ThemeProvider } from "../styles";
 
 const componentName = "Snackbar";
 
@@ -17,7 +17,7 @@ const useStyles = makeStyles(
       darkMode,
       direction,
       zIndexes: { popover },
-      mixins: { useFontIconSize },
+      mixins: { useIconWrapper },
       typography: { pxToRem, useText, fontFamily }
     } = theme;
 
@@ -53,12 +53,12 @@ const useStyles = makeStyles(
           "transform 360ms cubic-bezier(0, 0, 0.2, 1), visibility 200ms ease, opacity 200ms ease"
       },
       icon: {
-        ...useFontIconSize(16),
+        ...useIconWrapper(16),
         color: !darkMode ? colors.white : "rgba(0, 0, 0, 0.87)",
         flexShrink: 0,
         position: "relative",
         top: pxToRem(16),
-        alignSelft: "flex-start",
+        alignSelf: "flex-start",
         "& + $text": {
           ...(direction === "rtl"
             ? { marginRight: pxToRem(8) }
@@ -178,7 +178,7 @@ const Snackbar = React.memo(
           )}
           {...otherProps}
         >
-          {icon && <Icon identifier={icon} className={localClass.icon} />}
+          {icon && <i className={localClass.icon}>{icon}</i>}
           <span className={localClass.text}>{text}</span>
           {undoable && (
             <React.Fragment>
@@ -200,10 +200,7 @@ const Snackbar = React.memo(
               variant="inlined"
               className={localClass.closeButton}
               leadingIcon={
-                <Icon
-                  identifier="close-large"
-                  className={localClass.closeButtonIcon}
-                />
+                <CloseLarge className={localClass.closeButtonIcon} />
               }
               onClick={onClose}
             />
@@ -219,7 +216,7 @@ Snackbar.displayName = componentName;
 Snackbar.propTypes = {
   text: PropTypes.string.isRequired,
   className: PropTypes.string,
-  icon: PropTypes.string,
+  icon: PropTypes.node,
   undoButtonLabel: PropTypes.string,
   placement: PropTypes.oneOf(allowedPlacements),
   open: PropTypes.bool,

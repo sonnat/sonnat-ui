@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import createClass from "classnames";
-import Icon from "../Icon";
 import makeStyles from "../styles/makeStyles";
 import { adjustColor } from "../styles/colorUtils";
 
@@ -16,7 +15,7 @@ const useStyles = makeStyles(
       darkMode,
       direction,
       zIndexes: { sticky },
-      mixins: { useFontIconSize },
+      mixins: { useIconWrapper },
       typography: { pxToRem, useText, fontWeight, fontFamily }
     } = theme;
 
@@ -100,6 +99,7 @@ const useStyles = makeStyles(
         transition: "color 360ms ease"
       },
       icon: {
+        ...useIconWrapper(24),
         ...hacks.backfaceVisibilityFix,
         color: coloring.text,
         transition: "color 360ms ease",
@@ -114,19 +114,19 @@ const useStyles = makeStyles(
         width: pxToRem(56),
         height: pxToRem(56),
         padding: pxToRem(16),
-        "& $icon": useFontIconSize(24)
+        "& $icon": useIconWrapper(24)
       },
       mediumIconButton: {
         width: pxToRem(48),
         height: pxToRem(48),
         padding: pxToRem(12),
-        "& $icon": useFontIconSize(24)
+        "& $icon": useIconWrapper(24)
       },
       smallIconButton: {
         width: pxToRem(40),
         height: pxToRem(40),
         padding: pxToRem(10),
-        "& $icon": useFontIconSize(20)
+        "& $icon": useIconWrapper(20)
       },
       disabled: {
         backgroundColor: !darkMode
@@ -171,13 +171,10 @@ const FloatingActionButton = React.memo(
 
     const localClass = useStyles();
 
-    const isIconed =
-      typeof leadingIcon === "string"
-        ? leadingIcon.length !== 0
-        : !!leadingIcon;
-
-    const isInvalid = !label && !isIconed;
-    const isIconButton = !isInvalid && !label && isIconed;
+    const isLabeled = label != null;
+    const isIconed = leadingIcon != null;
+    const isInvalid = !isLabeled && !isIconed;
+    const isIconButton = !isInvalid && !isLabeled && isIconed;
 
     const isNative = RootNode === "button";
 
@@ -190,22 +187,21 @@ const FloatingActionButton = React.memo(
       conditionalProps.role = "button";
     }
 
-    const leadingIconComponent = leadingIcon ? (
-      typeof leadingIcon === "string" ? (
-        <Icon
-          identifier={leadingIcon}
-          className={createClass(localClass.leadingIcon, localClass.icon)}
-        />
-      ) : (
-        React.cloneElement(leadingIcon, {
-          className: createClass(
-            leadingIcon.props.className,
-            localClass.leadingIcon,
-            localClass.icon
-          )
-        })
-      )
-    ) : null;
+    const iconComponents = { leading: null, single: null };
+
+    if (isIconButton) {
+      iconComponents.single = (
+        <i className={createClass(localClass.leadingIcon, localClass.icon)}>
+          {leadingIcon}
+        </i>
+      );
+    } else if (isIconed) {
+      iconComponents.leading = (
+        <i className={createClass(localClass.leadingIcon, localClass.icon)}>
+          {leadingIcon}
+        </i>
+      );
+    }
 
     return isInvalid ? null : (
       <RootNode
@@ -221,8 +217,12 @@ const FloatingActionButton = React.memo(
         {...conditionalProps}
         {...otherProps}
       >
-        {leadingIconComponent}
-        <span className={localClass.label}>{label}</span>
+        {iconComponents.leading}
+        {!isIconButton ? (
+          <span className={localClass.label}>{label}</span>
+        ) : (
+          iconComponents.single
+        )}
       </RootNode>
     );
   })
@@ -235,7 +235,7 @@ FloatingActionButton.propTypes = {
   className: PropTypes.string,
   label: PropTypes.string,
   disabled: PropTypes.bool,
-  leadingIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  leadingIcon: PropTypes.node,
   iconButtonSize: PropTypes.oneOf(allowedIconButtonSizes)
 };
 

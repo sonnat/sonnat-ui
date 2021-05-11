@@ -1,15 +1,15 @@
-import React, { useReducer, useRef } from "react";
-import PropTypes from "prop-types";
 import createClass from "classnames";
-import Icon from "../Icon";
-import reducer from "./reducer";
+import PropTypes from "prop-types";
+import React, { useReducer, useRef } from "react";
+import { Minus, Plus } from "../internals/icons";
+import makeStyles from "../styles/makeStyles";
+import { clamp, useControlled, useForkRef } from "../utils";
 import {
   allowAdditionAndSubtraction,
   preventAddition,
   preventSubtraction
 } from "./actions";
-import { clamp, useControlled, useForkRef } from "../utils";
-import makeStyles from "../styles/makeStyles";
+import reducer from "./reducer";
 
 const componentName = "InputStepper";
 const allowedSizes = ["medium", "small"];
@@ -20,7 +20,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      mixins: { useFontIconSize },
+      mixins: { useIconWrapper },
       typography: { pxToRem, useText, fontFamily }
     } = theme;
 
@@ -93,7 +93,7 @@ const useStyles = makeStyles(
         "& $actionIcon": { marginLeft: "auto" }
       },
       actionIcon: {
-        ...useFontIconSize(20),
+        ...useIconWrapper(20),
         color: colors.text.secondary,
         transition: "color 360ms ease"
       },
@@ -138,7 +138,7 @@ const useStyles = makeStyles(
           height: pxToRem(32),
           "&:after,&:before": { height: pxToRem(16) }
         },
-        "& $actionIcon": useFontIconSize(16),
+        "& $actionIcon": useIconWrapper(16),
         "& $input": { fontSize: pxToRem(14) }
       }
     };
@@ -303,7 +303,9 @@ const InputStepper = React.memo(
           })}
           onClick={onAdd}
         >
-          <Icon identifier="plus" className={localClass.actionIcon} />
+          <i className={localClass.actionIcon}>
+            <Plus />
+          </i>
         </button>
         <div className={localClass.inputContainer}>
           <input
@@ -327,7 +329,9 @@ const InputStepper = React.memo(
           })}
           onClick={onSubtract}
         >
-          <Icon identifier="minus" className={localClass.actionIcon} />
+          <i className={localClass.actionIcon}>
+            <Minus />
+          </i>
         </button>
       </div>
     );

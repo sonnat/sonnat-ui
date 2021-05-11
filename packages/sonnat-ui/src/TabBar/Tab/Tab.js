@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import createClass from "classnames";
-import Icon from "../../Icon";
 import makeStyles from "../../styles/makeStyles";
 import { changeColor } from "../../styles/colorUtils";
 import TabBarContext from "../context";
@@ -14,7 +13,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      mixins: { useFontIconSize },
+      mixins: { useIconWrapper },
       typography: { pxToRem, useText }
     } = theme;
 
@@ -49,7 +48,7 @@ const useStyles = makeStyles(
         overflow: "hidden",
         display: "flex",
         alignItems: "center",
-        "& > $icon:only-child": useFontIconSize(24)
+        "& > $icon:only-child": useIconWrapper(24)
       },
       label: {
         ...useText({ color: colors.text.secondary }),
@@ -59,7 +58,7 @@ const useStyles = makeStyles(
           : { marginLeft: pxToRem(8) })
       },
       icon: {
-        ...useFontIconSize(20),
+        ...useIconWrapper(20),
         color: colors.text.secondary,
         transition: "color 360ms ease"
       },
@@ -83,7 +82,7 @@ const useStyles = makeStyles(
             ? { marginRight: pxToRem(4) }
             : { marginLeft: pxToRem(4) })
         },
-        "& $content > $icon:not(:only-child)": useFontIconSize(18)
+        "& $content > $icon:not(:only-child)": useIconWrapper(18)
       },
       active: {
         "& $label": {
@@ -154,7 +153,7 @@ const Tab = React.memo(
         {...otherProps}
       >
         <div className={localClass.content}>
-          {icon && <Icon identifier={icon} className={localClass.icon} />}
+          {icon && <i className={localClass.icon}>{icon}</i>}
           {label && <span className={localClass.label}>{label}</span>}
         </div>
       </div>
@@ -167,7 +166,7 @@ Tab.displayName = componentName;
 Tab.propTypes = {
   className: PropTypes.string,
   label: PropTypes.string,
-  icon: PropTypes.string,
+  icon: PropTypes.node,
   active: PropTypes.bool,
   onClick: PropTypes.func,
   identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number])

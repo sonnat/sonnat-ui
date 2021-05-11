@@ -1,30 +1,30 @@
+import createClass from "classnames";
+import PropTypes from "prop-types";
 import React, {
-  useState,
-  useRef,
-  useEffect,
   useCallback,
-  useImperativeHandle
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState
 } from "react";
 import { isFragment } from "react-is";
-import PropTypes from "prop-types";
-import createClass from "classnames";
 import useFormControl from "../FormControl/useFormControl";
-import InputBase from "../InputBase";
 import InputAdornment from "../InputAdornment";
-import Icon from "../Icon";
+import InputBase from "../InputBase";
+import { Check, ChevronDown } from "../internals/icons";
 import Menu, { MenuItem, MenuItemGroup } from "../Menu";
 import RemovableChip from "../RemovableChip";
-import { componentName as optionName } from "./Option";
-import { componentName as optionGroupName } from "./OptionGroup";
 import { makeStyles, useTheme } from "../styles";
 import {
+  closest,
+  generateUniqueString,
   setRef,
   useControlled,
   useEnhancedEffect,
-  generateUniqueString,
-  useForkRef,
-  closest
+  useForkRef
 } from "../utils";
+import { componentName as optionName } from "./Option";
+import { componentName as optionGroupName } from "./OptionGroup";
 
 const componentName = "Select";
 const allowedVariants = ["filled", "outlined"];
@@ -36,6 +36,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      mixins: { useIconWrapper },
       typography: { pxToRem, useText, fontFamily }
     } = theme;
 
@@ -76,19 +77,13 @@ const useStyles = makeStyles(
           color: colors.text.secondary
         })
       },
-      helperIconWrapper: {
-        paddingTop: pxToRem(4),
-        ...(direction === "rtl"
-          ? { paddingLeft: pxToRem(4) }
-          : { paddingRight: pxToRem(4) })
-      },
       helperIcon: {
+        ...useIconWrapper(16),
+        marginTop: pxToRem(4),
         color: colors.text.secondary,
-        width: pxToRem(16),
-        height: pxToRem(16),
-        maxWidth: pxToRem(16),
-        maxHeight: pxToRem(16),
-        fontSize: pxToRem(16)
+        ...(direction === "rtl"
+          ? { marginLeft: pxToRem(4) }
+          : { marginRight: pxToRem(4) })
       },
       placeholder: {
         ...useText({ fontSize: pxToRem(16), color: colors.text.hint }),
@@ -118,7 +113,7 @@ const useStyles = makeStyles(
       menu: {},
       option: {},
       optionGroup: {},
-      optionIcon: {},
+      optionIcon: useIconWrapper(16),
       caretIcon: {},
       selected: {
         color: !darkMode ? colors.primary.origin : colors.primary.light
@@ -152,11 +147,6 @@ const useStyles = makeStyles(
   },
   { name: `Sonnat${componentName}` }
 );
-
-const createHelperIcon = (helperIcon, className) =>
-  React.cloneElement(helperIcon, {
-    className: createClass(className, helperIcon.props.className)
-  });
 
 const areEqual = (a, b) => {
   if (typeof b === "object" && b !== null) {
@@ -509,10 +499,9 @@ const Select = React.memo(
                   {...otherOptionProps}
                 >
                   {multiple && (
-                    <Icon
-                      identifier="check"
-                      className={localClass.optionIcon}
-                    />
+                    <i className={localClass.optionIcon}>
+                      <Check />
+                    </i>
                   )}
                   {children}
                 </MenuItem>
@@ -554,7 +543,9 @@ const Select = React.memo(
             {...otherOptionProps}
           >
             {multiple && (
-              <Icon identifier="check" className={localClass.optionIcon} />
+              <i className={localClass.optionIcon}>
+                <Check />
+              </i>
             )}
             {children}
           </MenuItem>
@@ -683,13 +674,8 @@ const Select = React.memo(
           trailingAdornment={
             <InputAdornment>
               {trailingAdornment}
-              <InputAdornment variant="icon">
-                <Icon
-                  className={localClass.caretIcon}
-                  aria-hidden="true"
-                  identifier="chevron-down"
-                  color="inherit"
-                />
+              <InputAdornment variant="icon" className={localClass.caretIcon}>
+                <ChevronDown />
               </InputAdornment>
             </InputAdornment>
           }
@@ -710,9 +696,7 @@ const Select = React.memo(
             {helperText && (
               <p className={localClass.helperContent}>
                 {helperIcon && (
-                  <span className={localClass.helperIconWrapper}>
-                    {createHelperIcon(helperIcon, localClass.helperIcon)}
-                  </span>
+                  <i className={localClass.helperIcon}>{helperIcon}</i>
                 )}
                 <span className={localClass.helperText}>{helperText}</span>
               </p>

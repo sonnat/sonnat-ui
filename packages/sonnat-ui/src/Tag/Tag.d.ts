@@ -14,7 +14,7 @@ type BaseProps<P = {}> = P & {
    * The icon placed before the label.
    * The component will use it as a `sonnat-icon` identifier.
    */
-  icon?: string;
+  icon?: React.ReactNode;
   /**
    * The variant of the Tag.
    * @default "filled"

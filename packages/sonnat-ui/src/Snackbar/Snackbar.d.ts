@@ -16,7 +16,7 @@ type BaseProps<P = {}> = P & {
    * The icon placed before the text.
    * The component will use it as a `sonnat-icon` identifier.
    */
-  icon?: string;
+  icon?: React.ReactNode;
   /**
    * The horizontal placement of the snackbar.
    * @default "center"

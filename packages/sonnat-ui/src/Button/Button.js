@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import createClass from "classnames";
 import ClipSpinner from "../Spinner/Clip";
-import Icon from "../Icon";
 import createColorVariants from "./createColorVariants";
 import { makeStyles, useTheme } from "../styles";
 
@@ -20,7 +19,7 @@ const useStyles = makeStyles(
       direction,
       darkMode,
       hacks,
-      mixins: { useFontIconSize },
+      mixins: { useIconWrapper },
       typography: { pxToRem, useText, fontWeight, fontFamily }
     } = theme;
 
@@ -77,10 +76,10 @@ const useStyles = makeStyles(
         "&$iconButton": {
           height: pxToRem(40),
           width: pxToRem(40),
-          "& > $icon": useFontIconSize(20)
+          "& > $icon": useIconWrapper(20)
         },
         "& $label": { fontSize: pxToRem(16) },
-        "& $icon": useFontIconSize(20),
+        "& $icon": useIconWrapper(20),
         "& $leadingIcon": {
           ...(direction === "rtl"
             ? { marginRight: pxToRem(-4), marginLeft: pxToRem(8) }
@@ -99,10 +98,10 @@ const useStyles = makeStyles(
         "&$iconButton": {
           height: pxToRem(32),
           width: pxToRem(32),
-          "& > $icon": useFontIconSize(16)
+          "& > $icon": useIconWrapper(16)
         },
         "& $label": { fontSize: pxToRem(14) },
-        "& $icon": useFontIconSize(16),
+        "& $icon": useIconWrapper(16),
         "& $leadingIcon": {
           ...(direction === "rtl"
             ? { marginLeft: pxToRem(4) }
@@ -534,20 +533,10 @@ const Button = React.memo(
     }
 
     const isNative = RootNode === "button";
-
-    const isLeadingIconed =
-      typeof leadingIcon === "string"
-        ? leadingIcon.length !== 0
-        : !!leadingIcon;
-
-    const isTrailingIconed =
-      typeof trailingIcon === "string"
-        ? trailingIcon.length !== 0
-        : !!trailingIcon;
-
-    const isIconed = isLeadingIconed || isTrailingIconed;
-    const isInvalid = !label && !isIconed;
-    const isIconButton = !isInvalid && !label && isIconed;
+    const isLabeled = label != null;
+    const isIconed = leadingIcon != null || trailingIcon != null;
+    const isInvalid = !isLabeled && !isIconed;
+    const isIconButton = !isInvalid && !isLabeled && isIconed;
 
     const isPrimary = color === "primary";
     const isSecondary = color === "secondary";
@@ -556,40 +545,6 @@ const Button = React.memo(
     const hasValidColor = allowedColors.includes(color);
     const hasValidSize = allowedSizes.includes(size);
 
-    const leadingIconComponent = leadingIcon ? (
-      typeof leadingIcon === "string" ? (
-        <Icon
-          identifier={leadingIcon}
-          className={createClass(localClass.leadingIcon, localClass.icon)}
-        />
-      ) : (
-        React.cloneElement(leadingIcon, {
-          className: createClass(
-            leadingIcon.props.className,
-            localClass.leadingIcon,
-            localClass.icon
-          )
-        })
-      )
-    ) : null;
-
-    const trailingIconComponent = trailingIcon ? (
-      typeof trailingIcon === "string" ? (
-        <Icon
-          identifier={trailingIcon}
-          className={createClass(localClass.trailingIcon, localClass.icon)}
-        />
-      ) : (
-        React.cloneElement(trailingIcon, {
-          className: createClass(
-            trailingIcon.props.className,
-            localClass.trailingIcon,
-            localClass.icon
-          )
-        })
-      )
-    ) : null;
-
     const conditionalProps = {};
 
     if (isNative) {
@@ -597,6 +552,33 @@ const Button = React.memo(
     } else {
       conditionalProps["aria-disabled"] = disabled;
       conditionalProps.role = "button";
+    }
+
+    const iconComponents = { leading: null, trailing: null, single: null };
+
+    if (isIconButton) {
+      const icon = leadingIcon || trailingIcon;
+      iconComponents.single = (
+        <i className={createClass(localClass.leadingIcon, localClass.icon)}>
+          {icon}
+        </i>
+      );
+    } else {
+      if (leadingIcon != null) {
+        iconComponents.leading = (
+          <i className={createClass(localClass.leadingIcon, localClass.icon)}>
+            {leadingIcon}
+          </i>
+        );
+      }
+
+      if (trailingIcon != null) {
+        iconComponents.trailing = (
+          <i className={createClass(localClass.trailingIcon, localClass.icon)}>
+            {trailingIcon}
+          </i>
+        );
+      }
     }
 
     return isInvalid ? null : (
@@ -614,9 +596,7 @@ const Button = React.memo(
           [localClass.rounded]: rounded,
           [localClass.raised]: invalidUsageOfRaised ? false : raised,
           [localClass.disabled]: loading || (!loading && disabled),
-          [localClass.iconButton]: isIconButton,
-          [localClass.leadingIconed]: !isIconButton && isLeadingIconed,
-          [localClass.trailingIconed]: !isIconButton && isTrailingIconed
+          [localClass.iconButton]: isIconButton
         })}
         {...conditionalProps}
         {...otherProps}
@@ -640,15 +620,13 @@ const Button = React.memo(
             className={createClass(localClass.loadingIcon, localClass.icon)}
           />
         )}
-        {isIconButton ? (
-          leadingIconComponent || trailingIconComponent
+        {iconComponents.leading}
+        {!isIconButton ? (
+          <span className={localClass.label}>{label}</span>
         ) : (
-          <React.Fragment>
-            {leadingIconComponent}
-            <span className={localClass.label}>{label}</span>
-            {trailingIconComponent}
-          </React.Fragment>
+          iconComponents.single
         )}
+        {iconComponents.trailing}
       </RootNode>
     );
   })
@@ -667,8 +645,8 @@ Button.propTypes = {
   size: PropTypes.oneOf(allowedSizes),
   variant: PropTypes.oneOf(allowedVariants),
   rootNode: PropTypes.elementType,
-  leadingIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  trailingIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
+  leadingIcon: PropTypes.node,
+  trailingIcon: PropTypes.node
 };
 
 export default Button;
