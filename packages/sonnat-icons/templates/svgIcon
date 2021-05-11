@@ -1,0 +1,6 @@
+import {{name}}Paths from "./paths/{{name}}";
+import createSvgIcon from "@sonnat/ui/utils/createSvgIcon";
+
+const {{name}} = createSvgIcon({{name}}Paths, "{{name}}");
+
+export default {{name}};
