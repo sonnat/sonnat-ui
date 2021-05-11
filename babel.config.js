@@ -6,7 +6,7 @@ if (process.env.BABEL_ENV !== "es") {
       "@babel/preset-env",
       {
         bugfixes: true,
-        modules: ["esm", "production-umd"].includes(process.env.BABEL_ENV)
+        modules: ["esm", "umd"].includes(process.env.BABEL_ENV)
           ? false
           : "commonjs"
       }
@@ -37,7 +37,7 @@ module.exports = {
     production: {
       plugins: [["@babel/plugin-transform-runtime", { useESModules: true }]]
     },
-    "production-umd": {
+    umd: {
       plugins: [["@babel/plugin-transform-runtime", { useESModules: true }]]
     }
   }
