@@ -19,7 +19,11 @@
     "isolatedModules": true,
     "allowJs": true,
     // Otherwise we get react-native typings which conflict with dom.lib.
-    "types": ["node", "react"]
+    "types": ["node", "react"],
+    "paths": {
+      "@sonnat/ui": ["./packages/sonnat-ui/src"],
+      "@sonnat/ui/*": ["./packages/sonnat-ui/src/*"]
+    }
   },
   "exclude": ["**/dist", "**/node_modules", "examples", "develop"]
 }

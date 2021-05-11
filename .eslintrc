@@ -42,6 +42,11 @@
   "settings": {
     "react": {
       "version": "detect"
+    },
+    "import/resolver": {
+      "alias": {
+        "map": [["@sonnat/ui", "./packages/sonnat-ui/src"]]
+      }
     }
   }
 }
