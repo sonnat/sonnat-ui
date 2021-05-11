@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import createClass from "classnames";
-import fontIconVariables from "../styles/fontIconVariables.json";
 import { makeStyles, useTheme } from "../styles";
 
 const componentName = "Icon";
@@ -20,44 +19,21 @@ const colorEnum = [
   "info"
 ];
 
-const camelCase = s => s.replace(/-./g, x => x[1].toUpperCase());
-
-const getIconVariableFromProp = (identifier = "") => {
-  const id = camelCase(identifier);
-
-  return fontIconVariables[id] || "";
-};
-
-const generateIdentifiers = () => {
-  const blackList = ["fontFamily", "fontPath"];
-
-  return Object.keys(fontIconVariables).reduce((result, key) => {
-    if (blackList.includes(key)) return result;
-
-    const value = fontIconVariables[key];
-
-    return { ...result, [key]: { "&:before": { content: value } } };
-  }, {});
-};
-
-const iconIdentifiers = generateIdentifiers();
-
 const useStyles = makeStyles(
   theme => {
     const {
       darkMode,
       colors,
       direction,
-      typography: { fontFamily, pxToRem }
+      typography: { pxToRem }
     } = theme;
 
     return {
-      ...iconIdentifiers,
       root: {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
         direction,
-        fontFamily: `${fontFamily.icon} !important`,
+        userSelect: "none",
         speak: "none",
+        display: "inline-block",
         fontStyle: "normal",
         fontWeight: "normal",
         fontVariant: "normal",
@@ -65,21 +41,15 @@ const useStyles = makeStyles(
         lineHeight: "1",
         WebkitFontSmoothing: "antialiased",
         MozOsxFontSmoothing: "grayscale",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        "& > svg": {
-          width: "100%",
-          height: "100%"
-        },
-        textDecoration: "none"
+        textDecoration: "none",
+        fill: "currentColor",
+        fontSize: pxToRem(14)
       },
-      defaultIcon: {
+      defaultSize: {
         width: pxToRem(16),
         height: pxToRem(16),
         minWidth: pxToRem(16),
-        minHeight: pxToRem(16),
-        fontSize: pxToRem(16)
+        minHeight: pxToRem(16)
       },
       inheritColor: { color: "inherit" },
       textPrimaryColor: { color: colors.text.primary },
@@ -110,65 +80,82 @@ const useStyles = makeStyles(
 const Icon = React.memo(
   React.forwardRef(function Icon(props, ref) {
     const {
+      children,
       className,
-      identifier,
-      size,
+      color,
+      viewBox,
+      title,
       style: otherStyles,
-      color = "inherit",
-      rootNode: HTMLTag = "i",
+      size = "auto",
       ...otherProps
     } = props;
-
-    const variableKey = getIconVariableFromProp(identifier);
-    const hasValidIdentifier = variableKey != null && variableKey.length > 0;
-    const hasValidSize =
-      size != null ? typeof size === "number" && !isNaN(size) : true;
-
-    if (!hasValidIdentifier && process.env.NODE_ENV !== "production") {
-      // eslint-disable-next-line no-console
-      console.error(
-        `[Sonnat]: There is no sonnat-icon with \`identifier={"${identifier}"}\`!`
-      );
-    }
-
-    if (!hasValidSize) {
-      throw new Error(
-        `[Sonnat]: Invalid size provided! (provided value: \`size={${size}}\`)`
-      );
-    }
 
     const localClass = useStyles();
     const theme = useTheme();
 
-    const identifierClassName = hasValidIdentifier
-      ? localClass[camelCase(identifier)]
-      : undefined;
+    const hasValidSize =
+      (typeof size === "number" && !isNaN(size)) ||
+      (typeof size === "string" && size === "auto");
+
+    const hasValidColor =
+      color != null
+        ? typeof color === "string" && colorEnum.includes(color)
+        : true;
+
+    if (process.env.NODE_ENV !== "production") {
+      if (!hasValidSize) {
+        // eslint-disable-next-line no-console
+        console.error(
+          `Sonnat: Invalid size provided! (provided size: \`size=${
+            typeof size === "number" ? `{${size}}` : `"${size}"`
+          }\`)`
+        );
+      }
+
+      if (!hasValidColor) {
+        // eslint-disable-next-line no-console
+        console.error(
+          `Sonnat: Invalid color provided! (provided color: \`color={${color}}\`)`
+        );
+      }
+    }
 
     const sizeStyles =
-      size != null
+      size === "auto"
         ? {
+            width: "100%",
+            height: "100%"
+          }
+        : {
             width: theme.typography.pxToRem(size),
             height: theme.typography.pxToRem(size),
             minWidth: theme.typography.pxToRem(size),
-            minHeight: theme.typography.pxToRem(size),
-            fontSize: theme.typography.pxToRem(size)
-          }
-        : {};
+            minHeight: theme.typography.pxToRem(size)
+          };
 
     return (
-      <HTMLTag
-        aria-hidden="true"
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox={viewBox}
+        aria-hidden={title ? undefined : true}
+        role={title ? "img" : undefined}
+        focusable="false"
         style={{ ...otherStyles, ...sizeStyles }}
         className={createClass(
           localClass.root,
           localClass[`${color}Color`],
-          identifierClassName,
           className,
-          { [localClass.defaultIcon]: size != null || typeof size !== "number" }
+          {
+            [localClass.defaultSize]: size == null || !hasValidSize,
+            [localClass[`${color}Color`]]: color != null && hasValidColor
+          }
         )}
         ref={ref}
         {...otherProps}
-      />
+      >
+        {title && <title>{title}</title>}
+        {children}
+      </svg>
     );
   })
 );
@@ -176,12 +163,13 @@ const Icon = React.memo(
 Icon.displayName = componentName;
 
 Icon.propTypes = {
+  children: PropTypes.node,
   className: PropTypes.string,
+  title: PropTypes.string,
+  viewBox: PropTypes.string,
   style: PropTypes.object,
   color: PropTypes.oneOf(colorEnum),
-  rootNode: PropTypes.elementType,
-  identifier: PropTypes.string,
-  size: PropTypes.number
+  size: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf(["auto"])])
 };
 
 export default Icon;
