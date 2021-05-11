@@ -23,9 +23,6 @@ export * from "./useEventListener";
 export { default as deepMerge } from "./deepMerge";
 export * from "./deepMerge";
 
-export { default as getIconVariableFromProp } from "./getIconVariableFromProp";
-export * from "./getIconVariableFromProp";
-
 export { default as getOffsetFromWindow } from "./getOffsetFromWindow";
 export * from "./getOffsetFromWindow";
 

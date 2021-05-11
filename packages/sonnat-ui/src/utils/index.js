@@ -14,8 +14,6 @@ export { default as useEventListener } from "./useEventListener";
 
 export { default as deepMerge } from "./deepMerge";
 
-export { default as getIconVariableFromProp } from "./getIconVariableFromProp";
-
 export { default as getOffsetFromWindow } from "./getOffsetFromWindow";
 
 export { default as onNextFrame } from "./onNextFrame";
