@@ -8,7 +8,6 @@ import App from "./App";
 import theme from "./theme";
 import GlobalContext from "./GlobalContext";
 
-import "@sonnat/ui/dist/static/sonnat-font-icon.css";
 import "./static/fonts.css";
 
 const Main = () => {
