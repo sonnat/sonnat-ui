@@ -28,12 +28,6 @@ or (recommended):
 import Button from "@sonnat/ui/Button";
 ```
 
-And make sure to add `sonnat-font-icon` like so:
-
-```javascript
-import "@sonnat/ui/static/sonnat-font-icon.min.css";
-```
-
 ## Documentation
 
 Visit [https://sonnat.dev/docs](https://www.sonnat.dev/docs) to view the full documentation.
