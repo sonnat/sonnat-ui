@@ -63,7 +63,6 @@ export interface FontWeights {
 export interface FontFamilies {
   ltr: string;
   rtl: string;
-  icon: string;
   monospace: string;
 }
 

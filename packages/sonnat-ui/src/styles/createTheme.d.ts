@@ -28,7 +28,6 @@ export interface Theme {
   typography: Typography;
   zIndexes: ZIndexes;
   darkMode: boolean;
-  icons: { variable: any };
   hacks: {
     safariTransitionRadiusOverflowCombinationFix: CSSProperties;
     backfaceVisibilityFix: CSSProperties;

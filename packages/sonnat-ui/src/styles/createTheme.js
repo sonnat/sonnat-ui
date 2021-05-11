@@ -5,7 +5,6 @@ import createSpacings from "./createSpacings";
 import createBreakpoints from "./createBreakpoints";
 import createMixins from "./createMixins";
 import createZIndexes from "./createZIndexes";
-import fontIconVariables from "./fontIconVariables.json";
 
 export default (options = {}) => {
   const {
@@ -30,8 +29,7 @@ export default (options = {}) => {
     pxToRem: typography.pxToRem
   });
   const mixins = createMixins(mixinsInput, {
-    pxToRem: typography.pxToRem,
-    iconFontFamily: typography.fontFamily.icon
+    pxToRem: typography.pxToRem
   });
   const zIndexes = createZIndexes(zIndexesInput);
 
@@ -62,8 +60,7 @@ export default (options = {}) => {
       zIndexes,
       direction,
       hacks,
-      darkMode: isDarkMode,
-      icons: { variable: fontIconVariables }
+      darkMode: isDarkMode
     },
     otherOptions
   );

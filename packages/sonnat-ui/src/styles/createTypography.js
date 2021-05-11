@@ -1,4 +1,3 @@
-export const sonnatIconFontFamily = "sonnat-icon";
 export const sonnatRtlFontFamily = `IRANSans, Arial, Tahoma, Helvetica`;
 export const sonnatLtrFontFamily = `"Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI",
 "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
@@ -196,7 +195,6 @@ export default function createTypography(typography) {
   return {
     fontWeight: sonnatFontWeight,
     fontFamily: {
-      icon: sonnatIconFontFamily,
       ltr: ltrFontFamily,
       rtl: rtlFontFamily,
       monospace: monospaceFontFamily

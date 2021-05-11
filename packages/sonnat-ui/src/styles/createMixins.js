@@ -1,7 +1,5 @@
-import { getIconVariableFromProp } from "../utils";
-
 export default (mixins, options) => {
-  const { pxToRem, iconFontFamily } = options;
+  const { pxToRem } = options;
 
   return {
     useDisableUserSelect: () => ({
@@ -15,38 +13,25 @@ export default (mixins, options) => {
       touchAction: "pan-y",
       WebkitTapHighlightColor: "transparent"
     }),
-    useFontIcon: (identifier = "") => {
-      const iconIdentifier = identifier
-        ? { "&:before": { content: getIconVariableFromProp(identifier) } }
-        : {};
+    useIconWrapper: size => {
+      const sizing =
+        size != null
+          ? {
+              width: pxToRem(size),
+              height: pxToRem(size),
+              minWidth: pxToRem(size),
+              minHeight: pxToRem(size),
+              fontSize: pxToRem(size)
+            }
+          : {};
 
       return {
-        fontFamily: `${iconFontFamily} !important`,
-        speak: "none",
-        fontStyle: "normal",
-        fontWeight: "normal",
-        fontVariant: "normal",
-        textTransform: "none",
-        lineHeight: "1",
-        WebkitFontSmoothing: "antialiased",
-        MozOsxFontSmoothing: "grayscale",
-        ...iconIdentifier
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        ...sizing
       };
     },
-    useFontIconSize: (size = 16) => ({
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      width: pxToRem(size),
-      height: pxToRem(size),
-      minWidth: pxToRem(size),
-      minHeight: pxToRem(size),
-      fontSize: pxToRem(size),
-      "& > svg": {
-        width: "100%",
-        height: "100%"
-      }
-    }),
     usePreserveAspectRatio: (ratio = "1:1") => {
       let w, h;
 
