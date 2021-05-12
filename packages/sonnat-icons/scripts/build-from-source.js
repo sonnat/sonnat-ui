@@ -36,11 +36,11 @@ function cleanPaths(data) {
     .replace(/<svg[^>]*>/g, "")
     .replace(/<\/svg>/g, "")
     .replace(/"\/>/g, '" />')
-    .replace(/ xlink:href=".+?"/g, "")
     .replace(/ fill=".+?"/g, "")
     .replace(/ fill-opacity=".+?"/g, "")
-    .replace(/ clip-rule=".+?"/g, "")
-    .replace(/ fill-rule=".+?"/g, "")
+    .replace(/xlink:href=/g, "xlinkHref=")
+    .replace(/clip-rule=/g, "clipRule=")
+    .replace(/fill-rule=/g, "fillRule=")
     .replace(/ clip-path=".+?"/g, "") // Fix visibility issue and save some bytes.
     .replace(/<clipPath.+?<\/clipPath>/g, ""); // Remove unused definitions
 
