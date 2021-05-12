@@ -10,17 +10,19 @@ export type TextTypeMap<P = {}, N extends React.ElementType = "span"> = {
     /**
      * Applies the theme typography styles.
      */
-    variant?:
+    variant:
       | "h1"
       | "h2"
       | "h3"
       | "h4"
       | "h5"
       | "h6"
-      | "heroText"
-      | "titleText"
-      | "bodyText"
-      | "captionText";
+      | "subtitle"
+      | "subtitleSmall"
+      | "body"
+      | "bodySmall"
+      | "caption"
+      | "captionSmall";
     /**
      * The content of the component.
      */
@@ -66,21 +68,6 @@ export type TextTypeMap<P = {}, N extends React.ElementType = "span"> = {
      * @default "ellipsis"
      */
     textOverflow?: "clip" | "ellipsis";
-    /**
-     * Applies the weighted typography styles based on the theme.
-     */
-    weight?: "bolder" | "lighter";
-    /**
-     * Applies the sized typography styles based on the theme.
-     * @default "large"
-     */
-    size?: "large" | "medium" | "small" | "extraSmall";
-    /**
-     * If `true`,
-     * the responsive behaviour of this typography class will apply to the component.
-     * @default false
-     */
-    responsive?: boolean;
     /**
      * If `true`, the text will not wrap,
      * but instead will truncate or clip based on the `textOverflow` prop provided.

@@ -12,10 +12,12 @@ const variantEnum = [
   "h4",
   "h5",
   "h6",
-  "heroText",
-  "titleText",
-  "bodyText",
-  "captionText"
+  "subtitle",
+  "subtitleSmall",
+  "body",
+  "bodySmall",
+  "caption",
+  "captionSmall"
 ];
 
 const colorEnum = [
@@ -42,56 +44,18 @@ const displayEnum = [
   "inherit"
 ];
 const textOverflowEnum = ["clip", "ellipsis"];
-const sizeEnum = ["large", "medium", "small", "extraSmall"];
-const weightEnum = ["bolder", "lighter"];
 
 const camelCase = s => s.replace(/-./g, x => x.toUpperCase()[1]);
-const getCorrectVariantKey = (variant, size, weight, sourceOfTruth) => {
-  const validation = { variant: true, size: true, weight: true };
 
-  if (!variant || !variantEnum.includes(variant)) validation.variant = false;
-  if (!size || !sizeEnum.includes(size)) validation.size = false;
-  if (!weight || !weightEnum.includes(weight)) validation.weight = false;
+const getCorrectVariantKey = (variant, sourceOfTruth) => {
+  if (!variant || !variantEnum.includes(variant)) return "";
 
-  if (!validation.variant) return "";
-  else {
-    let key = `${variant}`;
-    const variantKey = key;
-    const hasVariant = sourceOfTruth[key];
-
-    if (!validation.size) return hasVariant ? variantKey : "";
-    else {
-      key += `-${size}`;
-      const variantKeyWithSize = camelCase(key);
-      const hasVariantWithSize = sourceOfTruth[variantKeyWithSize];
-
-      if (!validation.weight)
-        return hasVariantWithSize
-          ? variantKeyWithSize
-          : hasVariant
-          ? variantKey
-          : "";
-      else {
-        key += `-${weight}`;
-        const variantKeyWithSizeWithWeight = camelCase(key);
-        const hasVariantWithSizeWithWeight =
-          sourceOfTruth[variantKeyWithSizeWithWeight];
-
-        return hasVariantWithSizeWithWeight
-          ? variantKeyWithSizeWithWeight
-          : hasVariantWithSize
-          ? variantKeyWithSize
-          : hasVariant
-          ? variantKey
-          : "";
-      }
-    }
-  }
+  const variantKey = `${variant}`;
+  return sourceOfTruth[variantKey] ? variantKey : "";
 };
 
-const generateVariations = (variants, breakpoints) => {
+const generateStyles = variants => {
   const styles = {};
-  const responsiveStyles = {};
 
   alignEnum.forEach(alignment => {
     styles[`${alignment}Alignment`] = { textAlign: alignment };
@@ -109,47 +73,10 @@ const generateVariations = (variants, breakpoints) => {
     const variant = variants[v];
 
     if (!variant) return;
-
     if (variant.rules) styles[v] = variant.rules;
-    if (variant.responsiveRules)
-      responsiveStyles[`${v}`] = {
-        "&$responsive": variant.responsiveRules
-      };
-
-    sizeEnum.forEach(size => {
-      if (variant[size]) {
-        if (variant[size].rules) {
-          const key = camelCase(`${v}-${size}`);
-          styles[key] = variant[size].rules;
-        }
-
-        if (variant[size].responsiveRules) {
-          const key = camelCase(`${v}-${size}`);
-          responsiveStyles[`${key}`] = {
-            "&$responsive": variant[size].responsiveRules
-          };
-        }
-
-        weightEnum.forEach(weight => {
-          if (variant[size][weight]) {
-            if (variant[size][weight].rules) {
-              const key = camelCase(`${v}-${size}-${weight}`);
-              styles[`${key}`] = variant[size][weight].rules;
-            }
-
-            if (variant[size][weight].responsiveRules) {
-              const key = camelCase(`${v}-${size}-${weight}`);
-              responsiveStyles[`${key}`] = {
-                "&$responsive": variant[size][weight].responsiveRules
-              };
-            }
-          }
-        });
-      }
-    });
   });
 
-  return { ...styles, [breakpoints.down("sm")]: responsiveStyles };
+  return styles;
 };
 
 const useStyles = makeStyles(
@@ -157,7 +84,6 @@ const useStyles = makeStyles(
     const {
       colors,
       darkMode,
-      breakpoints,
       direction,
       typography: { variants, fontFamily }
     } = theme;
@@ -193,8 +119,7 @@ const useStyles = makeStyles(
         color: !darkMode ? colors.warning.origin : colors.warning.light
       },
       infoColor: { color: !darkMode ? colors.info.origin : colors.info.light },
-      responsive: {},
-      ...generateVariations(variants, breakpoints)
+      ...generateStyles(variants)
     };
   },
   { name: `Sonnat${componentName}` }
@@ -207,20 +132,16 @@ const Text = React.memo(
       className,
       variant,
       align,
-      weight,
       display,
       rootNode: HTMLTag = "span",
       textOverflow = "ellipsis",
       color = "inherit",
-      size = "large",
       noWrap = false,
-      responsive = false,
       ...otherProps
     } = props;
 
     const localClass = useStyles();
-
-    const variantKey = getCorrectVariantKey(variant, size, weight, localClass);
+    const variantKey = getCorrectVariantKey(variant, localClass);
 
     return (
       <HTMLTag
@@ -234,7 +155,6 @@ const Text = React.memo(
           localClass[`${textOverflow}Overflow`],
           {
             [localClass.noWrap]: noWrap,
-            [localClass.responsive]: responsive,
             [localClass[`${align}Alignment`]]: align != null && !!align,
             [localClass[`${display}Display`]]: display != null && !!display
           }
@@ -252,15 +172,12 @@ Text.displayName = componentName;
 Text.propTypes = {
   children: PropTypes.node,
   variant: PropTypes.oneOf(variantEnum).isRequired,
-  size: PropTypes.oneOf(sizeEnum),
   rootNode: PropTypes.elementType,
   align: PropTypes.oneOf(alignEnum),
   color: PropTypes.oneOf(colorEnum),
   display: PropTypes.oneOf(displayEnum),
   textOverflow: PropTypes.oneOf(textOverflowEnum),
-  weight: PropTypes.oneOf(weightEnum),
   className: PropTypes.string,
-  responsive: PropTypes.bool,
   noWrap: PropTypes.bool
 };
 

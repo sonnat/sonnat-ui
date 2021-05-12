@@ -72,124 +72,18 @@ export default function createTypography(typography) {
     useText({ fontSize: pxToRem(fontSize), fontWeight, lineHeight });
 
   const variants = {
-    h1: {
-      rules: buildVariant(sonnatFontWeight.medium, 48, 1.5),
-      responsiveRules: { fontSize: pxToRem(32) }
-    },
-    h2: {
-      rules: buildVariant(sonnatFontWeight.medium, 32, 1.5)
-    },
-    h3: {
-      rules: buildVariant(sonnatFontWeight.medium, 24, 1.5),
-      responsiveRules: { fontSize: pxToRem(20) }
-    },
-    h4: {
-      rules: buildVariant(sonnatFontWeight.medium, 20, 1.5),
-      responsiveRules: { fontSize: pxToRem(18) }
-    },
-    h5: { rules: buildVariant(sonnatFontWeight.medium, 18, 1.5) },
-    h6: { rules: buildVariant(sonnatFontWeight.medium, 16, 1.5) },
-    heroText: {
-      large: {
-        bolder: {
-          rules: buildVariant(sonnatFontWeight.bold, 48, 1.5),
-          responsiveRules: { fontSize: pxToRem(32) }
-        },
-        lighter: {
-          rules: buildVariant(sonnatFontWeight.light, 48, 1.5),
-          responsiveRules: {
-            fontSize: pxToRem(32),
-            fontWeight: sonnatFontWeight.regular
-          }
-        },
-        rules: buildVariant(sonnatFontWeight.medium, 48, 1.5),
-        responsiveRules: { fontSize: pxToRem(32) }
-      },
-      medium: {
-        bolder: {
-          rules: buildVariant(sonnatFontWeight.bold, 40, 1.5),
-          responsiveRules: {
-            fontSize: pxToRem(32),
-            fontWeight: sonnatFontWeight.medium
-          }
-        },
-        lighter: {
-          rules: buildVariant(sonnatFontWeight.light, 40, 1.5),
-          responsiveRules: {
-            fontSize: pxToRem(32),
-            fontWeight: sonnatFontWeight.regular
-          }
-        },
-        rules: buildVariant(sonnatFontWeight.medium, 40, 1.5),
-        responsiveRules: { fontSize: pxToRem(32) }
-      },
-      small: {
-        bolder: {
-          rules: buildVariant(sonnatFontWeight.bold, 32, 1.5),
-          responsiveRules: { fontSize: pxToRem(24) }
-        },
-        lighter: {
-          rules: buildVariant(sonnatFontWeight.regular, 32, 1.5),
-          responsiveRules: {
-            fontSize: pxToRem(24),
-            fontWeight: sonnatFontWeight.medium
-          }
-        },
-        rules: buildVariant(sonnatFontWeight.medium, 32, 1.5),
-        responsiveRules: { fontSize: pxToRem(24) }
-      }
-    },
-    titleText: {
-      large: {
-        rules: buildVariant(sonnatFontWeight.medium, 24, 1.5),
-        responsiveRules: { fontSize: pxToRem(20) }
-      },
-      medium: {
-        rules: buildVariant(sonnatFontWeight.medium, 20, 1.5),
-        responsiveRules: { fontSize: pxToRem(18) }
-      },
-      small: {
-        rules: buildVariant(sonnatFontWeight.medium, 18, 1.5)
-      },
-      extraSmall: {
-        rules: buildVariant(sonnatFontWeight.medium, 16, 1.5)
-      }
-    },
-    bodyText: {
-      large: {
-        lighter: {
-          rules: buildVariant(sonnatFontWeight.light, 18, 2),
-          responsiveRules: { fontSize: pxToRem(16) }
-        },
-        rules: buildVariant(sonnatFontWeight.regular, 18, 2),
-        responsiveRules: { fontSize: pxToRem(16) }
-      },
-      medium: {
-        bolder: {
-          rules: buildVariant(sonnatFontWeight.medium, 16, 2),
-          responsiveRules: { fontSize: pxToRem(14) }
-        },
-        rules: buildVariant(sonnatFontWeight.regular, 16, 2),
-        responsiveRules: { fontSize: pxToRem(14) }
-      },
-      small: {
-        bolder: { rules: buildVariant(sonnatFontWeight.medium, 14, 2) },
-        rules: buildVariant(sonnatFontWeight.regular, 14, 2)
-      }
-    },
-    captionText: {
-      large: {
-        bolder: { rules: buildVariant(sonnatFontWeight.medium, 12, 2) },
-        rules: buildVariant(sonnatFontWeight.regular, 12, 2)
-      },
-      medium: {
-        bolder: { rules: buildVariant(sonnatFontWeight.medium, 10, 2) },
-        rules: buildVariant(sonnatFontWeight.regular, 10, 2)
-      },
-      small: {
-        rules: buildVariant(sonnatFontWeight.regular, 8, 2)
-      }
-    }
+    h1: buildVariant(sonnatFontWeight.medium, 56, 1.5),
+    h2: buildVariant(sonnatFontWeight.medium, 48, 1.5),
+    h3: buildVariant(sonnatFontWeight.medium, 32, 1.5),
+    h4: buildVariant(sonnatFontWeight.medium, 24, 1.5),
+    h5: buildVariant(sonnatFontWeight.medium, 20, 1.5),
+    h6: buildVariant(sonnatFontWeight.medium, 18, 1.5),
+    subtitle: buildVariant(sonnatFontWeight.medium, 16, 1.5),
+    subtitleSmall: buildVariant(sonnatFontWeight.medium, 14, 1.5),
+    body: buildVariant(sonnatFontWeight.regular, 16, 2),
+    bodySmall: buildVariant(sonnatFontWeight.regular, 14, 2),
+    caption: buildVariant(sonnatFontWeight.regular, 12, 1.5),
+    captionSmall: buildVariant(sonnatFontWeight.regular, 10, 1.5)
   };
 
   return {

@@ -8,49 +8,26 @@ export type VariantNames =
   | "h4"
   | "h5"
   | "h6"
-  | "heroText"
-  | "titleText"
-  | "bodyText"
-  | "captionText";
-
-type VariantSizes = "large" | "medium" | "small" | "extraSmall";
-type VariantWeights = "bolder" | "lighter";
-
-type OnlyNormalCSSRules = {
-  rules: CSSProperties;
-};
-
-type WithResponsiveCSSRules = OnlyNormalCSSRules & {
-  responsiveRules: CSSProperties;
-};
+  | "title"
+  | "titleSmall"
+  | "body"
+  | "bodySmall"
+  | "caption"
+  | "captionSmall";
 
 export interface VariantProps {
-  h1: WithResponsiveCSSRules;
-  h2: OnlyNormalCSSRules;
-  h3: WithResponsiveCSSRules;
-  h4: WithResponsiveCSSRules;
-  h5: OnlyNormalCSSRules;
-  h6: OnlyNormalCSSRules;
-  heroText: Record<
-    Extract<VariantSizes, "large" | "medium" | "small">,
-    Record<VariantWeights, WithResponsiveCSSRules> & WithResponsiveCSSRules
-  >;
-  titleText: Record<
-    Extract<VariantSizes, "large" | "medium">,
-    WithResponsiveCSSRules
-  > &
-    Record<Exclude<VariantSizes, "large" | "medium">, OnlyNormalCSSRules>;
-  bodyText: {
-    large: { lighter: WithResponsiveCSSRules } & WithResponsiveCSSRules;
-    medium: { bolder: WithResponsiveCSSRules } & WithResponsiveCSSRules;
-    small: { bolder: OnlyNormalCSSRules } & OnlyNormalCSSRules;
-  };
-  captionText: Record<
-    Extract<VariantSizes, "large" | "medium">,
-    Record<Extract<VariantWeights, "bolder">, OnlyNormalCSSRules> &
-      OnlyNormalCSSRules
-  > &
-    Record<Extract<VariantSizes, "small">, OnlyNormalCSSRules>;
+  h1: CSSProperties;
+  h2: CSSProperties;
+  h3: CSSProperties;
+  h4: CSSProperties;
+  h5: CSSProperties;
+  h6: CSSProperties;
+  subtitle: CSSProperties;
+  subtitleSmall: CSSProperties;
+  body: CSSProperties;
+  bodySmall: CSSProperties;
+  caption: CSSProperties;
+  captionSmall: CSSProperties;
 }
 
 export interface FontWeights {
