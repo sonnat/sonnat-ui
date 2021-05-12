@@ -76,10 +76,12 @@ const useStyles = makeStyles(
         "&$iconButton": {
           height: pxToRem(40),
           width: pxToRem(40),
-          "& > $icon": useIconWrapper(20)
+          "& > $icon": useIconWrapper(20),
+          "& > $spinner": { width: pxToRem(20), height: pxToRem(20) }
         },
         "& $label": { fontSize: pxToRem(16) },
         "& $icon": useIconWrapper(20),
+        "& $spinner": { width: pxToRem(20), height: pxToRem(20) },
         "& $leadingIcon": {
           ...(direction === "rtl"
             ? { marginRight: pxToRem(-4), marginLeft: pxToRem(8) }
@@ -98,10 +100,12 @@ const useStyles = makeStyles(
         "&$iconButton": {
           height: pxToRem(32),
           width: pxToRem(32),
-          "& > $icon": useIconWrapper(16)
+          "& > $icon": useIconWrapper(16),
+          "& > $spinner": { width: pxToRem(16), height: pxToRem(16) }
         },
         "& $label": { fontSize: pxToRem(14) },
         "& $icon": useIconWrapper(16),
+        "& $spinner": { width: pxToRem(16), height: pxToRem(16) },
         "& $leadingIcon": {
           ...(direction === "rtl"
             ? { marginLeft: pxToRem(4) }
@@ -471,8 +475,9 @@ const useStyles = makeStyles(
           margin: "0 !important"
         }
       },
-      loadingIcon: {
+      spinner: {
         position: "absolute",
+        flexShrink: 0,
         "& ~ *": {
           visibility: "hidden",
           opacity: "0"
@@ -512,8 +517,12 @@ const Button = React.memo(
       ...otherProps
     } = props;
 
+    const {
+      darkMode,
+      colors: { createPrimaryColor, createSecondaryColor, createBlackColor }
+    } = useTheme();
+
     const localClass = useStyles();
-    const theme = useTheme();
 
     let invalidUsageOfRaised = false;
 
@@ -537,9 +546,6 @@ const Button = React.memo(
     const isIconed = leadingIcon != null || trailingIcon != null;
     const isInvalid = !isLabeled && !isIconed;
     const isIconButton = !isInvalid && !isLabeled && isIconed;
-
-    const isPrimary = color === "primary";
-    const isSecondary = color === "secondary";
 
     const hasValidVariant = allowedVariants.includes(variant);
     const hasValidColor = allowedColors.includes(color);
@@ -581,6 +587,23 @@ const Button = React.memo(
       }
     }
 
+    const spinnerColor = {
+      background:
+        {
+          outlined: {
+            primary: createPrimaryColor({ alpha: 0.12 }),
+            secondary: createSecondaryColor({ alpha: 0.12 })
+          }[color]
+        }[variant] || (darkMode ? null : createBlackColor({ alpha: 0.12 })),
+      foreground:
+        {
+          outlined: {
+            primary: createPrimaryColor({ alpha: 0.48 }),
+            secondary: createSecondaryColor({ alpha: 0.48 })
+          }[color]
+        }[variant] || (darkMode ? null : createBlackColor({ alpha: 0.48 }))
+    };
+
     return isInvalid ? null : (
       <RootNode
         type="button"
@@ -603,21 +626,9 @@ const Button = React.memo(
       >
         {loading && (
           <ClipSpinner
-            backgroundColor={
-              variant === "outlined" && isPrimary
-                ? theme.colors.createPrimaryColor({ alpha: 0.12 })
-                : isSecondary
-                ? theme.colors.createSecondaryColor({ alpha: 0.12 })
-                : theme.colors.createBlackColor({ alpha: 0.12 })
-            }
-            foregroundColor={
-              variant === "outlined" && isPrimary
-                ? theme.colors.createPrimaryColor({ alpha: 0.48 })
-                : isSecondary
-                ? theme.colors.createSecondaryColor({ alpha: 0.48 })
-                : theme.colors.createBlackColor({ alpha: 0.48 })
-            }
-            className={createClass(localClass.loadingIcon, localClass.icon)}
+            backgroundColor={spinnerColor.background}
+            foregroundColor={spinnerColor.foreground}
+            className={createClass(localClass.spinner)}
           />
         )}
         {iconComponents.leading}
