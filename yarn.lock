@@ -1122,29 +1122,6 @@
     webpack "^4.44.1"
     webpack-bundle-analyzer "^4.4.0"
 
-"@sonnat/ui@latest":
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/@sonnat/ui/-/ui-1.0.15.tgz#4249f9d1cf240f4dfa79dd788dd835f5a227ee80"
-  integrity sha512-DeBvmA6uSXrPr+lfrcind5/yITDUJ+AYLqgpCvVgjGug+wcrYtYIh+xT7r8ZuTBHg13N9uN43CR7zGBbaFZVYg==
-  dependencies:
-    "@babel/runtime" "^7.13.6"
-    classnames "^2.2.6"
-    color "^3.1.3"
-    jss "^10.5.1"
-    jss-plugin-camel-case "^10.5.1"
-    jss-plugin-default-unit "^10.5.1"
-    jss-plugin-extend "^10.5.1"
-    jss-plugin-global "^10.5.1"
-    jss-plugin-nested "^10.5.1"
-    jss-plugin-props-sort "^10.5.1"
-    jss-plugin-rule-value-function "^10.5.1"
-    jss-plugin-vendor-prefixer "^10.5.1"
-    lodash.throttle "^4.1.1"
-    prop-types "^15.7.2"
-    react-is "^17.0.1"
-    react-jss "^10.5.1"
-    react-resize-detector "^5.2.0"
-
 "@szmarczak/http-timer@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@szmarczak/http-timer/-/http-timer-1.1.2.tgz#b1665e2c461a2cd92f4c1bbf50d5454de0d4b421"
