@@ -2,31 +2,26 @@ import React from "react";
 import PropTypes from "prop-types";
 import createClass from "classnames";
 import makeStyles from "../../styles/makeStyles";
+import useTheme from "../../styles/useTheme";
 
 const componentName = "MoonSpinner";
 
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
-      darkMode,
       direction,
       typography: { pxToRem, fontFamily }
     } = theme;
 
     return {
-      root: ({ size }) => ({
+      root: {
         direction,
         fontFamily: fontFamily[direction],
-        width: pxToRem(size) || pxToRem(20),
-        height: pxToRem(size) || pxToRem(20),
-        minWidth: pxToRem(size) || pxToRem(20),
-        minHeight: pxToRem(size) || pxToRem(20),
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         position: "relative"
-      }),
+      },
       base: {
         display: "flex",
         alignItems: "center",
@@ -35,25 +30,18 @@ const useStyles = makeStyles(
         width: "100%",
         height: "100%",
         borderRadius: "50%",
-        border: ({ backgroundColor }) =>
-          `${pxToRem(4)} solid ${backgroundColor || colors.divider}`,
         animationName: "$rotateAnimation",
         animationDuration: "600ms",
         animationTimingFunction: "linear",
-        animationIterationCount: "infinite",
-        "&:after": {
-          content: '""',
-          position: "absolute",
-          top: "0",
-          width: pxToRem(4),
-          height: pxToRem(4),
-          transform: "translateY(-100%)",
-          backgroundColor: ({ foregroundColor }) =>
-            foregroundColor || !darkMode
-              ? colors.createBlackColor({ alpha: 0.48 })
-              : colors.createWhiteColor({ alpha: 0.48 }),
-          borderRadius: "50%"
-        }
+        animationIterationCount: "infinite"
+      },
+      movingParticle: {
+        position: "absolute",
+        top: "0",
+        width: pxToRem(4),
+        height: pxToRem(4),
+        transform: "translateY(-100%)",
+        borderRadius: "50%"
       },
       "@keyframes rotateAnimation": {
         "0%": {
@@ -74,14 +62,49 @@ const MoonSpinner = React.memo(function MoonSpinner(props) {
     size,
     backgroundColor,
     foregroundColor,
+    style,
     ...otherProps
   } = props;
 
-  const localClass = useStyles({ size, backgroundColor, foregroundColor });
+  const {
+    colors,
+    darkMode,
+    typography: { pxToRem }
+  } = useTheme();
+
+  const localClass = useStyles();
+
+  const sizing = {
+    width: pxToRem(size) || pxToRem(20),
+    height: pxToRem(size) || pxToRem(20),
+    minWidth: pxToRem(size) || pxToRem(20),
+    minHeight: pxToRem(size) || pxToRem(20)
+  };
+
+  const coloring = {
+    background: backgroundColor || colors.divider,
+    foreground:
+      foregroundColor ||
+      (!darkMode
+        ? colors.createBlackColor({ alpha: 0.48 })
+        : colors.createWhiteColor({ alpha: 0.48 }))
+  };
 
   return (
-    <div className={createClass(localClass.root, className)} {...otherProps}>
-      <div className={localClass.base}></div>
+    <div
+      className={createClass(localClass.root, className)}
+      style={{ ...style, ...sizing }}
+      {...otherProps}
+    >
+      <div
+        className={localClass.base}
+        style={{ border: `${pxToRem(4)} solid ${coloring.background}` }}
+      >
+        <div
+          className={localClass.movingParticle}
+          style={{ backgroundColor: coloring.foreground }}
+        />
+      </div>
     </div>
   );
 });
@@ -91,6 +114,7 @@ MoonSpinner.displayName = componentName;
 MoonSpinner.propTypes = {
   className: PropTypes.string,
   size: PropTypes.number,
+  style: PropTypes.object,
   backgroundColor: PropTypes.string,
   foregroundColor: PropTypes.string
 };

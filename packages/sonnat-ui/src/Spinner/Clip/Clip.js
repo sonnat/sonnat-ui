@@ -2,27 +2,22 @@ import React from "react";
 import PropTypes from "prop-types";
 import createClass from "classnames";
 import makeStyles from "../../styles/makeStyles";
+import useTheme from "../../styles/useTheme";
 
 const componentName = "ClipSpinner";
 
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
-      darkMode,
       direction,
       typography: { pxToRem, fontFamily }
     } = theme;
 
     return {
-      root: ({ size }) => ({
+      root: {
         direction,
-        fontFamily: fontFamily[direction],
-        width: pxToRem(size) || pxToRem(20),
-        height: pxToRem(size) || pxToRem(20),
-        minWidth: pxToRem(size) || pxToRem(20),
-        minHeight: pxToRem(size) || pxToRem(20)
-      }),
+        fontFamily: fontFamily[direction]
+      },
       svg: {
         width: "100%",
         height: "100%",
@@ -32,7 +27,6 @@ const useStyles = makeStyles(
         animationIterationCount: "infinite"
       },
       base: {
-        fill: ({ backgroundColor }) => backgroundColor || colors.divider,
         transition: "fill 360ms ease"
       },
       movingParticle: {
@@ -40,10 +34,6 @@ const useStyles = makeStyles(
         strokeLinecap: "round",
         strokeLinejoin: "round",
         strokeWidth: pxToRem(2),
-        stroke: ({ foregroundColor }) =>
-          foregroundColor || !darkMode
-            ? colors.createBlackColor({ alpha: 0.48 })
-            : colors.createWhiteColor({ alpha: 0.48 }),
         animationName: "$clipAnimation",
         animationDuration: "1.6s",
         animationTimingFunction: "ease-in",
@@ -80,23 +70,52 @@ const ClipSpinner = React.memo(function ClipSpinner(props) {
     size,
     backgroundColor,
     foregroundColor,
+    style,
     ...otherProps
   } = props;
 
-  const localClass = useStyles({ size, backgroundColor, foregroundColor });
+  const {
+    colors,
+    darkMode,
+    typography: { pxToRem }
+  } = useTheme();
+
+  const localClass = useStyles();
+
+  const sizing = {
+    width: pxToRem(size) || pxToRem(20),
+    height: pxToRem(size) || pxToRem(20),
+    minWidth: pxToRem(size) || pxToRem(20),
+    minHeight: pxToRem(size) || pxToRem(20)
+  };
+
+  const coloring = {
+    background: backgroundColor || colors.divider,
+    foreground:
+      foregroundColor ||
+      (!darkMode
+        ? colors.createBlackColor({ alpha: 0.48 })
+        : colors.createWhiteColor({ alpha: 0.48 }))
+  };
 
   return (
-    <div className={createClass(localClass.root, className)} {...otherProps}>
+    <div
+      className={createClass(localClass.root, className)}
+      style={{ ...style, ...sizing }}
+      {...otherProps}
+    >
       <svg
         className={localClass.svg}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
       >
         <path
+          fill={coloring.background}
           className={localClass.base}
           d="M8,16a8,8,0,1,1,8-8A8,8,0,0,1,8,16ZM8,2a6,6,0,1,0,6,6A6,6,0,0,0,8,2Z"
         ></path>
         <circle
+          stroke={coloring.foreground}
           className={localClass.movingParticle}
           cx="8"
           cy="8"
@@ -112,6 +131,7 @@ ClipSpinner.displayName = componentName;
 ClipSpinner.propTypes = {
   className: PropTypes.string,
   size: PropTypes.number,
+  style: PropTypes.object,
   backgroundColor: PropTypes.string,
   foregroundColor: PropTypes.string
 };
