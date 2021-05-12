@@ -5,9 +5,6 @@ const Mustache = require("mustache");
 const path = require("path");
 const yargs = require("yargs");
 
-const extensions = [".svg"];
-const ignore = [];
-
 const packagePath = process.cwd();
 
 const outDirs = {
@@ -26,17 +23,6 @@ function toPascalCase(string, splitRegex) {
   return baseCase
     .map(part => part.charAt(0).toUpperCase() + part.substring(1))
     .join("");
-}
-
-async function generateIndex() {
-  // const files = await globAsync(path.join(outDir, "*.js"));
-  // const index = files
-  //   .map(file => {
-  //     const typename = path.basename(file).replace(".js", "");
-  //     return `export { default as ${typename} } from './${typename}';\n`;
-  //   })
-  //   .join("");
-  // await fse.writeFile(path.join(outDir, "index.js"), index);
 }
 
 /**
