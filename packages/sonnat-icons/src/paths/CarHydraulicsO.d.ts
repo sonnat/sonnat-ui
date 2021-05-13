@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CarHydraulicsO: IPaths;
+declare const CarHydraulicsO: ReactNode;
 export default CarHydraulicsO;

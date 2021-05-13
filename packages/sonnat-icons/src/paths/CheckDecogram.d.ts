@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CheckDecogram: IPaths;
+declare const CheckDecogram: ReactNode;
 export default CheckDecogram;

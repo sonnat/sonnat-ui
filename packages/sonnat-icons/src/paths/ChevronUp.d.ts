@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ChevronUp: IPaths;
+declare const ChevronUp: ReactNode;
 export default ChevronUp;

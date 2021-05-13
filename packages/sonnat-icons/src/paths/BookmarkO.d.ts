@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const BookmarkO: IPaths;
+declare const BookmarkO: ReactNode;
 export default BookmarkO;

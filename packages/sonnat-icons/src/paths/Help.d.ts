@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Help: IPaths;
+declare const Help: ReactNode;
 export default Help;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Medium: IPaths;
+declare const Medium: ReactNode;
 export default Medium;

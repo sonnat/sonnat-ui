@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CardTextO: IPaths;
+declare const CardTextO: ReactNode;
 export default CardTextO;

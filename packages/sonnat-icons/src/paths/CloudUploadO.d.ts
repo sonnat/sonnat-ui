@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CloudUploadO: IPaths;
+declare const CloudUploadO: ReactNode;
 export default CloudUploadO;

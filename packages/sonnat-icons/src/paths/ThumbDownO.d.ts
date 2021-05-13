@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ThumbDownO: IPaths;
+declare const ThumbDownO: ReactNode;
 export default ThumbDownO;

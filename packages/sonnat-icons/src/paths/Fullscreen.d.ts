@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Fullscreen: IPaths;
+declare const Fullscreen: ReactNode;
 export default Fullscreen;

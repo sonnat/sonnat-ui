@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Rotate90: IPaths;
+declare const Rotate90: ReactNode;
 export default Rotate90;

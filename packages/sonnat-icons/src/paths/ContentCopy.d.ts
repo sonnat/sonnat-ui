@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ContentCopy: IPaths;
+declare const ContentCopy: ReactNode;
 export default ContentCopy;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const DropO: IPaths;
+declare const DropO: ReactNode;
 export default DropO;

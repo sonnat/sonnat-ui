@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ClockLarge: IPaths;
+declare const ClockLarge: ReactNode;
 export default ClockLarge;

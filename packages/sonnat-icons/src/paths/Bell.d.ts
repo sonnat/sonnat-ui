@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Bell: IPaths;
+declare const Bell: ReactNode;
 export default Bell;

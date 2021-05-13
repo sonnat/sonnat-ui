@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const PhoneInTalkO: IPaths;
+declare const PhoneInTalkO: ReactNode;
 export default PhoneInTalkO;

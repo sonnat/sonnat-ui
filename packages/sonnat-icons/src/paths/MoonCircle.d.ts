@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const MoonCircle: IPaths;
+declare const MoonCircle: ReactNode;
 export default MoonCircle;

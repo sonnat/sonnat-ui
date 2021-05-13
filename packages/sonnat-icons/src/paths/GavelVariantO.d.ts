@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const GavelVariantO: IPaths;
+declare const GavelVariantO: ReactNode;
 export default GavelVariantO;

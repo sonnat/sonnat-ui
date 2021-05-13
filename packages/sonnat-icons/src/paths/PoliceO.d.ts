@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const PoliceO: IPaths;
+declare const PoliceO: ReactNode;
 export default PoliceO;

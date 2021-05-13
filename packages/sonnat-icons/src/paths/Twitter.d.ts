@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Twitter: IPaths;
+declare const Twitter: ReactNode;
 export default Twitter;

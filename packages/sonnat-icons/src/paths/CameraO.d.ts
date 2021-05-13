@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CameraO: IPaths;
+declare const CameraO: ReactNode;
 export default CameraO;

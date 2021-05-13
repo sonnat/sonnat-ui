@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Pool: IPaths;
+declare const Pool: ReactNode;
 export default Pool;

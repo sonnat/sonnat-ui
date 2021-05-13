@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Gitlab: IPaths;
+declare const Gitlab: ReactNode;
 export default Gitlab;

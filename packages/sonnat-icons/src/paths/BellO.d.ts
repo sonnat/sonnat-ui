@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const BellO: IPaths;
+declare const BellO: ReactNode;
 export default BellO;

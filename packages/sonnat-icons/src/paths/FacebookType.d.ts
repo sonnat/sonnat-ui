@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const FacebookType: IPaths;
+declare const FacebookType: ReactNode;
 export default FacebookType;

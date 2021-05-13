@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const DotsVertical: IPaths;
+declare const DotsVertical: ReactNode;
 export default DotsVertical;

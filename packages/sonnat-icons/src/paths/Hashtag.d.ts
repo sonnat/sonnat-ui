@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Hashtag: IPaths;
+declare const Hashtag: ReactNode;
 export default Hashtag;

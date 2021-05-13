@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const InfoCircleLargeO: IPaths;
+declare const InfoCircleLargeO: ReactNode;
 export default InfoCircleLargeO;

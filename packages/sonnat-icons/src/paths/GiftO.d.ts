@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const GiftO: IPaths;
+declare const GiftO: ReactNode;
 export default GiftO;

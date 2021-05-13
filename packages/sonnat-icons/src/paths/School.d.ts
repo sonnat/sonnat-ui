@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const School: IPaths;
+declare const School: ReactNode;
 export default School;

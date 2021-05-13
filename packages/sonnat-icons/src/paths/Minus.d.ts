@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Minus: IPaths;
+declare const Minus: ReactNode;
 export default Minus;

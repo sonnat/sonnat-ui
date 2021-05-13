@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Lifebuoy: IPaths;
+declare const Lifebuoy: ReactNode;
 export default Lifebuoy;

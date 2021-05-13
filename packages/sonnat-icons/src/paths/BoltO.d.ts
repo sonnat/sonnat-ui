@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const BoltO: IPaths;
+declare const BoltO: ReactNode;
 export default BoltO;

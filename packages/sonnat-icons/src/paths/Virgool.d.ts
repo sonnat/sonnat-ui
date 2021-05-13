@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Virgool: IPaths;
+declare const Virgool: ReactNode;
 export default Virgool;

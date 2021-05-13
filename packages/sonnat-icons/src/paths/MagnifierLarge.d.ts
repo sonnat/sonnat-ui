@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const MagnifierLarge: IPaths;
+declare const MagnifierLarge: ReactNode;
 export default MagnifierLarge;

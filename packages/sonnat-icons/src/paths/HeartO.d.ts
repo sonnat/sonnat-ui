@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const HeartO: IPaths;
+declare const HeartO: ReactNode;
 export default HeartO;

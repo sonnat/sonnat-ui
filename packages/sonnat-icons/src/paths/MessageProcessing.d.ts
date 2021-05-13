@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const MessageProcessing: IPaths;
+declare const MessageProcessing: ReactNode;
 export default MessageProcessing;

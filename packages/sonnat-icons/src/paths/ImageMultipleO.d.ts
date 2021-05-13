@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ImageMultipleO: IPaths;
+declare const ImageMultipleO: ReactNode;
 export default ImageMultipleO;

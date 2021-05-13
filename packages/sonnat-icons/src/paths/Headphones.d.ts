@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Headphones: IPaths;
+declare const Headphones: ReactNode;
 export default Headphones;

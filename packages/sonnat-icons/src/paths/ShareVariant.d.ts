@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ShareVariant: IPaths;
+declare const ShareVariant: ReactNode;
 export default ShareVariant;

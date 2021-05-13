@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Renew: IPaths;
+declare const Renew: ReactNode;
 export default Renew;

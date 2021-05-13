@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const SortAlphabeticalAscendingFa: IPaths;
+declare const SortAlphabeticalAscendingFa: ReactNode;
 export default SortAlphabeticalAscendingFa;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const BrushO: IPaths;
+declare const BrushO: ReactNode;
 export default BrushO;

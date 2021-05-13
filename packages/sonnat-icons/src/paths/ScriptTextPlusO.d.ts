@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ScriptTextPlusO: IPaths;
+declare const ScriptTextPlusO: ReactNode;
 export default ScriptTextPlusO;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const EraserO: IPaths;
+declare const EraserO: ReactNode;
 export default EraserO;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const EmailO: IPaths;
+declare const EmailO: ReactNode;
 export default EmailO;

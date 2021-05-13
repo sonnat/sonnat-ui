@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Apple: IPaths;
+declare const Apple: ReactNode;
 export default Apple;

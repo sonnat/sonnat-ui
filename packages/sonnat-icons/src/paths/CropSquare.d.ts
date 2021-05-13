@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CropSquare: IPaths;
+declare const CropSquare: ReactNode;
 export default CropSquare;

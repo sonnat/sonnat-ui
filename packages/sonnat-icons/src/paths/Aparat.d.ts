@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Aparat: IPaths;
+declare const Aparat: ReactNode;
 export default Aparat;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const BarbecueO: IPaths;
+declare const BarbecueO: ReactNode;
 export default BarbecueO;

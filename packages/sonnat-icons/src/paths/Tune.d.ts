@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Tune: IPaths;
+declare const Tune: ReactNode;
 export default Tune;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const StarHalfLeft: IPaths;
+declare const StarHalfLeft: ReactNode;
 export default StarHalfLeft;

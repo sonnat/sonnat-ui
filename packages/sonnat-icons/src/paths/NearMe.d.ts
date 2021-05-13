@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const NearMe: IPaths;
+declare const NearMe: ReactNode;
 export default NearMe;

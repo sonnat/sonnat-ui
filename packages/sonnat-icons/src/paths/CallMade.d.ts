@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CallMade: IPaths;
+declare const CallMade: ReactNode;
 export default CallMade;

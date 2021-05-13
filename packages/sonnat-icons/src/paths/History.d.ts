@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const History: IPaths;
+declare const History: ReactNode;
 export default History;

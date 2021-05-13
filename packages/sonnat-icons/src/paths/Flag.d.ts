@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Flag: IPaths;
+declare const Flag: ReactNode;
 export default Flag;

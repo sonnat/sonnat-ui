@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const MapO: IPaths;
+declare const MapO: ReactNode;
 export default MapO;

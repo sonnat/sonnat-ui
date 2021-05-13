@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CheckCellphoneIphoneO: IPaths;
+declare const CheckCellphoneIphoneO: ReactNode;
 export default CheckCellphoneIphoneO;

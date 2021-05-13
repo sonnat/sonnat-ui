@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CircleSliceO: IPaths;
+declare const CircleSliceO: ReactNode;
 export default CircleSliceO;

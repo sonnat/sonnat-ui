@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CreditCard: IPaths;
+declare const CreditCard: ReactNode;
 export default CreditCard;

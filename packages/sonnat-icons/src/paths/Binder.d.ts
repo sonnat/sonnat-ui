@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Binder: IPaths;
+declare const Binder: ReactNode;
 export default Binder;

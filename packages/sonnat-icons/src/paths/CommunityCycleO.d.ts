@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CommunityCycleO: IPaths;
+declare const CommunityCycleO: ReactNode;
 export default CommunityCycleO;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const LadderSquareMultipleO: IPaths;
+declare const LadderSquareMultipleO: ReactNode;
 export default LadderSquareMultipleO;

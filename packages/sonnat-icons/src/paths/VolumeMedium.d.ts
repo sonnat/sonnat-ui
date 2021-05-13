@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const VolumeMedium: IPaths;
+declare const VolumeMedium: ReactNode;
 export default VolumeMedium;

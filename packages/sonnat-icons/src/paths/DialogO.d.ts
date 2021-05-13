@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const DialogO: IPaths;
+declare const DialogO: ReactNode;
 export default DialogO;

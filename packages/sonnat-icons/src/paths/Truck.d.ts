@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Truck: IPaths;
+declare const Truck: ReactNode;
 export default Truck;

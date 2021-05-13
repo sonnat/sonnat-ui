@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CafebazaarType: IPaths;
+declare const CafebazaarType: ReactNode;
 export default CafebazaarType;

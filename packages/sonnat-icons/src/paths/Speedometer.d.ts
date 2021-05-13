@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Speedometer: IPaths;
+declare const Speedometer: ReactNode;
 export default Speedometer;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ArrowUp: IPaths;
+declare const ArrowUp: ReactNode;
 export default ArrowUp;

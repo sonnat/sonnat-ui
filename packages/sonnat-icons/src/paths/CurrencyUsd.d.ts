@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CurrencyUsd: IPaths;
+declare const CurrencyUsd: ReactNode;
 export default CurrencyUsd;

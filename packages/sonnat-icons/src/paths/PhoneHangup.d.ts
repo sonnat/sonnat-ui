@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const PhoneHangup: IPaths;
+declare const PhoneHangup: ReactNode;
 export default PhoneHangup;

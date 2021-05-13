@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const SaunaO: IPaths;
+declare const SaunaO: ReactNode;
 export default SaunaO;

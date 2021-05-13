@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const TagRemoveO: IPaths;
+declare const TagRemoveO: ReactNode;
 export default TagRemoveO;

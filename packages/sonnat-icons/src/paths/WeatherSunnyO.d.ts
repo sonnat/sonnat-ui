@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const WeatherSunnyO: IPaths;
+declare const WeatherSunnyO: ReactNode;
 export default WeatherSunnyO;

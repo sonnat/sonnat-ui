@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const MessageAlertO: IPaths;
+declare const MessageAlertO: ReactNode;
 export default MessageAlertO;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const SmsO: IPaths;
+declare const SmsO: ReactNode;
 export default SmsO;

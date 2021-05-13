@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const SkullO: IPaths;
+declare const SkullO: ReactNode;
 export default SkullO;

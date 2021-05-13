@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const LinkedinType: IPaths;
+declare const LinkedinType: ReactNode;
 export default LinkedinType;

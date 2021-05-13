@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const TooltipImageO: IPaths;
+declare const TooltipImageO: ReactNode;
 export default TooltipImageO;

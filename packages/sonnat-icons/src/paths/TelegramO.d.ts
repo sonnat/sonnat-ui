@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const TelegramO: IPaths;
+declare const TelegramO: ReactNode;
 export default TelegramO;

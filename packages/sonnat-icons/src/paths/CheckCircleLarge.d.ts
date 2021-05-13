@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CheckCircleLarge: IPaths;
+declare const CheckCircleLarge: ReactNode;
 export default CheckCircleLarge;

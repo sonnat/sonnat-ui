@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CabinetO: IPaths;
+declare const CabinetO: ReactNode;
 export default CabinetO;

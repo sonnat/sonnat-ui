@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const AccountPlusO: IPaths;
+declare const AccountPlusO: ReactNode;
 export default AccountPlusO;

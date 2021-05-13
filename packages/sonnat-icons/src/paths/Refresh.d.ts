@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Refresh: IPaths;
+declare const Refresh: ReactNode;
 export default Refresh;

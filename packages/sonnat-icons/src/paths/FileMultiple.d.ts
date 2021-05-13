@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const FileMultiple: IPaths;
+declare const FileMultiple: ReactNode;
 export default FileMultiple;

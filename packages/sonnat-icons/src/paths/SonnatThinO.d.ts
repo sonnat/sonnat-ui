@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const SonnatThinO: IPaths;
+declare const SonnatThinO: ReactNode;
 export default SonnatThinO;

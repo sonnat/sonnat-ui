@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CheckAll: IPaths;
+declare const CheckAll: ReactNode;
 export default CheckAll;

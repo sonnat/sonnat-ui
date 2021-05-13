@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const MoonO: IPaths;
+declare const MoonO: ReactNode;
 export default MoonO;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ExportShare: IPaths;
+declare const ExportShare: ReactNode;
 export default ExportShare;

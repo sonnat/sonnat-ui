@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ShieldCheck: IPaths;
+declare const ShieldCheck: ReactNode;
 export default ShieldCheck;

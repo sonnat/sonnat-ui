@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const HomeO: IPaths;
+declare const HomeO: ReactNode;
 export default HomeO;

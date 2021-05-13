@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const GavelO: IPaths;
+declare const GavelO: ReactNode;
 export default GavelO;

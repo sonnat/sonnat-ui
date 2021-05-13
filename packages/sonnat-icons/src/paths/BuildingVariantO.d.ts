@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const BuildingVariantO: IPaths;
+declare const BuildingVariantO: ReactNode;
 export default BuildingVariantO;

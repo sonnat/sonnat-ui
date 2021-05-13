@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const TooltipText: IPaths;
+declare const TooltipText: ReactNode;
 export default TooltipText;

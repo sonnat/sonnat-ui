@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ChatO: IPaths;
+declare const ChatO: ReactNode;
 export default ChatO;

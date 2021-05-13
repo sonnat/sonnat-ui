@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const BalconyO: IPaths;
+declare const BalconyO: ReactNode;
 export default BalconyO;

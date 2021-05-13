@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const PhoneClassicTopO: IPaths;
+declare const PhoneClassicTopO: ReactNode;
 export default PhoneClassicTopO;

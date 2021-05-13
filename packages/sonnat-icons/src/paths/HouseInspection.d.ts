@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const HouseInspection: IPaths;
+declare const HouseInspection: ReactNode;
 export default HouseInspection;

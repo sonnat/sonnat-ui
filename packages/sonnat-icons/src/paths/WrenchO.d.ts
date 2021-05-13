@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const WrenchO: IPaths;
+declare const WrenchO: ReactNode;
 export default WrenchO;

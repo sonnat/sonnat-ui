@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ChevronRightCircle: IPaths;
+declare const ChevronRightCircle: ReactNode;
 export default ChevronRightCircle;

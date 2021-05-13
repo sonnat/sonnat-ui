@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const MopedO: IPaths;
+declare const MopedO: ReactNode;
 export default MopedO;

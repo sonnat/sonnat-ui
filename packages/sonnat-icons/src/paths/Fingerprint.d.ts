@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Fingerprint: IPaths;
+declare const Fingerprint: ReactNode;
 export default Fingerprint;

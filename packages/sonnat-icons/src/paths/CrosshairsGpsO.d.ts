@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CrosshairsGpsO: IPaths;
+declare const CrosshairsGpsO: ReactNode;
 export default CrosshairsGpsO;

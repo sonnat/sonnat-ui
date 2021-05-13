@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const PencilO: IPaths;
+declare const PencilO: ReactNode;
 export default PencilO;

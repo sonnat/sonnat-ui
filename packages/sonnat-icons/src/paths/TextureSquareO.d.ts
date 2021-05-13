@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const TextureSquareO: IPaths;
+declare const TextureSquareO: ReactNode;
 export default TextureSquareO;

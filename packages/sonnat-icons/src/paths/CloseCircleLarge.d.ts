@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CloseCircleLarge: IPaths;
+declare const CloseCircleLarge: ReactNode;
 export default CloseCircleLarge;

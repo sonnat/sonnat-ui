@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CropLandscape: IPaths;
+declare const CropLandscape: ReactNode;
 export default CropLandscape;

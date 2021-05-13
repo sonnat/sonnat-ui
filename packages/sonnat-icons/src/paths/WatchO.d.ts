@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const WatchO: IPaths;
+declare const WatchO: ReactNode;
 export default WatchO;

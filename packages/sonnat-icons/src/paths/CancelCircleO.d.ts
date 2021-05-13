@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CancelCircleO: IPaths;
+declare const CancelCircleO: ReactNode;
 export default CancelCircleO;

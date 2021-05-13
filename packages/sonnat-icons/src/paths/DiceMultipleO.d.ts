@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const DiceMultipleO: IPaths;
+declare const DiceMultipleO: ReactNode;
 export default DiceMultipleO;

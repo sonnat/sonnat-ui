@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ChartSquareO: IPaths;
+declare const ChartSquareO: ReactNode;
 export default ChartSquareO;

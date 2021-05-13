@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const MapMarkerDotsO: IPaths;
+declare const MapMarkerDotsO: ReactNode;
 export default MapMarkerDotsO;

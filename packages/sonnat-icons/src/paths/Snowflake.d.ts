@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Snowflake: IPaths;
+declare const Snowflake: ReactNode;
 export default Snowflake;

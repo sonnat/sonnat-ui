@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CarSeatbelt: IPaths;
+declare const CarSeatbelt: ReactNode;
 export default CarSeatbelt;

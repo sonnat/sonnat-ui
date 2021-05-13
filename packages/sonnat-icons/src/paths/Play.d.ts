@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Play: IPaths;
+declare const Play: ReactNode;
 export default Play;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const MouseOThin: IPaths;
+declare const MouseOThin: ReactNode;
 export default MouseOThin;

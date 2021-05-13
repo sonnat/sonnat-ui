@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Lock: IPaths;
+declare const Lock: ReactNode;
 export default Lock;

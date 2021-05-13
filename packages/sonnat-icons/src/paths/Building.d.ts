@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Building: IPaths;
+declare const Building: ReactNode;
 export default Building;

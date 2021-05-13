@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const FaNumber4: IPaths;
+declare const FaNumber4: ReactNode;
 export default FaNumber4;

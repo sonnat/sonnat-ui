@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const PinO: IPaths;
+declare const PinO: ReactNode;
 export default PinO;

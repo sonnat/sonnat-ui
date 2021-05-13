@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const AlertOctagon: IPaths;
+declare const AlertOctagon: ReactNode;
 export default AlertOctagon;

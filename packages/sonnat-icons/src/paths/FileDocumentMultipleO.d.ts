@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const FileDocumentMultipleO: IPaths;
+declare const FileDocumentMultipleO: ReactNode;
 export default FileDocumentMultipleO;

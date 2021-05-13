@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ChairRolling: IPaths;
+declare const ChairRolling: ReactNode;
 export default ChairRolling;

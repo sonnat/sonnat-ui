@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Ladder: IPaths;
+declare const Ladder: ReactNode;
 export default Ladder;

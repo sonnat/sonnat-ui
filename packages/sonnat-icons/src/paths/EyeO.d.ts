@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const EyeO: IPaths;
+declare const EyeO: ReactNode;
 export default EyeO;

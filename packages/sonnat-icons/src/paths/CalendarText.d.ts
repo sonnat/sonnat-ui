@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CalendarText: IPaths;
+declare const CalendarText: ReactNode;
 export default CalendarText;

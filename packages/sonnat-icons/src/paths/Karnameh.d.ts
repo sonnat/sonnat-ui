@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Karnameh: IPaths;
+declare const Karnameh: ReactNode;
 export default Karnameh;

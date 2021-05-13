@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const VolumeOff: IPaths;
+declare const VolumeOff: ReactNode;
 export default VolumeOff;

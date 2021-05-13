@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const StarCircleO: IPaths;
+declare const StarCircleO: ReactNode;
 export default StarCircleO;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const InstagramO: IPaths;
+declare const InstagramO: ReactNode;
 export default InstagramO;

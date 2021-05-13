@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Cloud: IPaths;
+declare const Cloud: ReactNode;
 export default Cloud;

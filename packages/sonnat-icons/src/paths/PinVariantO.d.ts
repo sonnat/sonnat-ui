@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const PinVariantO: IPaths;
+declare const PinVariantO: ReactNode;
 export default PinVariantO;

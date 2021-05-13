@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const FormatPaintO: IPaths;
+declare const FormatPaintO: ReactNode;
 export default FormatPaintO;

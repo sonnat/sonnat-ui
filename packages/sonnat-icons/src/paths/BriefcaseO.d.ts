@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const BriefcaseO: IPaths;
+declare const BriefcaseO: ReactNode;
 export default BriefcaseO;

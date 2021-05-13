@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const HelpCircle: IPaths;
+declare const HelpCircle: ReactNode;
 export default HelpCircle;

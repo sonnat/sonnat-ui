@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const VirusO: IPaths;
+declare const VirusO: ReactNode;
 export default VirusO;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const PlusCircle: IPaths;
+declare const PlusCircle: ReactNode;
 export default PlusCircle;

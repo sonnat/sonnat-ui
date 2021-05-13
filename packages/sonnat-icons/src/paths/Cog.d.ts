@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Cog: IPaths;
+declare const Cog: ReactNode;
 export default Cog;

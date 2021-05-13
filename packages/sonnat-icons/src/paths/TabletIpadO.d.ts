@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const TabletIpadO: IPaths;
+declare const TabletIpadO: ReactNode;
 export default TabletIpadO;

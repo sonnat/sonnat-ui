@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const MicrophoneO: IPaths;
+declare const MicrophoneO: ReactNode;
 export default MicrophoneO;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Logout: IPaths;
+declare const Logout: ReactNode;
 export default Logout;

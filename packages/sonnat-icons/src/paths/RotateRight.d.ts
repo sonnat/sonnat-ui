@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const RotateRight: IPaths;
+declare const RotateRight: ReactNode;
 export default RotateRight;

@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ThumbUp: IPaths;
+declare const ThumbUp: ReactNode;
 export default ThumbUp;

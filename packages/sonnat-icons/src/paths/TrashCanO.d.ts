@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const TrashCanO: IPaths;
+declare const TrashCanO: ReactNode;
 export default TrashCanO;

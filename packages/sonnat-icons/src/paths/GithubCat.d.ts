@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const GithubCat: IPaths;
+declare const GithubCat: ReactNode;
 export default GithubCat;

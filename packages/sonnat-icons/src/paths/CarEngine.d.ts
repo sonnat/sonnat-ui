@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const CarEngine: IPaths;
+declare const CarEngine: ReactNode;
 export default CarEngine;

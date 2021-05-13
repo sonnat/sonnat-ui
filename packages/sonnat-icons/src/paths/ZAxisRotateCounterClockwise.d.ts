@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const ZAxisRotateCounterClockwise: IPaths;
+declare const ZAxisRotateCounterClockwise: ReactNode;
 export default ZAxisRotateCounterClockwise;

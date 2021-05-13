@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const BadgeAccount: IPaths;
+declare const BadgeAccount: ReactNode;
 export default BadgeAccount;

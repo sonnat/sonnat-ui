@@ -1,4 +1,4 @@
-import type { IPaths } from "../types";
+import type { ReactNode } from "react";
 
-declare const Clock: IPaths;
+declare const Clock: ReactNode;
 export default Clock;
