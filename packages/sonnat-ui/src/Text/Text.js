@@ -47,13 +47,6 @@ const textOverflowEnum = ["clip", "ellipsis"];
 
 const camelCase = s => s.replace(/-./g, x => x.toUpperCase()[1]);
 
-const getCorrectVariantKey = (variant, sourceOfTruth) => {
-  if (!variant || !variantEnum.includes(variant)) return "";
-
-  const variantKey = `${variant}`;
-  return sourceOfTruth[variantKey] ? variantKey : "";
-};
-
 const generateStyles = variants => {
   const styles = {};
 
@@ -73,7 +66,7 @@ const generateStyles = variants => {
     const variant = variants[v];
 
     if (!variant) return;
-    if (variant.rules) styles[v] = variant.rules;
+    styles[v] = variant;
   });
 
   return styles;
@@ -141,18 +134,22 @@ const Text = React.memo(
     } = props;
 
     const localClass = useStyles();
-    const variantKey = getCorrectVariantKey(variant, localClass);
+
+    let variantClass = "";
+    if (variant && variantEnum.includes(variant)) {
+      variantClass = localClass[`${variant}`] || "";
+    }
 
     return (
       <HTMLTag
         ref={ref}
         className={createClass(
-          className,
           localClass.root,
-          localClass[variantKey],
           localClass[`${display}Display`],
           localClass[`${color}Color`],
           localClass[`${textOverflow}Overflow`],
+          className,
+          variantClass,
           {
             [localClass.noWrap]: noWrap,
             [localClass[`${align}Alignment`]]: align != null && !!align,
