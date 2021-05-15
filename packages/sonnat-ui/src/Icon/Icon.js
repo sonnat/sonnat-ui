@@ -83,9 +83,9 @@ const Icon = React.memo(
       children,
       className,
       color,
-      viewBox,
       title,
       style: otherStyles,
+      viewBox = "0 0 24 24",
       size = "auto",
       ...otherProps
     } = props;
