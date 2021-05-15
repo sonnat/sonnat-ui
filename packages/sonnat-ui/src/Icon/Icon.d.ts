@@ -11,6 +11,18 @@ type BaseProps<P = {}> = P & {
    */
   className?: string;
   /**
+   * The viewBox of the SVG.
+   *
+   * Allows you to redefine what the coordinates without units mean inside an SVG element.
+   * @default "0 0 24 24"
+   */
+  viewBox?: string;
+  /**
+   * Provides a human-readable title for the element that contains it.
+   * https://www.w3.org/TR/SVG-access/#Equivalent
+   */
+  title?: string;
+  /**
    * The color of the icon.
    * @default "inherit"
    */
