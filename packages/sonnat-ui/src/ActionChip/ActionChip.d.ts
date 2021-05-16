@@ -9,8 +9,7 @@ type BaseProps<P = {}> = P & {
   /** The text of the chip. */
   label?: string;
   /**
-   * The leading icon placed before the label.
-   * When a string was provided, the component will use it as a `sonnat-icon` identifier.
+   * The leading icon element placed before the label.
    */
   leadingIcon?: React.ReactNode;
   /**

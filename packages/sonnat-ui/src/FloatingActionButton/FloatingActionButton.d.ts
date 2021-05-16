@@ -28,8 +28,7 @@ export type FloatingActionButtonTypeMap<
      */
     iconButtonSize?: "small" | "medium" | "large";
     /**
-     * The leading icon placed before the label.
-     * When a string was provided, the component will use it as a `sonnat-icon` identifier.
+     * The leading icon element placed before the label.
      */
     leadingIcon?: React.ReactNode;
     // eslint-disable-next-line no-unused-vars
@@ -42,9 +41,8 @@ export type FloatingActionButtonProps<
   N extends React.ElementType = FloatingActionButtonTypeMap["defaultRootNode"]
 > = OverrideProps<FloatingActionButtonTypeMap<P, N>, N>;
 
-declare const FloatingActionButton: OverridableComponent<FloatingActionButtonTypeMap<
-  {},
-  "button"
->>;
+declare const FloatingActionButton: OverridableComponent<
+  FloatingActionButtonTypeMap<{}, "button">
+>;
 
 export default FloatingActionButton;

@@ -54,13 +54,11 @@ export type ButtonTypeMap<P = {}, N extends React.ElementType = "button"> = {
      */
     variant?: "filled" | "outlined" | "inlined";
     /**
-     * The leading icon placed before the label.
-     * When a string was provided, the component will use it as a `sonnat-icon` identifier.
+     * The leading icon element placed before the label.
      */
     leadingIcon?: React.ReactNode;
     /**
-     * The trailing icon placed after the label.
-     * When a string was provided, the component will use it as a `sonnat-icon` identifier.
+     * The trailing icon element placed before the label.
      */
     trailingIcon?: React.ReactNode;
     // eslint-disable-next-line no-unused-vars

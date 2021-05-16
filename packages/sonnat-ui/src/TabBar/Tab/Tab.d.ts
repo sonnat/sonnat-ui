@@ -9,8 +9,7 @@ type BaseProps<P = {}> = P & {
    */
   className?: string;
   /**
-   * The icon placed before the label.
-   * The component will use it as a `sonnat-icon` identifier.
+   * The leading icon element placed before the label.
    */
   icon?: React.ReactNode;
   /**

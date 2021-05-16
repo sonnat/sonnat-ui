@@ -25,7 +25,7 @@ type BaseProps<P = {}> = P & {
   defaultValue?: string;
   /** The helper text content. */
   helperText?: string;
-  /** The helper icon. */
+  /** The helper icon element placed before the helper text. */
   helperIcon?: React.ReactNode;
   /**
    * If `true`, the textarea will be vertically resizable.

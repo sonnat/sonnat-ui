@@ -13,8 +13,7 @@ type BaseProps<P = {}> = P & {
    */
   undoButtonLabel?: string;
   /**
-   * The icon placed before the text.
-   * The component will use it as a `sonnat-icon` identifier.
+   * The leading icon element placed before the text.
    */
   icon?: React.ReactNode;
   /**
