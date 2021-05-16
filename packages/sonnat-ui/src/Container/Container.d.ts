@@ -16,6 +16,11 @@ type BaseProps<P = {}> = P & {
    * @default false
    */
   fluid?: boolean | "xxs" | "xs" | "sm" | "md" | "lg" | "xlg";
+  /**
+   * If `true`, the paddings will be removed.
+   * @default false
+   */
+  noPadding?: boolean;
 };
 
 export type ContainerProps<P = {}> = BaseProps<P> &

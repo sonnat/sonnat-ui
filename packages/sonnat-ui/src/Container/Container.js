@@ -20,8 +20,8 @@ const useStyles = makeStyles(
         direction,
         fontFamily: fontFamily[direction],
         width: "100%",
-        paddingRight: `${pxToRem(gutter)}`,
-        paddingLeft: `${pxToRem(gutter)}`,
+        paddingRight: pxToRem(gutter),
+        paddingLeft: pxToRem(gutter),
         marginRight: "auto",
         marginLeft: "auto",
         [breakpoints.up("xxs")]: {
@@ -50,6 +50,10 @@ const useStyles = makeStyles(
       fluid: {
         maxWidth: "100%"
       },
+      noPadding: {
+        paddingRight: 0,
+        paddingLeft: 0
+      },
       xxsFluid: {},
       xsFluid: {},
       smFluid: {},
@@ -63,7 +67,13 @@ const useStyles = makeStyles(
 
 const Container = React.memo(
   React.forwardRef(function Container(props, ref) {
-    const { children, className, fluid = false, ...otherProps } = props;
+    const {
+      children,
+      className,
+      fluid = false,
+      noPadding = false,
+      ...otherProps
+    } = props;
 
     const localClass = useStyles();
 
@@ -75,7 +85,8 @@ const Container = React.memo(
           typeof fluid === "boolean"
             ? { [localClass.fluid]: fluid }
             : localClass[`${fluid}Fluid`],
-          className
+          className,
+          { [localClass.noPadding]: noPadding }
         )}
         {...otherProps}
       >
@@ -90,6 +101,7 @@ Container.displayName = componentName;
 Container.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
+  noPadding: PropTypes.bool,
   fluid: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf(breakpointEnum)])
 };
 
