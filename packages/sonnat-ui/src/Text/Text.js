@@ -5,7 +5,7 @@ import makeStyles from "../styles/makeStyles";
 
 const componentName = "Text";
 
-const variantEnum = [
+const allowedVariants = [
   "h1",
   "h2",
   "h3",
@@ -20,7 +20,7 @@ const variantEnum = [
   "captionSmall"
 ];
 
-const colorEnum = [
+const allowedColors = [
   "inherit",
   "textPrimary",
   "textSecondary",
@@ -34,8 +34,18 @@ const colorEnum = [
   "info"
 ];
 
-const alignEnum = ["left", "right", "center", "justify", "inherit", "initial"];
-const displayEnum = [
+const allowedAlignments = [
+  "left",
+  "right",
+  "center",
+  "justify",
+  "inherit",
+  "initial"
+];
+
+const allowedWeights = ["bold", "medium", "regular", "light"];
+
+const allowedDisplays = [
   "inline",
   "block",
   "inline-block",
@@ -43,30 +53,35 @@ const displayEnum = [
   "inline-flex",
   "inherit"
 ];
-const textOverflowEnum = ["clip", "ellipsis"];
+
+const allowedTextOverflows = ["clip", "ellipsis"];
 
 const camelCase = s => s.replace(/-./g, x => x.toUpperCase()[1]);
 
 const generateStyles = variants => {
   const styles = {};
 
-  alignEnum.forEach(alignment => {
+  allowedAlignments.forEach(alignment => {
     styles[`${alignment}Alignment`] = { textAlign: alignment };
   });
 
-  displayEnum.forEach(display => {
+  allowedDisplays.forEach(display => {
     styles[`${camelCase(display)}Display`] = { display };
   });
 
-  textOverflowEnum.forEach(overflow => {
+  allowedTextOverflows.forEach(overflow => {
     styles[`${overflow}Overflow`] = { textOverflow: overflow };
   });
 
-  variantEnum.forEach(v => {
+  allowedVariants.forEach(v => {
     const variant = variants[v];
 
     if (!variant) return;
-    styles[v] = variant;
+
+    // eslint-disable-next-line no-unused-vars
+    const { fontWeight: _, ...restStyles } = variant;
+
+    styles[v] = restStyles;
   });
 
   return styles;
@@ -78,7 +93,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      typography: { variants, fontFamily }
+      typography: { variants, fontFamily, fontWeight }
     } = theme;
 
     return {
@@ -112,6 +127,10 @@ const useStyles = makeStyles(
         color: !darkMode ? colors.warning.origin : colors.warning.light
       },
       infoColor: { color: !darkMode ? colors.info.origin : colors.info.light },
+      boldWeight: { fontWeight: fontWeight.bold },
+      mediumWeight: { fontWeight: fontWeight.medium },
+      regularWeight: { fontWeight: fontWeight.regular },
+      lightWeight: { fontWeight: fontWeight.light },
       ...generateStyles(variants)
     };
   },
@@ -129,6 +148,7 @@ const Text = React.memo(
       rootNode: HTMLTag = "span",
       textOverflow = "ellipsis",
       color = "inherit",
+      weight = "regular",
       noWrap = false,
       ...otherProps
     } = props;
@@ -136,7 +156,7 @@ const Text = React.memo(
     const localClass = useStyles();
 
     let variantClass = "";
-    if (variant && variantEnum.includes(variant)) {
+    if (variant && allowedVariants.includes(variant)) {
       variantClass = localClass[`${variant}`] || "";
     }
 
@@ -145,8 +165,8 @@ const Text = React.memo(
         ref={ref}
         className={createClass(
           localClass.root,
-          localClass[`${display}Display`],
           localClass[`${color}Color`],
+          localClass[`${weight}Weight`],
           localClass[`${textOverflow}Overflow`],
           className,
           variantClass,
@@ -168,12 +188,13 @@ Text.displayName = componentName;
 
 Text.propTypes = {
   children: PropTypes.node,
-  variant: PropTypes.oneOf(variantEnum).isRequired,
+  variant: PropTypes.oneOf(allowedVariants).isRequired,
   rootNode: PropTypes.elementType,
-  align: PropTypes.oneOf(alignEnum),
-  color: PropTypes.oneOf(colorEnum),
-  display: PropTypes.oneOf(displayEnum),
-  textOverflow: PropTypes.oneOf(textOverflowEnum),
+  align: PropTypes.oneOf(allowedAlignments),
+  color: PropTypes.oneOf(allowedColors),
+  display: PropTypes.oneOf(allowedDisplays),
+  textOverflow: PropTypes.oneOf(allowedTextOverflows),
+  weight: PropTypes.oneOf(allowedWeights),
   className: PropTypes.string,
   noWrap: PropTypes.bool
 };

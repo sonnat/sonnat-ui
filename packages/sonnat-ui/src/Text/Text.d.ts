@@ -53,6 +53,11 @@ export type TextTypeMap<P = {}, N extends React.ElementType = "span"> = {
      */
     align?: "initial" | "inherit" | "left" | "center" | "right" | "justify";
     /**
+     * Set the font-weight on the text.
+     * @default "regular"
+     */
+    weight?: "bold" | "medium" | "regular" | "light";
+    /**
      * Set the display on the component.
      * @default "initial"
      */
