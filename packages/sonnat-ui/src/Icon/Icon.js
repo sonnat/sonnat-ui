@@ -34,6 +34,7 @@ const useStyles = makeStyles(
         userSelect: "none",
         speak: "none",
         display: "inline-block",
+        verticalAlign: "middle",
         fontStyle: "normal",
         fontWeight: "normal",
         fontVariant: "normal",
