@@ -38,6 +38,13 @@ type BaseProps<P = {}> = P & {
    */
   defaultOpen?: boolean;
   /**
+   * The Callback fires when user has clicked outside of the tooltip.
+   *
+   * @param {React.MouseEvent<HTMLElement, MouseEvent>} event The event source of the callback.
+   */
+  // eslint-disable-next-line no-unused-vars
+  onOutsideClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+  /**
    * The Callback fires when the component requests to be closed.
    *
    * @param {object} event The event source of the callback.

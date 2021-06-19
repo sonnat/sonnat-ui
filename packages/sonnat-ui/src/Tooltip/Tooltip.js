@@ -10,7 +10,8 @@ import {
   onNextFrame,
   useForkRef,
   setRef,
-  usePreviousValue
+  usePreviousValue,
+  useEventListener
 } from "../utils";
 
 const componentName = "Tooltip";
@@ -39,7 +40,6 @@ const useStyles = makeStyles(
         alignItems: "center",
         zIndex: zIndexes.popover,
         position: "absolute",
-        pointerEvents: "none",
         MozBackfaceVisibility: "hidden",
         WebkitBackfaceVisibility: "hidden",
         backfaceVisibility: "hidden",
@@ -196,6 +196,8 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
+const isSSR = typeof window === "undefined";
+
 const getMirrorPlacement = placement => {
   switch (placement) {
     case "top":
@@ -206,6 +208,8 @@ const getMirrorPlacement = placement => {
       return "right";
     case "right":
       return "left";
+    default:
+      return "";
   }
 };
 
@@ -241,13 +245,14 @@ const createAnchorElement = (
 
   if (allowedTriggerEvents.includes(triggersOn)) {
     switch (triggersOn) {
-      case "click":
+      case "click": {
         childrenAditionalProps.onClick = e => {
           listeners.onClick(e);
           if (childrenProps.onClick) childrenProps.onClick(e);
         };
         break;
-      case "hover":
+      }
+      case "hover": {
         childrenAditionalProps.onMouseEnter = e => {
           listeners.onMouseEnter(e);
           if (childrenProps.onMouseEnter) childrenProps.onMouseEnter(e);
@@ -257,7 +262,8 @@ const createAnchorElement = (
           if (childrenProps.onMouseLeave) childrenProps.onMouseLeave(e);
         };
         break;
-      case "mouseMove":
+      }
+      case "mouseMove": {
         childrenAditionalProps.onMouseEnter = e => {
           listeners.onMouseEnter(e);
           if (childrenProps.onMouseEnter) childrenProps.onMouseEnter(e);
@@ -271,6 +277,9 @@ const createAnchorElement = (
           if (childrenProps.onMouseLeave) childrenProps.onMouseLeave(e);
         };
         break;
+      }
+      default:
+        return;
     }
   }
 
@@ -360,13 +369,15 @@ const newPositioning = (
 };
 
 const positioning = (placement, tooltipElement, anchorElement) => {
-  let position = getPosition(placement, tooltipElement, anchorElement);
+  const position = getPosition(placement, tooltipElement, anchorElement);
 
   const tooltipRect = tooltipElement.getBoundingClientRect();
-  const tooltipWidth = tooltipRect.width,
-    tooltipHeight = tooltipRect.height;
-  let x = position.left - tooltipWidth / 2,
-    y = position.top - tooltipHeight;
+
+  const tooltipWidth = tooltipRect.width;
+  const tooltipHeight = tooltipRect.height;
+
+  const x = position.left - tooltipWidth / 2;
+  const y = position.top - tooltipHeight;
 
   const collisionState = checkBoundingCollision(
     x,
@@ -391,6 +402,7 @@ const Tooltip = React.memo(
       defaultOpen,
       onOpen,
       onClose,
+      onOutsideClick,
       open: openProp,
       style = {},
       tailed = false,
@@ -463,6 +475,22 @@ const Tooltip = React.memo(
         setCurrentPlacement(newPlacement);
       }
     }, [isMounted, placement, prevPlacement]);
+
+    const outsideClickHandler = React.useCallback(
+      e => {
+        if (
+          anchorRef.current != null &&
+          anchorRef.current !== e.target &&
+          !anchorRef.current.contains(e.target) &&
+          tooltipRef.current != null &&
+          tooltipRef.current !== e.target &&
+          !tooltipRef.current.contains(e.target)
+        ) {
+          if (onOutsideClick) onOutsideClick(e);
+        }
+      },
+      [onOutsideClick]
+    );
 
     const anchorElement = createAnchorElement(
       children,
@@ -541,6 +569,16 @@ const Tooltip = React.memo(
       }
     );
 
+    useEventListener(
+      {
+        element: !isSSR ? document : null,
+        eventName: "mousedown",
+        listener: outsideClickHandler,
+        options: { useCapture: true }
+      },
+      open && onOutsideClick != null
+    );
+
     return (
       <React.Fragment>
         <PortalDestination aria-hidden={!open}>
@@ -586,6 +624,7 @@ Tooltip.propTypes = {
   style: PropTypes.object,
   onOpen: PropTypes.func,
   onClose: PropTypes.func,
+  onOutsideClick: PropTypes.func,
   placement: PropTypes.oneOf(allowedPlacements),
   triggersOn: PropTypes.oneOf(allowedTriggerEvents)
 };
