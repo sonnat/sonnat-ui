@@ -1,22 +1,22 @@
 import { generateColorSet } from "./colorUtils";
 
-const red = generateColorSet("#e53935");
-const pink = generateColorSet("#EA475B");
-const purple = generateColorSet("#B961CC");
-const deepPurple = generateColorSet("#7622BB");
-const navy = generateColorSet("#1A1A8D");
-const blue = generateColorSet("#3563E9");
-const lightBlue = generateColorSet("#2F98F5");
-const aqua = generateColorSet("#33BCD3");
-const forest = generateColorSet("#00695C");
-const green = generateColorSet("#2E7D32");
-const lightGreen = generateColorSet("#7CB342");
-const pear = generateColorSet("#CDDC39");
-const yellow = generateColorSet("#fdd835");
-const orange = generateColorSet("#ff9800");
-const deepOrange = generateColorSet("#E65100");
-const brown = generateColorSet("#A43C0C");
-const blueGrey = generateColorSet("#433E60");
+export const red = generateColorSet("#e53935");
+export const pink = generateColorSet("#EA475B");
+export const purple = generateColorSet("#B961CC");
+export const deepPurple = generateColorSet("#7622BB");
+export const navy = generateColorSet("#1A1A8D");
+export const blue = generateColorSet("#3563E9");
+export const lightBlue = generateColorSet("#2F98F5");
+export const aqua = generateColorSet("#33BCD3");
+export const forest = generateColorSet("#00695C");
+export const green = generateColorSet("#2E7D32");
+export const lightGreen = generateColorSet("#7CB342");
+export const pear = generateColorSet("#CDDC39");
+export const yellow = generateColorSet("#fdd835");
+export const orange = generateColorSet("#ff9800");
+export const deepOrange = generateColorSet("#E65100");
+export const brown = generateColorSet("#A43C0C");
+export const blueGrey = generateColorSet("#433E60");
 
 export const grey = {
   50: "#fafafa",
