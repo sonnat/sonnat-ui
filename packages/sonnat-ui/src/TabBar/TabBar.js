@@ -392,19 +392,16 @@ const TabBar = React.memo(
       if (isScrollable && scrollHandleVisibility !== "off") {
         const { scrollWidth, clientWidth } = scrollerRef.current;
 
-        let showStartScrollButton;
-        let showEndScrollButton;
-
         const scrollLeft = getNormalizedScrollLeft(
           scrollerRef.current,
           theme.direction
         );
 
         // use 1 for the potential rounding error with browser zooms.
-        showStartScrollButton = isRtl
+        const showStartScrollButton = isRtl
           ? scrollLeft < scrollWidth - clientWidth - 1
           : scrollLeft > 1;
-        showEndScrollButton = !isRtl
+        const showEndScrollButton = !isRtl
           ? scrollLeft < scrollWidth - clientWidth - 1
           : scrollLeft > 1;
 
