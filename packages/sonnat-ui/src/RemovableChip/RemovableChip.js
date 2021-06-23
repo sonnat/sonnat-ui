@@ -150,9 +150,6 @@ const useStyles = makeStyles(
       },
       filled: {
         "&$disabled": {
-          backgroundColor: !darkMode
-            ? colors.pallete.grey[100]
-            : colors.pallete.grey[900],
           color: !darkMode
             ? colors.createBlackColor({ alpha: 0.32 })
             : colors.createWhiteColor({ alpha: 0.12 }),
@@ -173,20 +170,27 @@ const useStyles = makeStyles(
           ? colors.createBlackColor({ alpha: 0.04 })
           : colors.createWhiteColor({ alpha: 0.04 }),
         color: colors.text.secondary,
-        "& $icon, & $removeButtonIcon": { color: colors.text.secondary }
+        "& $icon, & $removeButtonIcon": { color: colors.text.secondary },
+        "&$disabled": {
+          backgroundColor: !darkMode
+            ? colors.pallete.grey[100]
+            : colors.pallete.grey[900]
+        }
       },
       filledPrimary: {
         backgroundColor: filledPrimary.background,
         color: filledPrimary.text,
-        "& $icon, & $removeButtonIcon": {
-          color: filledPrimary.text
+        "& $icon, & $removeButtonIcon": { color: filledPrimary.text },
+        "&$disabled": {
+          backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.12 })
         }
       },
       filledSecondary: {
         backgroundColor: filledSecondary.background,
         color: filledSecondary.text,
-        "& $icon, & $removeButtonIcon": {
-          color: filledSecondary.text
+        "& $icon, & $removeButtonIcon": { color: filledSecondary.text },
+        "&$disabled": {
+          backgroundColor: changeColor(filledSecondaryMainBg, { alpha: 0.12 })
         }
       },
       outlinedDefault: {
@@ -203,26 +207,16 @@ const useStyles = makeStyles(
         }
       },
       outlinedPrimary: {
-        backgroundColor: !darkMode
-          ? colors.createPrimaryColor({ alpha: 0.04 })
-          : changeColor(colors.primary.light, { alpha: 0.04 }),
-        border: `${pxToRem(1)} solid ${
-          !darkMode ? colors.primary.origin : colors.primary.light
-        }`,
-        color: !darkMode ? colors.primary.origin : colors.primary.light,
-        "& $icon, & $removeButtonIcon": {
-          color: !darkMode ? colors.primary.origin : colors.primary.light
-        },
+        backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.04 }),
+        border: `${pxToRem(1)} solid ${filledPrimaryMainBg}`,
+        color: filledPrimaryMainBg,
+        "& $icon, & $removeButtonIcon": { color: filledPrimaryMainBg },
         "& $removeButtonIcon": {
           "&:hover, &:focus": {
-            backgroundColor: !darkMode
-              ? colors.createPrimaryColor({ alpha: 0.12 })
-              : changeColor(colors.primary.light, { alpha: 0.12 })
+            backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.12 })
           },
           "&:active": {
-            backgroundColor: !darkMode
-              ? colors.createPrimaryColor({ alpha: 0.24 })
-              : changeColor(colors.primary.light, { alpha: 0.24 })
+            backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.24 })
           },
           "&:hover": {
             // Reset on touch devices, it doesn't add specificity
@@ -232,40 +226,26 @@ const useStyles = makeStyles(
           }
         },
         "&$disabled": {
-          color: !darkMode
-            ? colors.createPrimaryColor({ alpha: 0.32 })
-            : changeColor(colors.primary.light, { alpha: 0.32 }),
+          color: changeColor(filledPrimaryMainBg, { alpha: 0.32 }),
           "& $icon, & $removeButtonIcon": {
-            color: !darkMode
-              ? colors.createPrimaryColor({ alpha: 0.32 })
-              : changeColor(colors.primary.light, { alpha: 0.32 })
+            color: changeColor(filledPrimaryMainBg, { alpha: 0.32 })
           },
-          borderColor: !darkMode
-            ? colors.createPrimaryColor({ alpha: 0.12 })
-            : changeColor(colors.primary.light, { alpha: 0.12 })
+          borderColor: changeColor(filledPrimaryMainBg, { alpha: 0.32 })
         }
       },
       outlinedSecondary: {
-        backgroundColor: !darkMode
-          ? colors.createSecondaryColor({ alpha: 0.04 })
-          : changeColor(colors.secondary.light, { alpha: 0.04 }),
-        border: `${pxToRem(1)} solid ${
-          !darkMode ? colors.secondary.origin : colors.secondary.light
-        }`,
-        color: !darkMode ? colors.secondary.origin : colors.secondary.light,
+        backgroundColor: changeColor(filledSecondaryMainBg, { alpha: 0.04 }),
+        border: `${pxToRem(1)} solid ${filledSecondaryMainBg}`,
+        color: filledSecondaryMainBg,
         "& $icon, & $removeButtonIcon": {
-          color: !darkMode ? colors.secondary.origin : colors.secondary.light
+          color: filledSecondaryMainBg
         },
         "& $removeButtonIcon": {
           "&:hover, &:focus": {
-            backgroundColor: !darkMode
-              ? colors.createSecondaryColor({ alpha: 0.12 })
-              : changeColor(colors.secondary.light, { alpha: 0.12 })
+            backgroundColor: changeColor(filledSecondaryMainBg, { alpha: 0.12 })
           },
           "&:active": {
-            backgroundColor: !darkMode
-              ? colors.createSecondaryColor({ alpha: 0.24 })
-              : changeColor(colors.secondary.light, { alpha: 0.24 })
+            backgroundColor: changeColor(filledSecondaryMainBg, { alpha: 0.24 })
           },
           "&:hover": {
             // Reset on touch devices, it doesn't add specificity
@@ -275,17 +255,11 @@ const useStyles = makeStyles(
           }
         },
         "&$disabled": {
-          color: !darkMode
-            ? colors.createSecondaryColor({ alpha: 0.32 })
-            : changeColor(colors.secondary.light, { alpha: 0.32 }),
+          color: changeColor(filledSecondaryMainBg, { alpha: 0.32 }),
           "& $icon, & $removeButtonIcon": {
-            color: !darkMode
-              ? colors.createSecondaryColor({ alpha: 0.32 })
-              : changeColor(colors.secondary.light, { alpha: 0.32 })
+            color: changeColor(filledSecondaryMainBg, { alpha: 0.32 })
           },
-          borderColor: !darkMode
-            ? colors.createSecondaryColor({ alpha: 0.12 })
-            : changeColor(colors.secondary.light, { alpha: 0.12 })
+          borderColor: changeColor(filledSecondaryMainBg, { alpha: 0.12 })
         }
       }
     };
