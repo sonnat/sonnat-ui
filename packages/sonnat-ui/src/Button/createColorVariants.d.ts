@@ -22,7 +22,9 @@ export interface TextColorVariants {
 }
 
 export interface FilledButton {
-  background: Pick<BackgroundColorVariants, "main" | "hover" | "active">;
+  background: Partial<
+    Pick<BackgroundColorVariants, "main" | "hover" | "active" | "disabled">
+  >;
   text: string;
 }
 

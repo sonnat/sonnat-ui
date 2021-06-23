@@ -24,7 +24,8 @@ export default function createVariantColors(theme) {
         : colors.createWhiteColor({ alpha: 0.98 }),
       active: !darkMode
         ? colors.createBlackColor({ alpha: 0.6 })
-        : colors.createWhiteColor({ alpha: 0.5 })
+        : colors.createWhiteColor({ alpha: 0.5 }),
+      disabled: !darkMode ? colors.pallete.grey[100] : colors.pallete.grey[900]
     },
     text: colors.getContrastColorOf(filledDefaultMainBg)
   };
@@ -39,7 +40,8 @@ export default function createVariantColors(theme) {
       active: adjustColor(filledPrimaryMainBg, {
         saturation: +8,
         lightness: -4
-      })
+      }),
+      disabled: changeColor(filledPrimaryMainBg, { alpha: 0.12 })
     },
     text: colors.getContrastColorOf(filledPrimaryMainBg)
   };
@@ -54,7 +56,8 @@ export default function createVariantColors(theme) {
       active: adjustColor(filledSecondaryMainBg, {
         saturation: +8,
         lightness: -4
-      })
+      }),
+      disabled: changeColor(filledSecondaryMainBg, { alpha: 0.12 })
     },
     text: colors.getContrastColorOf(filledSecondaryMainBg)
   };
@@ -90,59 +93,39 @@ export default function createVariantColors(theme) {
 
   const outlinedPrimary = {
     border: {
-      main: !darkMode
-        ? colors.createPrimaryColor({ alpha: 0.56 })
-        : changeColor(colors.primary.light, { alpha: 0.56 }),
-      hover: !darkMode ? colors.primary.origin : colors.primary.light,
-      active: !darkMode ? colors.primary.origin : colors.primary.light,
-      disabled: !darkMode
-        ? colors.createPrimaryColor({ alpha: 0.12 })
-        : changeColor(colors.primary.light, { alpha: 0.12 })
+      main: changeColor(filledPrimaryMainBg, { alpha: 0.56 }),
+      hover: filledPrimaryMainBg,
+      active: filledPrimaryMainBg,
+      disabled: changeColor(filledPrimaryMainBg, { alpha: 0.12 })
     },
     background: {
-      hover: !darkMode
-        ? colors.createPrimaryColor({ alpha: 0.04 })
-        : changeColor(colors.primary.light, { alpha: 0.04 }),
-      active: !darkMode
-        ? colors.createPrimaryColor({ alpha: 0.12 })
-        : changeColor(colors.primary.light, { alpha: 0.12 })
+      hover: changeColor(filledPrimaryMainBg, { alpha: 0.04 }),
+      active: changeColor(filledPrimaryMainBg, { alpha: 0.12 })
     },
     text: {
-      main: !darkMode ? colors.primary.origin : colors.primary.light,
-      hover: !darkMode ? colors.primary.origin : colors.primary.light,
-      active: !darkMode ? colors.primary.origin : colors.primary.light,
-      disabled: !darkMode
-        ? colors.createPrimaryColor({ alpha: 0.32 })
-        : changeColor(colors.primary.light, { alpha: 0.32 })
+      main: filledPrimaryMainBg,
+      hover: filledPrimaryMainBg,
+      active: filledPrimaryMainBg,
+      disabled: changeColor(filledPrimaryMainBg, { alpha: 0.32 })
     }
   };
 
   const outlinedSecondary = {
     border: {
-      main: !darkMode
-        ? colors.createSecondaryColor({ alpha: 0.56 })
-        : changeColor(colors.secondary.light, { alpha: 0.56 }),
-      hover: !darkMode ? colors.secondary.origin : colors.secondary.light,
-      active: !darkMode ? colors.secondary.origin : colors.secondary.light,
-      disabled: !darkMode
-        ? colors.createSecondaryColor({ alpha: 0.12 })
-        : changeColor(colors.secondary.light, { alpha: 0.12 })
+      main: changeColor(filledSecondaryMainBg, { alpha: 0.56 }),
+      hover: filledSecondaryMainBg,
+      active: filledSecondaryMainBg,
+      disabled: changeColor(filledSecondaryMainBg, { alpha: 0.12 })
     },
     background: {
-      hover: !darkMode
-        ? colors.createSecondaryColor({ alpha: 0.04 })
-        : changeColor(colors.secondary.light, { alpha: 0.04 }),
-      active: !darkMode
-        ? colors.createSecondaryColor({ alpha: 0.12 })
-        : changeColor(colors.secondary.light, { alpha: 0.12 })
+      hover: changeColor(filledSecondaryMainBg, { alpha: 0.04 }),
+      active: changeColor(filledSecondaryMainBg, { alpha: 0.12 })
     },
     text: {
-      main: !darkMode ? colors.secondary.origin : colors.secondary.light,
-      hover: !darkMode ? colors.secondary.origin : colors.secondary.light,
-      active: !darkMode ? colors.secondary.origin : colors.secondary.light,
-      disabled: !darkMode
-        ? colors.createSecondaryColor({ alpha: 0.32 })
-        : changeColor(colors.secondary.light, { alpha: 0.32 })
+      main: filledSecondaryMainBg,
+      hover: filledSecondaryMainBg,
+      active: filledSecondaryMainBg,
+      disabled: changeColor(filledSecondaryMainBg, { alpha: 0.32 })
     }
   };
 
@@ -165,39 +148,27 @@ export default function createVariantColors(theme) {
 
   const inlinedPrimary = {
     background: {
-      hover: !darkMode
-        ? colors.createPrimaryColor({ alpha: 0.04 })
-        : changeColor(colors.primary.light, { alpha: 0.04 }),
-      active: !darkMode
-        ? colors.createPrimaryColor({ alpha: 0.12 })
-        : changeColor(colors.primary.light, { alpha: 0.12 })
+      hover: changeColor(filledPrimaryMainBg, { alpha: 0.04 }),
+      active: changeColor(filledPrimaryMainBg, { alpha: 0.12 })
     },
     text: {
-      main: !darkMode ? colors.primary.origin : colors.primary.light,
-      hover: !darkMode ? colors.primary.origin : colors.primary.light,
-      active: !darkMode ? colors.primary.origin : colors.primary.light,
-      disabled: !darkMode
-        ? colors.createPrimaryColor({ alpha: 0.32 })
-        : changeColor(colors.primary.light, { alpha: 0.32 })
+      main: filledPrimaryMainBg,
+      hover: filledPrimaryMainBg,
+      active: filledPrimaryMainBg,
+      disabled: changeColor(filledPrimaryMainBg, { alpha: 0.32 })
     }
   };
 
   const inlinedSecondary = {
     background: {
-      hover: !darkMode
-        ? colors.createSecondaryColor({ alpha: 0.04 })
-        : changeColor(colors.secondary.light, { alpha: 0.04 }),
-      active: !darkMode
-        ? colors.createSecondaryColor({ alpha: 0.12 })
-        : changeColor(colors.secondary.light, { alpha: 0.12 })
+      hover: changeColor(filledSecondaryMainBg, { alpha: 0.04 }),
+      active: changeColor(filledSecondaryMainBg, { alpha: 0.12 })
     },
     text: {
-      main: !darkMode ? colors.secondary.origin : colors.secondary.light,
-      hover: !darkMode ? colors.secondary.origin : colors.secondary.light,
-      active: !darkMode ? colors.secondary.origin : colors.secondary.light,
-      disabled: !darkMode
-        ? colors.createSecondaryColor({ alpha: 0.32 })
-        : changeColor(colors.secondary.light, { alpha: 0.32 })
+      main: filledSecondaryMainBg,
+      hover: filledSecondaryMainBg,
+      active: filledSecondaryMainBg,
+      disabled: changeColor(filledSecondaryMainBg, { alpha: 0.32 })
     }
   };
 

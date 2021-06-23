@@ -120,9 +120,6 @@ const useStyles = makeStyles(
       /* if (variant="filled") */
       filled: {
         "&$disabled, &[disabled]": {
-          backgroundColor: !darkMode
-            ? colors.pallete.grey[100]
-            : colors.pallete.grey[900],
           "& $label": {
             color: !darkMode
               ? colors.createBlackColor({ alpha: 0.32 })
@@ -179,6 +176,9 @@ const useStyles = makeStyles(
             })}`,
             transform: "translateY(2px)"
           }
+        },
+        "&$disabled": {
+          backgroundColor: filledDefault.background.disabled
         }
       },
       /* if (variant="filled", color="primary") */
@@ -234,6 +234,9 @@ const useStyles = makeStyles(
               })}`
             }
           }
+        },
+        "&$disabled": {
+          backgroundColor: filledPrimary.background.disabled
         }
       },
       /* if (variant="filled", color="secondary") */
@@ -291,6 +294,9 @@ const useStyles = makeStyles(
               })}`
             }
           }
+        },
+        "&$disabled": {
+          backgroundColor: filledSecondary.background.disabled
         }
       },
       /* if (variant="outlined") */
