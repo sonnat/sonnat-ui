@@ -11,6 +11,9 @@ export * from "./Breadcrumb";
 export { default as Icon } from "./Icon";
 export * from "./Icon";
 
+export { default as Image } from "./Image";
+export * from "./Image";
+
 export { default as Button } from "./Button";
 export * from "./Button";
 
