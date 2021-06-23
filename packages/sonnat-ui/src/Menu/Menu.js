@@ -121,7 +121,7 @@ const useStyles = makeStyles(
 );
 
 const checkGroupChildren = children => {
-  let report = { invalids: [], valids: [] };
+  const report = { invalids: [], valids: [] };
 
   if (children) {
     React.Children.forEach(children, child => {
