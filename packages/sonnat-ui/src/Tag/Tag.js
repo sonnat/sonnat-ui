@@ -120,7 +120,7 @@ const useStyles = makeStyles(
       },
       outlined: {},
       dense: {
-        height: "auto",
+        height: pxToRem(24),
         "& $label": { fontSize: pxToRem(12) }
       },
       default: {
