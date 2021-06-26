@@ -470,12 +470,13 @@ const TextArea = React.memo(
         const handleResize = debounce(() => {
           renders.current = 0;
           syncHeight();
-        });
+        }, 200);
 
         const containerWindow = getOwnerWindow(inputRef.current);
         containerWindow.addEventListener("resize", handleResize);
 
         return () => {
+          handleResize.cancel();
           containerWindow.removeEventListener("resize", handleResize);
         };
       }
