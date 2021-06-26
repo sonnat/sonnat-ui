@@ -10,14 +10,14 @@ type BaseProps<P = {}> = P & {
   className?: string;
 };
 
-export type CardActionBarProps<P = {}> = BaseProps<P> &
+export type CardBodyProps<P = {}> = BaseProps<P> &
   Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-export interface CardActionBarFC<P = {}> {
+export interface CardBodyFC<P = {}> {
   // eslint-disable-next-line no-unused-vars
-  (props: CardActionBarProps<P>): JSX.Element;
+  (props: CardBodyProps<P>): JSX.Element;
 }
 
-declare const CardActionBar: CardActionBarFC<{}>;
+declare const CardBody: CardBodyFC<{}>;
 
-export default CardActionBar;
+export default CardBody;

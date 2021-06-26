@@ -3,34 +3,23 @@ import PropTypes from "prop-types";
 import createClass from "classnames";
 import makeStyles from "../../styles/makeStyles";
 
-const componentName = "CardActionBar";
+const componentName = "CardBody";
 
 const useStyles = makeStyles(
   theme => {
     const {
-      direction,
       typography: { pxToRem }
     } = theme;
 
     return {
-      root: {
-        display: "flex",
-        alignItems: "center",
-        padding: pxToRem(8),
-        "& > * + *": {
-          ...{
-            ltr: { marginLeft: pxToRem(8) },
-            rtl: { marginRight: pxToRem(8) }
-          }[direction]
-        }
-      }
+      root: { padding: pxToRem(16) }
     };
   },
   { name: `Sonnat${componentName}` }
 );
 
-const CardActionBar = React.memo(
-  React.forwardRef(function CardActionBar(props, ref) {
+const CardBody = React.memo(
+  React.forwardRef(function CardBody(props, ref) {
     const { className, children, ...otherProps } = props;
 
     const classes = useStyles();
@@ -47,11 +36,11 @@ const CardActionBar = React.memo(
   })
 );
 
-CardActionBar.displayName = componentName;
+CardBody.displayName = componentName;
 
-CardActionBar.propTypes = {
+CardBody.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string
 };
 
-export default CardActionBar;
+export default CardBody;
