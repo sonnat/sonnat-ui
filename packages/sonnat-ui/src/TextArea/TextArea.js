@@ -1,12 +1,35 @@
-import React, { useState, useEffect, useRef, useImperativeHandle } from "react";
-import PropTypes from "prop-types";
 import createClass from "classnames";
-import makeStyles from "../styles/makeStyles";
-import { changeColor } from "../styles/colorUtils";
+import debounce from "lodash.debounce";
+import PropTypes from "prop-types";
+import React from "react";
 import { useFormControl } from "../FormControl";
-import { setRef, useEnhancedEffect, useControlled, clamp } from "../utils";
+import { changeColor } from "../styles/colorUtils";
+import makeStyles from "../styles/makeStyles";
+import {
+  clamp,
+  setRef,
+  useControlled,
+  useEnhancedEffect,
+  useForkRef
+} from "../utils";
 
 const componentName = "TextArea";
+
+/**
+ * @type {(node: Node | null | undefined) => Document}
+ */
+const getOwnerDocument = node => (node && node.ownerDocument) || document;
+
+/**
+ * @type {(node: Node | null | undefined) => Window}
+ */
+const getOwnerWindow = node => getOwnerDocument(node).defaultView || window;
+
+/**
+ * @type {(style: React.CSSProperties, property: string) => number}
+ */
+const getStyleNumericValue = (style, property) =>
+  parseInt(style[property], 10) || 0;
 
 const useStyles = makeStyles(
   theme => {
@@ -33,11 +56,29 @@ const useStyles = makeStyles(
             : colors.createWhiteColor({ alpha: 0.48 })
         }
       },
+      shadow: {
+        ...useText({ color: colors.text.primary, lineHeight: 1.5 }),
+        visibility: "hidden",
+
+        // Remove from the content flow
+        position: "absolute",
+
+        // Ignore the scrollbar width
+        overflow: "hidden",
+
+        border: "none",
+        top: 0,
+        left: 0,
+        height: 0,
+
+        // Create a new layer, increase the isolation of the computed values
+        transform: "translateZ(0)"
+      },
       input: {
         ...useText({ color: colors.text.primary, lineHeight: 1.5 }),
-        flex: [[1, 1]],
+        // flex: [[1, 1]],
         minWidth: 0,
-        minHeight: pxToRem(120),
+        // minHeight: pxToRem(120),
         borderRadius: pxToRem(4),
         outline: "none",
         border: `${pxToRem(1)} solid ${
@@ -50,12 +91,10 @@ const useStyles = makeStyles(
         padding: [[pxToRem(8), pxToRem(16)]],
         boxShadow: `0 0 0 0 ${colors.transparent}`,
         appearance: "none !important",
-        "&::-webkit-input-placeholder": useText({
-          color: colors.text.hint
-        }),
-        "&::-moz-placeholder": useText({ color: colors.text.hint }),
-        "&:-ms-input-placeholder": useText({ color: colors.text.hint }),
-        "&:-moz-placeholder": useText({ color: colors.text.hint })
+        "&::-webkit-input-placeholder": { color: colors.text.hint },
+        "&::-moz-placeholder": { color: colors.text.hint },
+        "&:-ms-input-placeholder": { color: colors.text.hint },
+        "&:-moz-placeholder": { color: colors.text.hint }
       },
       helperRow: {
         display: "flex",
@@ -163,10 +202,14 @@ const TextArea = React.memo(
       className,
       helperText,
       helperIcon,
-      inputProps = {},
       defaultValue,
       name: nameProp,
       value: valueProp,
+      maxRows,
+      minRows,
+      style = {},
+      inputProps = {},
+      autoResize = false,
       autoFocus = false,
       focused = false,
       readOnly = false,
@@ -187,6 +230,7 @@ const TextArea = React.memo(
       onFocus: inputOnFocusProp,
       onBlur: inputOnBlurProp,
       onChange: inputOnChangeProp,
+      style: inputStyleProp = {},
       readOnly: inputReadOnlyProp = false,
       autoFocus: inputAutoFocusProp = false,
       ...otherInputProps
@@ -216,19 +260,24 @@ const TextArea = React.memo(
 
     const name = inputNameProp || nameProp;
 
-    const inputRef = useRef();
+    const inputRef = React.useRef();
+    const handleRef = useForkRef(ref, inputRef);
+    const shadowRef = React.useRef();
+    const renders = React.useRef(0);
+
+    const [state, setState] = React.useState({});
 
     const localClass = useStyles();
     const formControl = useFormControl();
 
-    const [value, setValue] = useControlled(
+    const [value, setValue, isControlled] = useControlled(
       inputValueProp || valueProp,
       defaultValue,
       componentName
     );
 
-    const isInit = useRef(true);
-    const { current: initialValue } = useRef(
+    const isInit = React.useRef(true);
+    const { current: initialValue } = React.useRef(
       inputValueProp || valueProp || defaultValue
     );
 
@@ -236,9 +285,9 @@ const TextArea = React.memo(
     const isAutoFocus = !!inputAutoFocusProp || autoFocus || focused;
     const hasLimitedLength = !!otherInputProps.maxLength;
 
-    const [isMounted, setMounted] = useState(false);
-    const [isFocused, setFocused] = useState(isAutoFocus);
-    const [charCount, setCharCount] = useState(
+    const [isMounted, setMounted] = React.useState(false);
+    const [isFocused, setFocused] = React.useState(isAutoFocus);
+    const [charCount, setCharCount] = React.useState(
       clamp(
         initialValue ? initialValue.length : 0,
         0,
@@ -279,8 +328,11 @@ const TextArea = React.memo(
         if (isMounted) {
           e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
+            renders.current = 0;
+
             if (onChange) onChange(e, e.target.value);
             if (inputOnChangeProp) inputClassNameProp(e, e.target.value);
+            if (!isControlled && autoResize) syncHeight();
             setValue(e.target.value);
             setCharCount(e.target.value.length);
           }
@@ -292,7 +344,7 @@ const TextArea = React.memo(
     controlProps.focused =
       controlProps.disabled || isReadOnly ? false : controlProps.focused;
 
-    useEffect(() => {
+    React.useEffect(() => {
       setMounted(true);
       return () => setMounted(false);
     }, []);
@@ -313,7 +365,7 @@ const TextArea = React.memo(
       }
     });
 
-    useImperativeHandle(ref, () => ({
+    React.useImperativeHandle(ref, () => ({
       focus: () => {
         inputRef.current.focus();
       },
@@ -332,6 +384,110 @@ const TextArea = React.memo(
         }
       }
     }));
+
+    const syncHeight = React.useCallback(() => {
+      const input = inputRef.current;
+      const containerWindow = getOwnerWindow(input);
+      const computedStyle = containerWindow.getComputedStyle(input);
+
+      // If input's width is shrunk and it's not visible, don't sync height.
+      if (computedStyle.width === "0px") return;
+
+      const inputShadow = shadowRef.current;
+      inputShadow.style.width = computedStyle.width;
+      inputShadow.value = input.value || placeholder || "x";
+      if (inputShadow.value.slice(-1) === "\n") {
+        // Certain fonts which overflow the line height will cause the textarea
+        // to report a different scrollHeight depending on whether the last line
+        // is empty. Make it non-empty to avoid this issue.
+        inputShadow.value += " ";
+      }
+
+      const boxSizing = computedStyle["box-sizing"];
+      const padding =
+        getStyleNumericValue(computedStyle, "padding-bottom") +
+        getStyleNumericValue(computedStyle, "padding-top");
+      const border =
+        getStyleNumericValue(computedStyle, "border-bottom-width") +
+        getStyleNumericValue(computedStyle, "border-top-width");
+
+      // The height of the inner content
+      const innerHeight = inputShadow.scrollHeight;
+
+      // Measure height of a textarea with a single row
+      inputShadow.value = "x";
+      const singleRowHeight = inputShadow.scrollHeight;
+
+      // The height of the outer content
+      let outerHeight = innerHeight;
+
+      if (minRows)
+        outerHeight = Math.max(Number(minRows) * singleRowHeight, outerHeight);
+      if (maxRows)
+        outerHeight = Math.min(Number(maxRows) * singleRowHeight, outerHeight);
+      outerHeight = Math.max(outerHeight, singleRowHeight);
+
+      // Take the box sizing into account for applying this value as a style.
+      const outerHeightStyle =
+        outerHeight + (boxSizing === "border-box" ? padding + border : 0);
+      const overflow = Math.abs(outerHeight - innerHeight) <= 1;
+
+      setState(prevState => {
+        // Need a large enough difference to update the height.
+        // This prevents infinite rendering loop.
+        if (
+          renders.current < 20 &&
+          ((outerHeightStyle > 0 &&
+            Math.abs((prevState.outerHeightStyle || 0) - outerHeightStyle) >
+              1) ||
+            prevState.overflow !== overflow)
+        ) {
+          renders.current += 1;
+          return {
+            overflow,
+            outerHeightStyle
+          };
+        }
+
+        if (process.env.NODE_ENV !== "production") {
+          if (renders.current === 20) {
+            // eslint-disable-next-line no-console
+            console.error(
+              [
+                "Sonnat: Too many re-renders. The layout is unstable.",
+                "TextArea with `autoResize` prop, limits the number of renders to prevent an infinite loop."
+              ].join("\n")
+            );
+          }
+        }
+
+        return prevState;
+      });
+    }, [maxRows, minRows, placeholder]);
+
+    React.useEffect(() => {
+      if (autoResize) {
+        const handleResize = debounce(() => {
+          renders.current = 0;
+          syncHeight();
+        });
+
+        const containerWindow = getOwnerWindow(inputRef.current);
+        containerWindow.addEventListener("resize", handleResize);
+
+        return () => {
+          containerWindow.removeEventListener("resize", handleResize);
+        };
+      }
+    }, [syncHeight, autoResize]);
+
+    useEnhancedEffect(() => {
+      if (autoResize) syncHeight();
+    });
+
+    React.useEffect(() => {
+      renders.current = 0;
+    }, [value]);
 
     return (
       <div
@@ -358,12 +514,35 @@ const TextArea = React.memo(
           onFocus={controlProps.onFocus}
           onBlur={controlProps.onBlur}
           readOnly={isReadOnly}
+          rows={minRows}
+          style={{
+            height: state.outerHeightStyle,
+
+            // Need a large enough difference to allow scrolling.
+            // This prevents infinite rendering loop.
+            overflow: state.overflow ? "hidden" : undefined,
+
+            ...style,
+            ...inputStyleProp
+          }}
           ref={node => {
             if (inputRefProp) setRef(inputRefProp, node);
-            setRef(inputRef, node);
+            handleRef(node);
           }}
           {...otherInputProps}
-        ></textarea>
+        />
+        <textarea
+          aria-hidden
+          className={createClass(localClass.shadow, inputClassNameProp)}
+          readOnly
+          ref={shadowRef}
+          tabIndex={-1}
+          style={{
+            ...style,
+            ...inputStyleProp,
+            padding: 0
+          }}
+        />
         {(!!helperText || !!otherInputProps.maxLength) && (
           <div className={localClass.helperRow}>
             {helperText && (
@@ -396,6 +575,7 @@ TextArea.propTypes = {
   defaultValue: PropTypes.string,
   helperText: PropTypes.string,
   helperIcon: PropTypes.node,
+  autoResize: PropTypes.bool,
   readOnly: PropTypes.bool,
   focused: PropTypes.bool,
   autoFocus: PropTypes.bool,
@@ -407,7 +587,10 @@ TextArea.propTypes = {
   onFocus: PropTypes.func,
   onChange: PropTypes.func,
   onBlur: PropTypes.func,
-  inputProps: PropTypes.object
+  inputProps: PropTypes.object,
+  style: PropTypes.object,
+  maxRows: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  minRows: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 };
 
 export default TextArea;

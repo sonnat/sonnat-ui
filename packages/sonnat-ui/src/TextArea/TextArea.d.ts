@@ -28,6 +28,19 @@ type BaseProps<P = {}> = P & {
   /** The helper icon element placed before the helper text. */
   helperIcon?: React.ReactNode;
   /**
+   * Maximum number of rows to display.
+   */
+  maxRows?: string | number;
+  /**
+   * Minimum number of rows to display.
+   */
+  minRows?: string | number;
+  /**
+   * If `true`, the textarea will automatically adjust the height.
+   * @default false
+   */
+  autoResize?: boolean;
+  /**
    * If `true`, the textarea will be vertically resizable.
    * @default false
    */
