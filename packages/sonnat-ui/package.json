@@ -58,6 +58,7 @@
     "jss-plugin-rule-value-function": "^10.5.1",
     "jss-plugin-vendor-prefixer": "^10.5.1",
     "lodash.throttle": "^4.1.1",
+    "lodash.debounce": "^4.0.8",
     "prop-types": "^15.7.2",
     "react-is": "^17.0.1",
     "react-jss": "^10.5.1",
