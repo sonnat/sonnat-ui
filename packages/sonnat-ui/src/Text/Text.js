@@ -78,10 +78,7 @@ const generateStyles = variants => {
 
     if (!variant) return;
 
-    // eslint-disable-next-line no-unused-vars
-    const { fontWeight: _, ...restStyles } = variant;
-
-    styles[v] = restStyles;
+    styles[v] = variant;
   });
 
   return styles;
@@ -145,10 +142,10 @@ const Text = React.memo(
       variant,
       align,
       display,
+      weight,
       rootNode: HTMLTag = "span",
       textOverflow = "ellipsis",
       color = "inherit",
-      weight = "regular",
       noWrap = false,
       ...otherProps
     } = props;
@@ -166,12 +163,12 @@ const Text = React.memo(
         className={createClass(
           localClass.root,
           localClass[`${color}Color`],
-          localClass[`${weight}Weight`],
           localClass[`${textOverflow}Overflow`],
           className,
           variantClass,
           {
             [localClass.noWrap]: noWrap,
+            [localClass[`${weight}Weight`]]: weight != null && !!weight,
             [localClass[`${align}Alignment`]]: align != null && !!align,
             [localClass[`${display}Display`]]: display != null && !!display
           }
