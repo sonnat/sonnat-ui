@@ -2,18 +2,20 @@
   "name": "develop",
   "version": "1.0.0",
   "private": true,
-  "dependencies": {
-    "@sonnat/ui": "^1.1.0",
-    "@sonnat/icons": "^1.0.1",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
-  },
   "scripts": {
     "start": "npm-run-all -p build serve",
     "build": "webpack -w",
     "serve": "nodemon --ignore ./build --exec babel-node -- server.js",
     "prod": "cross-env NODE_ENV=production npm run start",
     "dev": "cross-env NODE_ENV=development npm run start"
+  },
+  "dependencies": {
+    "@sonnat/ui": "^1.1.2",
+    "@sonnat/icons": "^1.1.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17",
+    "react-dom": "^16.8.0 || ^17"
   },
   "devDependencies": {
     "express": "^4.17.1",
