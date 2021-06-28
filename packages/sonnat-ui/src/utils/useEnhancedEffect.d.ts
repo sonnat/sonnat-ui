@@ -1,4 +1,4 @@
-import { EffectCallback, DependencyList } from "react";
+import type { EffectCallback, DependencyList } from "react";
 
 /**
  *

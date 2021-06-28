@@ -1,13 +1,6 @@
 import { useEffect, useLayoutEffect } from "react";
 
-const noopFn = () => {};
+const useEnhancedEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
-export default function useEnhancedEffect(
-  effectCallback = noopFn,
-  dependencies
-) {
-  return (typeof window !== "undefined" ? useLayoutEffect : useEffect)(
-    effectCallback,
-    dependencies
-  );
-}
+export default useEnhancedEffect;
