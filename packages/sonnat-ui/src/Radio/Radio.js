@@ -341,14 +341,17 @@ const RadioButton = React.memo(
       ? `radiobox-${controlProps.name}-${value}`
       : undefined;
 
-    useEventListener(
-      {
-        element: typeof document !== "undefined" ? document : undefined,
-        eventName: "keyup",
-        listener: keyboardListener
-      },
-      isFocused
-    );
+    if (typeof document !== "undefined") {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      useEventListener(
+        {
+          element: document,
+          eventName: "keyup",
+          listener: keyboardListener
+        },
+        isFocused
+      );
+    }
 
     return (
       <div

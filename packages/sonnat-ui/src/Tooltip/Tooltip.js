@@ -569,15 +569,18 @@ const Tooltip = React.memo(
       }
     );
 
-    useEventListener(
-      {
-        element: !isSSR ? document : null,
-        eventName: "mousedown",
-        listener: outsideClickHandler,
-        options: { useCapture: true }
-      },
-      open && onOutsideClick != null
-    );
+    if (!isSSR) {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      useEventListener(
+        {
+          element: document,
+          eventName: "mousedown",
+          listener: outsideClickHandler,
+          options: { useCapture: true }
+        },
+        open && onOutsideClick != null
+      );
+    }
 
     return (
       <React.Fragment>

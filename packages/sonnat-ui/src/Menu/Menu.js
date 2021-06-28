@@ -347,7 +347,7 @@ const Menu = React.memo(
       }
       reset();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [openState]);
+    }, [openState, onOpen, onClose]);
 
     const registerNode = (index, node) => {
       indexToNode.current.set(index, node);
@@ -441,24 +441,28 @@ const Menu = React.memo(
       [arrowDownListener, arrowUpListener]
     );
 
-    useEventListener(
-      {
-        element: !isSSR ? document : undefined,
-        eventName: "mousedown",
-        listener: outsideClickHandler,
-        options: { useCapture: true }
-      },
-      openState && onOutsideClick != null
-    );
+    if (!isSSR) {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      useEventListener(
+        {
+          element: document,
+          eventName: "mousedown",
+          listener: outsideClickHandler,
+          options: { useCapture: true }
+        },
+        openState && onOutsideClick != null
+      );
 
-    useEventListener(
-      {
-        element: !isSSR ? document : undefined,
-        eventName: "keydown",
-        listener: keyboardListener
-      },
-      openState
-    );
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      useEventListener(
+        {
+          element: document,
+          eventName: "keydown",
+          listener: keyboardListener
+        },
+        openState
+      );
+    }
 
     return (
       <MenuContext.Provider value={{ registerNode, dense }}>

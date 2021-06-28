@@ -407,14 +407,18 @@ const Switch = React.memo(
       ? `switch-${controlProps.name}-${value}`
       : undefined;
 
-    useEventListener(
-      {
-        element: typeof document !== "undefined" ? document : undefined,
-        eventName: "keyup",
-        listener: keyboardListener
-      },
-      isFocused
-    );
+    if (typeof window !== "undefined") {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      useEventListener(
+        {
+          element: document,
+          eventName: "keyup",
+          listener: keyboardListener
+        },
+        isFocused
+      );
+    }
+
     return (
       <div
         aria-disabled={controlProps.disabled}
