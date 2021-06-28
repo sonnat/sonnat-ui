@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default-member */
 import Color from "color";
 import deepMerge from "../utils/deepMerge";
 import pallete from "./pallete";

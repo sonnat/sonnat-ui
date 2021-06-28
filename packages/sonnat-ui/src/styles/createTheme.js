@@ -50,7 +50,7 @@ export default (options = {}) => {
     backfaceVisibilityFix
   };
 
-  let theme = deepMerge(
+  const theme = deepMerge(
     {
       colors,
       typography,
