@@ -14,6 +14,9 @@ export * from "./Icon";
 export { default as Image } from "./Image";
 export * from "./Image";
 
+export { default as Dialog } from "./Dialog";
+export * from "./Dialog";
+
 export { default as Button } from "./Button";
 export * from "./Button";
 
