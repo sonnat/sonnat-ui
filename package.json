@@ -57,6 +57,8 @@
     "@size-limit/webpack": "^4.5.6",
     "@types/color": "^3.0.1",
     "@types/fs-extra": "^9.0.11",
+    "@types/lodash.debounce": "^4.0.6",
+    "@types/lodash.throttle": "^4.1.6",
     "@types/mustache": "^4.1.1",
     "@types/node": "^14.14.19",
     "@types/prettier": "^2.1.6",
