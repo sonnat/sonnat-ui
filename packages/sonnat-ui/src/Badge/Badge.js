@@ -55,15 +55,16 @@ const useStyles = makeStyles(
         ...useText({
           fontSize: pxToRem(10),
           fontWeight: fontWeight.medium,
-          lineHeight: 1.65
+          lineHeight: 1
         }),
         direction,
         fontFamily: fontFamily[direction],
-        textAlign: "center !important",
         minWidth: pxToRem(16),
         height: pxToRem(16),
         borderRadius: pxToRem(8),
-        display: "inline-block",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
         padding: `0 ${pxToRem(4)}`
       },
       filled: { extend: "notDottedBadge" },

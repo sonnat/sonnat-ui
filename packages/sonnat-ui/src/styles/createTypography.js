@@ -49,7 +49,7 @@ export default function createTypography(typography) {
     const {
       fontSize = pxToRem(16),
       fontWeight = sonnatFontWeight.regular,
-      lineHeight = 2,
+      lineHeight = 1.5,
       color
     } = textProperties;
 
@@ -72,18 +72,18 @@ export default function createTypography(typography) {
     useText({ fontSize: pxToRem(fontSize), fontWeight, lineHeight });
 
   const variants = {
-    h1: buildVariant(sonnatFontWeight.medium, 56, 1.5),
-    h2: buildVariant(sonnatFontWeight.medium, 48, 1.5),
-    h3: buildVariant(sonnatFontWeight.medium, 32, 1.5),
-    h4: buildVariant(sonnatFontWeight.medium, 24, 1.5),
-    h5: buildVariant(sonnatFontWeight.medium, 20, 1.5),
-    h6: buildVariant(sonnatFontWeight.medium, 18, 1.5),
+    h1: buildVariant(sonnatFontWeight.medium, 56, 1.1428571429),
+    h2: buildVariant(sonnatFontWeight.medium, 48, 1.1666666667),
+    h3: buildVariant(sonnatFontWeight.medium, 32, 1.25),
+    h4: buildVariant(sonnatFontWeight.medium, 24, 1.3333333333),
+    h5: buildVariant(sonnatFontWeight.medium, 20, 1.4),
+    h6: buildVariant(sonnatFontWeight.medium, 18, 1.4444444444),
     subtitle: buildVariant(sonnatFontWeight.medium, 16, 1.5),
-    subtitleSmall: buildVariant(sonnatFontWeight.medium, 14, 1.5),
-    body: buildVariant(sonnatFontWeight.regular, 16, 2),
-    bodySmall: buildVariant(sonnatFontWeight.regular, 14, 2),
-    caption: buildVariant(sonnatFontWeight.regular, 12, 1.5),
-    captionSmall: buildVariant(sonnatFontWeight.regular, 10, 1.5)
+    subtitleSmall: buildVariant(sonnatFontWeight.medium, 14, 1.5714285714),
+    body: buildVariant(sonnatFontWeight.regular, 16, 1.5),
+    bodySmall: buildVariant(sonnatFontWeight.regular, 14, 1.5714285714),
+    caption: buildVariant(sonnatFontWeight.regular, 12, 1.6666666667),
+    captionSmall: buildVariant(sonnatFontWeight.regular, 10, 1.8)
   };
 
   return {

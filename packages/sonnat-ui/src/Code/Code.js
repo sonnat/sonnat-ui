@@ -20,7 +20,7 @@ const useStyles = makeStyles(
         ...useText({
           fontSize: "0.875em",
           fontWeight: fontWeight.regular,
-          lineHeight: 1.45,
+          lineHeight: 1.5714285714,
           color: colors.text.primary
         }),
         direction,

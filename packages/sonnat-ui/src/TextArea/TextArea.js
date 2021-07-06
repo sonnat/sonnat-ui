@@ -50,14 +50,32 @@ const useStyles = makeStyles(
         minWidth: "0",
         verticalAlign: "top",
         flexDirection: "column",
-        "&:not($errored):not($focused) $input:hover": {
+        "&:not($errored):not($focused):hover:after": {
           borderColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.48 })
             : colors.createWhiteColor({ alpha: 0.48 })
+        },
+        "&:after": {
+          content: "''",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          margin: 0,
+          padding: 0,
+          overflow: "hidden",
+          position: "absolute",
+          borderStyle: "solid",
+          borderWidth: 1,
+          borderColor: !darkMode
+            ? colors.createBlackColor({ alpha: 0.24 })
+            : colors.createWhiteColor({ alpha: 0.24 }),
+          borderRadius: pxToRem(4),
+          pointerEvents: "none"
         }
       },
       shadow: {
-        ...useText({ color: colors.text.primary, lineHeight: 1.5 }),
+        ...useText({ color: colors.text.primary }),
         visibility: "hidden",
 
         // Remove from the content flow
@@ -75,20 +93,14 @@ const useStyles = makeStyles(
         transform: "translateZ(0)"
       },
       input: {
-        ...useText({ color: colors.text.primary, lineHeight: 1.5 }),
-        // flex: [[1, 1]],
+        ...useText({ color: colors.text.primary }),
         minWidth: 0,
-        // minHeight: pxToRem(120),
-        borderRadius: pxToRem(4),
         outline: "none",
-        border: `${pxToRem(1)} solid ${
-          !darkMode
-            ? colors.createBlackColor({ alpha: 0.24 })
-            : colors.createWhiteColor({ alpha: 0.24 })
-        }`,
+        border: "none",
         backgroundColor: colors.transparent,
         resize: "none",
         padding: [[pxToRem(8), pxToRem(16)]],
+        borderRadius: pxToRem(4),
         boxShadow: `0 0 0 0 ${colors.transparent}`,
         appearance: "none !important",
         "&::-webkit-input-placeholder": { color: colors.text.hint },
@@ -135,7 +147,7 @@ const useStyles = makeStyles(
       },
       fluid: { width: "100%" },
       errored: {
-        "& $input": {
+        "&:after": {
           borderColor: !darkMode ? colors.error.origin : colors.error.light
         },
         "&:not($disabled)": {
@@ -160,8 +172,8 @@ const useStyles = makeStyles(
       },
       disabled: {
         pointerEvents: "none",
+        "&:after": { borderColor: colors.divider },
         "& $input": {
-          borderColor: colors.divider,
           color: colors.text.disabled,
           "&::-webkit-input-placeholder": { color: colors.text.disabled },
           "&::-moz-placeholder": { color: colors.text.disabled },
@@ -170,20 +182,15 @@ const useStyles = makeStyles(
         }
       },
       focused: {
-        "&:not($errored) $input": {
+        "&:not($errored):after": {
+          borderWidth: 2,
           borderColor: !darkMode
             ? colors.createPrimaryColor({ alpha: 0.56 })
-            : changeColor(colors.primary.light, { alpha: 0.56 }),
-          boxShadow: `0 0 0 ${pxToRem(1)} ${
-            !darkMode
-              ? colors.createPrimaryColor({ alpha: 0.56 })
-              : changeColor(colors.primary.light, { alpha: 0.56 })
-          }`
+            : changeColor(colors.primary.light, { alpha: 0.56 })
         },
-        "&$errored $input": {
-          boxShadow: `0 0 0 ${pxToRem(1)} ${
-            !darkMode ? colors.error.origin : colors.error.light
-          }`
+        "&$errored:after": {
+          borderWidth: 2,
+          borderColor: !darkMode ? colors.error.origin : colors.error.light
         }
       },
       resizable: { "& $input": { resize: "vertical" } }

@@ -57,9 +57,9 @@ export interface Typography {
   fontSize: number;
   htmlFontSize: number;
   useText: (textProperties: {
-    fontSize?: string | number;
+    fontSize?: CSSProperties["fontSize"];
     fontWeight?: CSSProperties["fontWeight"];
-    lineHeight?: string | number;
+    lineHeight?: CSSProperties["lineHeight"];
     color?: CSSProperties["color"];
   }) => CSSProperties;
   pxToRem: (size: number) => string;
