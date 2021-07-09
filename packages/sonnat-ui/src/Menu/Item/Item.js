@@ -19,6 +19,7 @@ const useStyles = makeStyles(
       root: {
         ...useText({
           fontSize: pxToRem(14),
+          lineHeight: 1.5714285714,
           color: colors.text.secondary
         }),
         ...useDisableUserSelect(),

@@ -87,6 +87,7 @@ const useStyles = makeStyles(
       legendLabelText: {
         ...useText({
           fontSize: pxToRem(12),
+          lineHeight: 1.6666666667,
           color: colors.text.secondary
         }),
         display: "inline-block",
@@ -237,7 +238,7 @@ const useStyles = makeStyles(
         }
       },
       legendLabeled: {
-        "& $notchedOutline": { top: pxToRem(-12) }
+        "& $notchedOutline": { top: pxToRem(-9) }
       },
       rounded: {
         "&$medium": {

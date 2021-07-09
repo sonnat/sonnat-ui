@@ -52,10 +52,7 @@ const useStyles = makeStyles(
           }
         }
       },
-      label: useText({
-        fontSize: pxToRem(16),
-        color: colors.text.primary
-      }),
+      label: useText({ color: colors.text.primary }),
       cell: {
         ...(direction === "rtl"
           ? { marginLeft: pxToRem(4) }

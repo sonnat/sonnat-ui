@@ -68,6 +68,7 @@ const useStyles = makeStyles(
       text: {
         ...useText({
           fontSize: pxToRem(14),
+          lineHeight: 1.5714285714,
           color: !darkMode ? colors.white : "rgba(0, 0, 0, 0.87)"
         }),
         padding: `${pxToRem(10)} 0`,

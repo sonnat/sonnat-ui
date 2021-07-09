@@ -21,7 +21,8 @@ const useStyles = makeStyles(
       root: {
         ...useText({
           fontSize: pxToRem(12),
-          color: colors.text.secondary
+          color: colors.text.secondary,
+          lineHeight: 1.6666666667
         }),
         display: "inline-flex",
         alignItems: "center",

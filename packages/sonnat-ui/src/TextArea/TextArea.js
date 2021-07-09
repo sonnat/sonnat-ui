@@ -121,6 +121,7 @@ const useStyles = makeStyles(
       helperText: {
         ...useText({
           fontSize: pxToRem(12),
+          lineHeight: 1.6666666667,
           color: colors.text.secondary
         })
       },
@@ -135,6 +136,7 @@ const useStyles = makeStyles(
       charCount: {
         ...useText({
           fontSize: pxToRem(12),
+          lineHeight: 1.6666666667,
           color: colors.text.secondary
         }),
         ...(direction === "rtl"

@@ -74,6 +74,7 @@ const useStyles = makeStyles(
       helperText: {
         ...useText({
           fontSize: pxToRem(12),
+          lineHeight: 1.6666666667,
           color: colors.text.secondary
         })
       },
@@ -86,7 +87,7 @@ const useStyles = makeStyles(
           : { marginRight: pxToRem(4) })
       },
       placeholder: {
-        ...useText({ fontSize: pxToRem(16), color: colors.text.hint }),
+        ...useText({ color: colors.text.hint }),
         flexGrow: "1",
         overflow: "hidden",
         alignSelf: "center",
@@ -355,7 +356,7 @@ const Select = React.memo(
     }, [isMounted]);
 
     const removeChip = (e, childValue) => {
-      let newValue = Array.isArray(value) ? value.slice() : [];
+      const newValue = Array.isArray(value) ? value.slice() : [];
 
       const itemIndex = value.indexOf(childValue);
       if (itemIndex !== -1) newValue.splice(itemIndex, 1);

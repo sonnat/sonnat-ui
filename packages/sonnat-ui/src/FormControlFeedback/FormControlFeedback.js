@@ -14,6 +14,7 @@ const useStyles = makeStyles(
       margin: 0,
       ...theme.typography.useText({
         fontSize: theme.typography.pxToRem(12),
+        lineHeight: 1.6666666667,
         color: theme.colors.text.secondary
       })
     },

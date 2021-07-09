@@ -95,7 +95,11 @@ const useStyles = makeStyles(
         }
       },
       emptyStatement: {
-        ...useText({ fontSize: pxToRem(14), color: colors.text.hint }),
+        ...useText({
+          fontSize: pxToRem(14),
+          lineHeight: 1.5714285714,
+          color: colors.text.hint
+        }),
         display: "flex",
         alignItems: "center",
         height: pxToRem(40),

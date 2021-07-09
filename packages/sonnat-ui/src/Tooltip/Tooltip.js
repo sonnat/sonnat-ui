@@ -82,6 +82,7 @@ const useStyles = makeStyles(
       },
       text: useText({
         fontSize: pxToRem(12),
+        lineHeight: 1.6666666667,
         color: colors.white
       }),
       tail: {

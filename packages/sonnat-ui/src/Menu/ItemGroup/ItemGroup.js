@@ -19,7 +19,11 @@ const useStyles = makeStyles(
     return {
       root: {},
       title: {
-        ...useText({ fontSize: pxToRem(14), color: colors.text.primary }),
+        ...useText({
+          fontSize: pxToRem(14),
+          lineHeight: 1.5714285714,
+          color: colors.text.primary
+        }),
         paddingRight: pxToRem(16),
         paddingLeft: pxToRem(16),
         height: pxToRem(40),

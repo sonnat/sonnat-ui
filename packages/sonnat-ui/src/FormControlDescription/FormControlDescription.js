@@ -11,6 +11,7 @@ const useStyles = makeStyles(
     root: {
       ...theme.typography.useText({
         fontSize: theme.typography.pxToRem(14),
+        lineHeight: 1.5714285714,
         color: theme.colors.text.secondary
       }),
       direction: theme.direction,

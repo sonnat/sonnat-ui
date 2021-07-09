@@ -38,7 +38,7 @@ const useStyles = makeStyles(
         }
       },
       label: {
-        ...useText({ fontSize: pxToRem(16), color: colors.text.primary }),
+        ...useText({ color: colors.text.primary }),
         ...(direction === "rtl"
           ? { marginLeft: pxToRem(4) }
           : { marginRight: pxToRem(4) })

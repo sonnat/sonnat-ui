@@ -89,10 +89,7 @@ const useStyles = makeStyles(
           }
         }
       },
-      label: useText({
-        fontSize: pxToRem(16),
-        color: colors.text.primary
-      }),
+      label: useText({ color: colors.text.primary }),
       cell: {
         width: pxToRem(36),
         height: pxToRem(36),

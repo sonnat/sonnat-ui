@@ -79,7 +79,9 @@ const useStyles = makeStyles(
         paddingRight: pxToRem(8),
         paddingLeft: pxToRem(8)
       },
-      label: { ...useText({ fontSize: pxToRem(14) }) },
+      label: {
+        ...useText({ fontSize: pxToRem(14), lineHeight: 1.5714285714 })
+      },
       icon: {
         ...useIconWrapper(16),
         ...(direction === "rtl"
