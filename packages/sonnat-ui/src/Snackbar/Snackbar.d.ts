@@ -3,7 +3,7 @@ import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /** The text to display. */
-  text?: string;
+  text: string;
   /**
    * Append to the classNames applied to the component so you can override or
    * extend the styles.

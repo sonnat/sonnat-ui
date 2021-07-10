@@ -11,8 +11,8 @@ export declare const ServerContext: React.Context<ServerContextValue>;
 
 export interface ServerProviderProps {
   children: React.ReactNode;
-  sheetsRegistry: SheetsRegistry;
-  generateServerClassName: GenerateClassName;
+  sheetsRegistry?: SheetsRegistry;
+  generateServerClassName?: GenerateClassName;
 }
 
 export default function ServerProvider(

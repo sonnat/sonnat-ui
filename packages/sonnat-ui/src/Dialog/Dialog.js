@@ -293,7 +293,7 @@ Dialog.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   maxWidth: PropTypes.number,
-  open: PropTypes.bool.isRequired,
+  open: PropTypes.bool,
   fullScreen: PropTypes.bool,
   onOpen: PropTypes.func,
   onClose: PropTypes.func,

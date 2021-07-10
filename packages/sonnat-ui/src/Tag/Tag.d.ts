@@ -10,7 +10,7 @@ type BaseProps<P = {}> = P & {
   /**
    * The label of the tag.
    */
-  label?: string;
+  label: string;
   /**
    * The leading icon element placed before the label.
    */

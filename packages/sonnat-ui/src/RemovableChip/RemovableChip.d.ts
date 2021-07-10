@@ -8,7 +8,7 @@ type BaseProps<P = {}> = P & {
    */
   className?: string;
   /** The text of the chip. */
-  label?: string;
+  label: string;
   /**
    * The leading icon element placed before the label.
    */
