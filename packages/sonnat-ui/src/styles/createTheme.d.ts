@@ -8,17 +8,6 @@ import type { ZIndexes, ZIndexesInputs } from "./createZIndexes";
 
 export type Direction = "ltr" | "rtl";
 
-export interface ThemeOptions {
-  breakpoints: BreakpointsInputs;
-  direction: Direction;
-  mixins: MixinsInputs;
-  colors: ColorsInputs;
-  spacing: SpacingsInputs;
-  typography: TypographyInputs;
-  zIndex: ZIndexesInputs;
-  darkMode: boolean;
-}
-
 export interface Theme {
   breakpoints: Breakpoints;
   direction: Direction;
@@ -32,7 +21,24 @@ export interface Theme {
     safariTransitionRadiusOverflowCombinationFix: CSSProperties;
     backfaceVisibilityFix: CSSProperties;
   };
+  custom: object;
 }
 
-// eslint-disable-next-line no-unused-vars
-export default function createTheme(options?: Partial<ThemeOptions>): Theme;
+export interface ThemeOptions {
+  breakpoints: BreakpointsInputs;
+  direction: Direction;
+  mixins: MixinsInputs;
+  colors: ColorsInputs;
+  spacing: SpacingsInputs;
+  typography: TypographyInputs;
+  zIndex: ZIndexesInputs;
+  darkMode: boolean;
+}
+
+type CustomThemeOptions<O = {}> = {
+  custom: O | ((theme: Omit<Theme, "custom">) => O);
+};
+
+export default function createTheme<CustomOptions extends object = {}>(
+  options?: Partial<ThemeOptions> & CustomThemeOptions<CustomOptions>
+): Theme & { custom: CustomOptions };

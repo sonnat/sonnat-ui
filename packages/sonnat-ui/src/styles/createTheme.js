@@ -1,4 +1,3 @@
-import { deepMerge } from "../utils";
 import createTypography from "./createTypography";
 import createColors from "./createColors";
 import createSpacings from "./createSpacings";
@@ -16,7 +15,7 @@ export default (options = {}) => {
     zIndexes: zIndexesInput = {},
     darkMode: isDarkMode = false,
     direction = "ltr",
-    ...otherOptions
+    custom: customInput = {}
   } = options;
 
   const breakpoints = createBreakpoints(breakpointsInput);
@@ -50,20 +49,23 @@ export default (options = {}) => {
     backfaceVisibilityFix
   };
 
-  const theme = deepMerge(
-    {
-      colors,
-      typography,
-      spacings,
-      breakpoints,
-      mixins,
-      zIndexes,
-      direction,
-      hacks,
-      darkMode: isDarkMode
-    },
-    otherOptions
-  );
+  const thisTheme = {
+    colors,
+    typography,
+    spacings,
+    breakpoints,
+    mixins,
+    zIndexes,
+    direction,
+    hacks,
+    darkMode: isDarkMode
+  };
+
+  const theme = {
+    ...thisTheme,
+    custom:
+      typeof customInput === "function" ? customInput(thisTheme) : customInput
+  };
 
   return theme;
 };
