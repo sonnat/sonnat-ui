@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component. */
@@ -13,14 +14,13 @@ type BaseProps<P = {}> = P & {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 };
 
-export type CardActionableAreaProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type CardActionableAreaProps<P = {}> = MergeElementProps<
+  "div",
+  BaseProps<P>
+>;
 
-export interface CardActionableAreaFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: CardActionableAreaProps<P>): JSX.Element;
-}
-
-declare const CardActionableArea: CardActionableAreaFC<{}>;
+declare const CardActionableArea: (
+  props: CardActionableAreaProps
+) => JSX.Element;
 
 export default CardActionableArea;

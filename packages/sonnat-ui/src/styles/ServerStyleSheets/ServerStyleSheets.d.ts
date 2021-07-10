@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import * as React from "react";
-import { GenerateClassName } from "../../utils/typings";
-import { SonnatInitializerProps } from "../SonnatInitializer";
+import type { GenerateClassName } from "../../typings";
+import type { SonnatInitializerProps } from "../SonnatInitializer";
 
 export interface ServerStyleSheetsOptions {
   /** The id attribute for <style> tag. */

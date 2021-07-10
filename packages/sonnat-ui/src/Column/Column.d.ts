@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type GridNumbers =
   | 1
@@ -82,14 +83,8 @@ type BaseProps<P = {}> = P & {
   xlg?: GridNumbers | ColumnBreakpointObject;
 };
 
-export type ColumnProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type ColumnProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface ColumnFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: ColumnProps<P>): JSX.Element;
-}
-
-declare const Column: ColumnFC<{}>;
+declare const Column: (props: ColumnProps) => JSX.Element;
 
 export default Column;

@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /**
@@ -82,14 +83,9 @@ type BaseProps<P = {}> = P & {
     /* eslint-enable no-unused-vars */
   ) => void;
 };
-export type InputStepperProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-export interface InputStepperFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: InputStepperProps<P>): JSX.Element;
-}
+export type InputStepperProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-declare const InputStepper: InputStepperFC<{}>;
+declare const InputStepper: (props: InputStepperProps) => JSX.Element;
 
 export default InputStepper;

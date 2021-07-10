@@ -1,14 +1,11 @@
-import { Classes, Styles, StyleSheetFactoryOptions } from "../../utils/typings";
-import { DefaultTheme } from "../defaultTheme";
-
-export interface MakeStylesOptions extends StyleSheetFactoryOptions {
-  name?: string;
-}
+import type { Classes, Styles, MakeStylesOptions } from "../../typings";
+import type { DefaultTheme } from "../defaultTheme";
 
 export default function makeStyles<
   Theme = DefaultTheme,
-  C extends string = string
+  Props = unknown,
+  Name extends string = string
 >(
-  styles: Styles<Theme, C>,
+  styles: Styles<Theme, Props, Name>,
   options?: MakeStylesOptions
-): (data?: unknown) => Classes<C>;
+): (data?: Props & { theme?: Theme }) => Classes<Name>;

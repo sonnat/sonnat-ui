@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -95,8 +96,9 @@ type BaseProps<P = {}> = P & {
   /** The properties applied to the `label` element. */
   labelProps?: LabelProps;
 };
-export type SwitchProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-// eslint-disable-next-line no-unused-vars
-export default function Switch<P = {}>(props: SwitchProps<P>): JSX.Element;
+export type SwitchProps<P = {}> = MergeElementProps<"span", BaseProps<P>>;
+
+declare const Switch: (props: SwitchProps) => JSX.Element;
+
+export default Switch;

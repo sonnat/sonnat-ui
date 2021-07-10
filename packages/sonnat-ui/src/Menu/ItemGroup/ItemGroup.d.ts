@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the group. */
@@ -17,14 +18,8 @@ type BaseProps<P = {}> = P & {
   title?: string;
 };
 
-export type MenuItemGroupProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type MenuItemGroupProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface MenuItemGroupFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: MenuItemGroupProps<P>): JSX.Element;
-}
-
-declare const MenuItemGroup: MenuItemGroupFC<{}>;
+declare const MenuItemGroup: (props: MenuItemGroupProps) => JSX.Element;
 
 export default MenuItemGroup;

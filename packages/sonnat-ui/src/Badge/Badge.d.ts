@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /**
@@ -61,14 +62,8 @@ type BaseProps<P = {}> = P & {
   visible?: boolean;
 };
 
-export type BadgeProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"span">, keyof BaseProps<P>>;
+export type BadgeProps<P = {}> = MergeElementProps<"span", BaseProps<P>>;
 
-export interface BadgeFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: BadgeProps<P>): JSX.Element;
-}
-
-declare const Badge: BadgeFC<{}>;
+declare const Badge: (props: BadgeProps) => JSX.Element;
 
 export default Badge;

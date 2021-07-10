@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the item. */
@@ -43,14 +44,8 @@ type BaseProps<P = {}> = P & {
   onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
 };
 
-export type MenuItemProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type MenuItemProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface MenuItemFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: MenuItemProps<P>): JSX.Element;
-}
-
-declare const MenuItem: MenuItemFC<{}>;
+declare const MenuItem: (props: MenuItemProps) => JSX.Element;
 
 export default MenuItem;

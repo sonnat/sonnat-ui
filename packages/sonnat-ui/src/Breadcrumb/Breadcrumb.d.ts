@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /**
@@ -21,14 +22,8 @@ type BaseProps<P = {}> = P & {
   showOnlyPreviousStep?: boolean;
 };
 
-export type BreadcrumbProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"nav">, keyof BaseProps<P>>;
+export type BreadcrumbProps<P = {}> = MergeElementProps<"nav", BaseProps<P>>;
 
-export interface BreadcrumbFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: BreadcrumbProps<P>): JSX.Element;
-}
-
-declare const Breadcrumb: BreadcrumbFC<{}>;
+declare const Breadcrumb: (props: BreadcrumbProps) => JSX.Element;
 
 export default Breadcrumb;

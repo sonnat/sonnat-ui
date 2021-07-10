@@ -19,14 +19,8 @@ type BaseProps<P = {}> = P & {
   activate?: boolean;
 };
 
-export type PortalProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type PortalProps<P = {}> = BaseProps<P>;
 
-export interface PortalFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: PortalProps<P>): JSX.Element;
-}
-
-declare const Portal: PortalFC<{}>;
+declare const Portal: (props: PortalProps) => JSX.Element;
 
 export default Portal;

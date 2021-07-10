@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component. */
@@ -72,14 +73,8 @@ type BaseProps<P = {}> = P & {
   ) => boolean;
 };
 
-export type MenuProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type MenuProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface MenuFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: MenuProps<P>): JSX.Element;
-}
-
-declare const Menu: MenuFC<{}>;
+declare const Menu: (props: MenuProps) => JSX.Element;
 
 export default Menu;

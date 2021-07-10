@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component. */
@@ -20,14 +21,11 @@ type BaseProps<P = {}> = P & {
   required?: boolean;
 };
 
-export type FormControlLabelProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"label">, keyof BaseProps<P>>;
+export type FormControlLabelProps<P = {}> = MergeElementProps<
+  "label",
+  BaseProps<P>
+>;
 
-export interface FormControlLabelFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: FormControlLabelProps<P>): JSX.Element;
-}
-
-declare const FormControlLabel: FormControlLabelFC<{}>;
+declare const FormControlLabel: (props: FormControlLabelProps) => JSX.Element;
 
 export default FormControlLabel;

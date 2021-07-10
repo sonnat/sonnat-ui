@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /**
@@ -45,10 +46,12 @@ type BaseProps<P = {}> = P & {
   // eslint-disable-next-line no-unused-vars
   onRemove?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
-export type RemovableChipProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"button">, keyof BaseProps<P>>;
 
-export default function RemovableChip<P = {}>(
-  // eslint-disable-next-line no-unused-vars
-  props: RemovableChipProps<P>
-): JSX.Element;
+export type RemovableChipProps<P = {}> = MergeElementProps<
+  "button",
+  BaseProps<P>
+>;
+
+declare const RemovableChip: (props: RemovableChipProps) => JSX.Element;
+
+export default RemovableChip;

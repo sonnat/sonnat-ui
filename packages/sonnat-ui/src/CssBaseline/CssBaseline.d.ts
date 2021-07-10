@@ -7,11 +7,6 @@ type BaseProps<P = {}> = P & {
 
 export type CssBaselineProps<P = {}> = BaseProps<P>;
 
-export interface CssBaselineFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: CssBaselineProps<P>): JSX.Element;
-}
-
-declare const CssBaseline: CssBaselineFC<{}>;
+declare const CssBaseline: (props: CssBaselineProps) => JSX.Element;
 
 export default CssBaseline;

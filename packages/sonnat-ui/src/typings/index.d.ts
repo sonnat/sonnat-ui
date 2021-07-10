@@ -1,14 +1,13 @@
-/* eslint-disable no-unused-vars */
-import { CSSProperties } from "react";
-import { DefaultTheme } from "../../styles/defaultTheme";
-import {
-  Jss as DefaultJss,
-  StyleSheetFactoryOptions as JssStyleSheetFactoryOptions,
-  Styles as JssStyles,
+import type {
   Classes as JssClasses,
   GenerateId as JssGenerateId,
-  SheetsRegistry as JssSheetsRegistry
+  Jss as DefaultJss,
+  SheetsRegistry as JssSheetsRegistry,
+  Styles as JssStyles,
+  StyleSheetFactoryOptions as JssStyleSheetFactoryOptions
 } from "jss";
+import * as React from "react";
+import type { DefaultTheme } from "../styles/defaultTheme";
 
 type GenerateStringUnion<T> = Extract<
   {
@@ -51,8 +50,17 @@ export interface MakeStylesOptions extends StyleSheetFactoryOptions {
   name?: string;
 }
 
-export type Styles<Theme = DefaultTheme, C extends string = string> =
-  | JssStyles<C>
-  | ((theme: Theme) => JssStyles<C>);
+export type Styles<
+  Theme = DefaultTheme,
+  Props = unknown,
+  Name extends string = string
+> =
+  | JssStyles<Name, Props, Theme>
+  | ((theme: Theme) => JssStyles<Name, Props, undefined>);
 
-export type Classes<C extends string = string> = JssClasses<C>;
+export type Classes<Name extends string = string> = JssClasses<Name>;
+
+export type MergeElementProps<
+  T extends React.ElementType,
+  P extends object = {}
+> = Omit<React.ComponentPropsWithRef<T>, keyof P> & P;

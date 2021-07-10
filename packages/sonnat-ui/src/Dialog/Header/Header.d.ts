@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component. */
@@ -12,14 +13,8 @@ type BaseProps<P = {}> = P & {
   title: string;
 };
 
-export type DialogHeaderProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type DialogHeaderProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface DialogHeaderFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: DialogHeaderProps<P>): JSX.Element;
-}
-
-declare const DialogHeader: DialogHeaderFC<{}>;
+declare const DialogHeader: (props: DialogHeaderProps) => JSX.Element;
 
 export default DialogHeader;

@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /**
@@ -61,14 +62,8 @@ type BaseProps<P = {}> = P & {
   ) => void;
 };
 
-export type ChoiceChipProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"button">, keyof BaseProps<P>>;
+export type ChoiceChipProps<P = {}> = MergeElementProps<"button", BaseProps<P>>;
 
-export interface ChoiceChipFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: ChoiceChipProps<P>): JSX.Element;
-}
-
-declare const ChoiceChip: ChoiceChipFC<{}>;
+declare const ChoiceChip: (props: ChoiceChipProps) => JSX.Element;
 
 export default ChoiceChip;

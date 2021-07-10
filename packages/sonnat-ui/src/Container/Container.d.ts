@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the container. */
@@ -23,14 +24,8 @@ type BaseProps<P = {}> = P & {
   noPadding?: boolean;
 };
 
-export type ContainerProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type ContainerProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface ContainerFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: ContainerProps<P>): JSX.Element;
-}
-
-declare const Container: ContainerFC<{}>;
+declare const Container: (props: ContainerProps) => JSX.Element;
 
 export default Container;

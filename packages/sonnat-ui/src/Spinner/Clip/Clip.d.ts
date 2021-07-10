@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../../typings";
 
 type BaseProps<P = {}> = P & {
   /**
@@ -20,14 +21,11 @@ type BaseProps<P = {}> = P & {
   size?: number;
 };
 
-export type ClipSpinnerProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type ClipSpinnerProps<
+  P = {},
+  T extends React.ElementType = "div"
+> = MergeElementProps<T, BaseProps<P, T>>;
 
-export interface ClipSpinnerFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: ClipSpinnerProps<P>): JSX.Element;
-}
-
-declare const ClipSpinner: ClipSpinnerFC<{}>;
+declare const ClipSpinner: (props: ClipSpinnerProps) => JSX.Element;
 
 export default ClipSpinner;

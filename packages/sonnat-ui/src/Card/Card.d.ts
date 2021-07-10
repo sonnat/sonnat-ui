@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component. */
@@ -10,14 +11,8 @@ type BaseProps<P = {}> = P & {
   className?: string;
 };
 
-export type CardProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type CardProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface CardFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: CardProps<P>): JSX.Element;
-}
-
-declare const Card: CardFC<{}>;
+declare const Card: (props: CardProps) => JSX.Element;
 
 export default Card;

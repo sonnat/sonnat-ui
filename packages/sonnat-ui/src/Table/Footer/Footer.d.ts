@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component. */
@@ -10,14 +11,8 @@ type BaseProps<P = {}> = P & {
   className?: string;
 };
 
-export type TableFooterProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"tfoot">, keyof BaseProps<P>>;
+export type TableFooterProps<P = {}> = MergeElementProps<"tfoot", BaseProps<P>>;
 
-export interface TableFooterFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: TableFooterProps<P>): JSX.Element;
-}
-
-declare const TableFooter: TableFooterFC<{}>;
+declare const TableFooter: (props: TableFooterProps) => JSX.Element;
 
 export default TableFooter;

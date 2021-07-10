@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -95,14 +96,9 @@ type BaseProps<P = {}> = P & {
   /** The properties applied to the `label` element. */
   labelProps?: LabelProps;
 };
-export type CheckboxProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-export interface CheckboxFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: CheckboxProps<P>): JSX.Element;
-}
+export type CheckboxProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-declare const Checkbox: CheckboxFC<{}>;
+declare const Checkbox: (props: CheckboxProps) => JSX.Element;
 
 export default Checkbox;

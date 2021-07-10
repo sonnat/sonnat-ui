@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /**
@@ -45,14 +46,8 @@ type BaseProps<P = {}> = P & {
   onRemove?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 };
 
-export type TagProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type TagProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface TagFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: TagProps<P>): JSX.Element;
-}
-
-declare const Tag: TagFC<{}>;
+declare const Tag: (props: TagProps) => JSX.Element;
 
 export default Tag;

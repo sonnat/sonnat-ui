@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component */
@@ -65,14 +66,9 @@ type BaseProps<P = {}> = P & {
    */
   variant?: "filled" | "outlined";
 };
-export type InputBaseProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-export interface InputBaseFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: InputBaseProps<P>): JSX.Element;
-}
+export type InputBaseProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-declare const InputBase: InputBaseFC<{}>;
+declare const InputBase: (props: InputBaseProps) => JSX.Element;
 
 export default InputBase;

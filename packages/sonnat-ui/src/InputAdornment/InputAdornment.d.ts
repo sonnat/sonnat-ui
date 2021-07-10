@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component. */
@@ -15,14 +16,11 @@ type BaseProps<P = {}> = P & {
   variant?: "node" | "icon" | "text";
 };
 
-export type InputAdornmentProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type InputAdornmentProps<P = {}> = MergeElementProps<
+  "div",
+  BaseProps<P>
+>;
 
-export interface InputAdornmentFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: InputAdornmentProps<P>): JSX.Element;
-}
-
-declare const InputAdornment: InputAdornmentFC<{}>;
+declare const InputAdornment: (props: InputAdornmentProps) => JSX.Element;
 
 export default InputAdornment;

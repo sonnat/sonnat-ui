@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component. */
@@ -8,16 +9,18 @@ type BaseProps<P = {}> = P & {
    * extend the styles.
    */
   className?: string;
+  /**
+   * Append to the classNames applied to the component so you can override or
+   * extend the styles.
+   */
+  textAlign?: "inherit" | "center" | "justify" | "left" | "right";
 };
 
-export type TableCellProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"td" | "th">, keyof BaseProps<P>>;
+export type TableCellProps<P = {}> = MergeElementProps<
+  "td" | "th",
+  BaseProps<P>
+>;
 
-export interface TableCellFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: TableCellProps<P>): JSX.Element;
-}
-
-declare const TableCell: TableCellFC<{}>;
+declare const TableCell: (props: TableCellProps) => JSX.Element;
 
 export default TableCell;

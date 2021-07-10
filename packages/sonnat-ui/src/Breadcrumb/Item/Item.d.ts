@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../../typings";
 
 type BaseProps<P = {}> = P & {
   /**
@@ -12,14 +13,8 @@ type BaseProps<P = {}> = P & {
   className?: string;
 };
 
-export type BreadcrumbItemProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"li">, keyof BaseProps<P>>;
+export type BreadcrumbItemProps<P = {}> = MergeElementProps<"li", BaseProps<P>>;
 
-export interface BreadcrumbItemFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: BreadcrumbItemProps<P>): JSX.Element;
-}
-
-declare const BreadcrumbItem: BreadcrumbItemFC<{}>;
+declare const BreadcrumbItem: (props: BreadcrumbItemProps) => JSX.Element;
 
 export default BreadcrumbItem;

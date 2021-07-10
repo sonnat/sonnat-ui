@@ -7,14 +7,8 @@ type BaseProps<P = {}> = P & {
   fallback?: React.ReactNode;
 };
 
-export type NoSsrProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type NoSsrProps<P = {}> = BaseProps<P>;
 
-export interface NoSsrFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: NoSsrProps<P>): JSX.Element;
-}
-
-declare const NoSsr: NoSsrFC<{}>;
+declare const NoSsr: (props: NoSsrProps) => JSX.Element;
 
 export default NoSsr;

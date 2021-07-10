@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component. */
@@ -43,14 +44,8 @@ type BaseProps<P = {}> = P & {
   ) => void;
 };
 
-export type TabBarProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type TabBarProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface TabBarFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: TabBarProps<P>): JSX.Element;
-}
-
-declare const TabBar: TabBarFC<{}>;
+declare const TabBar: (props: TabBarProps) => JSX.Element;
 
 export default TabBar;

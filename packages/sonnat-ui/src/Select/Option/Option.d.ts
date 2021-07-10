@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the item. */
@@ -48,14 +49,8 @@ type BaseProps<P = {}> = P & {
   onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
 };
 
-export type SelectOptionProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type SelectOptionProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface SelectOptionFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: SelectOptionProps<P>): JSX.Element;
-}
-
-declare const SelectOption: SelectOptionFC<{}>;
+declare const SelectOption: (props: SelectOptionProps) => JSX.Element;
 
 export default SelectOption;

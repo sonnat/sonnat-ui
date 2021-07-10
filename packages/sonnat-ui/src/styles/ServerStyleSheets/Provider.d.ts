@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import * as React from "react";
-import { GenerateClassName, SheetsRegistry } from "../../utils/typings";
+import type { GenerateClassName, SheetsRegistry } from "../../typings";
 
 export interface ServerContextValue {
   sheetsRegistry: SheetsRegistry;

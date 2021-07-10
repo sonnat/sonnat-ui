@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /**
@@ -60,14 +61,8 @@ type BaseProps<P = {}> = P & {
   onOpen?: (event: React.SyntheticEvent | Event) => void;
 };
 
-export type TooltipProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type TooltipProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface TooltipFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: TooltipProps<P>): JSX.Element;
-}
-
-declare const Tooltip: TooltipFC<{}>;
+declare const Tooltip: (props: TooltipProps) => JSX.Element;
 
 export default Tooltip;

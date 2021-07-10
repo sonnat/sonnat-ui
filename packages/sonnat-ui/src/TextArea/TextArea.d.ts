@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLTextAreaElement> {
@@ -111,14 +112,9 @@ type BaseProps<P = {}> = P & {
   // eslint-disable-next-line no-unused-vars
   onBlur?: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
 };
-export type TextAreaProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-export interface TextAreaFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: TextAreaProps<P>): JSX.Element;
-}
+export type TextAreaProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-declare const TextArea: TextAreaFC<{}>;
+declare const TextArea: (props: TextAreaProps) => JSX.Element;
 
 export default TextArea;

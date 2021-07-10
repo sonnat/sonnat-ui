@@ -1,4 +1,4 @@
-import { GenerateClassName } from "../../utils/typings";
+import { GenerateClassName } from "../../typings";
 
 export interface GenerateClassNameOptions {
   disableGlobal?: boolean;

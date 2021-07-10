@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type HandleState = {
   active: boolean;
@@ -122,14 +123,8 @@ type BaseProps<P = {}> = P & {
   onDismount?: () => void;
 };
 
-export type InputSliderProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type InputSliderProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface InputSliderFC<P> {
-  // eslint-disable-next-line no-unused-vars
-  (props: InputSliderProps<P>): JSX.Element;
-}
-
-declare const InputSlider: InputSliderFC<{}>;
+declare const InputSlider: (props: InputSliderProps) => JSX.Element;
 
 export default InputSlider;

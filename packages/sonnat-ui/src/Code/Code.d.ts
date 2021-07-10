@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component. */
@@ -18,14 +19,8 @@ type BaseProps<P = {}> = P & {
   codeBlock?: boolean;
 };
 
-export type CodeProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"code" | "pre">, keyof BaseProps<P>>;
+export type CodeProps<P = {}> = MergeElementProps<"code" | "pre", BaseProps<P>>;
 
-export interface CodeFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: CodeProps<P>): JSX.Element;
-}
-
-declare const Code: CodeFC<{}>;
+declare const Code: (props: CodeProps) => JSX.Element;
 
 export default Code;

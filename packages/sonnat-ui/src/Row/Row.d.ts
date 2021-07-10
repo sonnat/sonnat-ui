@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component. */
@@ -10,14 +11,8 @@ type BaseProps<P = {}> = P & {
   className?: string;
 };
 
-export type RowProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type RowProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface RowFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: RowProps<P>): JSX.Element;
-}
-
-declare const Row: RowFC<{}>;
+declare const Row: (props: RowProps) => JSX.Element;
 
 export default Row;

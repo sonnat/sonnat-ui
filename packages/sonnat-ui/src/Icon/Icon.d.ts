@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /**
@@ -46,14 +47,8 @@ type BaseProps<P = {}> = P & {
   size?: number | "auto";
 };
 
-export type IconProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"svg">, keyof BaseProps<P>>;
+export type IconProps<P = {}> = MergeElementProps<"svg", BaseProps<P>>;
 
-export interface IconFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: IconProps<P>): JSX.Element;
-}
-
-declare const Icon: IconFC;
+declare const Icon: (props: IconProps) => JSX.Element;
 
 export default Icon;

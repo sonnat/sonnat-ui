@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component. */
@@ -15,14 +16,13 @@ type BaseProps<P = {}> = P & {
   hasError?: boolean;
 };
 
-export type FormControlDescriptionProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type FormControlFeedbackProps<P = {}> = MergeElementProps<
+  "div",
+  BaseProps<P>
+>;
 
-export interface FormControlDescriptionFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: FormControlDescriptionProps<P>): JSX.Element;
-}
+declare const FormControlFeedback: (
+  props: FormControlFeedbackProps
+) => JSX.Element;
 
-declare const FormControlDescription: FormControlDescriptionFC<{}>;
-
-export default FormControlDescription;
+export default FormControlFeedback;

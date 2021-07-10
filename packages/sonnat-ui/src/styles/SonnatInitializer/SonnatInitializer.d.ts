@@ -1,6 +1,6 @@
 import * as React from "react";
-import { GenerateClassName, Jss } from "../../utils/typings";
-import { DefaultTheme } from "../defaultTheme";
+import type { GenerateClassName, Jss } from "../../typings";
+import type { DefaultTheme } from "../defaultTheme";
 
 export interface SonnatInitializerOptions<Theme = DefaultTheme> {
   /** Sonnat's theme object */

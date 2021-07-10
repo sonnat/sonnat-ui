@@ -134,5 +134,8 @@ export * from "./Tooltip";
 export { default as TabBar } from "./TabBar";
 export * from "./TabBar";
 
+export { default as Table } from "./Table";
+export * from "./Table";
+
 export { default as Skeleton } from "./Skeleton";
 export * from "./Skeleton";

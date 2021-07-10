@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the group. */
@@ -33,14 +34,8 @@ type BaseProps<P = {}> = P & {
   ) => void;
 };
 
-export type CheckGroupProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type CheckGroupProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface CheckGroupFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: CheckGroupProps<P>): JSX.Element;
-}
-
-declare const CheckGroup: CheckGroupFC<{}>;
+declare const CheckGroup: (props: CheckGroupProps) => JSX.Element;
 
 export default CheckGroup;

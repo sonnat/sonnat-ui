@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../../typings";
 
 type BaseProps<P = {}> = P & {
   /** The label of the tab. */
@@ -37,14 +38,8 @@ type BaseProps<P = {}> = P & {
   ) => void;
 };
 
-export type TabProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type TabProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface TabFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: TabProps<P>): JSX.Element;
-}
-
-declare const Tab: TabFC<{}>;
+declare const Tab: (props: TabProps) => JSX.Element;
 
 export default Tab;

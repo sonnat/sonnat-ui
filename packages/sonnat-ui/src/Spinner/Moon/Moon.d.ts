@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../../typings";
 
 type BaseProps<P = {}> = P & {
   /**
@@ -20,14 +21,11 @@ type BaseProps<P = {}> = P & {
   size?: number;
 };
 
-export type MoonSpinnerProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type MoonSpinnerProps<
+  P = {},
+  T extends React.ElementType = "div"
+> = MergeElementProps<T, BaseProps<P, T>>;
 
-export interface MoonSpinnerFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: MoonSpinnerProps<P>): JSX.Element;
-}
-
-declare const MoonSpinner: MoonSpinnerFC<{}>;
+declare const MoonSpinner: (props: MoonSpinnerProps) => JSX.Element;
 
 export default MoonSpinner;

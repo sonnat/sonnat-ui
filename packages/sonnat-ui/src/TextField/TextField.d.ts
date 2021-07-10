@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -129,14 +130,9 @@ type BaseProps<P = {}> = P & {
   // eslint-disable-next-line no-unused-vars
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 };
-export type TextFieldProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-export interface TextFieldFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: TextFieldProps<P>): JSX.Element;
-}
+export type TextFieldProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-declare const TextField: TextFieldFC<{}>;
+declare const TextField: (props: TextFieldProps) => JSX.Element;
 
 export default TextField;

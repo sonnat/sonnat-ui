@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the group. */
@@ -17,14 +18,11 @@ type BaseProps<P = {}> = P & {
   title?: string;
 };
 
-export type SelectOptionGroupProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type SelectOptionGroupProps<P = {}> = MergeElementProps<
+  "div",
+  BaseProps<P>
+>;
 
-export interface SelectOptionGroupFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: SelectOptionGroupProps<P>): JSX.Element;
-}
-
-declare const SelectOptionGroup: SelectOptionGroupFC<{}>;
+declare const SelectOptionGroup: (props: SelectOptionGroupProps) => JSX.Element;
 
 export default SelectOptionGroup;

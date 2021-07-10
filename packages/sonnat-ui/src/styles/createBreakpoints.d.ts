@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { OverridableStringUnion } from "../utils/typings";
+import type { OverridableStringUnion } from "../typings";
 
 export type BreakpointDefaults = Record<
   "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "xlg",

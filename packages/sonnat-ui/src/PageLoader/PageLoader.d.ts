@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /**
@@ -17,14 +18,8 @@ type BaseProps<P = {}> = P & {
   loading?: boolean;
 };
 
-export type PageLoaderProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type PageLoaderProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export interface PageLoaderFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: PageLoaderProps<P>): JSX.Element;
-}
-
-declare const PageLoader: PageLoaderFC<{}>;
+declare const PageLoader: (props: PageLoaderProps) => JSX.Element;
 
 export default PageLoader;

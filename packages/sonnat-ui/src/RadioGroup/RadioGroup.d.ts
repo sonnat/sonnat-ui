@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the group. */
@@ -37,10 +38,8 @@ type BaseProps<P = {}> = P & {
   ) => void;
 };
 
-export type RadioGroupProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
+export type RadioGroupProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
-export default function RadioGroup<P = {}>(
-  // eslint-disable-next-line no-unused-vars
-  props: RadioGroupProps<P>
-): JSX.Element;
+declare const RadioGroup: (props: RadioGroupProps) => JSX.Element;
+
+export default RadioGroup;

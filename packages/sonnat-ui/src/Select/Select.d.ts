@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 export interface InputProps
   extends React.SelectHTMLAttributes<HTMLSelectElement | HTMLDivElement> {
@@ -158,14 +159,11 @@ type BaseProps<P = {}> = P & {
   onBlur?: (event: React.FocusEvent<HTMLSelectElement>) => void;
 };
 
-export type SelectProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div" | "Select">, keyof BaseProps<P>>;
+export type SelectProps<P = {}> = MergeElementProps<
+  "div" | "select",
+  BaseProps<P>
+>;
 
-export interface SelectFC<P = {}> {
-  // eslint-disable-next-line no-unused-vars
-  (props: SelectProps<P>): JSX.Element;
-}
-
-declare const Select: SelectFC<{}>;
+declare const Select: (props: SelectProps) => JSX.Element;
 
 export default Select;

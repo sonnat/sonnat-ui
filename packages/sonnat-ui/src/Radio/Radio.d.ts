@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -88,8 +89,9 @@ type BaseProps<P = {}> = P & {
   /** The properties applied to the `label` element. */
   labelProps?: LabelProps;
 };
-export type RadioProps<P = {}> = BaseProps<P> &
-  Omit<React.ComponentPropsWithRef<"div">, keyof BaseProps<P>>;
 
-// eslint-disable-next-line no-unused-vars
-export default function Radio<P = {}>(props: RadioProps<P>): JSX.Element;
+export type RadioProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
+
+declare const Radio: (props: RadioProps) => JSX.Element;
+
+export default Radio;
