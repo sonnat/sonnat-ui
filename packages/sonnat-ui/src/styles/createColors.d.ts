@@ -11,14 +11,16 @@ export type TextType = {
 
 export type BackgroundType = {
   origin: string;
-  level?: { 1: string; 2: string };
+  level: { 1: string; 2: string };
 };
 
-export interface SystemColorVariant {
+export type SystemColorVariantObject = {
   origin: string;
   light: string;
   dark: string;
-}
+};
+
+export type SystemColorVariant = string | Partial<SystemColorVariantObject>;
 
 export type DarkBaseColors = {
   text: TextType;
@@ -55,20 +57,14 @@ export interface Colors {
 }
 
 export interface ColorsInputs {
-  primary: Partial<SystemColorVariant>;
-  secondary: Partial<SystemColorVariant>;
-  error: Partial<SystemColorVariant>;
-  warning: Partial<SystemColorVariant>;
-  info: Partial<SystemColorVariant>;
-  success: Partial<SystemColorVariant>;
+  primary?: SystemColorVariant;
+  secondary?: SystemColorVariant;
+  error?: SystemColorVariant;
+  warning?: SystemColorVariant;
+  info?: SystemColorVariant;
+  success?: SystemColorVariant;
   contrastThreshold?: number;
-  text: Partial<TextType>;
-  divider?: string;
-  background: Partial<BackgroundType>;
 }
-
-declare const dark: DarkBaseColors;
-declare const light: LightBaseColors;
 
 export default function createColors(
   colors: ColorsInputs,

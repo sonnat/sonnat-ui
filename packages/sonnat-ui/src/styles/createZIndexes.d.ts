@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 export interface ZIndexes {
   sticky: number;
   header: number;

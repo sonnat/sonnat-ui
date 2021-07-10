@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
-import { CSSProperties } from "react";
-import { FontFamilies, TypographyUtils } from "./createTypography";
+import type { CSSProperties } from "react";
+import type { TypographyUtils } from "./createTypography";
 
 export interface Mixins {
   useDisableUserSelect: () => CSSProperties;

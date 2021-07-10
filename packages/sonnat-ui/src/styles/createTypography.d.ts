@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import { CSSProperties } from "react";
+import * as React from "react";
 
 export type VariantNames =
   | "h1"
@@ -16,18 +15,18 @@ export type VariantNames =
   | "captionSmall";
 
 export interface VariantProps {
-  h1: CSSProperties;
-  h2: CSSProperties;
-  h3: CSSProperties;
-  h4: CSSProperties;
-  h5: CSSProperties;
-  h6: CSSProperties;
-  subtitle: CSSProperties;
-  subtitleSmall: CSSProperties;
-  body: CSSProperties;
-  bodySmall: CSSProperties;
-  caption: CSSProperties;
-  captionSmall: CSSProperties;
+  h1: React.CSSProperties;
+  h2: React.CSSProperties;
+  h3: React.CSSProperties;
+  h4: React.CSSProperties;
+  h5: React.CSSProperties;
+  h6: React.CSSProperties;
+  subtitle: React.CSSProperties;
+  subtitleSmall: React.CSSProperties;
+  body: React.CSSProperties;
+  bodySmall: React.CSSProperties;
+  caption: React.CSSProperties;
+  captionSmall: React.CSSProperties;
 }
 
 export interface FontWeights {
@@ -57,11 +56,11 @@ export interface Typography {
   fontSize: number;
   htmlFontSize: number;
   useText: (textProperties: {
-    fontSize?: CSSProperties["fontSize"];
-    fontWeight?: CSSProperties["fontWeight"];
-    lineHeight?: CSSProperties["lineHeight"];
-    color?: CSSProperties["color"];
-  }) => CSSProperties;
+    fontSize?: React.CSSProperties["fontSize"];
+    fontWeight?: React.CSSProperties["fontWeight"];
+    lineHeight?: React.CSSProperties["lineHeight"];
+    color?: React.CSSProperties["color"];
+  }) => React.CSSProperties;
   pxToRem: (size: number) => string;
   remToPx: (size: number) => string;
   variants: VariantProps;

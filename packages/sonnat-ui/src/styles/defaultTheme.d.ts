@@ -1,4 +1,4 @@
-import { Theme } from "./createTheme";
+import type { Theme } from "./createTheme";
 
 export interface DefaultTheme extends Theme {}
 

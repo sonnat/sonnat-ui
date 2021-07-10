@@ -12,7 +12,6 @@ export type Breakpoint = OverridableStringUnion<
 >;
 
 export type BreakpointValues = { [key in Breakpoint]: number };
-export const keys: Breakpoint[];
 
 export interface Breakpoints {
   keys: Breakpoint[];

@@ -1,22 +1,22 @@
-import { CSSProperties } from "react";
-import { Breakpoints, BreakpointsInputs } from "./createBreakpoints";
-import { Colors, ColorsInputs } from "./createColors";
-import { Mixins, MixinsInputs } from "./createMixins";
-import { Spacings, SpacingsInputs } from "./createSpacings";
-import { Typography, TypographyInputs } from "./createTypography";
-import { ZIndexes, ZIndexesInputs } from "./createZIndexes";
+import type { CSSProperties } from "react";
+import type { Breakpoints, BreakpointsInputs } from "./createBreakpoints";
+import type { Colors, ColorsInputs } from "./createColors";
+import type { Mixins, MixinsInputs } from "./createMixins";
+import type { Spacings, SpacingsInputs } from "./createSpacings";
+import type { Typography, TypographyInputs } from "./createTypography";
+import type { ZIndexes, ZIndexesInputs } from "./createZIndexes";
 
 export type Direction = "ltr" | "rtl";
 
 export interface ThemeOptions {
-  breakpoints?: BreakpointsInputs;
-  direction?: Direction;
-  mixins?: MixinsInputs;
-  colors?: ColorsInputs;
-  spacing?: SpacingsInputs;
-  typography?: TypographyInputs;
-  zIndex?: ZIndexesInputs;
-  darkMode?: boolean;
+  breakpoints: BreakpointsInputs;
+  direction: Direction;
+  mixins: MixinsInputs;
+  colors: ColorsInputs;
+  spacing: SpacingsInputs;
+  typography: TypographyInputs;
+  zIndex: ZIndexesInputs;
+  darkMode: boolean;
 }
 
 export interface Theme {
@@ -35,4 +35,4 @@ export interface Theme {
 }
 
 // eslint-disable-next-line no-unused-vars
-export default function createTheme(options?: ThemeOptions): Theme;
+export default function createTheme(options?: Partial<ThemeOptions>): Theme;
