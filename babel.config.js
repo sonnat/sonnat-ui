@@ -24,7 +24,8 @@ module.exports = {
     "@babel/plugin-transform-object-assign",
     ["@babel/plugin-transform-runtime", { version: "^7.4.4" }],
     ["@babel/plugin-proposal-class-properties", { loose: true }],
-    ["@babel/plugin-proposal-object-rest-spread", { loose: true }]
+    ["@babel/plugin-proposal-object-rest-spread", { loose: true }],
+    ["@babel/plugin-proposal-private-methods", { loose: true }]
   ],
   env: {
     cjs: {},
