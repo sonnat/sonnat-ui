@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
 import { useForkRef, useControlled } from "../utils";
 import RadioGroupContext from "./context";
@@ -36,7 +36,7 @@ const RadioGroup = React.memo(
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
     const rootRef = useRef();
     const forkRef = useForkRef(ref, rootRef);
@@ -59,10 +59,9 @@ const RadioGroup = React.memo(
         <div
           role="radiogroup"
           ref={forkRef}
-          className={createClass(localClass.root, className, {
-            [localClass[layoutDirection]]: allowedDirections.includes(
-              layoutDirection
-            )
+          className={clx(classes.root, className, {
+            [classes[layoutDirection]]:
+              allowedDirections.includes(layoutDirection)
           })}
           {...otherProps}
         >

@@ -1,4 +1,4 @@
-import createClass from "classnames";
+import clx from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 import { isFragment } from "react-is";
@@ -87,7 +87,7 @@ const Breadcrumb = React.memo(
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
     const children = React.Children.map(childrenProp, child => {
       if (!React.isValidElement(child)) return null;
@@ -107,20 +107,20 @@ const Breadcrumb = React.memo(
       }
 
       return React.cloneElement(child, {
-        className: createClass(child.props.className, localClass.item)
+        className: clx(child.props.className, classes.item)
       });
     });
 
     return (
       <nav
         aria-label={ariaLabel}
-        className={createClass(localClass.root, className)}
+        className={clx(classes.root, className)}
         ref={ref}
         {...otherProps}
       >
         <ol
-          className={createClass(localClass.list, {
-            [localClass.onlyPreviousStep]: showOnlyPreviousStep
+          className={clx(classes.list, {
+            [classes.onlyPreviousStep]: showOnlyPreviousStep
           })}
         >
           {children}

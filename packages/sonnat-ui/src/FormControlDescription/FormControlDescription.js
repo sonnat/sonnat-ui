@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
 import useFormControl from "../FormControl/useFormControl";
 
@@ -25,7 +25,7 @@ const useStyles = makeStyles(
 const FormControlDescription = function FormControlDescription(props) {
   const { children, className, disabled = false, ...otherProps } = props;
 
-  const localClass = useStyles();
+  const classes = useStyles();
   const formControl = useFormControl();
 
   const controlProps = {
@@ -34,8 +34,8 @@ const FormControlDescription = function FormControlDescription(props) {
 
   return (
     <p
-      className={createClass(localClass.root, className, {
-        [localClass.disabled]: controlProps.disabled
+      className={clx(classes.root, className, {
+        [classes.disabled]: controlProps.disabled
       })}
       {...otherProps}
     >

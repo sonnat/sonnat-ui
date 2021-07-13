@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
 
 const componentName = "Row";
@@ -31,14 +31,10 @@ const Row = React.memo(
   React.forwardRef(function Row(props, ref) {
     const { children, className, ...otherProps } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
     return (
-      <div
-        ref={ref}
-        className={createClass(localClass.root, className)}
-        {...otherProps}
-      >
+      <div ref={ref} className={clx(classes.root, className)} {...otherProps}>
         {children}
       </div>
     );

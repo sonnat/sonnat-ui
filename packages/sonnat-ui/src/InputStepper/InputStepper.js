@@ -1,9 +1,9 @@
-import createClass from "classnames";
+import clx from "classnames";
 import PropTypes from "prop-types";
 import React, { useReducer, useRef } from "react";
 import { Minus, Plus } from "../internals/icons";
 import makeStyles from "../styles/makeStyles";
-import { clamp, useControlled, useForkRef } from "../utils";
+import { clamp, useControlled, useForkRef, getVar } from "../utils";
 import {
   allowAdditionAndSubtraction,
   preventAddition,
@@ -12,7 +12,8 @@ import {
 import reducer from "./reducer";
 
 const componentName = "InputStepper";
-const allowedSizes = ["medium", "small"];
+
+const allowedSizes = ["large", "medium", "small"];
 
 const useStyles = makeStyles(
   theme => {
@@ -132,6 +133,16 @@ const useStyles = makeStyles(
         "& $actionIcon": { color: colors.text.disabled }
       },
       small: {
+        height: pxToRem(24),
+        "& $action": {
+          width: pxToRem(24),
+          height: pxToRem(24),
+          "&:after,&:before": { height: pxToRem(16) }
+        },
+        "& $actionIcon": useIconWrapper(14),
+        "& $input": { fontSize: pxToRem(12), lineHeight: 1.6666666667 }
+      },
+      medium: {
         height: pxToRem(32),
         "& $action": {
           width: pxToRem(32),
@@ -139,7 +150,16 @@ const useStyles = makeStyles(
           "&:after,&:before": { height: pxToRem(16) }
         },
         "& $actionIcon": useIconWrapper(16),
-        "& $input": { fontSize: pxToRem(14) }
+        "& $input": { fontSize: pxToRem(14), lineHeight: 1.5714285714 }
+      },
+      large: {
+        height: pxToRem(40),
+        "& $action": {
+          width: pxToRem(40),
+          height: pxToRem(40),
+          "&:after,&:before": { height: pxToRem(24) }
+        },
+        "& $actionIcon": useIconWrapper(20)
       }
     };
   },
@@ -180,7 +200,7 @@ const InputStepper = React.memo(
       max: maxProp = Infinity,
       disabled = false,
       fluid = false,
-      size = "medium",
+      size: sizeProp = "medium",
       ...otherProps
     } = props;
 
@@ -216,7 +236,7 @@ const InputStepper = React.memo(
       );
     }
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
     const name = inputNameProp || nameProp;
 
@@ -230,6 +250,8 @@ const InputStepper = React.memo(
 
     const { current: min } = useRef(minProp);
     const { current: max } = useRef(maxProp);
+
+    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
 
     const { current: defaultValue } = useRef(
       valueProp != null
@@ -288,26 +310,26 @@ const InputStepper = React.memo(
     return (
       <div
         ref={ref}
-        className={createClass(localClass.root, className, {
-          [localClass[size]]: allowedSizes.includes(size),
-          [localClass.disabled]: disabled,
-          [localClass.fluid]: fluid
+        className={clx(classes.root, className, {
+          [classes[size]]: allowedSizes.includes(size),
+          [classes.disabled]: disabled,
+          [classes.fluid]: fluid
         })}
         {...otherProps}
       >
         <button
           tabIndex={!permissions.addition ? -1 : 0}
           disabled={!permissions.addition}
-          className={createClass(localClass.action, localClass.addAction, {
-            [localClass.disabled]: !permissions.addition
+          className={clx(classes.action, classes.addAction, {
+            [classes.disabled]: !permissions.addition
           })}
           onClick={onAdd}
         >
-          <i className={localClass.actionIcon}>
+          <i className={classes.actionIcon}>
             <Plus />
           </i>
         </button>
-        <div className={localClass.inputContainer}>
+        <div className={classes.inputContainer}>
           <input
             name={name}
             id={inputIdProp}
@@ -317,19 +339,19 @@ const InputStepper = React.memo(
             onChange={changeHandler}
             value={value}
             readOnly
-            className={createClass(localClass.input, inputClassNameProp)}
+            className={clx(classes.input, inputClassNameProp)}
             {...otherInputProps}
           />
         </div>
         <button
           tabIndex={!permissions.subtraction ? -1 : 0}
           disabled={!permissions.subtraction}
-          className={createClass(localClass.action, localClass.subtractAction, {
-            [localClass.disabled]: !permissions.subtraction
+          className={clx(classes.action, classes.subtractAction, {
+            [classes.disabled]: !permissions.subtraction
           })}
           onClick={onSubtract}
         >
-          <i className={localClass.actionIcon}>
+          <i className={classes.actionIcon}>
             <Minus />
           </i>
         </button>

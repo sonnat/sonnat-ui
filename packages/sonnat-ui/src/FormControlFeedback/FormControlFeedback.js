@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
 import useFormControl from "../FormControl/useFormControl";
 
@@ -30,7 +30,7 @@ const useStyles = makeStyles(
 const FormControlFeedback = function FormControlFeedback(props) {
   const { children, className, hasError, ...otherProps } = props;
 
-  const localClass = useStyles();
+  const classes = useStyles();
   const formControl = useFormControl();
 
   const controlProps = {
@@ -39,8 +39,8 @@ const FormControlFeedback = function FormControlFeedback(props) {
 
   return (
     <div
-      className={createClass(localClass.root, className, {
-        [localClass.errored]: controlProps.hasError
+      className={clx(classes.root, className, {
+        [classes.errored]: controlProps.hasError
       })}
       {...otherProps}
     >

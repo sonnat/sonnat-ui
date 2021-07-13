@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import { gridNumbers } from "../utils/enums";
 import makeStyles from "../styles/makeStyles";
 import useTheme from "../styles/useTheme";
@@ -86,7 +86,7 @@ const Column = React.memo(
   React.forwardRef(function Column(props, ref) {
     const { children, className, all, ...otherProps } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
     const theme = useTheme();
 
     let generatedClasses = [];
@@ -95,23 +95,20 @@ const Column = React.memo(
       if (typeof all === "string" || typeof all === "number") {
         const size = all;
 
-        generatedClasses = [...generatedClasses, localClass[`column${size}`]];
+        generatedClasses = [...generatedClasses, classes[`column${size}`]];
       } else if (typeof all === "object") {
         const { size, order, offset } = all;
 
         if (size != null) {
-          generatedClasses = [...generatedClasses, localClass[`column${size}`]];
+          generatedClasses = [...generatedClasses, classes[`column${size}`]];
         }
 
         if (order != null) {
-          generatedClasses = [...generatedClasses, localClass[`order${order}`]];
+          generatedClasses = [...generatedClasses, classes[`order${order}`]];
         }
 
         if (offset != null) {
-          generatedClasses = [
-            ...generatedClasses,
-            localClass[`offset${offset}`]
-          ];
+          generatedClasses = [...generatedClasses, classes[`offset${offset}`]];
         }
       }
     }
@@ -126,7 +123,7 @@ const Column = React.memo(
           if (size) {
             generatedClasses = [
               ...generatedClasses,
-              localClass[`${breakpoint}Column${size}`]
+              classes[`${breakpoint}Column${size}`]
             ];
           }
         } else if (typeof prop === "object") {
@@ -135,21 +132,21 @@ const Column = React.memo(
           if (size != null) {
             generatedClasses = [
               ...generatedClasses,
-              localClass[`${breakpoint}Column${size}`]
+              classes[`${breakpoint}Column${size}`]
             ];
           }
 
           if (order != null) {
             generatedClasses = [
               ...generatedClasses,
-              localClass[`${breakpoint}Order${order}`]
+              classes[`${breakpoint}Order${order}`]
             ];
           }
 
           if (offset != null) {
             generatedClasses = [
               ...generatedClasses,
-              localClass[`${breakpoint}Offset${offset}`]
+              classes[`${breakpoint}Offset${offset}`]
             ];
           }
         }
@@ -162,7 +159,7 @@ const Column = React.memo(
     return (
       <div
         ref={ref}
-        className={createClass(localClass.root, className, ...generatedClasses)}
+        className={clx(classes.root, className, ...generatedClasses)}
         {...otherColumnProps}
       >
         {children}

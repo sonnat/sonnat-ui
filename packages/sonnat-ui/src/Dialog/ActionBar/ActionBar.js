@@ -1,4 +1,4 @@
-import createClass from "classnames";
+import clx from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 import setRef from "../../utils/setRef";
@@ -50,7 +50,7 @@ const DialogActionBar = React.memo(
           if (ref) setRef(ref, node);
           registerActionBar(node);
         }}
-        className={createClass(classes.root, className, {
+        className={clx(classes.root, className, {
           [classes.withOverflow]: hasOverflow
         })}
         {...otherProps}

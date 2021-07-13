@@ -1,4 +1,4 @@
-import createClass from "classnames";
+import clx from "classnames";
 import PropTypes from "prop-types";
 import React, {
   useCallback,
@@ -21,14 +21,16 @@ import {
   setRef,
   useControlled,
   useEnhancedEffect,
-  useForkRef
+  useForkRef,
+  getVar
 } from "../utils";
 import { componentName as optionName } from "./Option";
 import { componentName as optionGroupName } from "./OptionGroup";
 
 const componentName = "Select";
+
 const allowedVariants = ["filled", "outlined"];
-const allowedSizes = ["medium", "small"];
+const allowedSizes = ["large", "medium", "small"];
 
 const useStyles = makeStyles(
   theme => {
@@ -80,7 +82,7 @@ const useStyles = makeStyles(
       },
       helperIcon: {
         ...useIconWrapper(16),
-        marginTop: pxToRem(4),
+        marginTop: pxToRem(2),
         color: colors.text.secondary,
         ...(direction === "rtl"
           ? { marginLeft: pxToRem(4) }
@@ -124,15 +126,31 @@ const useStyles = makeStyles(
         "& $placeholder, & $displaySingle": { color: colors.text.disabled }
       },
       open: {
-        "& $caretIcon": {
-          transform: "rotate(180deg)"
-        }
+        "& $caretIcon": { transform: "rotate(180deg)" }
       },
       small: {
-        "& $placeholder, & $displaySingle": { fontSize: pxToRem(12) }
+        "& $helperText": {
+          fontSize: pxToRem(10),
+          lineHeight: 1.8
+        },
+        "& $helperIcon": {
+          ...useIconWrapper(14)
+        },
+        "& $optionIcon": useIconWrapper(14),
+        "& $placeholder, & $displaySingle": {
+          fontSize: pxToRem(12),
+          lineHeight: 1.6666666667
+        }
       },
+      medium: {
+        "& $optionIcon": useIconWrapper(14),
+        "& $placeholder, & $displaySingle": {
+          fontSize: pxToRem(12),
+          lineHeight: 1.6666666667
+        }
+      },
+      large: {},
       fluid: { width: "100%" },
-      medium: {},
       errored: {
         "&:not($disabled)": {
           "& $helperText": {
@@ -181,8 +199,8 @@ const Select = React.memo(
       searchPlaceholder: searchPlaceholderProp,
       searchEmptyStatementText: searchEmptyStatementTextProp,
       open: openProp,
-      variant = "outlined",
-      size = "medium",
+      variant: variantProp = "outlined",
+      size: sizeProp = "medium",
       multiple = false,
       searchable = false,
       autoFocus = false,
@@ -216,7 +234,7 @@ const Select = React.memo(
 
     const ref = useForkRef(rootRef, refProp);
 
-    const localClass = useStyles();
+    const classes = useStyles();
     const formControl = useFormControl();
 
     const theme = useTheme();
@@ -244,6 +262,14 @@ const Select = React.memo(
 
     const isAutoFocus = !!inputAutoFocusProp || autoFocus || focused;
     const isRTL = theme.direction === "rtl";
+
+    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+
+    const variant = getVar(
+      variantProp,
+      "outlined",
+      !allowedVariants.includes(variantProp)
+    );
 
     const [isOpen, setOpen] = useState(false);
     const [isMounted, setMounted] = useState(false);
@@ -281,7 +307,6 @@ const Select = React.memo(
 
     // inherit properties from FormControl
     const controlProps = {
-      size: formControl ? formControl.size : size,
       focused: formControl ? formControl.focusedState : isFocused,
       disabled: formControl ? formControl.disabled : disabled,
       hasError: formControl ? formControl.hasError : hasError,
@@ -460,7 +485,7 @@ const Select = React.memo(
         return (
           <MenuItemGroup
             ref={child.ref}
-            className={createClass(localClass.optionGroup, className)}
+            className={clx(classes.optionGroup, className)}
             role="optiongroup"
             title={title}
             {...otherGroupProps}
@@ -484,8 +509,8 @@ const Select = React.memo(
               return (
                 <MenuItem
                   aria-selected={selected ? "true" : undefined}
-                  className={createClass(localClass.option, className, {
-                    [localClass.selected]: selected
+                  className={clx(classes.option, className, {
+                    [classes.selected]: selected
                   })}
                   key={`${generateUniqueString()}/${index}`}
                   disabled={disabled}
@@ -500,7 +525,7 @@ const Select = React.memo(
                   {...otherOptionProps}
                 >
                   {multiple && (
-                    <i className={localClass.optionIcon}>
+                    <i className={classes.optionIcon}>
                       <Check />
                     </i>
                   )}
@@ -529,8 +554,8 @@ const Select = React.memo(
         return (
           <MenuItem
             aria-selected={selected ? "true" : undefined}
-            className={createClass(localClass.option, className, {
-              [localClass.selected]: selected
+            className={clx(classes.option, className, {
+              [classes.selected]: selected
             })}
             disabled={disabled}
             data-value={value}
@@ -544,7 +569,7 @@ const Select = React.memo(
             {...otherOptionProps}
           >
             {multiple && (
-              <i className={localClass.optionIcon}>
+              <i className={classes.optionIcon}>
                 <Check />
               </i>
             )}
@@ -589,8 +614,8 @@ const Select = React.memo(
               ? `sonnat-select-input-component-${name}`
               : undefined
           }
-          className={createClass(localClass.input, inputClassNameProp, {
-            [localClass.native]: native
+          className={clx(classes.input, inputClassNameProp, {
+            [classes.native]: native
           })}
           ref={node => {
             if (inputRefProp) setRef(inputRefProp, node);
@@ -598,11 +623,11 @@ const Select = React.memo(
           }}
           {...inputProps}
         >
-          <div className={localClass.display}>
+          <div className={classes.display}>
             {!display || display.length === 0 ? (
-              <span className={localClass.placeholder}>{placeholder}</span>
+              <span className={classes.placeholder}>{placeholder}</span>
             ) : multiple ? (
-              <div className={localClass.displayMultiple}>
+              <div className={classes.displayMultiple}>
                 {display.map((item, index) => {
                   const [content, value] = item;
 
@@ -610,7 +635,7 @@ const Select = React.memo(
                     <RemovableChip
                       disabled={disabled}
                       size={size}
-                      className={localClass.chip}
+                      className={classes.chip}
                       onRemove={e => removeChip(e, value)}
                       label={content}
                       key={`${generateUniqueString}/${index}`}
@@ -619,7 +644,7 @@ const Select = React.memo(
                 })}
               </div>
             ) : (
-              <span className={localClass.displaySingle}>{display}</span>
+              <span className={classes.displaySingle}>{display}</span>
             )}
           </div>
         </InputComponent>
@@ -644,11 +669,8 @@ const Select = React.memo(
     return (
       <div
         ref={ref}
-        className={createClass(localClass.root, className, {
-          [localClass.fluid]: controlProps.fluid,
-          [localClass[controlProps.size]]: allowedSizes.includes(
-            controlProps.size
-          )
+        className={clx(classes.root, className, classes[size], {
+          [classes.fluid]: controlProps.fluid
         })}
         {...otherProps}
       >
@@ -659,11 +681,11 @@ const Select = React.memo(
           hasError={controlProps.hasError}
           disabled={controlProps.disabled}
           fluid={controlProps.fluid}
-          size={controlProps.size}
+          size={size}
           variant={variant}
           onMouseDown={e => {
             if (!controlProps.disabled) {
-              const chipSelector = `.${localClass.chip}`;
+              const chipSelector = `.${classes.chip}`;
               if (
                 !closest(e.target, chipSelector) &&
                 !menuRef.current.contains(e.target)
@@ -675,15 +697,15 @@ const Select = React.memo(
           trailingAdornment={
             <InputAdornment>
               {trailingAdornment}
-              <InputAdornment variant="icon" className={localClass.caretIcon}>
+              <InputAdornment variant="icon" className={classes.caretIcon}>
                 <ChevronDown />
               </InputAdornment>
             </InputAdornment>
           }
-          className={createClass(localClass.base, {
-            [localClass.open]: openState,
-            [localClass.disabled]: controlProps.disabled,
-            [localClass.errored]: controlProps.hasError
+          className={clx(classes.base, {
+            [classes.open]: openState,
+            [classes.disabled]: controlProps.disabled,
+            [classes.errored]: controlProps.hasError
           })}
           controller={createInputController()}
           controllerId={
@@ -693,13 +715,13 @@ const Select = React.memo(
           }
         />
         {(!!helperText || !!otherInputProps.maxLength) && (
-          <div className={localClass.helperRow}>
+          <div className={classes.helperRow}>
             {helperText && (
-              <p className={localClass.helperContent}>
+              <p className={classes.helperContent}>
                 {helperIcon && (
-                  <i className={localClass.helperIcon}>{helperIcon}</i>
+                  <i className={classes.helperIcon}>{helperIcon}</i>
                 )}
-                <span className={localClass.helperText}>{helperText}</span>
+                <span className={classes.helperText}>{helperText}</span>
               </p>
             )}
           </div>
@@ -709,14 +731,14 @@ const Select = React.memo(
             role="listbox"
             anchorNode={inputBaseRef.current}
             ref={menuRef}
-            className={localClass.menu}
+            className={classes.menu}
             preventPageScrolling={preventPageScrolling}
             onOutsideClick={outsideClickHandler}
             outsideClickDetector={detectOutsideClicks}
             searchable={searchable}
             searchPlaceholder={searchPlaceholder}
             searchEmptyStatementText={searchEmptyStatementText}
-            dense={size === "small"}
+            dense={size !== "large"}
             onOpen={onOpen}
             onClose={onClose}
             open={openState}

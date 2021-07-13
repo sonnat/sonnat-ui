@@ -16,6 +16,7 @@ const useStyles = makeStyles(
   theme => {
     const {
       colors,
+      darkMode,
       typography: { pxToRem, variants }
     } = theme;
 
@@ -32,7 +33,10 @@ const useStyles = makeStyles(
       },
       headerCell: {
         ...variants.subtitle,
-        color: colors.text.primary
+        color: colors.text.primary,
+        borderBottomColor: darkMode
+          ? "rgba(0, 0, 0, 0.24)"
+          : "rgba(255, 255, 255, 0.24)"
       },
       footerCell: {
         ...variants.caption,
@@ -43,7 +47,7 @@ const useStyles = makeStyles(
       textAlignJustify: { textAlign: "justify" },
       textAlignLeft: { textAlign: "left" },
       textAlignRight: { textAlign: "right" },
-      dense: { padding: `${pxToRem(4)} ${pxToRem(8)}` },
+      dense: { padding: pxToRem(8) },
       selected: { color: "inherit" }
     };
   },

@@ -17,7 +17,7 @@ type BaseProps<P = {}> = P & {
    * The size of the chip.
    * @default "medium"
    */
-  size?: "small" | "medium";
+  size?: "large" | "medium" | "small";
   /**
    * The color of the chip.
    * @default "default"

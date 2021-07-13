@@ -18,6 +18,11 @@ type BaseProps<P = {}> = P & {
    * @default false
    */
   dense?: boolean;
+  /**
+   * If `true`, the table will be border-less.
+   * @default false
+   */
+  borderLess?: boolean;
 };
 
 export type TableProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;

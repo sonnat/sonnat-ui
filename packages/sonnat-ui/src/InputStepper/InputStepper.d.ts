@@ -31,7 +31,7 @@ type BaseProps<P = {}> = P & {
    * The size of the stepper.
    * @default "medium"
    */
-  size?: "medium" | "small";
+  size?: "large" | "medium" | "small";
   /**
    * The minimum value the stepper can hold.
    * @default 0

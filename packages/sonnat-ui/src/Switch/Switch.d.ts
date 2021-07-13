@@ -32,7 +32,7 @@ type BaseProps<P = {}> = P & {
    * The size of the switch.
    * @default "medium"
    */
-  size?: "small" | "medium";
+  size?: "large" | "medium" | "small";
   /**
    * If `true`, the switch will be readOnly.
    * @default false

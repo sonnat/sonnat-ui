@@ -2,7 +2,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
 
 const componentName = "Skeleton";
@@ -84,7 +84,7 @@ const Skeleton = React.memo(
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
     // eslint-disable-next-line no-unused-vars
     const { width: _w, height: _h, ...otherStyleProps } = styleProp;
@@ -107,11 +107,11 @@ const Skeleton = React.memo(
       <HTMLTag
         ref={ref}
         style={style}
-        className={createClass(localClass.root, className, {
-          [localClass[variant]]: allowedVariants.includes(variant),
-          [localClass.autoHeight]: !!children && !height,
-          [localClass.autoWidth]: !!children && !width,
-          [localClass.hasChildren]: !!children
+        className={clx(classes.root, className, {
+          [classes[variant]]: allowedVariants.includes(variant),
+          [classes.autoHeight]: !!children && !height,
+          [classes.autoWidth]: !!children && !width,
+          [classes.hasChildren]: !!children
         })}
         {...otherProps}
       >

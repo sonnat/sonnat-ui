@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import FloatedListContext from "../context";
 import makeStyles from "../../styles/makeStyles";
 
@@ -76,7 +76,7 @@ const MenuItem = React.memo(function MenuItem(props) {
 
   const itemRef = useRef();
 
-  const localClass = useStyles();
+  const classes = useStyles();
 
   const { registerNode, dense } = useContext(FloatedListContext);
   const [isMounted, setMounted] = useState(false);
@@ -115,11 +115,11 @@ const MenuItem = React.memo(function MenuItem(props) {
           setFocused(false);
         }
       }}
-      className={createClass(localClass.root, className, {
-        [localClass.focused]: isFocused,
-        [localClass.disabled]: disabled,
-        [localClass.hide]: hide,
-        [localClass.dense]: dense
+      className={clx(classes.root, className, {
+        [classes.focused]: isFocused,
+        [classes.disabled]: disabled,
+        [classes.hide]: hide,
+        [classes.dense]: dense
       })}
       {...otherProps}
     >

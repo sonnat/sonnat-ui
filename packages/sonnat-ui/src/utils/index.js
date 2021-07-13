@@ -38,5 +38,7 @@ export { default as useConstantProp } from "./useConstantProp";
 
 export { default as detectScrollBarWidth } from "./detectScrollBarWidth";
 
+export { default as getVar } from "./getVar";
+
 export * from "./scrollLeft";
 export * from "./enums";

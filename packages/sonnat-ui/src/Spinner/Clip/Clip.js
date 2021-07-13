@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../../styles/makeStyles";
 import useTheme from "../../styles/useTheme";
 
@@ -80,7 +80,7 @@ const ClipSpinner = React.memo(function ClipSpinner(props) {
     typography: { pxToRem }
   } = useTheme();
 
-  const localClass = useStyles();
+  const classes = useStyles();
 
   const sizing = {
     width: pxToRem(size) || pxToRem(20),
@@ -100,23 +100,23 @@ const ClipSpinner = React.memo(function ClipSpinner(props) {
 
   return (
     <div
-      className={createClass(localClass.root, className)}
+      className={clx(classes.root, className)}
       style={{ ...style, ...sizing }}
       {...otherProps}
     >
       <svg
-        className={localClass.svg}
+        className={classes.svg}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
       >
         <path
           fill={coloring.background}
-          className={localClass.base}
+          className={classes.base}
           d="M8,16a8,8,0,1,1,8-8A8,8,0,0,1,8,16ZM8,2a6,6,0,1,0,6,6A6,6,0,0,0,8,2Z"
         ></path>
         <circle
           stroke={coloring.foreground}
-          className={localClass.movingParticle}
+          className={classes.movingParticle}
           cx="8"
           cy="8"
           r="7"

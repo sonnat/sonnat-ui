@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import { ChevronLeft, ChevronRight } from "../../internals/icons";
 import makeStyles from "../../styles/makeStyles";
 import useTheme from "../../styles/useTheme";
@@ -63,21 +63,17 @@ const BreadcrumbItem = React.memo(
   React.forwardRef(function BreadcrumbItem(props, ref) {
     const { className, children, ...otherProps } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
     const theme = useTheme();
 
     const isRtl = theme.direction === "rtl";
 
     return (
-      <li
-        ref={ref}
-        className={createClass(localClass.root, className)}
-        {...otherProps}
-      >
+      <li ref={ref} className={clx(classes.root, className)} {...otherProps}>
         {children}
         <i
-          className={createClass(
-            localClass.separator,
+          className={clx(
+            classes.separator,
             "sonnat__breadcrumb-item__separator"
           )}
         >

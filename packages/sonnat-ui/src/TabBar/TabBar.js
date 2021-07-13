@@ -1,7 +1,7 @@
-import createClass from "classnames";
+import clx from "classnames";
 import throttle from "lodash.throttle";
 import PropTypes from "prop-types";
-import React, { useEffect, useRef, useState } from "react";
+import * as React from "react";
 import { isFragment } from "react-is";
 import { withResizeDetector } from "react-resize-detector";
 import { ChevronLeftLarge, ChevronRightLarge } from "../internals/icons";
@@ -11,12 +11,17 @@ import {
   getNormalizedScrollLeft,
   setRef,
   useConstantProp,
-  useControlled
+  useControlled,
+  getVar
 } from "../utils";
 import TabBarContext from "./context";
 import { componentName as childName } from "./Tab";
 
 const componentName = "TabBar";
+
+const allowedVariants = ["scrollable", "fluid"];
+const allowedSizes = ["large", "medium", "small"];
+const allowedHandleVisibility = ["auto", "off"];
 
 const useStyles = makeStyles(
   theme => {
@@ -34,7 +39,6 @@ const useStyles = makeStyles(
         fontFamily: fontFamily[direction],
         display: "flex",
         position: "relative",
-        height: pxToRem(48),
         overflow: "hidden"
       },
       scrollBehavior: {
@@ -93,7 +97,6 @@ const useStyles = makeStyles(
       indicatorSlider: {
         left: 0,
         bottom: 0,
-        top: pxToRem(48),
         height: pxToRem(2),
         width: "100%",
         content: '""',
@@ -123,6 +126,18 @@ const useStyles = makeStyles(
       },
       startFader: {},
       endFader: {},
+      large: {
+        height: pxToRem(48),
+        "& $indicatorSlider": { top: pxToRem(48) }
+      },
+      medium: {
+        height: pxToRem(40),
+        "& $indicatorSlider": { top: pxToRem(40) }
+      },
+      small: {
+        height: pxToRem(32),
+        "& $indicatorSlider": { top: pxToRem(32) }
+      },
       disabledFader: {
         visibility: "hidden"
       },
@@ -169,16 +184,30 @@ const TabBar = React.memo(
       onChange,
       children: childrenProp,
       width: parentWidth,
-      scrollHandleVisibility = "auto",
-      variant = "scrollable",
-      dense = false,
+      scrollHandleVisibility: hVisProp = "auto",
+      variant: variantProp = "scrollable",
+      size: sizeProp = "medium",
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
     const theme = useTheme();
 
     const isRtl = theme.direction === "rtl";
+
+    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+
+    const variant = getVar(
+      variantProp,
+      "scrollable",
+      !allowedVariants.includes(variantProp)
+    );
+
+    const scrollHandleVisibility = getVar(
+      hVisProp,
+      "auto",
+      !allowedHandleVisibility.includes(hVisProp)
+    );
 
     const isFluid = useConstantProp(variant === "fluid", false, {
       componentName,
@@ -192,27 +221,28 @@ const TabBar = React.memo(
 
     const padding = 0;
 
-    const indicatorRef = useRef();
-    const parentRef = useRef();
-    const scrollerRef = useRef();
-    const listRef = useRef();
+    const indicatorRef = React.useRef();
+    const parentRef = React.useRef();
+    const scrollerRef = React.useRef();
+    const listRef = React.useRef();
 
     const identifierToIndex = new Map();
 
-    const [indicatorState, setIndicatorState] = useState({
+    const [indicatorState, setIndicatorState] = React.useState({
       scaleX: 1,
       x: 0,
       bgColor: theme.colors.transparent
     });
 
-    const [isResized, setResized] = useState(false);
-    const [scrollButtonsDisplayState, setScrollButtonsDisplayState] = useState({
-      start: false,
-      end: false
-    });
+    const [isResized, setResized] = React.useState(false);
+    const [scrollButtonsDisplayState, setScrollButtonsDisplayState] =
+      React.useState({
+        start: false,
+        end: false
+      });
 
     const indicatorProps = {
-      className: localClass.indicatorSlider,
+      className: classes.indicatorSlider,
       style: {
         backgroundColor: indicatorState.bgColor,
         left: indicatorState.x,
@@ -453,12 +483,16 @@ const TabBar = React.memo(
       }
     };
 
-    const changeListener = (e, identifier) => {
-      if (onChange) onChange(e, identifier);
+    const changeListener = React.useCallback(
+      (e, identifier) => {
+        if (onChange) onChange(e, identifier);
 
-      // Switch tab if-and-only-if it is a uncontrolled component
-      setValue(identifier);
-    };
+        // Switch tab if-and-only-if it is a uncontrolled component
+        setValue(identifier);
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [onChange]
+    );
 
     const startScrollButtonHandler = () => {
       moveScroller(-getAvgScrollAmount());
@@ -468,7 +502,7 @@ const TabBar = React.memo(
       moveScroller(getAvgScrollAmount());
     };
 
-    useEffect(() => {
+    React.useEffect(() => {
       if (parentWidth) setResized(true);
     }, [parentWidth]);
 
@@ -478,79 +512,78 @@ const TabBar = React.memo(
       setResized(false);
     }
 
-    useEffect(() => {
+    React.useEffect(() => {
       updateIndicatorState();
       updateScrollButtonState();
       scrollIntoView();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value]);
 
+    const context = React.useMemo(
+      () => ({
+        fluid: isFluid,
+        scrollable: isScrollable,
+        onChange: changeListener,
+        size
+      }),
+      [isFluid, isScrollable, changeListener, size]
+    );
+
     return (
-      <TabBarContext.Provider
-        value={{
-          dense,
-          fluid: isFluid,
-          scrollable: isScrollable,
-          onChange: changeListener
+      <div
+        className={clx(classes.root, className, classes[size], {
+          [classes.scrollable]: isScrollable,
+          [classes.fluid]: isFluid
+        })}
+        ref={node => {
+          if (ref) setRef(ref, node);
+          parentRef.current = node;
         }}
+        {...otherProps}
       >
-        <div
-          className={createClass(localClass.root, className, {
-            [localClass.scrollable]: isScrollable,
-            [localClass.fluid]: isFluid
-          })}
-          ref={node => {
-            if (ref) setRef(ref, node);
-            parentRef.current = node;
-          }}
-          {...otherProps}
-        >
-          {isScrollable && (
-            <div
-              aria-disabled={!scrollButtonsDisplayState.start}
-              role="button"
-              className={createClass(localClass.startFader, localClass.fader, {
-                [localClass.disabledFader]: !scrollButtonsDisplayState.start
-              })}
-              onClick={startScrollButtonHandler}
-            >
-              <i className={localClass.faderIcon}>
-                {isRtl ? <ChevronRightLarge /> : <ChevronLeftLarge />}
-              </i>
-            </div>
-          )}
+        {isScrollable && (
           <div
-            ref={scrollerRef}
-            className={localClass.listWrapper}
-            onScroll={throttle(() => {
-              updateScrollButtonState();
-            }, 250)}
+            aria-disabled={!scrollButtonsDisplayState.start}
+            role="button"
+            className={clx(classes.startFader, classes.fader, {
+              [classes.disabledFader]: !scrollButtonsDisplayState.start
+            })}
+            onClick={startScrollButtonHandler}
           >
-            <div {...indicatorProps}></div>
-            <div
-              ref={listRef}
-              className={localClass.listContainer}
-              role="tablist"
-            >
-              {children}
-            </div>
+            <i className={classes.faderIcon}>
+              {isRtl ? <ChevronRightLarge /> : <ChevronLeftLarge />}
+            </i>
           </div>
-          {isScrollable && (
-            <div
-              aria-disabled={!scrollButtonsDisplayState.end}
-              role="button"
-              className={createClass(localClass.endFader, localClass.fader, {
-                [localClass.disabledFader]: !scrollButtonsDisplayState.end
-              })}
-              onClick={endScrollButtonHandler}
-            >
-              <i className={localClass.faderIcon}>
-                {isRtl ? <ChevronLeftLarge /> : <ChevronRightLarge />}
-              </i>
-            </div>
-          )}
+        )}
+        <div
+          ref={scrollerRef}
+          className={classes.listWrapper}
+          onScroll={throttle(() => {
+            updateScrollButtonState();
+          }, 250)}
+        >
+          <div {...indicatorProps}></div>
+          <div ref={listRef} className={classes.listContainer} role="tablist">
+            <TabBarContext.Provider value={context}>
+              {children}
+            </TabBarContext.Provider>
+          </div>
         </div>
-      </TabBarContext.Provider>
+        {isScrollable && (
+          <div
+            aria-disabled={!scrollButtonsDisplayState.end}
+            role="button"
+            className={clx(classes.endFader, classes.fader, {
+              [classes.disabledFader]: !scrollButtonsDisplayState.end
+            })}
+            onClick={endScrollButtonHandler}
+          >
+            <i className={classes.faderIcon}>
+              {isRtl ? <ChevronLeftLarge /> : <ChevronRightLarge />}
+            </i>
+          </div>
+        )}
+      </div>
     );
   })
 );
@@ -562,10 +595,10 @@ TabBar.propTypes = {
   className: PropTypes.string,
   activeTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   defaultActiveTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  dense: PropTypes.bool,
   width: PropTypes.number,
-  scrollHandleVisibility: PropTypes.oneOf(["auto", "off"]),
-  variant: PropTypes.oneOf(["scrollable", "fluid"]),
+  scrollHandleVisibility: PropTypes.oneOf(allowedHandleVisibility),
+  variant: PropTypes.oneOf(allowedVariants),
+  size: PropTypes.oneOf(allowedSizes),
   onChange: PropTypes.func
 };
 

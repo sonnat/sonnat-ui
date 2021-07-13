@@ -81,6 +81,11 @@ type BaseProps<P = {}> = P & {
    * @default false
    */
   hasError?: boolean;
+  /**
+   * The size of the textarea.
+   * @default "medium"
+   */
+  size?: "large" | "medium" | "small";
   /** The properties applied to the `input` element. */
   inputProps?: InputProps;
   /**

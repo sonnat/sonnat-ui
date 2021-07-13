@@ -62,4 +62,7 @@ export * from "./detectScrollBarWidth";
 export { default as scrollLeft } from "./scrollLeft";
 export * from "./scrollLeft";
 
+export { default as getVar } from "./getVar";
+export * from "./getVar";
+
 export * from "./enums";

@@ -1,11 +1,13 @@
-import React from "react";
+import clx from "classnames";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import React from "react";
 import useInputBase from "../InputBase/useInputBase";
-import makeStyles from "../styles/makeStyles";
 import { adjustColor } from "../styles/colorUtils";
+import makeStyles from "../styles/makeStyles";
+import getVar from "../utils/getVar";
 
 const componentName = "InputAdornment";
+
 const allowedVariants = ["node", "icon", "text"];
 
 const useStyles = makeStyles(
@@ -60,8 +62,12 @@ const useStyles = makeStyles(
         "&$textAdornment": { color: colors.text.hint },
         "&$iconAdornment": { color: colors.divider }
       },
-      medium: {
-        "&$textAdornment": { minWidth: pxToRem(24), fontSize: pxToRem(14) },
+      large: {
+        "&$textAdornment": {
+          minWidth: pxToRem(24),
+          fontSize: pxToRem(14),
+          lineHeight: 1.5714285714
+        },
         "&$iconAdornment": useIconWrapper(24),
         "& + *": {
           ...(direction === "rtl"
@@ -69,13 +75,28 @@ const useStyles = makeStyles(
             : { marginLeft: pxToRem(8) })
         }
       },
+      medium: {
+        "&$textAdornment": {
+          minWidth: pxToRem(16),
+          fontSize: pxToRem(10),
+          fontWeight: fontWeight.medium,
+          lineHeight: 1.8
+        },
+        "&$iconAdornment": useIconWrapper(16),
+        "& + *": {
+          ...(direction === "rtl"
+            ? { marginRight: pxToRem(4) }
+            : { marginLeft: pxToRem(4) })
+        }
+      },
       small: {
         "&$textAdornment": {
           minWidth: pxToRem(16),
           fontSize: pxToRem(10),
-          fontWeight: fontWeight.medium
+          fontWeight: fontWeight.medium,
+          lineHeight: 1.8
         },
-        "&$iconAdornment": useIconWrapper(16),
+        "&$iconAdornment": useIconWrapper(14),
         "& + *": {
           ...(direction === "rtl"
             ? { marginRight: pxToRem(4) }
@@ -97,35 +118,46 @@ const useStyles = makeStyles(
 
 const InputAdornment = React.memo(
   React.forwardRef(function InputAdornment(props, ref) {
-    const { className, children, variant = "node", ...otherProps } = props;
+    const {
+      className,
+      children,
+      variant: variantProp = "node",
+      ...otherProps
+    } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
+
+    const variant = getVar(
+      variantProp,
+      "node",
+      !allowedVariants.includes(variantProp)
+    );
 
     const RootNode = variant === "icon" ? "i" : "div";
-    const { size, disabled, hasError } = useInputBase();
-    const hasValidVariant = allowedVariants.includes(variant);
 
-    return hasValidVariant ? (
+    const { size, disabled, hasError } = useInputBase();
+
+    return (
       <RootNode
         ref={ref}
         role={otherProps.onClick ? "button" : undefined}
         tabIndex={otherProps.onClick ? (disabled ? -1 : 0) : undefined}
-        className={createClass(
-          localClass.root,
+        className={clx(
+          classes.root,
           className,
-          localClass[size],
-          localClass[`${variant}Adornment`],
+          classes[size],
+          classes[`${variant}Adornment`],
           {
-            [localClass.actionable]: !!otherProps.onClick,
-            [localClass.disabled]: disabled,
-            [localClass.errored]: hasError
+            [classes.actionable]: !!otherProps.onClick,
+            [classes.disabled]: disabled,
+            [classes.errored]: hasError
           }
         )}
         {...otherProps}
       >
         {children}
       </RootNode>
-    ) : null;
+    );
   })
 );
 

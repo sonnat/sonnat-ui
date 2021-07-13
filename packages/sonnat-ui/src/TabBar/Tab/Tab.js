@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../../styles/makeStyles";
 import { changeColor } from "../../styles/colorUtils";
 import TabBarContext from "../context";
@@ -21,11 +21,9 @@ const useStyles = makeStyles(
       root: {
         outline: "none",
         display: "flex",
-        minHeight: pxToRem(48),
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
-        padding: [[0, pxToRem(24)]],
         appearance: "none !important",
         cursor: "pointer",
         transition: "250ms ease",
@@ -47,25 +45,24 @@ const useStyles = makeStyles(
         textAlign: "center",
         overflow: "hidden",
         display: "flex",
-        alignItems: "center",
-        "& > $icon:only-child": useIconWrapper(24)
+        alignItems: "center"
       },
       label: {
         ...useText({ color: colors.text.secondary }),
-        transition: "color 360ms ease",
-        ...(direction === "rtl"
-          ? { marginRight: pxToRem(8) }
-          : { marginLeft: pxToRem(8) })
+        transition: "color 360ms ease"
       },
       icon: {
         ...useIconWrapper(20),
         color: colors.text.secondary,
-        transition: "color 360ms ease"
+        transition: "color 360ms ease",
+        "& + $label": {
+          ...(direction === "rtl"
+            ? { marginRight: pxToRem(4) }
+            : { marginLeft: pxToRem(4) })
+        }
       },
       fluid: {
-        "& $content": {
-          justifyContent: "center"
-        }
+        "& $content": { justifyContent: "center" }
       },
       stable: {
         minWidth: 0,
@@ -74,15 +71,43 @@ const useStyles = makeStyles(
           "background-color 250ms ease, transform 250ms cubic-bezier(0.4, 0, 0.2, 1), opacity 0s",
         flex: [[1, 1, "auto"]]
       },
-      dense: {
+      small: {
+        minHeight: pxToRem(32),
+        padding: [[0, pxToRem(16)]],
+        "& $label": {
+          fontSize: pxToRem(12),
+          fontWeight: 500,
+          lineHeight: 1.6666666667
+        },
+        "& $icon": useIconWrapper(14),
+        "&$iconTab $icon": useIconWrapper(16),
+        "&$leadingIconed": { padding: [[0, pxToRem(12)]] }
+      },
+      medium: {
+        minHeight: pxToRem(40),
+        padding: [[0, pxToRem(20)]],
         "& $label": {
           fontSize: pxToRem(14),
           fontWeight: 500,
-          ...(direction === "rtl"
-            ? { marginRight: pxToRem(4) }
-            : { marginLeft: pxToRem(4) })
+          lineHeight: 1.5714285714
         },
-        "& $content > $icon:not(:only-child)": useIconWrapper(18)
+        "& $icon": useIconWrapper(16),
+        "&$iconTab $icon": useIconWrapper(18),
+        "&$leadingIconed": { padding: [[0, pxToRem(12)]] }
+      },
+      large: {
+        minHeight: pxToRem(48),
+        padding: [[0, pxToRem(24)]],
+        "& $icon": {
+          ...useIconWrapper(20),
+          "& + $label": {
+            ...(direction === "rtl"
+              ? { marginRight: pxToRem(8) }
+              : { marginLeft: pxToRem(8) })
+          }
+        },
+        "&$iconTab $icon": useIconWrapper(24),
+        "&$leadingIconed": { padding: [[0, pxToRem(16)]] }
       },
       active: {
         "& $label": {
@@ -102,10 +127,8 @@ const useStyles = makeStyles(
             : changeColor(colors.primary.light, { alpha: 0.08 })
         }
       },
-      leadingIconed: { padding: [[0, pxToRem(16)]] },
-      iconTab: {
-        "& $content": { justifyContent: "center" }
-      }
+      leadingIconed: {},
+      iconTab: { "& $content": { justifyContent: "center" } }
     };
   },
   { name: `Sonnat${componentName}` }
@@ -123,12 +146,12 @@ const Tab = React.memo(
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
     const hasLeadingIcon = icon != null && icon;
     const isIconTab = label == null || label.length === 0;
 
-    const { dense, onChange, scrollable, fluid } = useContext(TabBarContext);
+    const { size, onChange, scrollable, fluid } = useContext(TabBarContext);
 
     return (
       <div
@@ -142,19 +165,18 @@ const Tab = React.memo(
             if (onClick) onClick(e, identifier);
           }
         }}
-        className={createClass(localClass.root, className, {
-          [localClass.active]: active,
-          [localClass.dense]: dense,
-          [localClass.fluid]: fluid,
-          [localClass.stable]: !scrollable,
-          [localClass.leadingIconed]: hasLeadingIcon,
-          [localClass.iconTab]: isIconTab
+        className={clx(classes.root, className, classes[size], {
+          [classes.active]: active,
+          [classes.fluid]: fluid,
+          [classes.stable]: !scrollable,
+          [classes.leadingIconed]: hasLeadingIcon,
+          [classes.iconTab]: isIconTab
         })}
         {...otherProps}
       >
-        <div className={localClass.content}>
-          {icon && <i className={localClass.icon}>{icon}</i>}
-          {label && <span className={localClass.label}>{label}</span>}
+        <div className={classes.content}>
+          {icon && <i className={classes.icon}>{icon}</i>}
+          {label && <span className={classes.label}>{label}</span>}
         </div>
       </div>
     );

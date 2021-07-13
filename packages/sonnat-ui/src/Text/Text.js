@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
 
 const componentName = "Text";
@@ -150,27 +150,27 @@ const Text = React.memo(
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
     let variantClass = "";
     if (variant && allowedVariants.includes(variant)) {
-      variantClass = localClass[`${variant}`] || "";
+      variantClass = classes[`${variant}`] || "";
     }
 
     return (
       <HTMLTag
         ref={ref}
-        className={createClass(
-          localClass.root,
-          localClass[`${color}Color`],
-          localClass[`${textOverflow}Overflow`],
+        className={clx(
+          classes.root,
+          classes[`${color}Color`],
+          classes[`${textOverflow}Overflow`],
           className,
           variantClass,
           {
-            [localClass.noWrap]: noWrap,
-            [localClass[`${weight}Weight`]]: weight != null && !!weight,
-            [localClass[`${align}Alignment`]]: align != null && !!align,
-            [localClass[`${display}Display`]]: display != null && !!display
+            [classes.noWrap]: noWrap,
+            [classes[`${weight}Weight`]]: weight != null && !!weight,
+            [classes[`${align}Alignment`]]: align != null && !!align,
+            [classes[`${display}Display`]]: display != null && !!display
           }
         )}
         {...otherProps}

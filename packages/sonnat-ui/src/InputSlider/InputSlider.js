@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import { withResizeDetector } from "react-resize-detector";
 import { ChevronLeft, ChevronRight } from "../internals/icons";
 import {
@@ -450,8 +450,8 @@ const InputSlider = React.memo(
       right: 0
     });
 
-    const localClass = useStyles();
-    const handleSelector = `.${localClass.handle}`;
+    const classes = useStyles();
+    const handleSelector = `.${classes.handle}`;
 
     React.useEffect(() => {
       setMounted(true);
@@ -491,11 +491,11 @@ const InputSlider = React.memo(
               stepsCount,
               stepsRef.current,
               widthPerStep,
-              localClass.step
+              classes.step
             )
           : null,
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [widthPerStep, localClass.step]
+      [widthPerStep, classes.step]
     );
 
     const calculateValue = track => {
@@ -879,29 +879,29 @@ const InputSlider = React.memo(
             if (onClickProp) onClickProp(e);
           }
         }}
-        className={createClass(localClass.root, className, {
-          [localClass.disabled]: disabled,
-          [localClass[variant]]: allowedVariants.includes(variant)
+        className={clx(classes.root, className, {
+          [classes.disabled]: disabled,
+          [classes[variant]]: allowedVariants.includes(variant)
         })}
         {...otherProps}
       >
-        <div className={localClass.wrapper}>
-          <div className={localClass.steps}>{steps}</div>
-          <div className={localClass.interval}>
+        <div className={classes.wrapper}>
+          <div className={classes.steps}>{steps}</div>
+          <div className={classes.interval}>
             <div
               ref={supHandleRef}
               onTouchStart={dragStart}
               onMouseDown={dragStart}
-              className={createClass(localClass.supHandle, localClass.handle)}
+              className={clx(classes.supHandle, classes.handle)}
               style={{
                 right: `${supState.right}px`,
                 zIndex: `${supState.zIndex}`,
                 transition: transitions
               }}
             >
-              <button className={localClass.handleCircle}>
+              <button className={classes.handleCircle}>
                 {isBidirectional && (
-                  <i className={localClass.handleIcon}>
+                  <i className={classes.handleIcon}>
                     <ChevronLeft />
                   </i>
                 )}
@@ -909,7 +909,7 @@ const InputSlider = React.memo(
             </div>
             <div
               ref={trackRef}
-              className={localClass.track}
+              className={classes.track}
               style={{
                 left: `${trackState.left}px`,
                 right: `${trackState.right}px`,
@@ -921,15 +921,15 @@ const InputSlider = React.memo(
                 ref={infHandleRef}
                 onTouchStart={dragStart}
                 onMouseDown={dragStart}
-                className={createClass(localClass.infHandle, localClass.handle)}
+                className={clx(classes.infHandle, classes.handle)}
                 style={{
                   left: `${infState.left}px`,
                   zIndex: `${infState.zIndex}`,
                   transition: transitions
                 }}
               >
-                <button className={localClass.handleCircle}>
-                  <i className={localClass.handleIcon}>
+                <button className={classes.handleCircle}>
+                  <i className={classes.handleIcon}>
                     <ChevronRight />
                   </i>
                 </button>

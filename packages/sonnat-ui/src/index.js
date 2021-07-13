@@ -107,9 +107,6 @@ export * from "./FormControlDescription";
 export { default as FormControlFeedback } from "./FormControlFeedback";
 export * from "./FormControlFeedback";
 
-export { default as FloatingActionButton } from "./FloatingActionButton";
-export * from "./FloatingActionButton";
-
 export { default as Snackbar } from "./Snackbar";
 export * from "./Snackbar";
 

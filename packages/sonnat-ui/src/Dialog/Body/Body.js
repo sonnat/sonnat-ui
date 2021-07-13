@@ -1,4 +1,4 @@
-import createClass from "classnames";
+import clx from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 import makeStyles from "../../styles/makeStyles";
@@ -34,9 +34,8 @@ const DialogBody = React.memo(
     const { height: heightStyle, ...styles } = style;
 
     const classes = useStyles();
-    const { hasOverflow, bodyHeight, registerBody } = React.useContext(
-      DialogContext
-    );
+    const { hasOverflow, bodyHeight, registerBody } =
+      React.useContext(DialogContext);
 
     const height = bodyHeight || heightStyle || "auto";
 
@@ -47,7 +46,7 @@ const DialogBody = React.memo(
           registerBody(node);
         }}
         style={{ ...styles, height }}
-        className={createClass(classes.root, className, {
+        className={clx(classes.root, className, {
           [classes.withOverflow]: hasOverflow
         })}
         {...otherProps}

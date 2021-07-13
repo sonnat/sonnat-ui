@@ -1,9 +1,9 @@
 import { createContext } from "react";
 
 const TabBarContext = createContext({
-  dense: false,
   fluid: false,
   scrollable: false,
+  size: "medium",
   onChange: () => {}
 });
 

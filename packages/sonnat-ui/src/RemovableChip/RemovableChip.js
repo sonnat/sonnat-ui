@@ -1,13 +1,14 @@
-import createClass from "classnames";
+import clx from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 import Close from "../internals/icons/Close";
 import { changeColor } from "../styles/colorUtils";
 import makeStyles from "../styles/makeStyles";
+import getVar from "../utils/getVar";
 
 const componentName = "RemovableChip";
 const allowedVariants = ["filled", "outlined"];
-const allowedSizes = ["medium", "small"];
+const allowedSizes = ["large", "medium", "small"];
 const allowedColors = ["default", "primary", "secondary"];
 
 const camelCase = s => s.replace(/-./g, x => x.toUpperCase()[1]);
@@ -81,8 +82,24 @@ const useStyles = makeStyles(
         alignItems: "center",
         flexShrink: "0",
         ...(direction === "rtl"
-          ? { marginLeft: pxToRem(-12), marginRight: "auto" }
-          : { marginRight: pxToRem(-12), marginLeft: "auto" })
+          ? { marginLeft: pxToRem(-12) }
+          : { marginRight: pxToRem(-12) }),
+        "&:hover > $removeButtonIcon, &:focus > $removeButtonIcon": {
+          backgroundColor: !darkMode
+            ? colors.createBlackColor({ alpha: 0.12 })
+            : colors.createWhiteColor({ alpha: 0.12 })
+        },
+        "&:active > $removeButtonIcon": {
+          backgroundColor: !darkMode
+            ? colors.createBlackColor({ alpha: 0.24 })
+            : colors.createWhiteColor({ alpha: 0.24 })
+        },
+        "&:hover > $removeButtonIcon": {
+          // Reset on touch devices, it doesn't add specificity
+          "@media (hover: none)": {
+            backgroundColor: colors.transparent
+          }
+        }
       },
       removeButtonIcon: {
         display: "inline-flex",
@@ -96,27 +113,30 @@ const useStyles = makeStyles(
         minWidth: pxToRem(16),
         minHeight: pxToRem(16),
         fontSize: pxToRem(16),
-        transition: "background-color 360ms ease, color 360ms ease",
-        "&:hover, &:focus": {
-          backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.12 })
-            : colors.createWhiteColor({ alpha: 0.12 })
-        },
-        "&:active": {
-          backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.24 })
-            : colors.createWhiteColor({ alpha: 0.24 })
-        },
-        "&:hover": {
-          // Reset on touch devices, it doesn't add specificity
-          "@media (hover: none)": {
-            backgroundColor: colors.transparent
-          }
-        }
+        transition: "background-color 360ms ease, color 360ms ease"
       },
       small: {
+        height: pxToRem(20),
+        fontSize: pxToRem(10),
+        padding: `0 ${pxToRem(8)}`,
+        lineHeight: 1.8,
+        "& $removeButton": {
+          width: pxToRem(20),
+          ...(direction === "rtl"
+            ? { marginLeft: pxToRem(-8) }
+            : { marginRight: pxToRem(-8) })
+        },
+        "& $icon": {
+          ...useIconWrapper(14),
+          ...(direction === "rtl"
+            ? { marginRight: pxToRem(-2), marginLeft: pxToRem(4) }
+            : { marginLeft: pxToRem(-2), marginRight: pxToRem(4) })
+        }
+      },
+      medium: {
         height: pxToRem(28),
         fontSize: pxToRem(12),
+        lineHeight: 1.6666666667,
         "& $removeButton": { width: pxToRem(28) },
         "& $icon": {
           ...(direction === "rtl"
@@ -124,9 +144,10 @@ const useStyles = makeStyles(
             : { marginLeft: pxToRem(-6), marginRight: pxToRem(4) })
         }
       },
-      medium: {
+      large: {
         height: pxToRem(32),
         fontSize: pxToRem(14),
+        lineHeight: 1.5714285714,
         "& $removeButton": { width: pxToRem(32) },
         "& $icon": {
           ...(direction === "rtl"
@@ -276,17 +297,27 @@ const RemovableChip = React.memo(
       leadingIcon,
       rounded = false,
       disabled = false,
-      variant = "filled",
-      color = "default",
-      size = "medium",
+      variant: variantProp = "filled",
+      color: colorProp = "default",
+      size: sizeProp = "medium",
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
-    const hasValidVariant = allowedVariants.includes(variant);
-    const hasValidColor = allowedColors.includes(color);
-    const hasValidSize = allowedSizes.includes(size);
+    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+
+    const color = getVar(
+      colorProp,
+      "default",
+      !allowedColors.includes(colorProp)
+    );
+
+    const variant = getVar(
+      variantProp,
+      "filled",
+      !allowedVariants.includes(variantProp)
+    );
 
     const removeHandler = e => {
       if (!disabled && onRemove) onRemove(e);
@@ -296,27 +327,28 @@ const RemovableChip = React.memo(
       <div
         aria-disabled={disabled ? "true" : "false"}
         ref={ref}
-        className={createClass(localClass.root, className, {
-          [localClass[size]]: hasValidSize,
-          [localClass[variant]]: hasValidVariant,
-          [localClass[camelCase(`${variant}-${color}`)]]:
-            hasValidColor && hasValidVariant,
-          [localClass.rounded]: rounded,
-          [localClass.disabled]: disabled
-        })}
+        className={clx(
+          className,
+          classes.root,
+          classes[size],
+          classes[variant],
+          classes[camelCase(`${variant}-${color}`)],
+          {
+            [classes.rounded]: rounded,
+            [classes.disabled]: disabled
+          }
+        )}
         {...otherProps}
       >
-        {leadingIcon && (
-          <i className={createClass(localClass.icon)}>{leadingIcon}</i>
-        )}
+        {leadingIcon && <i className={clx(classes.icon)}>{leadingIcon}</i>}
         {label}
         <button
-          className={localClass.removeButton}
+          className={classes.removeButton}
           onClick={removeHandler}
           disabled={disabled}
           tabIndex={disabled ? -1 : 0}
         >
-          <i className={createClass(localClass.removeButtonIcon)}>
+          <i className={clx(classes.removeButtonIcon)}>
             <Close />
           </i>
         </button>

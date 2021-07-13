@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import clx from "classnames";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import useFormControl from "../FormControl/useFormControl";
+import { changeColor } from "../styles/colorUtils";
+import makeStyles from "../styles/makeStyles";
+import getVar from "../utils/getVar";
+import useControlled from "../utils/useControlled";
 import useEventListener from "../utils/useEventListener";
 import useForkRef from "../utils/useForkRef";
-import useControlled from "../utils/useControlled";
-import makeStyles from "../styles/makeStyles";
-import { changeColor } from "../styles/colorUtils";
 
 const componentName = "Switch";
-const allowedSizes = ["medium", "small"];
+
+const allowedSizes = ["large", "medium", "small"];
 
 const useStyles = makeStyles(
   theme => {
@@ -28,14 +30,7 @@ const useStyles = makeStyles(
         display: "inline-flex",
         alignItems: "center",
         flexDirection: "row-reverse",
-        verticalAlign: "middle",
-        "&$checked$disabled": {
-          "& $track": { pointerEvents: "none" },
-          "& $indicator:after": {
-            backgroundColor: colors.divider,
-            pointerEvents: "none"
-          }
-        }
+        verticalAlign: "middle"
       },
       label: {
         ...useText({ color: colors.text.primary }),
@@ -73,9 +68,6 @@ const useStyles = makeStyles(
         WebkitTapHighlightColor: "rgba(0, 0, 0, 0) !important"
       },
       button: {
-        ...(direction === "rtl"
-          ? { right: pxToRem(-9) }
-          : { left: pxToRem(-9) }),
         borderRadius: "50%",
         position: "absolute",
         display: "flex",
@@ -168,11 +160,6 @@ const useStyles = makeStyles(
           backgroundColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.12 })
             : colors.createWhiteColor({ alpha: 0.12 })
-        },
-        "&$checked $button:before": {
-          backgroundColor: !darkMode
-            ? colors.createPrimaryColor({ alpha: 0.12 })
-            : changeColor(colors.primary.light, { alpha: 0.12 })
         }
       },
       disabled: {
@@ -210,13 +197,31 @@ const useStyles = makeStyles(
             : changeColor(colors.primary.light, { alpha: 0.04 })
         }
       },
-      medium: {
-        minHeight: pxToRem(42),
+      checkedFocused: {
+        "& $button:before": {
+          backgroundColor: !darkMode
+            ? colors.createPrimaryColor({ alpha: 0.12 })
+            : changeColor(colors.primary.light, { alpha: 0.12 })
+        }
+      },
+      checkedDisabled: {
+        "& $track": { pointerEvents: "none" },
+        "& $indicator:after": {
+          backgroundColor: colors.divider,
+          pointerEvents: "none"
+        }
+      },
+      large: {
+        minHeight: pxToRem(44),
+        "& $label": { fontSize: pxToRem(16), lineHeight: 1.5 },
         "& $cell": { width: pxToRem(42), height: pxToRem(24) },
         "& $handle": { width: pxToRem(20), height: pxToRem(20) },
         "& $button": {
-          width: pxToRem(42),
-          height: pxToRem(42)
+          ...(direction === "rtl"
+            ? { right: pxToRem(-10) }
+            : { left: pxToRem(-10) }),
+          width: pxToRem(44),
+          height: pxToRem(44)
         },
         "&$checked $button": {
           ...(direction === "rtl"
@@ -224,18 +229,40 @@ const useStyles = makeStyles(
             : { transform: `translateX(${pxToRem(18)})` })
         }
       },
-      small: {
-        minHeight: pxToRem(36),
+      medium: {
+        minHeight: pxToRem(34),
+        "& $label": { fontSize: pxToRem(14), lineHeight: 1.5714285714 },
         "& $cell": { width: pxToRem(32), height: pxToRem(18) },
         "& $handle": { width: pxToRem(16), height: pxToRem(16) },
         "& $button": {
-          width: pxToRem(36),
-          height: pxToRem(36)
+          ...(direction === "rtl"
+            ? { right: pxToRem(-8) }
+            : { left: pxToRem(-8) }),
+          width: pxToRem(34),
+          height: pxToRem(34)
         },
         "&$checked $button": {
           ...(direction === "rtl"
             ? { transform: `translateX(${pxToRem(-14)})` }
             : { transform: `translateX(${pxToRem(14)})` })
+        }
+      },
+      small: {
+        minHeight: pxToRem(26),
+        "& $label": { fontSize: pxToRem(12), lineHeight: 1.6666666667 },
+        "& $cell": { width: pxToRem(24), height: pxToRem(14) },
+        "& $handle": { width: pxToRem(12), height: pxToRem(12) },
+        "& $button": {
+          ...(direction === "rtl"
+            ? { right: pxToRem(-6) }
+            : { left: pxToRem(-6) }),
+          width: pxToRem(26),
+          height: pxToRem(26)
+        },
+        "&$checked $button": {
+          ...(direction === "rtl"
+            ? { transform: `translateX(${pxToRem(-10)})` }
+            : { transform: `translateX(${pxToRem(10)})` })
         }
       }
     };
@@ -261,7 +288,7 @@ const Switch = React.memo(
       hasError = false,
       disabled = false,
       required = false,
-      size = "medium",
+      size: sizeProp = "medium",
       ...otherProps
     } = props;
 
@@ -293,7 +320,7 @@ const Switch = React.memo(
     const inputRef = useRef();
     const inputRefHandler = useForkRef(inputRef, inputRefProp);
 
-    const localClass = useStyles();
+    const classes = useStyles();
     const formControl = useFormControl();
 
     const [checked, setChecked] = useControlled(
@@ -304,6 +331,8 @@ const Switch = React.memo(
 
     const [isMounted, setMounted] = useState(false);
     const [isFocused, setFocused] = useState(false);
+
+    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
 
     const isReadOnly = !!inputReadOnly || !!readOnly;
 
@@ -363,7 +392,6 @@ const Switch = React.memo(
 
     const controlProps = {
       name: name,
-      size: formControl ? formControl.size : size,
       disabled: formControl ? formControl.disabled : disabled,
       hasError: formControl ? formControl.hasError : hasError,
       required: formControl ? formControl.required : required,
@@ -405,6 +433,8 @@ const Switch = React.memo(
       ? inputId
       : controlProps.name && value
       ? `switch-${controlProps.name}-${value}`
+      : id
+      ? `switch-${id}`
       : undefined;
 
     if (typeof window !== "undefined") {
@@ -423,17 +453,16 @@ const Switch = React.memo(
       <div
         aria-disabled={controlProps.disabled}
         ref={ref}
-        className={createClass(localClass.root, className, {
-          [localClass[controlProps.size]]: allowedSizes.includes(
-            controlProps.size
-          ),
-          [localClass.disabled]: controlProps.disabled,
-          [localClass.focused]: isFocused,
-          [localClass.checked]: checked
+        className={clx(classes.root, className, classes[size], {
+          [classes.disabled]: controlProps.disabled,
+          [classes.focused]: isFocused,
+          [classes.checked]: checked,
+          [classes.checkedDisabled]: checked && controlProps.disabled,
+          [classes.checkedFocused]: checked && isFocused
         })}
         {...otherProps}
       >
-        <div className={localClass.cell}>
+        <div className={classes.cell}>
           <input
             id={id}
             tabIndex={controlProps.disabled ? -1 : 0}
@@ -441,7 +470,7 @@ const Switch = React.memo(
             value={value}
             disabled={controlProps.disabled}
             required={controlProps.required}
-            className={createClass(localClass.input, inputClassNameProp)}
+            className={clx(classes.input, inputClassNameProp)}
             onChange={controlProps.onChange}
             type="checkbox"
             onFocus={controlProps.onFocus}
@@ -450,16 +479,16 @@ const Switch = React.memo(
             ref={inputRefHandler}
             {...otherInputProps}
           />
-          <div className={localClass.track}>
-            <div className={localClass.button}>
-              <div className={localClass.handle}></div>
+          <div className={classes.track}>
+            <div className={classes.button}>
+              <div className={classes.handle}></div>
             </div>
-            <div className={localClass.indicator}></div>
+            <div className={classes.indicator}></div>
           </div>
         </div>
         {label && (
           <label
-            className={createClass(localClass.label, labelClassName)}
+            className={clx(classes.label, labelClassName)}
             htmlFor={id}
             {...otherLabelProps}
           >

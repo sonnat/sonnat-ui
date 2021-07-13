@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
 import useFormControl from "../FormControl/useFormControl";
 
@@ -38,7 +38,7 @@ const FormControlLabel = function FormControlLabel(props) {
     ...otherProps
   } = props;
 
-  const localClass = useStyles();
+  const classes = useStyles();
   const formControl = useFormControl();
 
   const controlProps = {
@@ -48,14 +48,14 @@ const FormControlLabel = function FormControlLabel(props) {
 
   return (
     <label
-      className={createClass(localClass.root, className, {
-        [localClass.disabled]: controlProps.disabled
+      className={clx(classes.root, className, {
+        [classes.disabled]: controlProps.disabled
       })}
       {...otherProps}
     >
       {children}
       {controlProps.required && (
-        <span className={localClass.requiredIndicator}>*</span>
+        <span className={classes.requiredIndicator}>*</span>
       )}
     </label>
   );

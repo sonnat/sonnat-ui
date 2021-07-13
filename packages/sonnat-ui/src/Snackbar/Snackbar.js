@@ -1,4 +1,4 @@
-import createClass from "classnames";
+import clx from "classnames";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import Button from "../Button";
@@ -144,7 +144,7 @@ const Snackbar = React.memo(
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
     const theme = useTheme();
 
     const isDarkMode = theme.darkMode;
@@ -171,16 +171,13 @@ const Snackbar = React.memo(
           ref={ref}
           role="alert"
           onTransitionEnd={transitionEndHandler}
-          className={createClass(
-            localClass.root,
-            localClass[placement],
-            className,
-            { [localClass.open]: isOpen }
-          )}
+          className={clx(classes.root, classes[placement], className, {
+            [classes.open]: isOpen
+          })}
           {...otherProps}
         >
-          {icon && <i className={localClass.icon}>{icon}</i>}
-          <span className={localClass.text}>{text}</span>
+          {icon && <i className={classes.icon}>{icon}</i>}
+          <span className={classes.text}>{text}</span>
           {undoable && (
             <React.Fragment>
               <Button
@@ -188,10 +185,10 @@ const Snackbar = React.memo(
                 variant="inlined"
                 color="secondary"
                 label={undoButtonLabel}
-                className={localClass.undoButton}
+                className={classes.undoButton}
                 onClick={onUndo}
               />
-              {closable && <div className={localClass.divider}></div>}
+              {closable && <div className={classes.divider}></div>}
             </React.Fragment>
           )}
           {closable && (
@@ -199,10 +196,8 @@ const Snackbar = React.memo(
               aria-label="Close Button"
               size="small"
               variant="inlined"
-              className={localClass.closeButton}
-              leadingIcon={
-                <CloseLarge className={localClass.closeButtonIcon} />
-              }
+              className={classes.closeButton}
+              leadingIcon={<CloseLarge className={classes.closeButtonIcon} />}
               onClick={onClose}
             />
           )}

@@ -112,7 +112,7 @@ type BaseProps<P = {}> = P & {
    * The size of the Select.
    * @default "medium"
    */
-  size?: "small" | "medium";
+  size?: "large" | "medium" | "small";
   /**
    * The variant to use.
    * @default "outlined"

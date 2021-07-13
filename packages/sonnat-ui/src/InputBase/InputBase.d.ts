@@ -59,7 +59,7 @@ type BaseProps<P = {}> = P & {
    * The size of the component.
    * @default "medium"
    */
-  size?: "medium" | "small";
+  size?: "large" | "medium" | "small";
   /**
    * The variant of the component.
    * @default "outlined"

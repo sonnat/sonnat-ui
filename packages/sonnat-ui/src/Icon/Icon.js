@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import { makeStyles, useTheme } from "../styles";
 
 const componentName = "Icon";
@@ -91,7 +91,7 @@ const Icon = React.memo(
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
     const theme = useTheme();
 
     const hasValidSize =
@@ -142,15 +142,10 @@ const Icon = React.memo(
         role={title ? "img" : undefined}
         focusable="false"
         style={{ ...otherStyles, ...sizeStyles }}
-        className={createClass(
-          localClass.root,
-          localClass[`${color}Color`],
-          className,
-          {
-            [localClass.defaultSize]: size == null || !hasValidSize,
-            [localClass[`${color}Color`]]: color != null && hasValidColor
-          }
-        )}
+        className={clx(classes.root, classes[`${color}Color`], className, {
+          [classes.defaultSize]: size == null || !hasValidSize,
+          [classes[`${color}Color`]]: color != null && hasValidColor
+        })}
         ref={ref}
         {...otherProps}
       >

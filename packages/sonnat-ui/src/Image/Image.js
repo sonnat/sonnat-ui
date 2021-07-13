@@ -6,7 +6,7 @@ import useIntersection from "../utils/useIntersection";
 
 const componentName = "Image";
 
-const VALID_LAYOUT_VALUES = ["fill", "fixed", "intrinsic", "responsive"];
+const allowedLayoutValues = ["fill", "fixed", "intrinsic", "responsive"];
 
 const toBase64 = str =>
   typeof window === "undefined"
@@ -89,12 +89,12 @@ const Image = React.memo(
             'Make sure you pass "src" in props to the `Image` component.'
         );
       }
-      if (!VALID_LAYOUT_VALUES.includes(layout)) {
+      if (!allowedLayoutValues.includes(layout)) {
         throw new Error(
           `[Sonnat]: Image with src "${src}" has invalid \`layout\` property. ` +
-            `Provided "${layout}" should be one of [${VALID_LAYOUT_VALUES.map(
-              String
-            ).join(", ")}].`
+            `Provided "${layout}" should be one of [${allowedLayoutValues
+              .map(String)
+              .join(", ")}].`
         );
       }
       if (
@@ -306,7 +306,7 @@ Image.propTypes = {
   sizes: PropTypes.string,
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  layout: PropTypes.oneOf(VALID_LAYOUT_VALUES)
+  layout: PropTypes.oneOf(allowedLayoutValues)
 };
 
 export default Image;

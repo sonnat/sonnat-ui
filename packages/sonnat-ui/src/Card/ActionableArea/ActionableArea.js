@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../../styles/makeStyles";
 
 const componentName = "CardActionableArea";
@@ -48,7 +48,7 @@ const CardActionableArea = React.memo(
         role="button"
         tabIndex={0}
         ref={ref}
-        className={createClass(classes.root, className)}
+        className={clx(classes.root, className)}
         onClick={onClick}
         {...otherProps}
       >

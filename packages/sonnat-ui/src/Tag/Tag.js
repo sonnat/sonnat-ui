@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import useConstantProp from "../utils/useConstantProp";
 import Close from "../internals/icons/Close";
 import { changeColor } from "../styles/colorUtils";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
 
 const componentName = "Tag";
@@ -275,7 +275,7 @@ const Tag = React.memo(
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
     const isRemovable = useConstantProp(onRemove != null, false, {
       componentName,
@@ -285,24 +285,24 @@ const Tag = React.memo(
     return visible ? (
       <div
         ref={ref}
-        className={createClass(localClass.root, className, {
-          [localClass[variant]]: allowedVariants.includes(variant),
-          [localClass[color]]: allowedColors.includes(color),
-          [localClass.removable]: isRemovable,
-          [localClass.dense]: dense
+        className={clx(classes.root, className, {
+          [classes[variant]]: allowedVariants.includes(variant),
+          [classes[color]]: allowedColors.includes(color),
+          [classes.removable]: isRemovable,
+          [classes.dense]: dense
         })}
         {...otherProps}
       >
-        {icon && <i className={localClass.icon}>{icon}</i>}
-        <span className={localClass.label}>{label}</span>
+        {icon && <i className={classes.icon}>{icon}</i>}
+        <span className={classes.label}>{label}</span>
         {isRemovable && (
           <div
             role="button"
             tabIndex={0}
-            className={localClass.removeBtn}
+            className={classes.removeBtn}
             onClick={onRemove}
           >
-            <i className={localClass.removeBtnIcon}>
+            <i className={classes.removeBtnIcon}>
               <Close />
             </i>
           </div>

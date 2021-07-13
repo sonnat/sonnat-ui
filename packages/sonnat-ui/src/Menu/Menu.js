@@ -2,7 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import { isFragment } from "react-is";
 import PropTypes from "prop-types";
 import throttle from "lodash.throttle";
-import createClass from "classnames";
+import clx from "classnames";
 import TextField from "../TextField";
 import PortalDestination from "../PortalDestination";
 import InputAdornment from "../InputAdornment";
@@ -179,7 +179,7 @@ const Menu = React.memo(
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
     const theme = useTheme();
 
     const [searchResult, setSearchResult] = useState(null);
@@ -308,9 +308,9 @@ const Menu = React.memo(
       } else itemIndex++;
 
       return React.cloneElement(child, {
-        className: createClass(child.props.className, {
-          [localClass.group]: isGroup,
-          [localClass.option]: !isGroup
+        className: clx(child.props.className, {
+          [classes.group]: isGroup,
+          [classes.option]: !isGroup
         }),
         index: currentIndex,
         key: `${generateUniqueString()}`,
@@ -474,9 +474,9 @@ const Menu = React.memo(
           <div
             tabIndex={-1}
             ref={ref}
-            className={createClass(localClass.root, className, {
-              [localClass.dense]: dense,
-              [localClass.searchable]: searchable
+            className={clx(classes.root, className, {
+              [classes.dense]: dense,
+              [classes.searchable]: searchable
             })}
             style={{
               ...style,
@@ -485,15 +485,15 @@ const Menu = React.memo(
             {...otherProps}
           >
             {openState && (
-              <div className={localClass.container}>
+              <div className={classes.container}>
                 {searchable && (
-                  <div className={localClass.searchRow}>
+                  <div className={classes.searchRow}>
                     <TextField
                       fluid
                       variant="filled"
                       placeholder={searchPlaceholder}
                       value={searchValue}
-                      size={dense ? "small" : "medium"}
+                      size={dense ? "medium" : "large"}
                       onChange={throttle(e => {
                         searchChangeListener(e);
                       }, 250)}
@@ -505,9 +505,9 @@ const Menu = React.memo(
                     />
                   </div>
                 )}
-                <div className={localClass.list} role={role} tabIndex={-1}>
+                <div className={classes.list} role={role} tabIndex={-1}>
                   {isSearchResultEmpty && (
-                    <div className={localClass.emptyStatement}>
+                    <div className={classes.emptyStatement}>
                       {searchEmptyStatementText}
                     </div>
                   )}

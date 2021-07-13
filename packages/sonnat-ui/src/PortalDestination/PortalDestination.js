@@ -21,13 +21,13 @@ const PortalDestination = React.memo(
   React.forwardRef(function PortalDestination(props, ref) {
     const { children, ...otherProps } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
     return (
       <Portal>
         <div
           ref={ref}
-          className={localClass.root}
+          className={classes.root}
           role="presentation"
           {...otherProps}
         >

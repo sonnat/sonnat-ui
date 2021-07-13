@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
 
 const componentName = "Code";
@@ -52,15 +52,15 @@ const Code = React.memo(
   React.forwardRef(function Code(props, ref) {
     const { className, children, codeBlock = false, ...otherProps } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
     const RootNode = codeBlock ? "pre" : "code";
 
     return (
       <RootNode
         ref={ref}
-        className={createClass(localClass.root, className, {
-          [localClass.codeBlock]: codeBlock
+        className={clx(classes.root, className, {
+          [classes.codeBlock]: codeBlock
         })}
         {...otherProps}
       >

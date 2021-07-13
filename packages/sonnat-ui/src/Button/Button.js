@@ -1,13 +1,14 @@
-import React from "react";
+import clx from "classnames";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import React from "react";
 import ClipSpinner from "../Spinner/Clip";
-import createColorVariants from "./createColorVariants";
 import { makeStyles, useTheme } from "../styles";
+import getVar from "../utils/getVar";
+import createColorVariants from "./createColorVariants";
 
 const componentName = "Button";
 const allowedVariants = ["filled", "inlined", "outlined"];
-const allowedSizes = ["medium", "small"];
+const allowedSizes = ["large", "medium", "small"];
 const allowedColors = ["default", "primary", "secondary"];
 
 const camelCase = s => s.replace(/-./g, x => x.toUpperCase()[1]);
@@ -69,7 +70,7 @@ const useStyles = makeStyles(
       rounded: {
         borderRadius: pxToRem(24)
       },
-      medium: {
+      large: {
         minWidth: pxToRem(96),
         height: pxToRem(40),
         padding: `0 ${pxToRem(16)}`,
@@ -79,7 +80,7 @@ const useStyles = makeStyles(
           "& > $icon": useIconWrapper(20),
           "& > $spinner": { width: pxToRem(20), height: pxToRem(20) }
         },
-        "& $label": { fontSize: pxToRem(16) },
+        "& $label": { fontSize: pxToRem(16), lineHeight: 1.5 },
         "& $icon": useIconWrapper(20),
         "& $spinner": { width: pxToRem(20), height: pxToRem(20) },
         "& $leadingIcon": {
@@ -93,7 +94,7 @@ const useStyles = makeStyles(
             : { marginRight: pxToRem(-4), marginLeft: pxToRem(12) })
         }
       },
-      small: {
+      medium: {
         minWidth: pxToRem(64),
         height: pxToRem(32),
         padding: `0 ${pxToRem(12)}`,
@@ -103,18 +104,42 @@ const useStyles = makeStyles(
           "& > $icon": useIconWrapper(16),
           "& > $spinner": { width: pxToRem(16), height: pxToRem(16) }
         },
-        "& $label": { fontSize: pxToRem(14) },
+        "& $label": { fontSize: pxToRem(14), lineHeight: 1.5714285714 },
         "& $icon": useIconWrapper(16),
         "& $spinner": { width: pxToRem(16), height: pxToRem(16) },
         "& $leadingIcon": {
           ...(direction === "rtl"
-            ? { marginLeft: pxToRem(4) }
-            : { marginRight: pxToRem(4) })
+            ? { marginRight: pxToRem(-4), marginLeft: pxToRem(4) }
+            : { marginLeft: pxToRem(-4), marginRight: pxToRem(4) })
         },
         "& $trailingIcon": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(8) }
-            : { marginLeft: pxToRem(8) })
+            ? { marginLeft: pxToRem(-4), marginRight: pxToRem(4) }
+            : { marginRight: pxToRem(-4), marginLeft: pxToRem(4) })
+        }
+      },
+      small: {
+        minWidth: pxToRem(32),
+        height: pxToRem(24),
+        padding: `0 ${pxToRem(12)}`,
+        "&$iconButton": {
+          height: pxToRem(32),
+          width: pxToRem(32),
+          "& > $icon": useIconWrapper(16),
+          "& > $spinner": { width: pxToRem(16), height: pxToRem(16) }
+        },
+        "& $label": { fontSize: pxToRem(12), lineHeight: 1.6666666667 },
+        "& $icon": useIconWrapper(14),
+        "& $spinner": { width: pxToRem(14), height: pxToRem(14) },
+        "& $leadingIcon": {
+          ...(direction === "rtl"
+            ? { marginRight: pxToRem(-4), marginLeft: pxToRem(4) }
+            : { marginLeft: pxToRem(-4), marginRight: pxToRem(4) })
+        },
+        "& $trailingIcon": {
+          ...(direction === "rtl"
+            ? { marginLeft: pxToRem(-4), marginRight: pxToRem(4) }
+            : { marginRight: pxToRem(-4), marginLeft: pxToRem(4) })
         }
       },
       /* if (variant="filled") */
@@ -513,9 +538,9 @@ const Button = React.memo(
       leadingIcon,
       trailingIcon,
       rootNode: RootNode = "button",
-      size = "medium",
-      color = "default",
-      variant = "filled",
+      size: sizeProp = "medium",
+      color: colorProp = "default",
+      variant: variantProp = "filled",
       rounded = false,
       disabled = false,
       raised = false,
@@ -528,7 +553,7 @@ const Button = React.memo(
       colors: { createPrimaryColor, createSecondaryColor, createBlackColor }
     } = useTheme();
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
     let invalidUsageOfRaised = false;
 
@@ -553,9 +578,19 @@ const Button = React.memo(
     const isInvalid = !isLabeled && !isIconed;
     const isIconButton = !isInvalid && !isLabeled && isIconed;
 
-    const hasValidVariant = allowedVariants.includes(variant);
-    const hasValidColor = allowedColors.includes(color);
-    const hasValidSize = allowedSizes.includes(size);
+    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+
+    const color = getVar(
+      colorProp,
+      "default",
+      !allowedColors.includes(colorProp)
+    );
+
+    const variant = getVar(
+      variantProp,
+      "filled",
+      !allowedVariants.includes(variantProp)
+    );
 
     const conditionalProps = {};
 
@@ -571,14 +606,12 @@ const Button = React.memo(
     if (isIconButton) {
       const icon = leadingIcon || trailingIcon;
       iconComponents.single = (
-        <i className={createClass(localClass.leadingIcon, localClass.icon)}>
-          {icon}
-        </i>
+        <i className={clx(classes.leadingIcon, classes.icon)}>{icon}</i>
       );
     } else {
       if (leadingIcon != null) {
         iconComponents.leading = (
-          <i className={createClass(localClass.leadingIcon, localClass.icon)}>
+          <i className={clx(classes.leadingIcon, classes.icon)}>
             {leadingIcon}
           </i>
         );
@@ -586,7 +619,7 @@ const Button = React.memo(
 
       if (trailingIcon != null) {
         iconComponents.trailing = (
-          <i className={createClass(localClass.trailingIcon, localClass.icon)}>
+          <i className={clx(classes.trailingIcon, classes.icon)}>
             {trailingIcon}
           </i>
         );
@@ -615,18 +648,21 @@ const Button = React.memo(
         type="button"
         tabIndex={disabled ? -1 : 0}
         ref={ref}
-        className={createClass(localClass.root, className, {
-          [localClass[variant]]: hasValidVariant,
-          [localClass[camelCase(`${variant}-${color}`)]]:
-            hasValidColor && hasValidVariant,
-          [localClass[size]]: hasValidSize,
-          [localClass.loading]: loading,
-          [localClass.iconed]: isIconed,
-          [localClass.rounded]: rounded,
-          [localClass.raised]: invalidUsageOfRaised ? false : raised,
-          [localClass.disabled]: loading || (!loading && disabled),
-          [localClass.iconButton]: isIconButton
-        })}
+        className={clx(
+          className,
+          classes.root,
+          classes[variant],
+          classes[size],
+          classes[camelCase(`${variant}-${color}`)],
+          {
+            [classes.loading]: loading,
+            [classes.iconed]: isIconed,
+            [classes.rounded]: rounded,
+            [classes.raised]: invalidUsageOfRaised ? false : raised,
+            [classes.disabled]: loading || (!loading && disabled),
+            [classes.iconButton]: isIconButton
+          }
+        )}
         {...conditionalProps}
         {...otherProps}
       >
@@ -634,12 +670,12 @@ const Button = React.memo(
           <ClipSpinner
             backgroundColor={spinnerColor.background}
             foregroundColor={spinnerColor.foreground}
-            className={createClass(localClass.spinner)}
+            className={clx(classes.spinner)}
           />
         )}
         {iconComponents.leading}
         {!isIconButton ? (
-          <span className={localClass.label}>{label}</span>
+          <span className={classes.label}>{label}</span>
         ) : (
           iconComponents.single
         )}

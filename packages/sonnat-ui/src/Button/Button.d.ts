@@ -42,7 +42,7 @@ type BaseProps<P = {}, T extends React.ElementType> = P & {
    * The size of the button.
    * @default "medium"
    */
-  size?: "small" | "medium";
+  size?: "large" | "medium" | "small";
   /**
    * The color of the button.
    * @default "default"

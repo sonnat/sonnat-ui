@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import { breakpointEnum } from "../utils/enums";
 import makeStyles from "../styles/makeStyles";
 
@@ -75,18 +75,18 @@ const Container = React.memo(
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
     return (
       <div
         ref={ref}
-        className={createClass(
-          localClass.root,
+        className={clx(
+          classes.root,
           typeof fluid === "boolean"
-            ? { [localClass.fluid]: fluid }
-            : localClass[`${fluid}Fluid`],
+            ? { [classes.fluid]: fluid }
+            : classes[`${fluid}Fluid`],
           className,
-          { [localClass.noPadding]: noPadding }
+          { [classes.noPadding]: noPadding }
         )}
         {...otherProps}
       >

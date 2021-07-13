@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
-import { useForkRef, useControlled } from "../utils";
+import { useForkRef, useControlled, getVar } from "../utils";
 import CheckGroupContext from "./context";
 
 const componentName = "CheckGroup";
@@ -32,11 +32,11 @@ const CheckGroup = React.memo(
       className,
       defaultValue: defaultValueProp,
       value: valueProp,
-      layoutDirection = "column",
+      layoutDirection: directionProp = "column",
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
     const rootRef = useRef();
     const forkRef = useForkRef(ref, rootRef);
@@ -61,6 +61,12 @@ const CheckGroup = React.memo(
       );
     }
 
+    const layoutDirection = getVar(
+      directionProp,
+      "column",
+      !allowedDirections.includes(directionProp)
+    );
+
     const changeListener = e => {
       let newValue;
       const isChecked = e.target.checked;
@@ -79,10 +85,9 @@ const CheckGroup = React.memo(
         <div
           role="group"
           ref={forkRef}
-          className={createClass(localClass.root, className, {
-            [localClass[layoutDirection]]: allowedDirections.includes(
-              layoutDirection
-            )
+          className={clx(classes.root, className, {
+            [classes[layoutDirection]]:
+              allowedDirections.includes(layoutDirection)
           })}
           {...otherProps}
         >

@@ -64,6 +64,11 @@ type BaseProps<P = {}> = P & {
    */
   hasError?: boolean;
   /**
+   * The size of the checkbox.
+   * @default "medium"
+   */
+  size?: "large" | "medium" | "small";
+  /**
    * The Callback fires when the state has changed.
    *
    * @param {React.ChangeEvent<HTMLInputElement>} event The event source of the callback.

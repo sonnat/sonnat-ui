@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import generateUniqueString from "../../utils/generateUniqueString";
 import FloatedListContext from "../context";
 import { isFragment } from "react-is";
@@ -50,7 +50,7 @@ const MenuItemGroup = React.memo(function MenuItemGroup(props) {
     ...otherProps
   } = props;
 
-  const localClass = useStyles();
+  const classes = useStyles();
 
   const { dense } = useContext(FloatedListContext);
 
@@ -96,15 +96,13 @@ const MenuItemGroup = React.memo(function MenuItemGroup(props) {
   return (
     <div
       role="menu"
-      className={createClass(localClass.root, className, {
-        [localClass.hide]: isHidden,
-        [localClass.dense]: dense
+      className={clx(classes.root, className, {
+        [classes.hide]: isHidden,
+        [classes.dense]: dense
       })}
       {...otherProps}
     >
-      <strong className={createClass(localClass.title, titleClassName)}>
-        {title}
-      </strong>
+      <strong className={clx(classes.title, titleClassName)}>{title}</strong>
       {children}
     </div>
   );

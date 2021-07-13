@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
 
 export const componentName = "Card";
@@ -41,11 +41,7 @@ const Card = React.memo(
     const classes = useStyles();
 
     return (
-      <div
-        ref={ref}
-        className={createClass(classes.root, className)}
-        {...otherProps}
-      >
+      <div ref={ref} className={clx(classes.root, className)} {...otherProps}>
         {children}
       </div>
     );

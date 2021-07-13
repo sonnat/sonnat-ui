@@ -1,12 +1,14 @@
-import React from "react";
+import clx from "classnames";
 import PropTypes from "prop-types";
-import createClass from "classnames";
-import makeStyles from "../styles/makeStyles";
+import React from "react";
 import { adjustColor, changeColor } from "../styles/colorUtils";
+import makeStyles from "../styles/makeStyles";
+import getVar from "../utils/getVar";
 
 const componentName = "ActionChip";
+
 const allowedVariants = ["filled", "outlined"];
-const allowedSizes = ["medium", "small"];
+const allowedSizes = ["large", "medium", "small"];
 const allowedColors = ["default", "primary", "secondary"];
 
 const camelCase = s => s.replace(/-./g, x => x.toUpperCase()[1]);
@@ -87,17 +89,31 @@ const useStyles = makeStyles(
         transition: "color 360ms ease"
       },
       small: {
+        height: pxToRem(20),
+        fontSize: pxToRem(10),
+        padding: `0 ${pxToRem(8)}`,
+        lineHeight: 1.8,
+        "& $icon": {
+          ...useIconWrapper(14),
+          ...(direction === "rtl"
+            ? { marginRight: pxToRem(-2), marginLeft: pxToRem(4) }
+            : { marginLeft: pxToRem(-2), marginRight: pxToRem(4) })
+        }
+      },
+      medium: {
         height: pxToRem(28),
         fontSize: pxToRem(12),
+        lineHeight: 1.6666666667,
         "& $icon": {
           ...(direction === "rtl"
             ? { marginRight: pxToRem(-6), marginLeft: pxToRem(4) }
             : { marginLeft: pxToRem(-6), marginRight: pxToRem(4) })
         }
       },
-      medium: {
+      large: {
         height: pxToRem(32),
         fontSize: pxToRem(14),
+        lineHeight: 1.5714285714,
         "& $icon": {
           ...(direction === "rtl"
             ? { marginRight: pxToRem(-4), marginLeft: pxToRem(4) }
@@ -291,19 +307,29 @@ const ActionChip = React.memo(
       className,
       label,
       leadingIcon,
-      size = "medium",
-      variant = "filled",
-      color = "default",
+      size: sizeProp = "medium",
+      variant: variantProp = "filled",
+      color: colorProp = "default",
       disabled = false,
       rounded = false,
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
-    const hasValidVariant = allowedVariants.includes(variant);
-    const hasValidColor = allowedColors.includes(color);
-    const hasValidSize = allowedSizes.includes(size);
+    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+
+    const color = getVar(
+      colorProp,
+      "default",
+      !allowedColors.includes(colorProp)
+    );
+
+    const variant = getVar(
+      variantProp,
+      "filled",
+      !allowedVariants.includes(variantProp)
+    );
 
     return label ? (
       <div
@@ -311,19 +337,20 @@ const ActionChip = React.memo(
         role="button"
         aria-disabled={disabled ? "true" : "false"}
         tabIndex={disabled ? -1 : 0}
-        className={createClass(localClass.root, className, {
-          [localClass[size]]: hasValidSize,
-          [localClass[variant]]: hasValidVariant,
-          [localClass[camelCase(`${variant}-${color}`)]]:
-            hasValidColor && hasValidVariant,
-          [localClass.rounded]: rounded,
-          [localClass.disabled]: disabled
-        })}
+        className={clx(
+          className,
+          classes.root,
+          classes[size],
+          classes[variant],
+          classes[camelCase(`${variant}-${color}`)],
+          {
+            [classes.rounded]: rounded,
+            [classes.disabled]: disabled
+          }
+        )}
         {...otherProps}
       >
-        {leadingIcon && (
-          <i className={createClass(localClass.icon)}>{leadingIcon}</i>
-        )}
+        {leadingIcon && <i className={clx(classes.icon)}>{leadingIcon}</i>}
         {label}
       </div>
     ) : null;

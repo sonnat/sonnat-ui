@@ -1,15 +1,18 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import clx from "classnames";
 import PropTypes from "prop-types";
-import createClass from "classnames";
-import useFormControl from "../FormControl/useFormControl";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import useCheckGroup from "../CheckGroup/useCheckGroup";
+import useFormControl from "../FormControl/useFormControl";
+import { changeColor } from "../styles/colorUtils";
+import makeStyles from "../styles/makeStyles";
+import getVar from "../utils/getVar";
+import useControlled from "../utils/useControlled";
 import useEventListener from "../utils/useEventListener";
 import useForkRef from "../utils/useForkRef";
-import useControlled from "../utils/useControlled";
-import makeStyles from "../styles/makeStyles";
-import { changeColor } from "../styles/colorUtils";
 
 const componentName = "Checkbox";
+
+const allowedSizes = ["large", "medium", "small"];
 
 const useStyles = makeStyles(
   theme => {
@@ -28,73 +31,10 @@ const useStyles = makeStyles(
         display: "inline-flex",
         alignItems: "center",
         boxSizing: "content-box",
-        verticalAlign: "middle",
-        "&$checked$disabled": {
-          "& $button": {
-            pointerEvents: "none",
-            borderColor: colors.transparent,
-            backgroundColor: colors.divider
-          }
-        },
-        "&$checked": {
-          "& $button": {
-            borderColor: !darkMode
-              ? colors.primary.origin
-              : colors.primary.light,
-            backgroundColor: !darkMode
-              ? colors.primary.origin
-              : colors.primary.light
-          },
-          "& $checkIcon polyline": {
-            opacity: 1,
-            animation:
-              "$checkAnimation 200ms cubic-bezier(0.65, 0, 0.45, 1) 48ms forwards"
-          }
-        },
-        "&:not($checked)$indeterminated": {
-          "&:not($disabled)": {
-            "& $button": {
-              borderColor: !darkMode
-                ? colors.primary.origin
-                : colors.primary.light,
-              backgroundColor: !darkMode
-                ? colors.primary.origin
-                : colors.primary.light
-            },
-            "& $checkIcon": {
-              transform: "rotate(-360deg)",
-              "& line": {
-                opacity: "1",
-                transform: "scale(1)",
-                transformOrigin: "0 center",
-                transition: "opacity 200ms ease, transform 200ms ease"
-              }
-            }
-          },
-          "&$disabled": {
-            "& $button": {
-              pointerEvents: "none",
-              borderColor: colors.transparent,
-              backgroundColor: colors.divider
-            },
-            "& $checkIcon": {
-              transform: "rotate(-360deg)",
-              "& line": {
-                opacity: "1",
-                transform: "scale(1)",
-                transformOrigin: "0 center",
-                transition: "opacity 200ms ease, transform 200ms ease"
-              }
-            }
-          }
-        }
+        verticalAlign: "middle"
       },
       label: useText({ color: colors.text.primary }),
       cell: {
-        width: pxToRem(36),
-        height: pxToRem(36),
-        minWidth: pxToRem(36),
-        minHeight: pxToRem(36),
         borderRadius: "50%",
         position: "relative",
         display: "flex",
@@ -139,8 +79,6 @@ const useStyles = makeStyles(
         WebkitTapHighlightColor: "rgba(0, 0, 0, 0) !important"
       },
       button: {
-        width: pxToRem(18),
-        height: pxToRem(18),
         border: `1px solid ${
           !darkMode
             ? colors.createBlackColor({ alpha: 0.24 })
@@ -157,8 +95,6 @@ const useStyles = makeStyles(
           "border-color 90ms cubic-bezier(0, 0, 0.2, 1), background-color 90ms cubic-bezier(0, 0, 0.2, 1)"
       },
       checkIcon: {
-        width: pxToRem(18),
-        height: pxToRem(18),
         position: "absolute",
         pointerEvents: "none",
         display: "flex",
@@ -166,10 +102,7 @@ const useStyles = makeStyles(
         overflow: "hidden",
         justifyContent: "center",
         transition: "transform 400ms ease",
-        "& svg": {
-          width: pxToRem(12),
-          height: pxToRem(8)
-        },
+        "& svg": { width: pxToRem(12), height: pxToRem(8) },
         "& polyline": {
           fill: "none",
           strokeLinecap: "round",
@@ -189,7 +122,43 @@ const useStyles = makeStyles(
           )
         }
       },
-      indeterminated: {},
+      indeterminated: {
+        "&:not($checked):not($disabled)": {
+          "& $button": {
+            borderColor: !darkMode
+              ? colors.primary.origin
+              : colors.primary.light,
+            backgroundColor: !darkMode
+              ? colors.primary.origin
+              : colors.primary.light
+          },
+          "& $checkIcon": {
+            transform: "rotate(-360deg)",
+            "& line": {
+              opacity: "1",
+              transform: "scale(1)",
+              transformOrigin: "0 center",
+              transition: "opacity 200ms ease, transform 200ms ease"
+            }
+          }
+        },
+        "&:not($checked)$disabled": {
+          "& $button": {
+            pointerEvents: "none",
+            borderColor: colors.transparent,
+            backgroundColor: colors.divider
+          },
+          "& $checkIcon": {
+            transform: "rotate(-360deg)",
+            "& line": {
+              opacity: "1",
+              transform: "scale(1)",
+              transformOrigin: "0 center",
+              transition: "opacity 200ms ease, transform 200ms ease"
+            }
+          }
+        }
+      },
       focused: {
         "& $cell:before": {
           transform: "scale(1)",
@@ -197,11 +166,6 @@ const useStyles = makeStyles(
           backgroundColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.12 })
             : colors.createWhiteColor({ alpha: 0.12 })
-        },
-        "&$checked $cell:before": {
-          backgroundColor: !darkMode
-            ? colors.createPrimaryColor({ alpha: 0.12 })
-            : changeColor(colors.primary.light, { alpha: 0.12 })
         }
       },
       disabled: {
@@ -222,6 +186,31 @@ const useStyles = makeStyles(
           backgroundColor: !darkMode
             ? colors.createPrimaryColor({ alpha: 0.04 })
             : changeColor(colors.primary.light, { alpha: 0.04 })
+        },
+        "& $button": {
+          borderColor: !darkMode ? colors.primary.origin : colors.primary.light,
+          backgroundColor: !darkMode
+            ? colors.primary.origin
+            : colors.primary.light
+        },
+        "& $checkIcon polyline": {
+          opacity: 1,
+          animation:
+            "$checkAnimation 200ms cubic-bezier(0.65, 0, 0.45, 1) 48ms forwards"
+        }
+      },
+      checkedDisabled: {
+        "& $button": {
+          pointerEvents: "none",
+          borderColor: colors.transparent,
+          backgroundColor: colors.divider
+        }
+      },
+      checkedFocused: {
+        "& $cell:before": {
+          backgroundColor: !darkMode
+            ? colors.createPrimaryColor({ alpha: 0.12 })
+            : changeColor(colors.primary.light, { alpha: 0.12 })
         }
       },
       "@keyframes checkAnimation": {
@@ -238,6 +227,48 @@ const useStyles = makeStyles(
         },
         to: {
           strokeDashoffset: "48"
+        }
+      },
+      large: {
+        "& $cell": {
+          width: pxToRem(36),
+          height: pxToRem(36),
+          minWidth: pxToRem(36),
+          minHeight: pxToRem(36)
+        },
+        "& $label": { fontSize: pxToRem(16), lineHeight: 1.5 },
+        "& $button": { width: pxToRem(18), height: pxToRem(18) },
+        "& $checkIcon": {
+          width: pxToRem(18),
+          height: pxToRem(18)
+        }
+      },
+      medium: {
+        "& $cell": {
+          width: pxToRem(32),
+          height: pxToRem(32),
+          minWidth: pxToRem(32),
+          minHeight: pxToRem(32)
+        },
+        "& $label": { fontSize: pxToRem(14), lineHeight: 1.5714285714 },
+        "& $button": { width: pxToRem(16), height: pxToRem(16) },
+        "& $checkIcon": {
+          width: pxToRem(16),
+          height: pxToRem(16)
+        }
+      },
+      small: {
+        "& $cell": {
+          width: pxToRem(28),
+          height: pxToRem(28),
+          minWidth: pxToRem(28),
+          minHeight: pxToRem(28)
+        },
+        "& $label": { fontSize: pxToRem(12), lineHeight: 1.6666666667 },
+        "& $button": { width: pxToRem(14), height: pxToRem(14) },
+        "& $checkIcon": {
+          width: pxToRem(14),
+          height: pxToRem(14)
         }
       }
     };
@@ -264,6 +295,7 @@ const Checkbox = React.memo(
       disabled = false,
       required = false,
       indeterminated = false,
+      size: sizeProp = "medium",
       ...otherProps
     } = props;
 
@@ -295,7 +327,7 @@ const Checkbox = React.memo(
     const inputRef = useRef();
     const inputRefHandler = useForkRef(inputRef, inputRefProp);
 
-    const localClass = useStyles();
+    const classes = useStyles();
     const checkGroup = useCheckGroup();
     const formControl = useFormControl();
 
@@ -307,6 +339,8 @@ const Checkbox = React.memo(
 
     const [isMounted, setMounted] = useState(false);
     const [isFocused, setFocused] = useState(false);
+
+    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
 
     const isReadOnly = !!inputReadOnly || !!readOnly;
 
@@ -412,6 +446,8 @@ const Checkbox = React.memo(
       ? inputId
       : controlProps.name && value
       ? `checkbox-${controlProps.name}-${value}`
+      : id
+      ? `checkbox-${id}`
       : undefined;
 
     if (typeof document !== "undefined") {
@@ -430,15 +466,17 @@ const Checkbox = React.memo(
       <div
         aria-disabled={controlProps.disabled}
         ref={ref}
-        className={createClass(localClass.root, className, {
-          [localClass.disabled]: controlProps.disabled,
-          [localClass.focused]: isFocused,
-          [localClass.checked]: checkedState,
-          [localClass.indeterminated]: indeterminated
+        className={clx(classes.root, className, classes[size], {
+          [classes.disabled]: controlProps.disabled,
+          [classes.focused]: isFocused,
+          [classes.checked]: checkedState,
+          [classes.checkedDisabled]: checkedState && controlProps.disabled,
+          [classes.checkedFocused]: checkedState && isFocused,
+          [classes.indeterminated]: indeterminated
         })}
         {...otherProps}
       >
-        <div className={localClass.cell}>
+        <div className={classes.cell}>
           <input
             id={id}
             name={controlProps.name}
@@ -446,7 +484,7 @@ const Checkbox = React.memo(
             tabIndex={controlProps.disabled ? -1 : 0}
             disabled={controlProps.disabled}
             required={controlProps.required}
-            className={createClass(localClass.input, inputClassNameProp)}
+            className={clx(classes.input, inputClassNameProp)}
             onChange={controlProps.onChange}
             onFocus={controlProps.onFocus}
             onBlur={controlProps.onBlur}
@@ -455,8 +493,8 @@ const Checkbox = React.memo(
             ref={inputRefHandler}
             {...otherInputProps}
           />
-          <div className={localClass.button}></div>
-          <div className={localClass.checkIcon}>
+          <div className={classes.button}></div>
+          <div className={classes.checkIcon}>
             <svg aria-hidden="true" focusable="false">
               <polyline
                 transform="translate(5.974874, 2.353553) rotate(-45.000000) translate(-5.974874, -2.353553) "
@@ -477,7 +515,7 @@ const Checkbox = React.memo(
         </div>
         {label && (
           <label
-            className={createClass(localClass.label, labelClassName)}
+            className={clx(classes.label, labelClassName)}
             htmlFor={id}
             {...otherLabelProps}
           >
@@ -507,7 +545,8 @@ Checkbox.propTypes = {
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   inputProps: PropTypes.object,
-  labelProps: PropTypes.object
+  labelProps: PropTypes.object,
+  size: PropTypes.oneOf(allowedSizes)
 };
 
 export default Checkbox;

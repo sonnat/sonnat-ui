@@ -1,14 +1,16 @@
-import React from "react";
+import clx from "classnames";
 import PropTypes from "prop-types";
-import createClass from "classnames";
-import useTextField from "../TextField/useTextField";
-import TextInputBaseContext from "./context";
-import makeStyles from "../styles/makeStyles";
+import React from "react";
 import { changeColor } from "../styles/colorUtils";
+import makeStyles from "../styles/makeStyles";
+import useTextField from "../TextField/useTextField";
+import getVar from "../utils/getVar";
+import TextInputBaseContext from "./context";
 
 const componentName = "InputBase";
+
 const allowedVariants = ["filled", "outlined"];
-const allowedSizes = ["medium", "small"];
+const allowedSizes = ["large", "medium", "small"];
 
 const useStyles = makeStyles(
   theme => {
@@ -35,28 +37,8 @@ const useStyles = makeStyles(
               : colors.createWhiteColor({ alpha: 0.48 })
           }
         },
-        "&:not($empty)": {
-          "&$medium $label": {
-            ...(direction === "rtl"
-              ? {
-                  transform: `translate(${pxToRem(-1)}, ${pxToRem(
-                    -16
-                  )}) scale(0.75)`
-                }
-              : {
-                  transform: `translate(${pxToRem(1)}, ${pxToRem(
-                    -16
-                  )}) scale(0.75)`
-                })
-          },
-          "&$small $label": {
-            ...(direction === "rtl"
-              ? { transform: `translate(${pxToRem(-5)}, ${pxToRem(-16)})` }
-              : { transform: `translate(${pxToRem(5)}, ${pxToRem(-16)})` })
-          },
-          "& $legendLabel": {
-            maxWidth: "999px"
-          }
+        "&:not($small):not($empty) $legendLabel": {
+          maxWidth: "999px"
         }
       },
       control: {
@@ -148,7 +130,7 @@ const useStyles = makeStyles(
         "& $label": { color: colors.text.hint }
       },
       focused: {
-        "& $legendLabel": {
+        "&:not($small) $legendLabel": {
           maxWidth: "999px",
           transition: "max-width 100ms ease 50ms"
         },
@@ -162,30 +144,13 @@ const useStyles = makeStyles(
         },
         "&:not($errored) $label": {
           color: !darkMode ? colors.primary.origin : colors.primary.light
-        },
-        "&$medium $label": {
-          ...(direction === "rtl"
-            ? {
-                transform: `translate(${pxToRem(-1)}, ${pxToRem(
-                  -16
-                )}) scale(0.75)`
-              }
-            : {
-                transform: `translate(${pxToRem(1)}, ${pxToRem(
-                  -16
-                )}) scale(0.75)`
-              })
-        },
-        "&$small $label": {
-          ...(direction === "rtl"
-            ? { transform: `translate(${pxToRem(-5)}, ${pxToRem(-16)})` }
-            : { transform: `translate(${pxToRem(5)}, ${pxToRem(-16)})` })
         }
       },
       small: {
-        "& $wrapper": { minHeight: pxToRem(32) },
-        "& $label": { fontSize: pxToRem(12) },
+        "& $wrapper": { minHeight: pxToRem(24) },
         "&:not($rounded)": {
+          "& $wrapper": { padding: [[0, pxToRem(8)]] },
+          "& $notchedOutline": { padding: [[0, pxToRem(8)]] },
           "& $leadingAdornment": {
             ...(direction === "rtl"
               ? { marginRight: pxToRem(0) }
@@ -195,9 +160,7 @@ const useStyles = makeStyles(
             ...(direction === "rtl"
               ? { marginLeft: pxToRem(0) }
               : { marginRight: pxToRem(0) })
-          },
-          "& $wrapper": { padding: [[0, pxToRem(8)]] },
-          "& $notchedOutline": { padding: [[0, pxToRem(8)]] }
+          }
         },
         "& $leadingAdornment + $control": {
           ...(direction === "rtl"
@@ -211,7 +174,65 @@ const useStyles = makeStyles(
         }
       },
       medium: {
+        "& $wrapper": { minHeight: pxToRem(32) },
+        "& $label": { fontSize: pxToRem(12), lineHeight: 1.6666666667 },
+        "& $legendLabelText": { fontSize: pxToRem(10), lineHeight: 1.8 },
+        "&:not($empty) $label, &$focused $label": {
+          ...(direction === "rtl"
+            ? {
+                transform: `translate(${pxToRem(-6)}, ${pxToRem(
+                  -15
+                )}) scale(0.8333333333)`
+              }
+            : {
+                transform: `translate(${pxToRem(6)}, ${pxToRem(
+                  -15
+                )}) scale(0.8333333333)`
+              })
+        },
         "&:not($rounded)": {
+          "& $wrapper": { padding: [[0, pxToRem(8)]] },
+          "& $notchedOutline": { padding: [[0, pxToRem(8)]] },
+          "& $leadingAdornment": {
+            ...(direction === "rtl"
+              ? { marginRight: pxToRem(0) }
+              : { marginLeft: pxToRem(0) })
+          },
+          "& $trailingAdornment": {
+            ...(direction === "rtl"
+              ? { marginLeft: pxToRem(0) }
+              : { marginRight: pxToRem(0) })
+          }
+        },
+        "& $leadingAdornment + $control": {
+          ...(direction === "rtl"
+            ? { marginRight: pxToRem(4) }
+            : { marginLeft: pxToRem(4) })
+        },
+        "& $control + $trailingAdornment": {
+          ...(direction === "rtl"
+            ? { marginRight: pxToRem(4) }
+            : { marginLeft: pxToRem(4) })
+        }
+      },
+      large: {
+        "& $wrapper": { minHeight: pxToRem(40) },
+        "&:not($empty) $label, &$focused $label": {
+          ...(direction === "rtl"
+            ? {
+                transform: `translate(${pxToRem(-2)}, ${pxToRem(
+                  -16
+                )}) scale(0.75)`
+              }
+            : {
+                transform: `translate(${pxToRem(2)}, ${pxToRem(
+                  -16
+                )}) scale(0.75)`
+              })
+        },
+        "&:not($rounded)": {
+          "& $wrapper": { padding: [[0, pxToRem(16)]] },
+          "& $notchedOutline": { padding: [[0, pxToRem(12)]] },
           "& $leadingAdornment": {
             ...(direction === "rtl"
               ? { marginRight: pxToRem(-8) }
@@ -221,11 +242,8 @@ const useStyles = makeStyles(
             ...(direction === "rtl"
               ? { marginLeft: pxToRem(-8) }
               : { marginRight: pxToRem(-8) })
-          },
-          "& $wrapper": { padding: [[0, pxToRem(16)]] },
-          "& $notchedOutline": { padding: [[0, pxToRem(12)]] }
+          }
         },
-        "& $wrapper": { minHeight: pxToRem(40) },
         "& $leadingAdornment + $control": {
           ...(direction === "rtl"
             ? { marginRight: pxToRem(8) }
@@ -292,7 +310,7 @@ const useStyles = makeStyles(
       },
       empty: {},
       withLeadingAdornment: {
-        "&$medium $label": {
+        "&$large $label": {
           ...(direction === "rtl"
             ? {
                 transform: `translate(${pxToRem(-1)}, ${pxToRem(
@@ -305,14 +323,20 @@ const useStyles = makeStyles(
                 )}) scale(0.75)`
               })
         },
-        "&$small $label": {
+        "&$medium $label": {
           ...(direction === "rtl"
-            ? { transform: `translate(${pxToRem(-5)}, ${pxToRem(-16)})` }
-            : { transform: `translate(${pxToRem(5)}, ${pxToRem(-16)})` })
+            ? {
+                transform: `translate(${pxToRem(-5)}, ${pxToRem(
+                  -13
+                )}) scale(0.8333333333)`
+              }
+            : {
+                transform: `translate(${pxToRem(5)}, ${pxToRem(
+                  -13
+                )}) scale(0.8333333333)`
+              })
         },
-        "& $legendLabel": {
-          maxWidth: "999px"
-        }
+        "&:not($small) $legendLabel": { maxWidth: "999px" }
       },
       withTrailingAdornment: {}
     };
@@ -330,8 +354,8 @@ const InputBase = React.memo(
       leadingAdornment,
       trailingAdornment,
       controllerId,
-      variant = "outlined",
-      size = "medium",
+      variant: variantProp = "outlined",
+      size: sizeProp = "medium",
       focused = false,
       readOnly = false,
       disabled = false,
@@ -341,56 +365,64 @@ const InputBase = React.memo(
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
     const { isEmpty } = useTextField();
 
     const isLegendLabeled = !!legendLabel;
     const hasLeadingAdornment = !!leadingAdornment;
     const hasTrailingAdornment = !!trailingAdornment;
 
+    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+
+    const variant = getVar(
+      variantProp,
+      "outlined",
+      !allowedVariants.includes(variantProp)
+    );
+
     return (
       <TextInputBaseContext.Provider value={{ size, disabled, hasError }}>
         <div
           ref={ref}
-          className={createClass(localClass.root, className, {
-            [localClass.empty]: isEmpty,
-            [localClass.fluid]: fluid,
-            [localClass.disabled]: disabled,
-            [localClass.readOnly]: readOnly,
-            [localClass.focused]: focused,
-            [localClass.withLeadingAdornment]: hasLeadingAdornment,
-            [localClass.withTrailingAdornment]: hasTrailingAdornment,
-            [localClass[variant]]: allowedVariants.includes(variant),
-            [localClass[size]]: allowedSizes.includes(size),
-            [localClass.rounded]: rounded,
-            [localClass.errored]: hasError,
-            [localClass.legendLabeled]: isLegendLabeled
-          })}
+          className={clx(
+            className,
+            classes.root,
+            classes[size],
+            classes[variant],
+            {
+              [classes.empty]: isEmpty,
+              [classes.fluid]: fluid,
+              [classes.disabled]: disabled,
+              [classes.readOnly]: readOnly,
+              [classes.focused]: focused,
+              [classes.withLeadingAdornment]: hasLeadingAdornment,
+              [classes.withTrailingAdornment]: hasTrailingAdornment,
+              [classes.rounded]: rounded,
+              [classes.errored]: hasError,
+              [classes.legendLabeled]: isLegendLabeled
+            }
+          )}
           {...otherProps}
         >
-          <div className={localClass.wrapper}>
-            {legendLabel && (
-              <label className={localClass.label} htmlFor={controllerId}>
+          <div className={classes.wrapper}>
+            {legendLabel && size !== "small" && (
+              <label className={classes.label} htmlFor={controllerId}>
                 {legendLabel}
               </label>
             )}
             {leadingAdornment && (
-              <div className={localClass.leadingAdornment}>
-                {leadingAdornment}
-              </div>
+              <div className={classes.leadingAdornment}>{leadingAdornment}</div>
             )}
-            <div className={localClass.control}>{controller}</div>
+            <div className={classes.control}>{controller}</div>
             {trailingAdornment && (
-              <div className={localClass.trailingAdornment}>
+              <div className={classes.trailingAdornment}>
                 {trailingAdornment}
               </div>
             )}
-            <fieldset aria-hidden={true} className={localClass.notchedOutline}>
+            <fieldset aria-hidden={true} className={classes.notchedOutline}>
               {legendLabel && (
-                <legend className={localClass.legendLabel}>
-                  <span className={localClass.legendLabelText}>
-                    {legendLabel}
-                  </span>
+                <legend className={classes.legendLabel}>
+                  <span className={classes.legendLabelText}>{legendLabel}</span>
                 </legend>
               )}
             </fieldset>

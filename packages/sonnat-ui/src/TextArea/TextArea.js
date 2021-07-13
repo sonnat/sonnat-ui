@@ -1,4 +1,4 @@
-import createClass from "classnames";
+import clx from "classnames";
 import debounce from "lodash.debounce";
 import PropTypes from "prop-types";
 import React from "react";
@@ -10,10 +10,13 @@ import {
   setRef,
   useControlled,
   useEnhancedEffect,
-  useForkRef
+  useForkRef,
+  getVar
 } from "../utils";
 
 const componentName = "TextArea";
+
+const allowedSizes = ["large", "medium", "small"];
 
 /**
  * @type {(node: Node | null | undefined) => Document}
@@ -44,10 +47,13 @@ const useStyles = makeStyles(
     return {
       root: {
         direction,
-        fontFamily: fontFamily[direction],
+        fontFamily: fontFamily[direction]
+      },
+      wrapper: {
         display: "inline-flex",
         position: "relative",
         minWidth: "0",
+        width: "100%",
         verticalAlign: "top",
         flexDirection: "column",
         "&:not($errored):not($focused):hover:after": {
@@ -127,7 +133,7 @@ const useStyles = makeStyles(
       },
       helperIcon: {
         ...useIconWrapper(16),
-        marginTop: pxToRem(4),
+        marginTop: pxToRem(2),
         color: colors.text.secondary,
         ...(direction === "rtl"
           ? { marginLeft: pxToRem(4) }
@@ -195,6 +201,60 @@ const useStyles = makeStyles(
           borderColor: !darkMode ? colors.error.origin : colors.error.light
         }
       },
+      small: {
+        "& $helperText": {
+          fontSize: pxToRem(10),
+          lineHeight: 1.8
+        },
+        "& $helperIcon": {
+          ...useIconWrapper(14)
+        },
+        "& $input": { padding: [[pxToRem(2), pxToRem(8)]] },
+        "& $input, & $shadow": {
+          fontSize: pxToRem(12),
+          lineHeight: 1.6666666667,
+          "&::-webkit-input-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          },
+          "&::-moz-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          },
+          "&:-ms-input-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          },
+          "&:-moz-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          }
+        }
+      },
+      medium: {
+        "& $input": { padding: [[pxToRem(6), pxToRem(8)]] },
+        "& $input, & $shadow": {
+          fontSize: pxToRem(12),
+          lineHeight: 1.6666666667,
+          "&::-webkit-input-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          },
+          "&::-moz-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          },
+          "&:-ms-input-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          },
+          "&:-moz-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          }
+        }
+      },
+      large: {},
       resizable: { "& $input": { resize: "vertical" } }
     };
   },
@@ -227,6 +287,7 @@ const TextArea = React.memo(
       disabled = false,
       resizable = false,
       required = false,
+      size: sizeProp = "medium",
       ...otherProps
     } = props;
 
@@ -276,8 +337,10 @@ const TextArea = React.memo(
 
     const [state, setState] = React.useState({});
 
-    const localClass = useStyles();
+    const classes = useStyles();
     const formControl = useFormControl();
+
+    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
 
     const [value, setValue, isControlled] = useControlled(
       inputValueProp || valueProp,
@@ -501,70 +564,72 @@ const TextArea = React.memo(
 
     return (
       <div
-        className={createClass(localClass.root, className, {
-          [localClass.resizable]: resizable,
-          [localClass.focused]: controlProps.focused,
-          [localClass.disabled]: controlProps.disabled,
-          [localClass.readOnly]: isReadOnly,
-          [localClass.fluid]: controlProps.fluid,
-          [localClass.errored]: controlProps.hasError
+        className={clx(classes.root, className, classes[size], {
+          [classes.resizable]: resizable,
+          [classes.focused]: controlProps.focused,
+          [classes.disabled]: controlProps.disabled,
+          [classes.readOnly]: isReadOnly,
+          [classes.fluid]: controlProps.fluid,
+          [classes.errored]: controlProps.hasError
         })}
         ref={ref}
         {...otherProps}
       >
-        <textarea
-          id={inputIdProp}
-          name={name}
-          placeholder={placeholder}
-          value={value}
-          disabled={controlProps.disabled}
-          required={controlProps.required}
-          className={createClass(localClass.input, inputClassNameProp)}
-          onChange={controlProps.onChange}
-          onFocus={controlProps.onFocus}
-          onBlur={controlProps.onBlur}
-          readOnly={isReadOnly}
-          rows={minRows}
-          style={{
-            height: state.outerHeightStyle,
+        <div className={classes.wrapper}>
+          <textarea
+            id={inputIdProp}
+            name={name}
+            placeholder={placeholder}
+            value={value}
+            disabled={controlProps.disabled}
+            required={controlProps.required}
+            className={clx(classes.input, inputClassNameProp)}
+            onChange={controlProps.onChange}
+            onFocus={controlProps.onFocus}
+            onBlur={controlProps.onBlur}
+            readOnly={isReadOnly}
+            rows={minRows}
+            style={{
+              height: state.outerHeightStyle,
 
-            // Need a large enough difference to allow scrolling.
-            // This prevents infinite rendering loop.
-            overflow: state.overflow ? "hidden" : undefined,
+              // Need a large enough difference to allow scrolling.
+              // This prevents infinite rendering loop.
+              overflow: state.overflow ? "hidden" : undefined,
 
-            ...style,
-            ...inputStyleProp
-          }}
-          ref={node => {
-            if (inputRefProp) setRef(inputRefProp, node);
-            handleRef(node);
-          }}
-          {...otherInputProps}
-        />
-        <textarea
-          aria-hidden
-          className={createClass(localClass.shadow, inputClassNameProp)}
-          readOnly
-          ref={shadowRef}
-          tabIndex={-1}
-          style={{
-            ...style,
-            ...inputStyleProp,
-            padding: 0
-          }}
-        />
+              ...style,
+              ...inputStyleProp
+            }}
+            ref={node => {
+              if (inputRefProp) setRef(inputRefProp, node);
+              handleRef(node);
+            }}
+            {...otherInputProps}
+          />
+          <textarea
+            aria-hidden
+            className={clx(classes.shadow, inputClassNameProp)}
+            readOnly
+            ref={shadowRef}
+            tabIndex={-1}
+            style={{
+              ...style,
+              ...inputStyleProp,
+              padding: 0
+            }}
+          />
+        </div>
         {(!!helperText || !!otherInputProps.maxLength) && (
-          <div className={localClass.helperRow}>
+          <div className={classes.helperRow}>
             {helperText && (
-              <p className={localClass.helperContent}>
+              <p className={classes.helperContent}>
                 {helperIcon && (
-                  <i className={localClass.helperIcon}>{helperIcon}</i>
+                  <i className={classes.helperIcon}>{helperIcon}</i>
                 )}
-                <span className={localClass.helperText}>{helperText}</span>
+                <span className={classes.helperText}>{helperText}</span>
               </p>
             )}
             {otherInputProps.maxLength && (
-              <div className={localClass.charCount}>
+              <div className={classes.charCount}>
                 {charCount} / {otherInputProps.maxLength}
               </div>
             )}
@@ -600,7 +665,8 @@ TextArea.propTypes = {
   inputProps: PropTypes.object,
   style: PropTypes.object,
   maxRows: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  minRows: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+  minRows: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  size: PropTypes.oneOf(allowedSizes)
 };
 
 export default TextArea;

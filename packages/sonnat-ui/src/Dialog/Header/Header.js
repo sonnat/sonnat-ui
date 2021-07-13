@@ -1,4 +1,4 @@
-import createClass from "classnames";
+import clx from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 import makeStyles from "../../styles/makeStyles";
@@ -44,7 +44,7 @@ const DialogHeader = React.memo(
           if (ref) setRef(ref, node);
           registerHeader(node);
         }}
-        className={createClass(classes.root, className, {
+        className={clx(classes.root, className, {
           [classes.withOverflow]: hasOverflow
         })}
         {...otherProps}

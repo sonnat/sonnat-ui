@@ -1,15 +1,22 @@
 import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import useFormControl from "../FormControl/useFormControl";
 import TextFieldContext from "./context";
 import InputBase from "../InputBase";
 import makeStyles from "../styles/makeStyles";
-import { clamp, setRef, useControlled, useEnhancedEffect } from "../utils";
+import {
+  clamp,
+  setRef,
+  useControlled,
+  useEnhancedEffect,
+  getVar
+} from "../utils";
 
 const componentName = "TextField";
+
 const allowedVariants = ["filled", "outlined"];
-const allowedSizes = ["medium", "small"];
+const allowedSizes = ["large", "medium", "small"];
 const allowedTypes = ["text", "email", "password"];
 
 const isEmpty = value => value === undefined || value === null || value === "";
@@ -70,7 +77,7 @@ const useStyles = makeStyles(
       },
       helperIcon: {
         ...useIconWrapper(16),
-        marginTop: pxToRem(4),
+        marginTop: pxToRem(2),
         color: colors.text.secondary,
         ...(direction === "rtl"
           ? { marginLeft: pxToRem(4) }
@@ -101,15 +108,57 @@ const useStyles = makeStyles(
         }
       },
       small: {
+        "& $helperText": {
+          fontSize: pxToRem(10),
+          lineHeight: 1.8
+        },
+        "& $helperIcon": {
+          ...useIconWrapper(14)
+        },
         "& $input": {
           fontSize: pxToRem(12),
-          "&::-webkit-input-placeholder": { fontSize: pxToRem(12) },
-          "&::-moz-placeholder": { fontSize: pxToRem(12) },
-          "&:-ms-input-placeholder": { fontSize: pxToRem(12) },
-          "&:-moz-placeholder": { fontSize: pxToRem(12) }
+          lineHeight: 1.6666666667,
+          "&::-webkit-input-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          },
+          "&::-moz-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          },
+          "&:-ms-input-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          },
+          "&:-moz-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          }
         }
       },
-      medium: {},
+      medium: {
+        "& $input": {
+          fontSize: pxToRem(12),
+          lineHeight: 1.6666666667,
+          "&::-webkit-input-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          },
+          "&::-moz-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          },
+          "&:-ms-input-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          },
+          "&:-moz-placeholder": {
+            fontSize: pxToRem(12),
+            lineHeight: 1.6666666667
+          }
+        }
+      },
+      large: {},
       fluid: { width: "100%" },
       errored: {
         "&:not($disabled)": {
@@ -146,9 +195,9 @@ const TextField = React.memo(
       inputProps = {},
       name: nameProp,
       value: valueProp,
-      variant = "outlined",
-      size = "medium",
-      type = "text",
+      variant: variantProp = "outlined",
+      size: sizeProp = "medium",
+      type: typeProp = "text",
       autoFocus = false,
       focused = false,
       readOnly = false,
@@ -200,7 +249,7 @@ const TextField = React.memo(
 
     const inputRef = useRef();
 
-    const localClass = useStyles();
+    const classes = useStyles();
     const formControl = useFormControl();
 
     const [value, setValue, isControlled] = useControlled(
@@ -213,6 +262,16 @@ const TextField = React.memo(
     const { current: initialValue } = useRef(
       inputValueProp || valueProp || defaultValue
     );
+
+    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+
+    const variant = getVar(
+      variantProp,
+      "outlined",
+      !allowedVariants.includes(variantProp)
+    );
+
+    const type = getVar(typeProp, "text", !allowedTypes.includes(typeProp));
 
     const isLegendLabeled = !!legendLabel;
     const isReadOnly = !!inputReadOnlyProp || readOnly;
@@ -232,7 +291,6 @@ const TextField = React.memo(
 
     // inherit properties from FormControl
     const controlProps = {
-      size: formControl ? formControl.size : size,
       focused: formControl ? formControl.focusedState : isFocused,
       disabled: formControl ? formControl.disabled : disabled,
       hasError: formControl ? formControl.hasError : hasError,
@@ -322,11 +380,8 @@ const TextField = React.memo(
       <TextFieldContext.Provider value={{ isEmpty: isEmpty(value) }}>
         <div
           ref={ref}
-          className={createClass(localClass.root, className, {
-            [localClass.fluid]: controlProps.fluid,
-            [localClass[controlProps.size]]: allowedSizes.includes(
-              controlProps.size
-            )
+          className={clx(classes.root, className, classes[size], {
+            [classes.fluid]: controlProps.fluid
           })}
           {...otherProps}
         >
@@ -338,13 +393,13 @@ const TextField = React.memo(
             hasError={controlProps.hasError}
             disabled={controlProps.disabled}
             fluid={controlProps.fluid}
-            size={controlProps.size}
+            size={size}
             variant={variant}
             leadingAdornment={leadingAdornment}
             trailingAdornment={trailingAdornment}
-            className={createClass(localClass.base, {
-              [localClass.disabled]: controlProps.disabled,
-              [localClass.errored]: controlProps.hasError
+            className={clx(classes.base, {
+              [classes.disabled]: controlProps.disabled,
+              [classes.errored]: controlProps.hasError
             })}
             controller={
               <input
@@ -376,7 +431,7 @@ const TextField = React.memo(
                 readOnly={isReadOnly}
                 disabled={controlProps.disabled}
                 required={controlProps.required}
-                className={createClass(localClass.input, inputClassNameProp)}
+                className={clx(classes.input, inputClassNameProp)}
                 ref={node => {
                   if (inputRefProp) setRef(inputRefProp, node);
                   setRef(inputRef, node);
@@ -391,17 +446,17 @@ const TextField = React.memo(
             controllerId={inputIdProp}
           />
           {(!!helperText || !!otherInputProps.maxLength) && (
-            <div className={localClass.helperRow}>
+            <div className={classes.helperRow}>
               {helperText && (
-                <p className={localClass.helperContent}>
+                <p className={classes.helperContent}>
                   {helperIcon && (
-                    <i className={localClass.helperIcon}>{helperIcon}</i>
+                    <i className={classes.helperIcon}>{helperIcon}</i>
                   )}
-                  <span className={localClass.helperText}>{helperText}</span>
+                  <span className={classes.helperText}>{helperText}</span>
                 </p>
               )}
               {otherInputProps.maxLength && (
-                <div className={localClass.charCount}>
+                <div className={classes.charCount}>
                   {charCount} / {otherInputProps.maxLength}
                 </div>
               )}

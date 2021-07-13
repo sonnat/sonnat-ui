@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
 import FormControlContext from "./context";
 
 const componentName = "FormControl";
-
-const allowedSizes = ["small", "medium"];
 
 const useStyles = makeStyles(
   theme => ({
@@ -29,7 +27,6 @@ const FormControl = React.memo(
     const {
       children,
       className,
-      size = "medium",
       focused = false,
       disabled = false,
       hasError = false,
@@ -38,7 +35,7 @@ const FormControl = React.memo(
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
     const [isFocused, setFocused] = useState(focused);
     const [isMounted, setMounted] = useState(false);
@@ -50,27 +47,29 @@ const FormControl = React.memo(
       };
     }, []);
 
-    const childrenContext = {
-      fluid,
-      size,
-      disabled,
-      hasError,
-      required,
-      focusedState: disabled ? false : isFocused,
-      onFocus: () => {
-        if (isMounted) setFocused(true);
-      },
-      onBlur: () => {
-        if (isMounted) setFocused(false);
-      }
-    };
+    const childrenContext = React.useMemo(
+      () => ({
+        fluid,
+        disabled,
+        hasError,
+        required,
+        focusedState: disabled ? false : isFocused,
+        onFocus: () => {
+          if (isMounted) setFocused(true);
+        },
+        onBlur: () => {
+          if (isMounted) setFocused(false);
+        }
+      }),
+      [fluid, disabled, hasError, required, isFocused, isMounted]
+    );
 
     return (
       <FormControlContext.Provider value={childrenContext}>
         <div
           ref={ref}
-          className={createClass(localClass.root, className, {
-            [localClass.fluid]: fluid
+          className={clx(classes.root, className, {
+            [classes.fluid]: fluid
           })}
           {...otherProps}
         >
@@ -88,8 +87,7 @@ FormControl.propTypes = {
   hasError: PropTypes.bool,
   focused: PropTypes.bool,
   fluid: PropTypes.bool,
-  required: PropTypes.bool,
-  size: PropTypes.oneOf(allowedSizes)
+  required: PropTypes.bool
 };
 
 FormControl.displayName = componentName;

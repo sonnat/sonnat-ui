@@ -1,7 +1,8 @@
-import React from "react";
+import clx from "classnames";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import React from "react";
 import makeStyles from "../styles/makeStyles";
+import getVar from "../utils/getVar";
 
 const componentName = "Badge";
 const allowedVariants = ["filled", "dotted"];
@@ -144,28 +145,59 @@ const Badge = React.memo(
       className,
       textContent,
       parentProps: parentPropsProp = {},
-      childShape = "rectangular",
+      childShape: shapeProp = "rectangular",
       children: childrenProp,
-      horizontalPosition = "right",
-      verticalPosition = "top",
-      color = "primary",
-      variant = "filled",
-      dotSize = "medium",
+      horizontalPosition: hPosProp = "right",
+      verticalPosition: vPosProp = "top",
+      color: colorProp = "primary",
+      variant: variantProp = "filled",
+      dotSize: dotSizeProp = "medium",
       visible = true,
       ...otherProps
     } = props;
 
     const { className: parentClassName, ...parentProps } = parentPropsProp;
 
-    const localClass = useStyles();
+    const classes = useStyles();
+
+    const horizontalPosition = getVar(
+      hPosProp,
+      "right",
+      !allowedHorizontalPositions.includes(hPosProp)
+    );
+
+    const verticalPosition = getVar(
+      vPosProp,
+      "top",
+      !allowedVerticalPositions.includes(vPosProp)
+    );
+
+    const variant = getVar(
+      variantProp,
+      "filled",
+      !allowedVariants.includes(variantProp)
+    );
+
+    const color = getVar(
+      colorProp,
+      "primary",
+      !allowedColors.includes(colorProp)
+    );
+
+    const dotSize = getVar(
+      dotSizeProp,
+      "medium",
+      !allowedSizes.includes(dotSizeProp)
+    );
+
+    const childShape = getVar(
+      shapeProp,
+      "rectangular",
+      !allowedChildShapes.includes(shapeProp)
+    );
 
     const isDotted = variant === "dotted";
     const isVisible = visible === true;
-
-    const hasValidVariant = allowedVariants.includes(variant);
-    const hasValidColor = allowedColors.includes(color);
-    const hasValidChildShape = allowedChildShapes.includes(childShape);
-    const hasValidDotSize = allowedSizes.includes(dotSize);
 
     let children;
 
@@ -180,31 +212,26 @@ const Badge = React.memo(
     }
 
     const positionClass =
-      localClass[camelCase(`${verticalPosition}-${horizontalPosition}`)];
+      classes[camelCase(`${verticalPosition}-${horizontalPosition}`)];
 
     const createRelativeBadge = () => {
       return (
         <div
           ref={ref}
-          className={createClass(
-            localClass.root,
-            localClass.relative,
+          className={clx(
+            classes.root,
+            classes.relative,
             parentClassName,
             className
           )}
           {...parentProps}
         >
           {createStandaloneBadge(
-            createClass(positionClass, {
-              [localClass[`${childShape}Overlapping`]]: hasValidChildShape
-            }),
+            clx(positionClass, classes[`${childShape}Overlapping`]),
             true
           )}
           {React.cloneElement(children, {
-            className: createClass(
-              children.props.className,
-              localClass.anchorElement
-            )
+            className: clx(children.props.className, classes.anchorElement)
           })}
         </div>
       );
@@ -214,18 +241,17 @@ const Badge = React.memo(
       return (
         <span
           ref={ref}
-          className={createClass(
-            localClass.standalone,
-            localClass.root,
+          className={clx(
+            classes.standalone,
+            classes.root,
             classes,
             hasParent ? undefined : parentClassName,
             className,
+            classes[camelCase(`${variant}-${color}`)],
+            classes[variant],
             {
-              [localClass.visible]: isVisible,
-              [localClass[camelCase(`${variant}-${color}`)]]:
-                hasValidVariant && hasValidColor,
-              [localClass[dotSize]]: hasValidDotSize && isDotted,
-              [localClass[variant]]: hasValidVariant
+              [classes.visible]: isVisible,
+              [classes[dotSize]]: isDotted
             }
           )}
           {...(hasParent ? otherProps : { ...otherProps, ...parentProps })}

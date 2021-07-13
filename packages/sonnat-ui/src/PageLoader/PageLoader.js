@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
 
 const componentName = "PageLoader";
@@ -56,7 +56,7 @@ const useStyles = makeStyles(
 const PageLoader = React.memo(function PageLoader(props) {
   const { className, loading = false, top = 0, ...otherProps } = props;
 
-  const localClass = useStyles();
+  const classes = useStyles();
 
   const step = useRef(0);
   const timeout = useRef(-1);
@@ -115,13 +115,13 @@ const PageLoader = React.memo(function PageLoader(props) {
   return (
     <div
       style={{ top }}
-      className={createClass(className, localClass.root, {
-        [localClass.visible]: visible
+      className={clx(className, classes.root, {
+        [classes.visible]: visible
       })}
       {...otherProps}
     >
-      <div className={localClass.progress} style={{ width: `${width}%` }}></div>
-      <div className={localClass.overlay}></div>
+      <div className={classes.progress} style={{ width: `${width}%` }}></div>
+      <div className={classes.overlay}></div>
     </div>
   );
 });

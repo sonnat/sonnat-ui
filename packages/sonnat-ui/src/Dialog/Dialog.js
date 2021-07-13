@@ -1,4 +1,4 @@
-import createClass from "classnames";
+import clx from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 import PortalDestination from "../PortalDestination";
@@ -246,7 +246,7 @@ const Dialog = React.memo(
         <div
           tabIndex={-1}
           ref={ref}
-          className={createClass(classes.root, className, {
+          className={clx(classes.root, className, {
             [classes.fullScreen]: isFullScreen,
             [classes.open]: openState
           })}

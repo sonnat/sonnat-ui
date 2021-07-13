@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../../styles/makeStyles";
 import useTheme from "../../styles/useTheme";
 
@@ -72,7 +72,7 @@ const MoonSpinner = React.memo(function MoonSpinner(props) {
     typography: { pxToRem }
   } = useTheme();
 
-  const localClass = useStyles();
+  const classes = useStyles();
 
   const sizing = {
     width: pxToRem(size) || pxToRem(20),
@@ -92,16 +92,16 @@ const MoonSpinner = React.memo(function MoonSpinner(props) {
 
   return (
     <div
-      className={createClass(localClass.root, className)}
+      className={clx(classes.root, className)}
       style={{ ...style, ...sizing }}
       {...otherProps}
     >
       <div
-        className={localClass.base}
+        className={classes.base}
         style={{ border: `${pxToRem(4)} solid ${coloring.background}` }}
       >
         <div
-          className={localClass.movingParticle}
+          className={classes.movingParticle}
           style={{ backgroundColor: coloring.foreground }}
         />
       </div>

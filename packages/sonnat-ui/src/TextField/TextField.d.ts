@@ -88,7 +88,7 @@ type BaseProps<P = {}> = P & {
    * The size of the text field.
    * @default "medium"
    */
-  size?: "medium" | "small";
+  size?: "large" | "medium" | "small";
   /**
    * The variant of the text field.
    * @default "outlined"

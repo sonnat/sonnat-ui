@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import useRadioGroup from "../RadioGroup/useRadioGroup";
 import useFormControl from "../FormControl/useFormControl";
 import useEventListener from "../utils/useEventListener";
@@ -9,7 +9,9 @@ import useControlled from "../utils/useControlled";
 import makeStyles from "../styles/makeStyles";
 import { changeColor } from "../styles/colorUtils";
 
-const componentName = "RadioButton";
+const componentName = "Radio";
+
+const allowedSizes = ["large", "medium", "small"];
 
 const useStyles = makeStyles(
   theme => {
@@ -29,38 +31,13 @@ const useStyles = makeStyles(
         alignItems: "center",
         boxSizing: "content-box",
         verticalAlign: "middle",
-        height: "auto",
-        minHeight: pxToRem(40),
-        "&$checked:not($disabled)": {
-          "& $button": {
-            borderColor: !darkMode
-              ? colors.createPrimaryColor({ alpha: 0.32 })
-              : changeColor(colors.primary.light, { alpha: 0.32 }),
-            "&:after": { opacity: 1, transform: "scale(1)" }
-          }
-        },
-        "&$checked$disabled": {
-          "& $button": {
-            pointerEvents: "none",
-            borderColor: colors.transparent,
-            backgroundColor: colors.divider,
-            "&:after": {
-              opacity: 1,
-              transform: "scale(1)",
-              backgroundColor: !darkMode ? colors.white : colors.black
-            }
-          }
-        }
+        height: "auto"
       },
       label: useText({ color: colors.text.primary }),
       cell: {
         ...(direction === "rtl"
           ? { marginLeft: pxToRem(4) }
           : { marginRight: pxToRem(4) }),
-        width: pxToRem(36),
-        height: pxToRem(36),
-        minWidth: pxToRem(36),
-        minHeight: pxToRem(36),
         borderRadius: "50%",
         position: "relative",
         display: "flex",
@@ -102,8 +79,6 @@ const useStyles = makeStyles(
         WebkitTapHighlightColor: "rgba(0, 0, 0, 0) !important"
       },
       button: {
-        width: pxToRem(18),
-        height: pxToRem(18),
         border: `1px solid ${
           !darkMode
             ? colors.createBlackColor({ alpha: 0.24 })
@@ -120,8 +95,6 @@ const useStyles = makeStyles(
           "border-color 90ms cubic-bezier(0, 0, 0.2, 1), background-color 90ms cubic-bezier(0, 0, 0.2, 1)",
         "&:after": {
           content: '""',
-          width: pxToRem(10),
-          height: pxToRem(10),
           borderRadius: "50%",
           backgroundColor: !darkMode
             ? colors.primary.origin
@@ -140,11 +113,6 @@ const useStyles = makeStyles(
           backgroundColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.12 })
             : colors.createWhiteColor({ alpha: 0.12 })
-        },
-        "&$checked $cell:before": {
-          backgroundColor: !darkMode
-            ? colors.createPrimaryColor({ alpha: 0.12 })
-            : changeColor(colors.primary.light, { alpha: 0.12 })
         }
       },
       disabled: {
@@ -165,6 +133,75 @@ const useStyles = makeStyles(
           backgroundColor: !darkMode
             ? colors.createPrimaryColor({ alpha: 0.04 })
             : changeColor(colors.primary.light, { alpha: 0.04 })
+        },
+        "&:not($disabled)": {
+          "& $button": {
+            borderColor: !darkMode
+              ? colors.createPrimaryColor({ alpha: 0.32 })
+              : changeColor(colors.primary.light, { alpha: 0.32 }),
+            "&:after": { opacity: 1, transform: "scale(1)" }
+          }
+        }
+      },
+      checkedDisabled: {
+        "& $button": {
+          pointerEvents: "none",
+          borderColor: colors.transparent,
+          backgroundColor: colors.divider,
+          "&:after": {
+            opacity: 1,
+            transform: "scale(1)",
+            backgroundColor: !darkMode ? colors.white : colors.black
+          }
+        }
+      },
+      checkedFocused: {
+        "& $cell:before": {
+          backgroundColor: !darkMode
+            ? colors.createPrimaryColor({ alpha: 0.12 })
+            : changeColor(colors.primary.light, { alpha: 0.12 })
+        }
+      },
+      large: {
+        "& $cell": {
+          width: pxToRem(36),
+          height: pxToRem(36),
+          minWidth: pxToRem(36),
+          minHeight: pxToRem(36)
+        },
+        "& $label": { fontSize: pxToRem(16), lineHeight: 1.5 },
+        "& $button": {
+          width: pxToRem(18),
+          height: pxToRem(18),
+          "&:after": { width: pxToRem(10), height: pxToRem(10) }
+        }
+      },
+      medium: {
+        "& $cell": {
+          width: pxToRem(32),
+          height: pxToRem(32),
+          minWidth: pxToRem(32),
+          minHeight: pxToRem(32)
+        },
+        "& $label": { fontSize: pxToRem(14), lineHeight: 1.5714285714 },
+        "& $button": {
+          width: pxToRem(16),
+          height: pxToRem(16),
+          "&:after": { width: pxToRem(8), height: pxToRem(8) }
+        }
+      },
+      small: {
+        "& $cell": {
+          width: pxToRem(28),
+          height: pxToRem(28),
+          minWidth: pxToRem(28),
+          minHeight: pxToRem(28)
+        },
+        "& $label": { fontSize: pxToRem(12), lineHeight: 1.6666666667 },
+        "& $button": {
+          width: pxToRem(14),
+          height: pxToRem(14),
+          "&:after": { width: pxToRem(6), height: pxToRem(6) }
         }
       }
     };
@@ -172,8 +209,8 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const RadioButton = React.memo(
-  React.forwardRef(function RadioButton(props, ref) {
+const Radio = React.memo(
+  React.forwardRef(function Radio(props, ref) {
     const {
       className,
       onChange,
@@ -190,6 +227,7 @@ const RadioButton = React.memo(
       hasError = false,
       disabled = false,
       required = false,
+      size: sizeProp = "medium",
       ...otherProps
     } = props;
 
@@ -221,7 +259,7 @@ const RadioButton = React.memo(
     const inputRef = useRef();
     const inputRefHandler = useForkRef(inputRef, inputRefProp);
 
-    const localClass = useStyles();
+    const classes = useStyles();
     const radioGroup = useRadioGroup();
     const formControl = useFormControl();
 
@@ -233,6 +271,8 @@ const RadioButton = React.memo(
 
     const [isMounted, setMounted] = useState(false);
     const [isFocused, setFocused] = useState(false);
+
+    const size = allowedSizes.includes(sizeProp) ? sizeProp : "medium";
 
     const isReadOnly = !!inputReadOnly || !!readOnly;
 
@@ -336,6 +376,8 @@ const RadioButton = React.memo(
       ? inputId
       : controlProps.name && value
       ? `radiobox-${controlProps.name}-${value}`
+      : id
+      ? `radiobox-${id}`
       : undefined;
 
     if (typeof document !== "undefined") {
@@ -354,14 +396,16 @@ const RadioButton = React.memo(
       <div
         aria-disabled={controlProps.disabled}
         ref={ref}
-        className={createClass(localClass.root, className, {
-          [localClass.disabled]: controlProps.disabled,
-          [localClass.focused]: isFocused,
-          [localClass.checked]: checkedState
+        className={clx(classes.root, className, classes[size], {
+          [classes.disabled]: controlProps.disabled,
+          [classes.focused]: isFocused,
+          [classes.checked]: checkedState,
+          [classes.checkedDisabled]: checkedState && controlProps.disabled,
+          [classes.checkedFocused]: checkedState && isFocused
         })}
         {...otherProps}
       >
-        <div className={localClass.cell}>
+        <div className={classes.cell}>
           <input
             name={controlProps.name}
             value={value}
@@ -369,7 +413,7 @@ const RadioButton = React.memo(
             tabIndex={controlProps.disabled ? -1 : 0}
             disabled={controlProps.disabled}
             required={controlProps.required}
-            className={createClass(localClass.input, inputClassNameProp)}
+            className={clx(classes.input, inputClassNameProp)}
             onChange={controlProps.onChange}
             onFocus={controlProps.onFocus}
             onBlur={controlProps.onBlur}
@@ -378,11 +422,11 @@ const RadioButton = React.memo(
             ref={inputRefHandler}
             {...otherInputProps}
           />
-          <div className={localClass.button}></div>
+          <div className={classes.button}></div>
         </div>
         {label && (
           <label
-            className={createClass(localClass.label, labelClassName)}
+            className={clx(classes.label, labelClassName)}
             htmlFor={id}
             {...otherLabelProps}
           >
@@ -394,9 +438,9 @@ const RadioButton = React.memo(
   })
 );
 
-RadioButton.displayName = componentName;
+Radio.displayName = componentName;
 
-RadioButton.propTypes = {
+Radio.propTypes = {
   className: PropTypes.string,
   label: PropTypes.string,
   name: PropTypes.string,
@@ -411,7 +455,8 @@ RadioButton.propTypes = {
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   inputProps: PropTypes.object,
-  labelProps: PropTypes.object
+  labelProps: PropTypes.object,
+  size: PropTypes.oneOf(allowedSizes)
 };
 
-export default RadioButton;
+export default Radio;

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
 
 const componentName = "Divider";
@@ -78,15 +78,15 @@ const Divider = React.memo(function Divider(props) {
     ...otherProps
   } = props;
 
-  const localClass = useStyles();
+  const classes = useStyles();
 
   return (
     <HTMLTag
       role="separator"
-      className={createClass(localClass.root, className, {
-        [localClass.spaced]: spaced,
-        [localClass.dotted]: dotted,
-        [localClass.vertical]: vertical
+      className={clx(classes.root, className, {
+        [classes.spaced]: spaced,
+        [classes.dotted]: dotted,
+        [classes.vertical]: vertical
       })}
       {...otherProps}
     />

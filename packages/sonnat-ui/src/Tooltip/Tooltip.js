@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createClass from "classnames";
+import clx from "classnames";
 import PortalDestination from "../PortalDestination";
 import makeStyles from "../styles/makeStyles";
 import {
@@ -412,7 +412,7 @@ const Tooltip = React.memo(
       ...otherProps
     } = props;
 
-    const localClass = useStyles();
+    const classes = useStyles();
 
     const isInitialized = React.useRef(false);
     const uniqueId = React.useRef(`tooltip${generateUniqueString()}`);
@@ -596,18 +596,18 @@ const Tooltip = React.memo(
               top: currentPosition.top,
               ...style
             }}
-            className={createClass(localClass.root, className, {
-              [localClass[currentPlacement]]: triggersOn !== "mouseMove",
-              [localClass.tailed]: triggersOn !== "mouseMove" && tailed,
-              [localClass.open]: open,
-              [localClass.floated]: triggersOn === "mouseMove"
+            className={clx(classes.root, className, {
+              [classes[currentPlacement]]: triggersOn !== "mouseMove",
+              [classes.tailed]: triggersOn !== "mouseMove" && tailed,
+              [classes.open]: open,
+              [classes.floated]: triggersOn === "mouseMove"
             })}
             {...otherProps}
           >
-            <div className={localClass.container}>
-              <span className={localClass.text}>{text}</span>
+            <div className={classes.container}>
+              <span className={classes.text}>{text}</span>
             </div>
-            <div className={localClass.tail}></div>
+            <div className={classes.tail}></div>
           </div>
         </PortalDestination>
         {anchorElement}

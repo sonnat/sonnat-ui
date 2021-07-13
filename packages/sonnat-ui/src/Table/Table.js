@@ -20,7 +20,8 @@ const useStyles = makeStyles(
         fontFamily: fontFamily[direction],
         width: "100%",
         overflowX: "auto",
-        borderRadius: pxToRem(4)
+        borderRadius: pxToRem(4),
+        border: `1px solid ${colors.divider}`
       },
       table: {
         display: "table",
@@ -38,9 +39,10 @@ const useStyles = makeStyles(
       },
       dense: {
         "& $caption": {
-          padding: `${pxToRem(4)} ${pxToRem(8)}`
+          padding: pxToRem(8)
         }
-      }
+      },
+      borderLess: { border: "none" }
     };
   },
   { name: `Sonnat${componentName}` }
@@ -54,6 +56,7 @@ const Table = React.memo(
       caption,
       htmlTableProps = {},
       dense = false,
+      borderLess = false,
       ...otherProps
     } = props;
 
@@ -67,7 +70,8 @@ const Table = React.memo(
       <div
         ref={ref}
         className={clx(className, classes.root, {
-          [classes.dense]: dense
+          [classes.dense]: dense,
+          [classes.borderLess]: borderLess
         })}
         {...otherProps}
       >
@@ -92,7 +96,8 @@ Table.propTypes = {
   className: PropTypes.string,
   caption: PropTypes.string,
   htmlTableProps: PropTypes.object,
-  dense: PropTypes.bool
+  dense: PropTypes.bool,
+  borderLess: PropTypes.bool
 };
 
 export default Table;
