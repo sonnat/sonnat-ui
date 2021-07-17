@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { MergeElementProps } from "../typings";
 
-type BaseProps<P = {}, T extends React.ElementType> = {
+type BaseProps<P = {}, T extends React.ElementType = "span"> = {
   /**
    * The component used for the root node.
    * Either a string to use a HTML element or a component.
@@ -42,6 +42,8 @@ export type SkeletonProps<
   T extends React.ElementType = "span"
 > = MergeElementProps<T, BaseProps<P, T>>;
 
-declare const Skeleton: (props: SkeletonProps) => JSX.Element;
+declare const Skeleton: <T extends React.ElementType = "span">(
+  props: SkeletonProps<{}, T>
+) => JSX.Element;
 
 export default Skeleton;

@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { MergeElementProps } from "../typings";
 
-type BaseProps<P = {}, T extends React.ElementType> = P & {
+type BaseProps<P = {}, T extends React.ElementType = "button"> = P & {
   /**
    * The component used for the root node.
    * Either a string to use a HTML element or a component.
@@ -70,6 +70,8 @@ export type ButtonProps<
   T extends React.ElementType = "button"
 > = MergeElementProps<T, BaseProps<P, T>>;
 
-declare const Button: (props: ButtonProps) => JSX.Element;
+declare const Button: <T extends React.ElementType = "button">(
+  props: ButtonProps<{}, T>
+) => JSX.Element;
 
 export default Button;

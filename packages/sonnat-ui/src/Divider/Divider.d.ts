@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { MergeElementProps } from "../typings";
 
-type BaseProps<P = {}, T extends React.ElementType> = P & {
+type BaseProps<P = {}, T extends React.ElementType = "hr"> = P & {
   /**
    * The component used for the root node.
    * Either a string to use a HTML element or a component.
@@ -39,6 +39,8 @@ export type DividerProps<
   T extends React.ElementType = "hr"
 > = MergeElementProps<T, BaseProps<P, T>>;
 
-declare const Divider: (props: DividerProps) => JSX.Element;
+declare const Divider: <T extends React.ElementType = "hr">(
+  props: DividerProps<{}, T>
+) => JSX.Element;
 
 export default Divider;
