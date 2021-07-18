@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { ColorInputType, HslaInputType } from "./colorUtils";
-import { PalleteObject, Pallete } from "./pallete";
+import { Pallete } from "./pallete";
 
 export type TextType = {
   primary: string;
@@ -35,12 +35,12 @@ export type LightBaseColors = {
 };
 
 export interface Colors {
-  primary: SystemColorVariant;
-  secondary: SystemColorVariant;
-  error: SystemColorVariant;
-  warning: SystemColorVariant;
-  info: SystemColorVariant;
-  success: SystemColorVariant;
+  primary: SystemColorVariantObject;
+  secondary: SystemColorVariantObject;
+  error: SystemColorVariantObject;
+  warning: SystemColorVariantObject;
+  info: SystemColorVariantObject;
+  success: SystemColorVariantObject;
   transparent: string;
   contrastThreshold: number;
   text: TextType;
