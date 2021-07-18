@@ -237,16 +237,16 @@ const Badge = React.memo(
       );
     };
 
-    const createStandaloneBadge = (classes, hasParent = false) => {
+    const createStandaloneBadge = (classNames, hasParent = false) => {
       return (
         <span
           ref={ref}
           className={clx(
             classes.standalone,
             classes.root,
-            classes,
-            hasParent ? undefined : parentClassName,
             className,
+            classNames,
+            hasParent ? undefined : parentClassName,
             classes[camelCase(`${variant}-${color}`)],
             classes[variant],
             {
