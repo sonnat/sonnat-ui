@@ -124,10 +124,10 @@ const useStyles = makeStyles(
         color: !darkMode ? colors.warning.origin : colors.warning.light
       },
       infoColor: { color: !darkMode ? colors.info.origin : colors.info.light },
-      boldWeight: { fontWeight: fontWeight.bold },
-      mediumWeight: { fontWeight: fontWeight.medium },
-      regularWeight: { fontWeight: fontWeight.regular },
-      lightWeight: { fontWeight: fontWeight.light },
+      boldWeight: { fontWeight: `${fontWeight.bold} !important` },
+      mediumWeight: { fontWeight: `${fontWeight.medium} !important` },
+      regularWeight: { fontWeight: `${fontWeight.regular} !important` },
+      lightWeight: { fontWeight: `${fontWeight.light} !important` },
       ...generateStyles(variants)
     };
   },
