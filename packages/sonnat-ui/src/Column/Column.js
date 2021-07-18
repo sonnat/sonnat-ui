@@ -153,7 +153,7 @@ const Column = React.memo(
       }
     });
 
-    // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
     const { xxs, xs, sm, md, lg, xlg, ...otherColumnProps } = otherProps;
 
     return (
