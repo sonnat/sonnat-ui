@@ -10,8 +10,8 @@ type BaseProps<P = {}> = P & {
    */
   className?: string;
   /**
-   * Append to the classNames applied to the component so you can override or
-   * extend the styles.
+   * Set the `text-align` css property of the table cell.
+   * @default "inherit"
    */
   textAlign?: "inherit" | "center" | "justify" | "left" | "right";
 };
