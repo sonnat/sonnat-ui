@@ -55,7 +55,7 @@ const useStyles = makeStyles(
 
     return {
       root: {
-        position: "absolute",
+        position: "fixed",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
