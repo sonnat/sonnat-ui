@@ -7,7 +7,7 @@ const componentName = "CardMedia";
 
 const useStyles = makeStyles(
   {
-    root: { width: "100%" }
+    root: { width: "100%", position: "relative" }
   },
   { name: `Sonnat${componentName}` }
 );
