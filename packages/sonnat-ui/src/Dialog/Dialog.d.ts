@@ -22,7 +22,7 @@ type BaseProps<P = {}> = P & {
    */
   maxWidth?: number;
   /**
-   * If `true`, the dialog is full-screen.
+   * If `true`, the dialog will be full-screen.
    * @default false
    */
   fullScreen?: boolean;
@@ -31,9 +31,9 @@ type BaseProps<P = {}> = P & {
    * @default false
    */
   open?: boolean;
-  /** The Callback fires when the menu has opened. */
+  /** The Callback fires when the dialog has opened. */
   onOpen?: () => void;
-  /** The Callback fires when the menu has closed. */
+  /** The Callback fires when the dialog has closed. */
   onClose?: () => void;
   /** Callback fired when the backdrop is clicked. */
   onBackdropClick?: (
