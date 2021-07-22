@@ -35,8 +35,8 @@ const useStyles = makeStyles(
         ...variants.subtitle,
         color: colors.text.primary,
         borderBottomColor: darkMode
-          ? "rgba(0, 0, 0, 0.24)"
-          : "rgba(255, 255, 255, 0.24)"
+          ? "rgba(255, 255, 255, 0.24)"
+          : "rgba(0, 0, 0, 0.24)"
       },
       footerCell: {
         ...variants.caption,
