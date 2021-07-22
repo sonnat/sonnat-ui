@@ -47,14 +47,13 @@ type BaseProps<P = {}, T extends React.ElementType = "span"> = P & {
     | "error"
     | "success"
     | "warning"
-    | "info" = "inherit";
+    | "info";
   /**
    * Set the text-align on the text.
    */
   align?: "initial" | "inherit" | "left" | "center" | "right" | "justify";
   /**
    * Set the font-weight on the text.
-   * @default "regular"
    */
   weight?: "bold" | "medium" | "regular" | "light";
   /**
