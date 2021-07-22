@@ -155,7 +155,7 @@ const useStyles = makeStyles(
       },
       fluid: { width: "100%" },
       errored: {
-        "&:after": {
+        "& $wrapper:after": {
           borderColor: !darkMode ? colors.error.origin : colors.error.light
         },
         "&:not($disabled)": {
