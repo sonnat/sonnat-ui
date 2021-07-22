@@ -14,7 +14,8 @@ const useStyles = makeStyles(
         color: theme.colors.text.primary
       }),
       direction: theme.direction,
-      fontFamily: theme.typography.fontFamily[theme.direction]
+      fontFamily: theme.typography.fontFamily[theme.direction],
+      paddingBottom: theme.typography.pxToRem(8)
     },
     requiredIndicator: {
       color: theme.darkMode
