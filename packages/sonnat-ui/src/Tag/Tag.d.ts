@@ -16,14 +16,14 @@ type BaseProps<P = {}> = P & {
    */
   icon?: React.ReactNode;
   /**
-   * The variant of the tag.
-   * @default "filled"
-   */
-  /**
    * If `true`, will make the tag denser.
    * @default false
    */
   dense?: boolean;
+  /**
+   * The variant of the tag.
+   * @default "filled"
+   */
   variant?: "filled" | "outlined";
   /**
    * The color of the tag.
