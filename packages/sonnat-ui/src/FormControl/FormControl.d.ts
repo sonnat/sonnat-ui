@@ -34,11 +34,6 @@ type BaseProps<P = {}> = P & {
    * @default false
    */
   focused?: boolean;
-  /**
-   * The size of the form controller.
-   * @default "medium"
-   */
-  size?: "large" | "medium" | "small";
 };
 
 export type FormControlProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
