@@ -1807,7 +1807,7 @@
   dependencies:
     "@babel/runtime" "^7.13.6"
 
-"@sonnat/ui@^1.1.2", "@sonnat/ui@latest":
+"@sonnat/ui@latest":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@sonnat/ui/-/ui-1.1.2.tgz#f50b4ef7ab67cf845da1622868063862ab0ec3cd"
   integrity sha512-X+GPdvC4BBGVhqHbsqu+9Ok1Yk2Qj377Txg0/umfVBbMJGVSaoeZxUR49zFSKIrMWtjB8asjN1nnHCZe51FwWw==
