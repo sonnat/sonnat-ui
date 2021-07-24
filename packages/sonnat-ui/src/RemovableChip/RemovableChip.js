@@ -83,23 +83,7 @@ const useStyles = makeStyles(
         flexShrink: "0",
         ...(direction === "rtl"
           ? { marginLeft: pxToRem(-12) }
-          : { marginRight: pxToRem(-12) }),
-        "&:hover > $removeButtonIcon, &:focus > $removeButtonIcon": {
-          backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.12 })
-            : colors.createWhiteColor({ alpha: 0.12 })
-        },
-        "&:active > $removeButtonIcon": {
-          backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.24 })
-            : colors.createWhiteColor({ alpha: 0.24 })
-        },
-        "&:hover > $removeButtonIcon": {
-          // Reset on touch devices, it doesn't add specificity
-          "@media (hover: none)": {
-            backgroundColor: colors.transparent
-          }
-        }
+          : { marginRight: pxToRem(-12) })
       },
       removeButtonIcon: {
         display: "inline-flex",
@@ -170,6 +154,24 @@ const useStyles = makeStyles(
         }
       },
       filled: {
+        "& $removeButton": {
+          "&:hover > $removeButtonIcon, &:focus > $removeButtonIcon": {
+            backgroundColor: !darkMode
+              ? colors.createBlackColor({ alpha: 0.12 })
+              : colors.createWhiteColor({ alpha: 0.12 })
+          },
+          "&:active > $removeButtonIcon": {
+            backgroundColor: !darkMode
+              ? colors.createBlackColor({ alpha: 0.24 })
+              : colors.createWhiteColor({ alpha: 0.24 })
+          },
+          "&:hover > $removeButtonIcon": {
+            // Reset on touch devices, it doesn't add specificity
+            "@media (hover: none)": {
+              backgroundColor: colors.transparent
+            }
+          }
+        },
         "&$disabled": {
           color: !darkMode
             ? colors.createBlackColor({ alpha: 0.32 })
@@ -221,6 +223,24 @@ const useStyles = makeStyles(
         border: `${pxToRem(1)} solid ${colors.divider}`,
         color: colors.text.secondary,
         "& $icon, & $removeButtonIcon": { color: colors.text.secondary },
+        "& $removeButton": {
+          "&:hover > $removeButtonIcon, &:focus > $removeButtonIcon": {
+            backgroundColor: !darkMode
+              ? colors.createBlackColor({ alpha: 0.12 })
+              : colors.createWhiteColor({ alpha: 0.12 })
+          },
+          "&:active > $removeButtonIcon": {
+            backgroundColor: !darkMode
+              ? colors.createBlackColor({ alpha: 0.24 })
+              : colors.createWhiteColor({ alpha: 0.24 })
+          },
+          "&:hover > $removeButtonIcon": {
+            // Reset on touch devices, it doesn't add specificity
+            "@media (hover: none)": {
+              backgroundColor: colors.transparent
+            }
+          }
+        },
         "&$disabled, &[disabled]": {
           borderColor: colors.divider,
           color: colors.text.disabled,
@@ -232,14 +252,14 @@ const useStyles = makeStyles(
         border: `${pxToRem(1)} solid ${filledPrimaryMainBg}`,
         color: filledPrimaryMainBg,
         "& $icon, & $removeButtonIcon": { color: filledPrimaryMainBg },
-        "& $removeButtonIcon": {
-          "&:hover, &:focus": {
+        "& $removeButton": {
+          "&:hover > $removeButtonIcon, &:focus > $removeButtonIcon": {
             backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.12 })
           },
-          "&:active": {
+          "&:active > $removeButtonIcon": {
             backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.24 })
           },
-          "&:hover": {
+          "&:hover > $removeButtonIcon": {
             // Reset on touch devices, it doesn't add specificity
             "@media (hover: none)": {
               backgroundColor: colors.transparent
@@ -261,14 +281,14 @@ const useStyles = makeStyles(
         "& $icon, & $removeButtonIcon": {
           color: filledSecondaryMainBg
         },
-        "& $removeButtonIcon": {
-          "&:hover, &:focus": {
+        "& $removeButton": {
+          "&:hover > $removeButtonIcon, &:focus > $removeButtonIcon": {
             backgroundColor: changeColor(filledSecondaryMainBg, { alpha: 0.12 })
           },
-          "&:active": {
+          "&:active > $removeButtonIcon": {
             backgroundColor: changeColor(filledSecondaryMainBg, { alpha: 0.24 })
           },
-          "&:hover": {
+          "&:hover > $removeButtonIcon": {
             // Reset on touch devices, it doesn't add specificity
             "@media (hover: none)": {
               backgroundColor: colors.transparent
