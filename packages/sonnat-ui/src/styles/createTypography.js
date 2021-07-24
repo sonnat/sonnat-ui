@@ -26,7 +26,7 @@ export default function createTypography(typography) {
   } = typography;
 
   if (process.env.NODE_ENV !== "production") {
-    if (typeof fontSize !== "number") {
+    if (typeof systemFontSize !== "number") {
       // eslint-disable-next-line no-console
       console.error("Sonnat: `fontSize` is required to be a number.");
     }
