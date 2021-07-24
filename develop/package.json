@@ -10,8 +10,8 @@
     "dev": "cross-env NODE_ENV=development npm run start"
   },
   "dependencies": {
-    "@sonnat/ui": "^1.1.2",
-    "@sonnat/icons": "^1.1.0"
+    "@sonnat/ui": "^1.2.0",
+    "@sonnat/icons": "^1.2.0"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17",
