@@ -2,7 +2,7 @@
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
   "name": "@sonnat/icons",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Sonnat icons exported as React SVG Components.",
   "sideEffects": false,
   "license": "MIT",
@@ -40,7 +40,7 @@
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17",
-    "@sonnat/ui": "^1.1.0"
+    "@sonnat/ui": "^1.2.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.13.6"
