@@ -169,7 +169,7 @@ const useStyles = makeStyles(
           minWidth: pxToRem(36),
           minHeight: pxToRem(36)
         },
-        "& $label": { fontSize: pxToRem(16), lineHeight: 1.5 },
+        "& $label": { fontSize: pxToRem(16), lineHeight: 1.625 },
         "& $button": {
           width: pxToRem(18),
           height: pxToRem(18),

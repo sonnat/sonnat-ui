@@ -80,7 +80,7 @@ const useStyles = makeStyles(
           "& > $icon": useIconWrapper(20),
           "& > $spinner": { width: pxToRem(20), height: pxToRem(20) }
         },
-        "& $label": { fontSize: pxToRem(16), lineHeight: 1.5 },
+        "& $label": { fontSize: pxToRem(16), lineHeight: 1.625 },
         "& $icon": useIconWrapper(20),
         "& $spinner": { width: pxToRem(20), height: pxToRem(20) },
         "& $leadingIcon": {

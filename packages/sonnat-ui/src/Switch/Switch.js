@@ -213,7 +213,7 @@ const useStyles = makeStyles(
       },
       large: {
         minHeight: pxToRem(44),
-        "& $label": { fontSize: pxToRem(16), lineHeight: 1.5 },
+        "& $label": { fontSize: pxToRem(16), lineHeight: 1.625 },
         "& $cell": { width: pxToRem(42), height: pxToRem(24) },
         "& $handle": { width: pxToRem(20), height: pxToRem(20) },
         "& $button": {
