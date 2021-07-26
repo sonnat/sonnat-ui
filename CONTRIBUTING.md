@@ -80,6 +80,45 @@ The core team is monitoring for Pull Requests. We will review your Pull Request 
 
 Please follow the coding style of the project. Sonnat-UI uses prettier and eslint, so if possible, enable linting in your editor to get real-time feedback.
 
+### Git Commit Messages
+
+- Use the present tense ("Add feature" not "Added feature")
+- Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
+- Limit the first line to 72 characters or less
+- Reference issues and pull requests liberally after the first line
+- Consider starting the commit message with an applicable emoji:
+  - 🎨 [:art:] when improving the format/structure of the code
+  - 🐎 [:zap:] when improving performance
+  - 🚱 [:non-potable_water:] when plugging memory leaks
+  - 📝 [:memo:] when writing/updating api docs
+  - 🐛 [:bug:] when fixing a bug
+  - 🚑️ [:ambulance:] when hotfixing a critical bug
+  - ✨ [:sparkles:] when introducing new features
+  - ⭐️ [:star:] when adding new components
+  - 🔥 [:fire:] when removing code or files
+  - 🔖 [:bookmark:] when adding version tags
+  - 🚨 [:rotating_light:] when fixing compiler/linter warnings
+  - 🚧 [:construction:] when the work is in progress
+  - ♻️ [:recycle:] when refactoring code
+  - 🔧 [:recycle:] when adding/updating configuration files
+  - 🔨 [:hammer:] when adding/updating development scripts
+  - ✏️ [:pencil2:] when fixing a typo
+  - 💩 [:poop:] when writing a bad code that needs to be improved
+  - 👽️ [:alien:] when updating code due to external API changes
+  - 🚚 [:truck:] when moving/renaming resources
+  - 💥 [:boom:] when introducing breaking changes
+  - 🍱 [:bento:] when adding/updating assets
+  - ♿️ [:wheelchair:] when improving accessibility
+  - 🚸 [:children_crossing:] when improving UX
+  - 💄 [:lipstick:] when improving UI
+  - ⚰️ [:coffin:] when removing dead code
+  - 🗑️ [:wastebasket:] when deprecating code🤺
+  - 💚 [:green_heart:] when fixing the CI build
+  - ✅ [:white_check_mark:] when adding tests
+  - 🔒 [:lock:] when dealing with security
+  - ⬆️ [:arrow_up:] when upgrading dependencies
+  - ⬇️ [:arrow_down:] when downgrading dependencies
+
 ## License
 
 By contributing your code to the sonnat/sonnat-ui GitHub repository, you agree to license your contribution under the MIT license.
