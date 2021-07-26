@@ -48,7 +48,7 @@ const useStyles = makeStyles(
         margin: 0,
         flex: [[1, 1]],
         minWidth: 0,
-        height: "100%",
+        height: pxToRem(40),
         appearance: "none !important",
         backgroundColor: colors.transparent,
         "&::-webkit-input-placeholder": useText({
@@ -116,6 +116,7 @@ const useStyles = makeStyles(
           ...useIconWrapper(14)
         },
         "& $input": {
+          height: pxToRem(24),
           fontSize: pxToRem(12),
           lineHeight: 1.6666666667,
           "&::-webkit-input-placeholder": {
@@ -138,6 +139,7 @@ const useStyles = makeStyles(
       },
       medium: {
         "& $input": {
+          height: pxToRem(32),
           fontSize: pxToRem(12),
           lineHeight: 1.6666666667,
           "&::-webkit-input-placeholder": {

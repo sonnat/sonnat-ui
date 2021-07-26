@@ -45,7 +45,7 @@ const useStyles = makeStyles(
         display: "flex",
         alignItems: "center",
         width: "100%",
-        minHeight: "100%",
+        height: "100%",
         position: "relative"
       },
       label: {
@@ -151,9 +151,9 @@ const useStyles = makeStyles(
         "&$rounded": {
           "& $wrapper": {
             borderRadius: pxToRem(12),
-            padding: [[0, pxToRem(12)]]
+            padding: [[0, pxToRem(10)]]
           },
-          "& $notchedOutline": { padding: [[0, pxToRem(12)]] },
+          "& $notchedOutline": { padding: [[0, pxToRem(10)]] },
           "& $leadingAdornment": {
             ...(direction === "rtl"
               ? { marginRight: pxToRem(-4) }
