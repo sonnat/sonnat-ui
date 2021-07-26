@@ -148,6 +148,23 @@ const useStyles = makeStyles(
       },
       small: {
         "& $wrapper": { minHeight: pxToRem(24) },
+        "&$rounded": {
+          "& $wrapper": {
+            borderRadius: pxToRem(12),
+            padding: [[0, pxToRem(12)]]
+          },
+          "& $notchedOutline": { padding: [[0, pxToRem(12)]] },
+          "& $leadingAdornment": {
+            ...(direction === "rtl"
+              ? { marginRight: pxToRem(-4) }
+              : { marginLeft: pxToRem(-4) })
+          },
+          "& $trailingAdornment": {
+            ...(direction === "rtl"
+              ? { marginLeft: pxToRem(-4) }
+              : { marginRight: pxToRem(-4) })
+          }
+        },
         "&:not($rounded)": {
           "& $wrapper": { padding: [[0, pxToRem(8)]] },
           "& $notchedOutline": { padding: [[0, pxToRem(8)]] },
@@ -180,15 +197,32 @@ const useStyles = makeStyles(
         "&:not($empty) $label, &$focused $label": {
           ...(direction === "rtl"
             ? {
-                transform: `translate(${pxToRem(-6)}, ${pxToRem(
-                  -15
+                transform: `translate(${pxToRem(-5)}, ${pxToRem(
+                  -13
                 )}) scale(0.8333333333)`
               }
             : {
-                transform: `translate(${pxToRem(6)}, ${pxToRem(
-                  -15
+                transform: `translate(${pxToRem(5)}, ${pxToRem(
+                  -13
                 )}) scale(0.8333333333)`
               })
+        },
+        "&$rounded": {
+          "& $wrapper": {
+            borderRadius: pxToRem(16),
+            padding: [[0, pxToRem(16)]]
+          },
+          "& $notchedOutline": { padding: [[0, pxToRem(16)]] },
+          "& $leadingAdornment": {
+            ...(direction === "rtl"
+              ? { marginRight: pxToRem(-4) }
+              : { marginLeft: pxToRem(-4) })
+          },
+          "& $trailingAdornment": {
+            ...(direction === "rtl"
+              ? { marginLeft: pxToRem(-4) }
+              : { marginRight: pxToRem(-4) })
+          }
         },
         "&:not($rounded)": {
           "& $wrapper": { padding: [[0, pxToRem(8)]] },
@@ -220,15 +254,32 @@ const useStyles = makeStyles(
         "&:not($empty) $label, &$focused $label": {
           ...(direction === "rtl"
             ? {
-                transform: `translate(${pxToRem(-2)}, ${pxToRem(
+                transform: `translate(${pxToRem(-1)}, ${pxToRem(
                   -16
                 )}) scale(0.75)`
               }
             : {
-                transform: `translate(${pxToRem(2)}, ${pxToRem(
+                transform: `translate(${pxToRem(1)}, ${pxToRem(
                   -16
                 )}) scale(0.75)`
               })
+        },
+        "&$rounded": {
+          "& $wrapper": {
+            borderRadius: pxToRem(20),
+            padding: [[0, pxToRem(24)]]
+          },
+          "& $notchedOutline": { padding: [[0, pxToRem(20)]] },
+          "& $leadingAdornment": {
+            ...(direction === "rtl"
+              ? { marginRight: pxToRem(-12) }
+              : { marginLeft: pxToRem(-12) })
+          },
+          "& $trailingAdornment": {
+            ...(direction === "rtl"
+              ? { marginLeft: pxToRem(-12) }
+              : { marginRight: pxToRem(-12) })
+          }
         },
         "&:not($rounded)": {
           "& $wrapper": { padding: [[0, pxToRem(16)]] },
@@ -256,44 +307,9 @@ const useStyles = makeStyles(
         }
       },
       legendLabeled: {
-        "& $notchedOutline": { top: pxToRem(-9) }
+        "& $notchedOutline": { top: pxToRem(-10) }
       },
-      rounded: {
-        "&$medium": {
-          "& $wrapper": {
-            borderRadius: pxToRem(20),
-            padding: [[0, pxToRem(24)]]
-          },
-          "& $notchedOutline": { padding: [[0, pxToRem(20)]] },
-          "& $leadingAdornment": {
-            ...(direction === "rtl"
-              ? { marginRight: pxToRem(-12) }
-              : { marginLeft: pxToRem(-12) })
-          },
-          "& $trailingAdornment": {
-            ...(direction === "rtl"
-              ? { marginLeft: pxToRem(-12) }
-              : { marginRight: pxToRem(-12) })
-          }
-        },
-        "&$small": {
-          "& $wrapper": {
-            borderRadius: pxToRem(16),
-            padding: [[0, pxToRem(16)]]
-          },
-          "& $notchedOutline": { padding: [[0, pxToRem(16)]] },
-          "& $leadingAdornment": {
-            ...(direction === "rtl"
-              ? { marginRight: pxToRem(-4) }
-              : { marginLeft: pxToRem(-4) })
-          },
-          "& $trailingAdornment": {
-            ...(direction === "rtl"
-              ? { marginLeft: pxToRem(-4) }
-              : { marginRight: pxToRem(-4) })
-          }
-        }
-      },
+      rounded: {},
       errored: {
         "&:not($disabled)": {
           "& $notchedOutline": {
@@ -380,6 +396,23 @@ const InputBase = React.memo(
       !allowedVariants.includes(variantProp)
     );
 
+    let invalidUsageOfLegend = false;
+
+    if (isLegendLabeled && size === "small") {
+      if (process.env.NODE_ENV !== "production") {
+        // eslint-disable-next-line no-console
+        console.error(
+          [
+            `Sonnat: You can not use the \`size="small"\` and \`legendLabel="${legendLabel}"\` properties ` +
+              "at the same time on `TextField` component.",
+            `We will fallback to \`size="small"\` and \`legendLabel={undefined}\`.`
+          ].join("\n")
+        );
+      }
+
+      invalidUsageOfLegend = true;
+    }
+
     return (
       <TextInputBaseContext.Provider value={{ size, disabled, hasError }}>
         <div
@@ -399,7 +432,7 @@ const InputBase = React.memo(
               [classes.withTrailingAdornment]: hasTrailingAdornment,
               [classes.rounded]: rounded,
               [classes.errored]: hasError,
-              [classes.legendLabeled]: isLegendLabeled
+              [classes.legendLabeled]: !invalidUsageOfLegend && isLegendLabeled
             }
           )}
           {...otherProps}
@@ -420,7 +453,7 @@ const InputBase = React.memo(
               </div>
             )}
             <fieldset aria-hidden={true} className={classes.notchedOutline}>
-              {legendLabel && (
+              {!invalidUsageOfLegend && legendLabel && (
                 <legend className={classes.legendLabel}>
                   <span className={classes.legendLabelText}>{legendLabel}</span>
                 </legend>
