@@ -555,29 +555,6 @@ const Button = React.memo(
 
     const classes = useStyles();
 
-    let invalidUsageOfRaised = false;
-
-    if (raised && variant !== "filled") {
-      if (process.env.NODE_ENV !== "production") {
-        // eslint-disable-next-line no-console
-        console.error(
-          [
-            `Sonnat: You can not use the \`raised={true}\` and \`variant="${variant}"\` properties ` +
-              "at the same time on a `Button` component.",
-            "We will fallback to `raised={false}`."
-          ].join("\n")
-        );
-      }
-
-      invalidUsageOfRaised = true;
-    }
-
-    const isNative = RootNode === "button";
-    const isLabeled = label != null;
-    const isIconed = leadingIcon != null || trailingIcon != null;
-    const isInvalid = !isLabeled && !isIconed;
-    const isIconButton = !isInvalid && !isLabeled && isIconed;
-
     const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
 
     const color = getVar(
@@ -591,6 +568,29 @@ const Button = React.memo(
       "filled",
       !allowedVariants.includes(variantProp)
     );
+
+    let invalidUsageOfRaised = false;
+
+    if (raised && variantProp !== "filled") {
+      if (process.env.NODE_ENV !== "production") {
+        // eslint-disable-next-line no-console
+        console.error(
+          [
+            `Sonnat: You can not use the \`raised={true}\` and \`variant="${variant}"\` properties ` +
+              "at the same time on `Button` component.",
+            `We will fallback to \`raised={false}\` and \`variant="${variant}"\`.`
+          ].join("\n")
+        );
+      }
+
+      invalidUsageOfRaised = true;
+    }
+
+    const isNative = RootNode === "button";
+    const isLabeled = label != null;
+    const isIconed = leadingIcon != null || trailingIcon != null;
+    const isInvalid = !isLabeled && !isIconed;
+    const isIconButton = !isInvalid && !isLabeled && isIconed;
 
     const conditionalProps = {};
 
