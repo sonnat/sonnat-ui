@@ -224,7 +224,7 @@ const useStyles = makeStyles(
           backgroundColor: filledPrimary.background.active
         },
         "&$raised": {
-          "&$medium": {
+          "&$large": {
             boxShadow: `0 14px 20px -12px ${colors.createPrimaryColor({
               alpha: 0.32
             })}, 0 16px 24px 2px ${colors.createPrimaryColor({
@@ -243,6 +243,23 @@ const useStyles = makeStyles(
               transform: "translateY(2px)"
             }
           },
+          "&$medium": {
+            boxShadow: `0 8px 9px -4px ${colors.createPrimaryColor({
+              alpha: 0.24
+            })}, 0 14px 16px 2px ${colors.createPrimaryColor({
+              alpha: 0.14
+            })}, 0 5px 20px 4px ${colors.createPrimaryColor({ alpha: 0.12 })}`,
+            "&:hover, &:focus": {
+              boxShadow: `0 0 4px -2px ${colors.createPrimaryColor({
+                alpha: 0.56
+              })}, 0 4px 8px 0 ${colors.createPrimaryColor({
+                alpha: 0.14
+              })}, 0 0 8px 2px ${colors.createPrimaryColor({
+                alpha: 0.12
+              })}`,
+              transform: "translateY(2px)"
+            }
+          },
           "&$small": {
             boxShadow: `0 8px 9px -4px ${colors.createPrimaryColor({
               alpha: 0.24
@@ -256,7 +273,8 @@ const useStyles = makeStyles(
                 alpha: 0.14
               })}, 0 0 8px 2px ${colors.createPrimaryColor({
                 alpha: 0.12
-              })}`
+              })}`,
+              transform: "translateY(2px)"
             }
           }
         },
@@ -282,7 +300,7 @@ const useStyles = makeStyles(
           backgroundColor: filledSecondary.background.active
         },
         "&$raised": {
-          "&$medium": {
+          "&$large": {
             boxShadow: `0 14px 20px -12px ${colors.createSecondaryColor({
               alpha: 0.32
             })}, 0 16px 24px 2px ${colors.createSecondaryColor({
@@ -296,6 +314,25 @@ const useStyles = makeStyles(
               })}, 0 4px 16px 0 ${colors.createSecondaryColor({
                 alpha: 0.14
               })}, 0 2px 10px 0 ${colors.createSecondaryColor({
+                alpha: 0.12
+              })}`,
+              transform: "translateY(2px)"
+            }
+          },
+          "&$medium": {
+            boxShadow: `0 8px 9px -4px ${colors.createSecondaryColor({
+              alpha: 0.24
+            })}, 0 14px 16px 2px ${colors.createSecondaryColor({
+              alpha: 0.14
+            })}, 0 5px 20px 4px ${colors.createSecondaryColor({
+              alpha: 0.12
+            })}`,
+            "&:hover, &:focus": {
+              boxShadow: `0 0 4px -2px ${colors.createSecondaryColor({
+                alpha: 0.56
+              })}, 0 4px 8px 0 ${colors.createSecondaryColor({
+                alpha: 0.14
+              })}, 0 0 8px 2px ${colors.createSecondaryColor({
                 alpha: 0.12
               })}`,
               transform: "translateY(2px)"
@@ -316,7 +353,8 @@ const useStyles = makeStyles(
                 alpha: 0.14
               })}, 0 0 8px 2px ${colors.createSecondaryColor({
                 alpha: 0.12
-              })}`
+              })}`,
+              transform: "translateY(2px)"
             }
           }
         },
