@@ -339,7 +339,7 @@ const Radio = React.memo(
       required: formControl ? formControl.required : required,
       onFocus: e => {
         if (isMounted) {
-          e.persist();
+          if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onFocus) onFocus(e);
             if (inputOnFocusProp) inputOnFocusProp(e);
@@ -350,7 +350,7 @@ const Radio = React.memo(
       },
       onBlur: e => {
         if (isMounted) {
-          e.persist();
+          if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onBlur) onBlur(e);
             if (inputOnBlurProp) inputOnBlurProp(e);
@@ -361,7 +361,7 @@ const Radio = React.memo(
       },
       onChange: e => {
         if (isMounted) {
-          e.persist();
+          if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onChange) onChange(e, true);
             if (inputOnChangeProp) inputOnChangeProp(e, true);

@@ -292,7 +292,7 @@ const InputStepper = React.memo(
     };
 
     const changeHandler = e => {
-      e.persist();
+      if (e && e.persist) e.persist();
       if (!disabled) {
         const newValue = parseInt(e.target.value);
 

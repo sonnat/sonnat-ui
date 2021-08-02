@@ -314,7 +314,7 @@ const Select = React.memo(
       fluid: formControl ? formControl.fluid : fluid,
       onFocus: e => {
         if (isMounted) {
-          if (e.persist) e.persist();
+          if (e && e.persist) e.persist();
           if (!controlProps.disabled) {
             if (onFocus) onFocus(e);
             if (inputOnFocusProp) inputOnFocusProp(e);
@@ -325,8 +325,8 @@ const Select = React.memo(
       },
       onBlur: e => {
         if (isMounted) {
+          if (e && e.persist) e.persist();
           if (!controlProps.disabled) {
-            if (e.persist) e.persist();
             if (onBlur) onBlur(e);
             if (inputOnBlurProp) inputOnBlurProp(e);
             if (formControl && formControl.onBlur) formControl.onBlur(e);
@@ -336,10 +336,10 @@ const Select = React.memo(
       },
       onChange: (e, v) => {
         if (isMounted) {
+          if (e && e.persist) e.persist();
           if (!controlProps.disabled) {
             const newValue = v != null ? v : e != null ? e.target.value : null;
 
-            if (e.persist) e.persist();
             if (onChange) onChange(e, newValue);
             if (inputOnChangeProp) inputOnChangeProp(e, newValue);
             setValue(newValue);
