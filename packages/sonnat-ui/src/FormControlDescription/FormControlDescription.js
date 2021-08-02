@@ -15,7 +15,8 @@ const useStyles = makeStyles(
         color: theme.colors.text.secondary
       }),
       direction: theme.direction,
-      fontFamily: theme.typography.fontFamily[theme.direction]
+      fontFamily: theme.typography.fontFamily[theme.direction],
+      marginBottom: theme.typography.pxToRem(8)
     },
     disabled: {}
   }),
