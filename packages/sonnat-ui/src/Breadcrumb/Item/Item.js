@@ -24,13 +24,11 @@ const useStyles = makeStyles(
           color: colors.text.secondary,
           lineHeight: 1.6666666667
         }),
+        maxWidth: pxToRem(120),
         display: "inline-flex",
         alignItems: "center",
         flexShrink: "0",
         cursor: "pointer",
-        whiteSpace: "nowrap",
-        textOverflow: "ellipsis",
-        overflow: "hidden",
         transition: "color 360ms ease",
         ...(direction === "rtl"
           ? { marginLeft: pxToRem(4) }
@@ -42,10 +40,13 @@ const useStyles = makeStyles(
             color: colors.text.primary,
             transform: "rotate(180deg)"
           },
-          "& ~ $root > $separator": {
-            transform: "rotate(180deg)"
-          }
+          "& ~ $root > $separator": { transform: "rotate(180deg)" }
         }
+      },
+      content: {
+        whiteSpace: "nowrap",
+        textOverflow: "ellipsis",
+        overflow: "hidden"
       },
       separator: {
         ...useIconWrapper(16),
@@ -70,13 +71,8 @@ const BreadcrumbItem = React.memo(
 
     return (
       <li ref={ref} className={clx(classes.root, className)} {...otherProps}>
-        {children}
-        <i
-          className={clx(
-            classes.separator,
-            "sonnat__breadcrumb-item__separator"
-          )}
-        >
+        <div className={classes.content}>{children}</div>
+        <i role="separator" className={classes.separator}>
           {isRtl ? <ChevronLeft /> : <ChevronRight />}
         </i>
       </li>

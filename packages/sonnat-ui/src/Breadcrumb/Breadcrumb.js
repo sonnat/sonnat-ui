@@ -34,34 +34,25 @@ const useStyles = makeStyles(
         position: "relative",
         scrollBehavior: "smooth",
         WebkitOverflowScrolling: "touch",
-        "& > $item": {
-          maxWidth: pxToRem(120)
-        },
         "& > $item:last-child": {
           margin: 0,
           color: colors.text.hint,
           pointerEvents: "none",
-          "& > .sonnat__breadcrumb-item__separator": {
-            display: "none"
-          }
+          "& > [role='separator']": { display: "none" }
         }
       },
       onlyPreviousStep: {
-        "& > $item:not(:nth-last-child(2))": {
-          display: "none"
-        },
+        "& > $item:not(:nth-last-child(2))": { display: "none" },
         "& > $item:nth-last-child(2)": {
           margin: 0,
           "&:hover": {
-            "& > .sonnat__breadcrumb-item__separator": {
+            "& > [role='separator']": {
               color: colors.text.primary,
               transform: "rotate(180deg)"
             },
-            "& ~ $item > .sonnat__breadcrumb-item__separator": {
-              transform: "rotate(0)"
-            }
+            "& ~ $item > [role='separator']": { transform: "rotate(0)" }
           },
-          "& > .sonnat__breadcrumb-item__separator": {
+          "& > [role='separator']": {
             order: "-1",
             transform: "rotate(180deg)",
             ...(direction === "rtl"
