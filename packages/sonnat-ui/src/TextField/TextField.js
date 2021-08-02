@@ -66,7 +66,12 @@ const useStyles = makeStyles(
       helperContent: {
         display: "flex",
         margin: 0,
-        flex: [[1, 0]]
+        flex: [[1, 0]],
+        "& + $charCount": {
+          ...(direction === "rtl"
+            ? { paddingRight: pxToRem(8) }
+            : { paddingLeft: pxToRem(8) })
+        }
       },
       helperText: {
         ...useText({
@@ -90,8 +95,8 @@ const useStyles = makeStyles(
           color: colors.text.secondary
         }),
         ...(direction === "rtl"
-          ? { marginRight: pxToRem(8) }
-          : { marginLeft: pxToRem(8) }),
+          ? { marginRight: "auto" }
+          : { marginLeft: "auto" }),
         minWidth: "7.7ch",
         display: "flex",
         justifyContent: "flex-end",
@@ -254,15 +259,18 @@ const TextField = React.memo(
     const classes = useStyles();
     const formControl = useFormControl();
 
-    const [value, setValue, isControlled] = useControlled(
-      inputValueProp || valueProp,
-      defaultValue,
-      componentName
+    const { current: _default_ } = useRef(
+      inputValueProp || valueProp != null
+        ? undefined
+        : defaultValue != null
+        ? defaultValue
+        : ""
     );
 
-    const isInit = useRef(true);
-    const { current: initialValue } = useRef(
-      inputValueProp || valueProp || defaultValue
+    const [value, setValue] = useControlled(
+      inputValueProp || valueProp,
+      _default_,
+      componentName
     );
 
     const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
@@ -275,6 +283,11 @@ const TextField = React.memo(
 
     const type = getVar(typeProp, "text", !allowedTypes.includes(typeProp));
 
+    const isInit = useRef(true);
+    const { current: initialValue } = useRef(
+      inputValueProp || valueProp || _default_
+    );
+
     const isLegendLabeled = !!legendLabel;
     const isReadOnly = !!inputReadOnlyProp || readOnly;
     const isAutoFocus = !!inputAutoFocusProp || autoFocus || focused;
@@ -285,7 +298,7 @@ const TextField = React.memo(
     const [isFocused, setFocused] = useState(isAutoFocus);
     const [charCount, setCharCount] = useState(
       clamp(
-        initialValue ? initialValue.length : 0,
+        initialValue.length,
         0,
         hasLimitedLength ? otherInputProps.maxLength : Infinity
       )
@@ -300,7 +313,7 @@ const TextField = React.memo(
       fluid: formControl ? formControl.fluid : fluid,
       onFocus: e => {
         if (isMounted) {
-          e.persist();
+          if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onFocus) onFocus(e);
             if (inputOnFocusProp) inputOnFocusProp(e);
@@ -311,7 +324,7 @@ const TextField = React.memo(
       },
       onBlur: e => {
         if (isMounted) {
-          e.persist();
+          if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onBlur) onBlur(e);
             if (inputOnBlurProp) inputOnBlurProp(e);
@@ -322,7 +335,7 @@ const TextField = React.memo(
       },
       onChange: e => {
         if (isMounted) {
-          e.persist();
+          if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onChange) onChange(e, e.target.value);
             if (inputOnChangeProp) inputOnChangeProp(e, e.target.value);
@@ -378,6 +391,10 @@ const TextField = React.memo(
       }
     }));
 
+    const finalValue = hasLimitedLength
+      ? value.substr(0, otherInputProps.maxLength)
+      : value;
+
     return (
       <TextFieldContext.Provider value={{ isEmpty: isEmpty(value) }}>
         <div
@@ -407,22 +424,7 @@ const TextField = React.memo(
               <input
                 id={inputIdProp}
                 name={name}
-                value={
-                  isControlled
-                    ? hasLimitedLength
-                      ? value
-                        ? value.substr(0, otherInputProps.maxLength)
-                        : undefined
-                      : value
-                    : undefined
-                }
-                defaultValue={
-                  hasLimitedLength
-                    ? defaultValue
-                      ? defaultValue.substr(0, otherInputProps.maxLength)
-                      : undefined
-                    : defaultValue
-                }
+                value={finalValue}
                 placeholder={
                   isLegendLabeled
                     ? hasLeadingAdornment
@@ -457,7 +459,7 @@ const TextField = React.memo(
                   <span className={classes.helperText}>{helperText}</span>
                 </p>
               )}
-              {otherInputProps.maxLength && (
+              {hasLimitedLength && (
                 <div className={classes.charCount}>
                   {charCount} / {otherInputProps.maxLength}
                 </div>

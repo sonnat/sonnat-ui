@@ -47,7 +47,12 @@ const useStyles = makeStyles(
     return {
       root: {
         direction,
-        fontFamily: fontFamily[direction]
+        fontFamily: fontFamily[direction],
+        "&:not($errored):not($focused):hover $wrapper:after": {
+          borderColor: !darkMode
+            ? colors.createBlackColor({ alpha: 0.48 })
+            : colors.createWhiteColor({ alpha: 0.48 })
+        }
       },
       wrapper: {
         display: "inline-flex",
@@ -56,11 +61,6 @@ const useStyles = makeStyles(
         width: "100%",
         verticalAlign: "top",
         flexDirection: "column",
-        "&:not($errored):not($focused):hover:after": {
-          borderColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.48 })
-            : colors.createWhiteColor({ alpha: 0.48 })
-        },
         "&:after": {
           content: "''",
           top: 0,
@@ -122,7 +122,12 @@ const useStyles = makeStyles(
       helperContent: {
         display: "flex",
         margin: 0,
-        flex: [[1, 0]]
+        flex: [[1, 0]],
+        "& + $charCount": {
+          ...(direction === "rtl"
+            ? { paddingRight: pxToRem(8) }
+            : { paddingLeft: pxToRem(8) })
+        }
       },
       helperText: {
         ...useText({
@@ -146,8 +151,8 @@ const useStyles = makeStyles(
           color: colors.text.secondary
         }),
         ...(direction === "rtl"
-          ? { marginRight: pxToRem(8) }
-          : { marginLeft: pxToRem(8) }),
+          ? { marginRight: "auto" }
+          : { marginLeft: "auto" }),
         minWidth: "7.7ch",
         display: "flex",
         justifyContent: "flex-end",
@@ -180,7 +185,7 @@ const useStyles = makeStyles(
       },
       disabled: {
         pointerEvents: "none",
-        "&:after": { borderColor: colors.divider },
+        "& $wrapper:after": { borderColor: colors.divider },
         "& $input": {
           color: colors.text.disabled,
           "&::-webkit-input-placeholder": { color: colors.text.disabled },
@@ -190,13 +195,13 @@ const useStyles = makeStyles(
         }
       },
       focused: {
-        "&:not($errored):after": {
+        "&:not($errored) $wrapper:after": {
           borderWidth: 2,
           borderColor: !darkMode
             ? colors.createPrimaryColor({ alpha: 0.56 })
             : changeColor(colors.primary.light, { alpha: 0.56 })
         },
-        "&$errored:after": {
+        "&$errored $wrapper:after": {
           borderWidth: 2,
           borderColor: !darkMode ? colors.error.origin : colors.error.light
         }
@@ -335,18 +340,26 @@ const TextArea = React.memo(
     const shadowRef = React.useRef();
     const renders = React.useRef(0);
 
-    const [state, setState] = React.useState({});
+    const [styleState, setStyleState] = React.useState({});
 
     const classes = useStyles();
     const formControl = useFormControl();
 
-    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+    const { current: _default_ } = React.useRef(
+      inputValueProp || valueProp != null
+        ? undefined
+        : defaultValue != null
+        ? defaultValue
+        : ""
+    );
 
     const [value, setValue, isControlled] = useControlled(
       inputValueProp || valueProp,
-      defaultValue,
+      _default_,
       componentName
     );
+
+    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
 
     const isInit = React.useRef(true);
     const { current: initialValue } = React.useRef(
@@ -361,7 +374,7 @@ const TextArea = React.memo(
     const [isFocused, setFocused] = React.useState(isAutoFocus);
     const [charCount, setCharCount] = React.useState(
       clamp(
-        initialValue ? initialValue.length : 0,
+        initialValue.length,
         0,
         hasLimitedLength ? otherInputProps.maxLength : Infinity
       )
@@ -376,7 +389,7 @@ const TextArea = React.memo(
       fluid: formControl ? formControl.fluid : fluid,
       onFocus: e => {
         if (isMounted) {
-          e.persist();
+          if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onFocus) onFocus(e);
             if (inputOnFocusProp) inputOnFocusProp(e);
@@ -387,7 +400,7 @@ const TextArea = React.memo(
       },
       onBlur: e => {
         if (isMounted) {
-          e.persist();
+          if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onBlur) onBlur(e);
             if (inputOnBlurProp) inputOnBlurProp(e);
@@ -398,7 +411,7 @@ const TextArea = React.memo(
       },
       onChange: e => {
         if (isMounted) {
-          e.persist();
+          if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             renders.current = 0;
 
@@ -504,7 +517,7 @@ const TextArea = React.memo(
         outerHeight + (boxSizing === "border-box" ? padding + border : 0);
       const overflow = Math.abs(outerHeight - innerHeight) <= 1;
 
-      setState(prevState => {
+      setStyleState(prevState => {
         // Need a large enough difference to update the height.
         // This prevents infinite rendering loop.
         if (
@@ -562,6 +575,10 @@ const TextArea = React.memo(
       renders.current = 0;
     }, [value]);
 
+    const finalValue = hasLimitedLength
+      ? value.substr(0, otherInputProps.maxLength)
+      : value;
+
     return (
       <div
         className={clx(classes.root, className, classes[size], {
@@ -580,7 +597,7 @@ const TextArea = React.memo(
             id={inputIdProp}
             name={name}
             placeholder={placeholder}
-            value={value}
+            value={finalValue}
             disabled={controlProps.disabled}
             required={controlProps.required}
             className={clx(classes.input, inputClassNameProp)}
@@ -590,11 +607,11 @@ const TextArea = React.memo(
             readOnly={isReadOnly}
             rows={minRows}
             style={{
-              height: state.outerHeightStyle,
+              height: styleState.outerHeightStyle,
 
               // Need a large enough difference to allow scrolling.
               // This prevents infinite rendering loop.
-              overflow: state.overflow ? "hidden" : undefined,
+              overflow: styleState.overflow ? "hidden" : undefined,
 
               ...style,
               ...inputStyleProp
