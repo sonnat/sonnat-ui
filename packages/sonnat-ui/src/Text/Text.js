@@ -170,7 +170,8 @@ const Text = React.memo(
             [classes.noWrap]: noWrap,
             [classes[`${weight}Weight`]]: weight != null && !!weight,
             [classes[`${align}Alignment`]]: align != null && !!align,
-            [classes[`${display}Display`]]: display != null && !!display
+            [classes[`${camelCase(display)}Display`]]:
+              display != null && !!display
           }
         )}
         {...otherProps}
