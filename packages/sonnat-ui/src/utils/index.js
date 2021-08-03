@@ -28,6 +28,8 @@ export { default as useEnhancedEffect } from "./useEnhancedEffect";
 
 export { default as useIntersection } from "./useIntersection";
 
+export { default as useIsMounted } from "./useIsMounted";
+
 export { default as useSyncEffect } from "./useSyncEffect";
 
 export { default as usePreviousValue } from "./usePreviousValue";

@@ -23,6 +23,9 @@ export * from "./useEventListener";
 export { default as useIntersection } from "./useIntersection";
 export * from "./useIntersection";
 
+export { default as useIsMounted } from "./useIsMounted";
+export * from "./useIsMounted";
+
 export { default as deepMerge } from "./deepMerge";
 export * from "./deepMerge";
 
