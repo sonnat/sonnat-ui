@@ -152,26 +152,26 @@ const Text = React.memo(
 
     const classes = useStyles();
 
-    let variantClass = "";
-    if (variant && allowedVariants.includes(variant)) {
-      variantClass = classes[`${variant}`] || "";
+    let displayClass = "";
+
+    if (display && allowedDisplays.includes(display)) {
+      displayClass = classes[`${camelCase(display)}`] || "";
     }
 
     return (
       <HTMLTag
         ref={ref}
         className={clx(
+          className,
           classes.root,
           classes[`${color}Color`],
           classes[`${textOverflow}Overflow`],
-          className,
-          variantClass,
+          displayClass,
           {
             [classes.noWrap]: noWrap,
+            [classes[variant]]: variant != null && !!variant,
             [classes[`${weight}Weight`]]: weight != null && !!weight,
-            [classes[`${align}Alignment`]]: align != null && !!align,
-            [classes[`${camelCase(display)}Display`]]:
-              display != null && !!display
+            [classes[`${align}Alignment`]]: align != null && !!align
           }
         )}
         {...otherProps}
