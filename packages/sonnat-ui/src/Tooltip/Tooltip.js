@@ -1,17 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
 import clx from "classnames";
+import PropTypes from "prop-types";
+import React from "react";
 import PortalDestination from "../PortalDestination";
 import makeStyles from "../styles/makeStyles";
 import {
-  useControlled,
   generateUniqueString,
   getOffsetFromWindow,
   onNextFrame,
-  useForkRef,
   setRef,
-  usePreviousValue,
-  useEventListener
+  useControlled,
+  useEventListener,
+  useForkRef,
+  useIsMounted,
+  usePreviousValue
 } from "../utils";
 
 const componentName = "Tooltip";
@@ -423,7 +424,8 @@ const Tooltip = React.memo(
 
     const prevPlacement = usePreviousValue(placement);
 
-    const [isMounted, setMounted] = React.useState(false);
+    const isMounted = useIsMounted();
+
     const [currentPlacement, setCurrentPlacement] = React.useState(placement);
 
     const [currentPosition, setCurrentPositon] = React.useState({
@@ -436,11 +438,6 @@ const Tooltip = React.memo(
       openProp == null && defaultOpen == null ? false : defaultOpen,
       componentName
     );
-
-    React.useEffect(() => {
-      setMounted(true);
-      return () => setMounted(false);
-    }, []);
 
     React.useEffect(() => {
       if (

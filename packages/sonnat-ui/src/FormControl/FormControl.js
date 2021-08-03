@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import clx from "classnames";
+import PropTypes from "prop-types";
+import React, { useState } from "react";
 import makeStyles from "../styles/makeStyles";
+import useIsMounted from "../utils/useIsMounted";
 import FormControlContext from "./context";
 
 const componentName = "FormControl";
@@ -37,15 +38,9 @@ const FormControl = React.memo(
 
     const classes = useStyles();
 
-    const [isFocused, setFocused] = useState(focused);
-    const [isMounted, setMounted] = useState(false);
+    const isMounted = useIsMounted();
 
-    useEffect(() => {
-      setMounted(true);
-      return () => {
-        setMounted(false);
-      };
-    }, []);
+    const [isFocused, setFocused] = useState(focused);
 
     const childrenContext = React.useMemo(
       () => ({

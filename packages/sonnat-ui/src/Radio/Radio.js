@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
 import clx from "classnames";
 import useRadioGroup from "../RadioGroup/useRadioGroup";
@@ -8,6 +8,7 @@ import useForkRef from "../utils/useForkRef";
 import useControlled from "../utils/useControlled";
 import makeStyles from "../styles/makeStyles";
 import { changeColor } from "../styles/colorUtils";
+import useIsMounted from "../utils/useIsMounted";
 
 const componentName = "Radio";
 
@@ -269,7 +270,7 @@ const Radio = React.memo(
       componentName
     );
 
-    const [isMounted, setMounted] = useState(false);
+    const isMounted = useIsMounted();
     const [isFocused, setFocused] = useState(false);
 
     const size = allowedSizes.includes(sizeProp) ? sizeProp : "medium";
@@ -313,11 +314,6 @@ const Radio = React.memo(
     const value = inputValueProp || valueProp;
 
     const checkedState = radioGroup ? radioGroup.value === value : checked;
-
-    useEffect(() => {
-      setMounted(true);
-      return () => setMounted(false);
-    }, []);
 
     const keyboardListener = useCallback(e => {
       // do nothing if the event was already processed

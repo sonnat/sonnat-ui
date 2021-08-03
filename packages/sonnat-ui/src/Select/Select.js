@@ -2,7 +2,6 @@ import clx from "classnames";
 import PropTypes from "prop-types";
 import React, {
   useCallback,
-  useEffect,
   useImperativeHandle,
   useRef,
   useState
@@ -18,12 +17,13 @@ import { makeStyles, useTheme } from "../styles";
 import {
   closest,
   generateUniqueString,
+  getVar,
   setRef,
   useControlled,
   useEnhancedEffect,
-  useForkRef,
-  getVar
+  useForkRef
 } from "../utils";
+import useIsMounted from "../utils/useIsMounted";
 import { componentName as optionName } from "./Option";
 import { componentName as optionGroupName } from "./OptionGroup";
 
@@ -271,8 +271,9 @@ const Select = React.memo(
       !allowedVariants.includes(variantProp)
     );
 
+    const isMounted = useIsMounted();
+
     const [isOpen, setOpen] = useState(false);
-    const [isMounted, setMounted] = useState(false);
     const [isFocused, setFocused] = useState(isAutoFocus);
 
     const placeholder =
@@ -362,11 +363,6 @@ const Select = React.memo(
 
       if (!isOpenControlled) setOpen(newOpenState);
     };
-
-    useEffect(() => {
-      setMounted(true);
-      return () => setMounted(false);
-    }, []);
 
     // initially focus the component if it is focused
     useEnhancedEffect(() => {

@@ -1,17 +1,18 @@
-import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
-import PropTypes from "prop-types";
 import clx from "classnames";
+import PropTypes from "prop-types";
+import React, { useImperativeHandle, useRef, useState } from "react";
 import useFormControl from "../FormControl/useFormControl";
-import TextFieldContext from "./context";
 import InputBase from "../InputBase";
 import makeStyles from "../styles/makeStyles";
 import {
   clamp,
+  getVar,
   setRef,
   useControlled,
   useEnhancedEffect,
-  getVar
+  useIsMounted
 } from "../utils";
+import TextFieldContext from "./context";
 
 const componentName = "TextField";
 
@@ -292,7 +293,8 @@ const TextField = React.memo(
     const hasLeadingAdornment = !!leadingAdornment;
     const hasLimitedLength = !!otherInputProps.maxLength;
 
-    const [isMounted, setMounted] = useState(false);
+    const isMounted = useIsMounted();
+
     const [isFocused, setFocused] = useState(isAutoFocus);
     const [charCount, setCharCount] = useState(
       clamp(
@@ -347,11 +349,6 @@ const TextField = React.memo(
     // prevent component from being focused if it is disabled or readOnly
     controlProps.focused =
       controlProps.disabled || isReadOnly ? false : controlProps.focused;
-
-    useEffect(() => {
-      setMounted(true);
-      return () => setMounted(false);
-    }, []);
 
     // initially focus the component if it is focused
     useEnhancedEffect(() => {

@@ -7,11 +7,12 @@ import { changeColor } from "../styles/colorUtils";
 import makeStyles from "../styles/makeStyles";
 import {
   clamp,
+  getVar,
   setRef,
   useControlled,
   useEnhancedEffect,
   useForkRef,
-  getVar
+  useIsMounted
 } from "../utils";
 
 const componentName = "TextArea";
@@ -368,7 +369,8 @@ const TextArea = React.memo(
     const isAutoFocus = !!inputAutoFocusProp || autoFocus || focused;
     const hasLimitedLength = !!otherInputProps.maxLength;
 
-    const [isMounted, setMounted] = React.useState(false);
+    const isMounted = useIsMounted();
+
     const [isFocused, setFocused] = React.useState(isAutoFocus);
     const [charCount, setCharCount] = React.useState(
       clamp(
@@ -426,11 +428,6 @@ const TextArea = React.memo(
     // prevent component from being focused if it is disabled or readOnly
     controlProps.focused =
       controlProps.disabled || isReadOnly ? false : controlProps.focused;
-
-    React.useEffect(() => {
-      setMounted(true);
-      return () => setMounted(false);
-    }, []);
 
     // initially focus the component if it is focused
     useEnhancedEffect(() => {

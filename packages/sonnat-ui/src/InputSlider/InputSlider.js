@@ -1,20 +1,21 @@
-import React from "react";
-import PropTypes from "prop-types";
 import clx from "classnames";
+import PropTypes from "prop-types";
+import React from "react";
 import { withResizeDetector } from "react-resize-detector";
 import { ChevronLeft, ChevronRight } from "../internals/icons";
-import {
-  useEventListener,
-  closest,
-  clamp,
-  map,
-  useForkRef,
-  useControlled,
-  usePreviousValue,
-  useConstantProp
-} from "../utils";
-import makeStyles from "../styles/makeStyles";
 import { changeColor } from "../styles/colorUtils";
+import makeStyles from "../styles/makeStyles";
+import {
+  clamp,
+  closest,
+  map,
+  useConstantProp,
+  useControlled,
+  useEventListener,
+  useForkRef,
+  useIsMounted,
+  usePreviousValue
+} from "../utils";
 
 const componentName = "InputSlider";
 
@@ -273,11 +274,11 @@ const InputSlider = React.memo(
     const {
       className,
       // Exclude from the `otherProps` property.
-      /* eslint-disable no-unused-vars, react/prop-types */
+      /* eslint-disable */
       targetRef,
       height: rootHeight,
       onClick: onClickProp,
-      /* eslint-enable no-unused-vars, react/prop-types */
+      /* eslint-enable */
       onChange,
       onMount,
       onDismount,
@@ -420,8 +421,9 @@ const InputSlider = React.memo(
     const isInitialRender = React.useRef(true);
     const isInitiated = React.useRef(false);
 
+    const isMounted = useIsMounted();
+
     const [transitions, setTransitions] = React.useState("");
-    const [isMounted, setMounted] = React.useState(false);
     const [isDragStarted, setDragStarted] = React.useState(false);
     const [isClickAllowed, setClickAllowed] = React.useState(true);
     const [currentHandle, setCurrentHandle] = React.useState("sup");
@@ -454,13 +456,10 @@ const InputSlider = React.memo(
     const handleSelector = `.${classes.handle}`;
 
     React.useEffect(() => {
-      setMounted(true);
-      if (onMount) onMount();
-      return () => {
-        setMounted(false);
-        if (onDismount) onDismount();
-      };
-    }, [onMount, onDismount]);
+      if (isMounted) {
+        if (onMount) onMount();
+      } else if (onDismount) onDismount();
+    }, [isMounted, onMount, onDismount]);
 
     // update parentWidth when resizeDetector detects any changes in width of the parent
     React.useEffect(() => {

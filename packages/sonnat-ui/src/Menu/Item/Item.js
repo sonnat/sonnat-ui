@@ -1,8 +1,9 @@
-import React, { useContext, useRef, useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import useIsMounted from "@sonnat/ui/utils/useIsMounted";
 import clx from "classnames";
-import FloatedListContext from "../context";
+import PropTypes from "prop-types";
+import React, { useContext, useRef, useState } from "react";
 import makeStyles from "../../styles/makeStyles";
+import FloatedListContext from "../context";
 
 export const componentName = "MenuItem";
 
@@ -79,13 +80,9 @@ const MenuItem = React.memo(function MenuItem(props) {
   const classes = useStyles();
 
   const { registerNode, dense } = useContext(FloatedListContext);
-  const [isMounted, setMounted] = useState(false);
-  const [isFocused, setFocused] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
+  const isMounted = useIsMounted();
+  const [isFocused, setFocused] = useState(false);
 
   if (isMounted && itemRef.current && registerNode) {
     itemRef.current.disabled = disabled;
