@@ -1,8 +1,8 @@
-import useIsMounted from "@sonnat/ui/utils/useIsMounted";
 import clx from "classnames";
 import PropTypes from "prop-types";
 import React, { useContext, useRef, useState } from "react";
 import makeStyles from "../../styles/makeStyles";
+import useIsMounted from "../../utils/useIsMounted";
 import FloatedListContext from "../context";
 
 export const componentName = "MenuItem";
