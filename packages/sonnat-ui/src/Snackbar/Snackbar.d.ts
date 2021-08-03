@@ -54,10 +54,7 @@ type BaseProps<P = {}> = P & {
   onTransitionEnd?: (event: React.TransitionEvent<HTMLDivElement>) => void;
 };
 
-export type SnackbarProps<
-  P = {},
-  T extends React.ElementType = "div"
-> = MergeElementProps<T, BaseProps<P, T>>;
+export type SnackbarProps<P = {}> = MergeElementProps<"div", BaseProps<P>>;
 
 declare const Snackbar: (props: SnackbarProps) => JSX.Element;
 
