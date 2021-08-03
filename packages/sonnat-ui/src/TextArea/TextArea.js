@@ -362,9 +362,7 @@ const TextArea = React.memo(
     const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
 
     const isInit = React.useRef(true);
-    const { current: initialValue } = React.useRef(
-      inputValueProp || valueProp || defaultValue
-    );
+    const { current: initialValue } = React.useRef(value);
 
     const isReadOnly = !!inputReadOnlyProp || readOnly;
     const isAutoFocus = !!inputAutoFocusProp || autoFocus || focused;

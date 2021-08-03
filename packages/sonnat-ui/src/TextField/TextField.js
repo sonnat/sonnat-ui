@@ -284,9 +284,7 @@ const TextField = React.memo(
     const type = getVar(typeProp, "text", !allowedTypes.includes(typeProp));
 
     const isInit = useRef(true);
-    const { current: initialValue } = useRef(
-      inputValueProp || valueProp || _default_
-    );
+    const { current: initialValue } = useRef(value);
 
     const isLegendLabeled = !!legendLabel;
     const isReadOnly = !!inputReadOnlyProp || readOnly;
@@ -400,7 +398,9 @@ const TextField = React.memo(
         <div
           ref={ref}
           className={clx(classes.root, className, classes[size], {
-            [classes.fluid]: controlProps.fluid
+            [classes.fluid]: controlProps.fluid,
+            [classes.disabled]: controlProps.disabled,
+            [classes.errored]: controlProps.hasError
           })}
           {...otherProps}
         >
