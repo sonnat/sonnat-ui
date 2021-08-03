@@ -16,10 +16,7 @@ const useStyles = makeStyles(
     } = theme;
 
     return {
-      root: {
-        height: pxToRem(24),
-        overflow: "hidden"
-      },
+      root: { overflow: "hidden" },
       list: {
         direction,
         fontFamily: fontFamily[direction],
@@ -27,6 +24,7 @@ const useStyles = makeStyles(
         margin: "0",
         listStyle: "none",
         display: "flex",
+        height: pxToRem(24),
         flexWrap: "nowrap",
         overflowX: "auto",
         overflowY: "hidden",
