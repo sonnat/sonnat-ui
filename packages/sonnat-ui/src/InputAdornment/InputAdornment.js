@@ -4,7 +4,11 @@ import React from "react";
 import useInputBase from "../InputBase/useInputBase";
 import { adjustColor } from "../styles/colorUtils";
 import makeStyles from "../styles/makeStyles";
+import { blue } from "../styles/pallete";
 import getVar from "../utils/getVar";
+import useEventCallback from "../utils/useEventCallback";
+import useForkRef from "../utils/useForkRef";
+import useIsFocusVisible from "../utils/useIsFocusVisible";
 
 const componentName = "InputAdornment";
 
@@ -47,10 +51,14 @@ const useStyles = makeStyles(
         padding: 0,
         backgroundColor: colors.transparent,
         cursor: "pointer",
-        "&:hover, &:focus": {
+        "&:hover": {
           color: !darkMode
             ? adjustColor(colors.text.secondary, { lightness: 12 })
-            : colors.createWhiteColor({ alpha: 0.98 })
+            : colors.createWhiteColor({ alpha: 0.98 }),
+          // Reset on touch devices, it doesn't add specificity
+          "@media (hover: none)": {
+            backgroundColor: colors.transparent
+          }
         },
         "&:active": {
           color: !darkMode
@@ -110,6 +118,10 @@ const useStyles = makeStyles(
         "&:not($disabled)$textAdornment": {
           color: !darkMode ? colors.error.origin : colors.error.light
         }
+      },
+      focusVisible: {
+        outline: `2px solid ${darkMode ? blue[300] : blue[500]}`,
+        outlineOffset: 1
       }
     };
   },
@@ -121,6 +133,11 @@ const InputAdornment = React.memo(
     const {
       className,
       children,
+      onFocus,
+      onBlur,
+      onKeyDown,
+      onKeyUp,
+      onClick,
       variant: variantProp = "node",
       ...otherProps
     } = props;
@@ -135,24 +152,119 @@ const InputAdornment = React.memo(
 
     const RootNode = variant === "icon" ? "i" : "div";
 
+    const isActionable = onClick != null;
+
     const { size, disabled, hasError } = useInputBase();
+
+    const {
+      isFocusVisibleRef,
+      onBlur: handleBlurVisible,
+      onFocus: handleFocusVisible,
+      ref: focusVisibleRef
+    } = useIsFocusVisible();
+
+    const adornmentRef = React.useRef(null);
+
+    const handleOwnRef = useForkRef(focusVisibleRef, adornmentRef);
+    const handleRef = useForkRef(ref, handleOwnRef);
+
+    const [focusVisible, setFocusVisible] = React.useState(false);
+
+    if (disabled && focusVisible) {
+      setFocusVisible(false);
+    }
+
+    React.useEffect(() => {
+      isFocusVisibleRef.current = focusVisible;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [focusVisible]);
+
+    const handleFocus = useEventCallback(event => {
+      // Fix for https://github.com/facebook/react/issues/7769
+      if (!adornmentRef.current) adornmentRef.current = event.currentTarget;
+
+      handleFocusVisible(event);
+
+      if (isFocusVisibleRef.current === true) setFocusVisible(true);
+      if (onFocus) onFocus(event);
+    });
+
+    const handleBlur = useEventCallback(event => {
+      handleBlurVisible(event);
+
+      if (isFocusVisibleRef.current === false) setFocusVisible(false);
+      if (onBlur) onBlur(event);
+    });
+
+    const keyDownRef = React.useRef(false);
+
+    const handleKeyDown = useEventCallback(event => {
+      if (keyDownRef.current === false && focusVisible && event.key === " ") {
+        keyDownRef.current = true;
+      }
+
+      if (event.target === event.currentTarget && event.key === " ") {
+        event.preventDefault();
+      }
+
+      if (onKeyDown) onKeyDown(event);
+
+      // Keyboard accessibility for non interactive elements
+      if (
+        event.target === event.currentTarget &&
+        event.key.toLowerCase() === "enter" &&
+        !disabled
+      ) {
+        event.preventDefault();
+        if (onClick) onClick(event);
+      }
+    });
+
+    const handleKeyUp = useEventCallback(event => {
+      if (!event.defaultPrevented && focusVisible && event.key === " ") {
+        keyDownRef.current = false;
+      }
+
+      if (onKeyUp) onKeyUp(event);
+
+      // Keyboard accessibility for non interactive elements
+      if (
+        event.target === event.currentTarget &&
+        event.key === " " &&
+        !event.defaultPrevented
+      ) {
+        if (onClick) onClick(event);
+      }
+    });
+
+    const actionProps = isActionable
+      ? {
+          onClick,
+          onKeyDown: handleKeyDown,
+          onKeyUp: handleKeyUp,
+          onFocus: handleFocus,
+          onBlur: handleBlur
+        }
+      : {};
 
     return (
       <RootNode
-        ref={ref}
-        role={otherProps.onClick ? "button" : undefined}
-        tabIndex={otherProps.onClick ? (disabled ? -1 : 0) : undefined}
+        ref={handleRef}
+        role={isActionable ? "button" : undefined}
+        tabIndex={isActionable ? (disabled ? -1 : 0) : undefined}
         className={clx(
           classes.root,
           className,
           classes[size],
           classes[`${variant}Adornment`],
           {
-            [classes.actionable]: !!otherProps.onClick,
+            [classes.focusVisible]: focusVisible,
+            [classes.actionable]: isActionable,
             [classes.disabled]: disabled,
             [classes.errored]: hasError
           }
         )}
+        {...actionProps}
         {...otherProps}
       >
         {children}
@@ -164,7 +276,12 @@ const InputAdornment = React.memo(
 InputAdornment.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
-  variant: PropTypes.oneOf(allowedVariants)
+  variant: PropTypes.oneOf(allowedVariants),
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  onKeyDown: PropTypes.func,
+  onKeyUp: PropTypes.func,
+  onClick: PropTypes.func
 };
 
 InputAdornment.displayName = componentName;
