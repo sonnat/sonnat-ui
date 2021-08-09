@@ -3,7 +3,11 @@ import PropTypes from "prop-types";
 import React from "react";
 import { adjustColor, changeColor } from "../styles/colorUtils";
 import makeStyles from "../styles/makeStyles";
+import { blue } from "../styles/pallete";
 import getVar from "../utils/getVar";
+import useEventCallback from "../utils/useEventCallback";
+import useForkRef from "../utils/useForkRef";
+import useIsFocusVisible from "../utils/useIsFocusVisible";
 
 const componentName = "ActionChip";
 
@@ -160,21 +164,19 @@ const useStyles = makeStyles(
             ? colors.pallete.grey[100]
             : colors.pallete.grey[900]
         },
-        "&:hover, &:focus": {
+        "&:hover": {
           backgroundColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.12 })
-            : colors.createWhiteColor({ alpha: 0.12 })
+            : colors.createWhiteColor({ alpha: 0.12 }),
+          // Reset on touch devices, it doesn't add specificity
+          "@media (hover: none)": {
+            backgroundColor: colors.transparent
+          }
         },
         "&:active": {
           backgroundColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.24 })
             : colors.createWhiteColor({ alpha: 0.24 })
-        },
-        "&:hover": {
-          // Reset on touch devices, it doesn't add specificity
-          "@media (hover: none)": {
-            backgroundColor: colors.transparent
-          }
         }
       },
       filledPrimary: {
@@ -184,17 +186,15 @@ const useStyles = makeStyles(
         "&$disabled": {
           backgroundColor: filledPrimary.background.disabled
         },
-        "&:hover, &:focus": {
-          backgroundColor: filledPrimary.background.hover
-        },
-        "&:active": {
-          backgroundColor: filledPrimary.background.active
-        },
         "&:hover": {
+          backgroundColor: filledPrimary.background.hover,
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": {
             backgroundColor: colors.transparent
           }
+        },
+        "&:active": {
+          backgroundColor: filledPrimary.background.active
         }
       },
       filledSecondary: {
@@ -204,17 +204,15 @@ const useStyles = makeStyles(
         "&$disabled": {
           backgroundColor: filledSecondary.background.disabled
         },
-        "&:hover, &:focus": {
-          backgroundColor: filledSecondary.background.hover
-        },
-        "&:active": {
-          backgroundColor: filledSecondary.background.active
-        },
         "&:hover": {
+          backgroundColor: filledSecondary.background.hover,
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": {
             backgroundColor: colors.transparent
           }
+        },
+        "&:active": {
+          backgroundColor: filledSecondary.background.active
         }
       },
       outlinedDefault: {
@@ -222,10 +220,14 @@ const useStyles = makeStyles(
         border: `${pxToRem(1)} solid ${colors.divider}`,
         color: colors.text.secondary,
         "& $icon": { color: colors.text.secondary },
-        "&:hover, &:focus": {
+        "&:hover": {
           backgroundColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.04 })
-            : colors.createWhiteColor({ alpha: 0.04 })
+            : colors.createWhiteColor({ alpha: 0.04 }),
+          // Reset on touch devices, it doesn't add specificity
+          "@media (hover: none)": {
+            backgroundColor: colors.transparent
+          }
         },
         "&:active": {
           backgroundColor: !darkMode
@@ -236,12 +238,6 @@ const useStyles = makeStyles(
           borderColor: colors.divider,
           color: colors.text.disabled,
           "& $icon": { color: colors.text.disabled }
-        },
-        "&:hover": {
-          // Reset on touch devices, it doesn't add specificity
-          "@media (hover: none)": {
-            backgroundColor: colors.transparent
-          }
         }
       },
       outlinedPrimary: {
@@ -249,8 +245,12 @@ const useStyles = makeStyles(
         border: `${pxToRem(1)} solid ${filledPrimaryMainBg}`,
         color: filledPrimaryMainBg,
         "& $icon": { color: filledPrimaryMainBg },
-        "&:hover, &:focus": {
-          backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.12 })
+        "&:hover": {
+          backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.12 }),
+          // Reset on touch devices, it doesn't add specificity
+          "@media (hover: none)": {
+            backgroundColor: colors.transparent
+          }
         },
         "&:active": {
           backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.24 })
@@ -261,12 +261,6 @@ const useStyles = makeStyles(
             color: changeColor(filledPrimaryMainBg, { alpha: 0.32 })
           },
           borderColor: changeColor(filledPrimaryMainBg, { alpha: 0.12 })
-        },
-        "&:hover": {
-          // Reset on touch devices, it doesn't add specificity
-          "@media (hover: none)": {
-            backgroundColor: colors.transparent
-          }
         }
       },
       outlinedSecondary: {
@@ -276,8 +270,12 @@ const useStyles = makeStyles(
         "& $icon": {
           color: filledSecondaryMainBg
         },
-        "&:hover, &:focus": {
-          backgroundColor: changeColor(filledSecondaryMainBg, { alpha: 0.12 })
+        "&:hover": {
+          backgroundColor: changeColor(filledSecondaryMainBg, { alpha: 0.12 }),
+          // Reset on touch devices, it doesn't add specificity
+          "@media (hover: none)": {
+            backgroundColor: colors.transparent
+          }
         },
         "&:active": {
           backgroundColor: changeColor(filledSecondaryMainBg, { alpha: 0.24 })
@@ -288,13 +286,11 @@ const useStyles = makeStyles(
             color: changeColor(filledSecondaryMainBg, { alpha: 0.32 })
           },
           borderColor: changeColor(filledSecondaryMainBg, { alpha: 0.12 })
-        },
-        "&:hover": {
-          // Reset on touch devices, it doesn't add specificity
-          "@media (hover: none)": {
-            backgroundColor: colors.transparent
-          }
         }
+      },
+      focusVisible: {
+        outline: `2px solid ${darkMode ? blue[300] : blue[500]}`,
+        outlineOffset: 1
       }
     };
   },
@@ -307,6 +303,11 @@ const ActionChip = React.memo(
       className,
       label,
       leadingIcon,
+      onClick,
+      onFocus,
+      onBlur,
+      onKeyUp,
+      onKeyDown,
       size: sizeProp = "medium",
       variant: variantProp = "filled",
       color: colorProp = "default",
@@ -331,12 +332,94 @@ const ActionChip = React.memo(
       !allowedVariants.includes(variantProp)
     );
 
+    const {
+      isFocusVisibleRef,
+      onBlur: handleBlurVisible,
+      onFocus: handleFocusVisible,
+      ref: focusVisibleRef
+    } = useIsFocusVisible();
+
+    const chipRef = React.useRef(null);
+
+    const handleOwnRef = useForkRef(focusVisibleRef, chipRef);
+    const handleRef = useForkRef(ref, handleOwnRef);
+
+    const [focusVisible, setFocusVisible] = React.useState(false);
+
+    if (disabled && focusVisible) {
+      setFocusVisible(false);
+    }
+
+    React.useEffect(() => {
+      isFocusVisibleRef.current = focusVisible;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [focusVisible]);
+
+    const handleFocus = useEventCallback(event => {
+      // Fix for https://github.com/facebook/react/issues/7769
+      if (!chipRef.current) chipRef.current = event.currentTarget;
+
+      handleFocusVisible(event);
+
+      if (isFocusVisibleRef.current === true) setFocusVisible(true);
+      if (onFocus) onFocus(event);
+    });
+
+    const handleBlur = useEventCallback(event => {
+      handleBlurVisible(event);
+
+      if (isFocusVisibleRef.current === false) setFocusVisible(false);
+      if (onBlur) onBlur(event);
+    });
+
+    const keyDownRef = React.useRef(false);
+
+    const handleKeyDown = useEventCallback(event => {
+      if (keyDownRef.current === false && focusVisible && event.key === " ") {
+        keyDownRef.current = true;
+      }
+
+      if (onKeyDown) onKeyDown(event);
+
+      // Keyboard accessibility for non interactive elements
+      if (
+        event.target === event.currentTarget &&
+        event.key.toLowerCase() === "enter" &&
+        !disabled
+      ) {
+        event.preventDefault();
+        if (onClick) onClick(event);
+      }
+    });
+
+    const handleKeyUp = useEventCallback(event => {
+      if (!event.defaultPrevented && focusVisible && event.key === " ") {
+        keyDownRef.current = false;
+      }
+
+      if (onKeyUp) onKeyUp(event);
+
+      // Keyboard accessibility for non interactive elements
+      if (
+        event.target === event.currentTarget &&
+        event.key === " " &&
+        !event.defaultPrevented
+      ) {
+        if (onClick) onClick(event);
+      }
+    });
+
     return label ? (
       <div
-        ref={ref}
+        ref={handleRef}
         role="button"
         aria-disabled={disabled ? "true" : "false"}
         tabIndex={disabled ? -1 : 0}
+        onClick={onClick}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+        onKeyUp={handleKeyUp}
         className={clx(
           className,
           classes.root,
@@ -344,6 +427,7 @@ const ActionChip = React.memo(
           classes[variant],
           classes[camelCase(`${variant}-${color}`)],
           {
+            [classes.focusVisible]: focusVisible,
             [classes.rounded]: rounded,
             [classes.disabled]: disabled
           }
@@ -367,7 +451,12 @@ ActionChip.propTypes = {
   leadingIcon: PropTypes.node,
   size: PropTypes.oneOf(allowedSizes),
   color: PropTypes.oneOf(allowedColors),
-  variant: PropTypes.oneOf(allowedVariants)
+  variant: PropTypes.oneOf(allowedVariants),
+  onClick: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  onKeyDown: PropTypes.func,
+  onKeyUp: PropTypes.func
 };
 
 export default ActionChip;

@@ -1,9 +1,13 @@
 import clx from "classnames";
 import PropTypes from "prop-types";
-import React, { useRef } from "react";
+import React from "react";
 import { adjustColor, changeColor } from "../styles/colorUtils";
 import makeStyles from "../styles/makeStyles";
+import { blue } from "../styles/pallete";
 import getVar from "../utils/getVar";
+import useEventCallback from "../utils/useEventCallback";
+import useForkRef from "../utils/useForkRef";
+import useIsFocusVisible from "../utils/useIsFocusVisible";
 import useControlled from "../utils/useControlled";
 
 const componentName = "ChoiceChip";
@@ -188,21 +192,19 @@ const useStyles = makeStyles(
           : colors.createWhiteColor({ alpha: 0.04 }),
         color: colors.text.secondary,
         "& $icon": { color: colors.text.secondary },
-        "&:hover, &:focus": {
+        "&:hover": {
           backgroundColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.12 })
-            : colors.createWhiteColor({ alpha: 0.12 })
+            : colors.createWhiteColor({ alpha: 0.12 }),
+          // Reset on touch devices, it doesn't add specificity
+          "@media (hover: none)": {
+            backgroundColor: colors.transparent
+          }
         },
         "&:active": {
           backgroundColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.24 })
             : colors.createWhiteColor({ alpha: 0.24 })
-        },
-        "&:hover": {
-          // Reset on touch devices, it doesn't add specificity
-          "@media (hover: none)": {
-            backgroundColor: colors.transparent
-          }
         }
       },
       outlinedUnselected: {
@@ -210,10 +212,14 @@ const useStyles = makeStyles(
         border: `${pxToRem(1)} solid ${colors.divider}`,
         color: colors.text.secondary,
         "& $icon": { color: colors.text.secondary },
-        "&:hover, &:focus": {
+        "&:hover": {
           backgroundColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.04 })
-            : colors.createWhiteColor({ alpha: 0.04 })
+            : colors.createWhiteColor({ alpha: 0.04 }),
+          // Reset on touch devices, it doesn't add specificity
+          "@media (hover: none)": {
+            backgroundColor: colors.transparent
+          }
         },
         "&:active": {
           backgroundColor: !darkMode
@@ -224,63 +230,51 @@ const useStyles = makeStyles(
           borderColor: colors.divider,
           color: colors.text.disabled,
           "& $icon": { color: colors.text.disabled }
-        },
-        "&:hover": {
-          // Reset on touch devices, it doesn't add specificity
-          "@media (hover: none)": {
-            backgroundColor: colors.transparent
-          }
         }
       },
       filledDefaultSelected: {
         backgroundColor: filledDefault.background.main,
         color: filledDefault.text,
         "& $icon": { color: filledDefault.text },
-        "&:hover, &:focus": {
-          backgroundColor: filledDefault.background.hover
-        },
-        "&:active": {
-          backgroundColor: filledDefault.background.active
-        },
         "&:hover": {
+          backgroundColor: filledDefault.background.hover,
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": {
             backgroundColor: colors.transparent
           }
+        },
+        "&:active": {
+          backgroundColor: filledDefault.background.active
         }
       },
       filledPrimarySelected: {
         backgroundColor: filledPrimarySelected.background.main,
         color: filledPrimarySelected.text,
         "& $icon": { color: filledPrimarySelected.text },
-        "&:hover, &:focus": {
-          backgroundColor: filledPrimarySelected.background.hover
-        },
-        "&:active": {
-          backgroundColor: filledPrimarySelected.background.active
-        },
         "&:hover": {
+          backgroundColor: filledPrimarySelected.background.hover,
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": {
             backgroundColor: colors.transparent
           }
+        },
+        "&:active": {
+          backgroundColor: filledPrimarySelected.background.active
         }
       },
       filledSecondarySelected: {
         backgroundColor: filledSecondarySelected.background.main,
         color: filledSecondarySelected.text,
         "& $icon": { color: filledSecondarySelected.text },
-        "&:hover, &:focus": {
-          backgroundColor: filledSecondarySelected.background.hover
-        },
-        "&:active": {
-          backgroundColor: filledSecondarySelected.background.active
-        },
         "&:hover": {
+          backgroundColor: filledSecondarySelected.background.hover,
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": {
             backgroundColor: colors.transparent
           }
+        },
+        "&:active": {
+          backgroundColor: filledSecondarySelected.background.active
         }
       },
       outlinedDefaultSelected: {
@@ -294,10 +288,14 @@ const useStyles = makeStyles(
         }`,
         color: colors.text.secondary,
         "& $icon": { color: colors.text.secondary },
-        "&:hover, &:focus": {
+        "&:hover": {
           backgroundColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.12 })
-            : colors.createWhiteColor({ alpha: 0.12 })
+            : colors.createWhiteColor({ alpha: 0.12 }),
+          // Reset on touch devices, it doesn't add specificity
+          "@media (hover: none)": {
+            backgroundColor: colors.transparent
+          }
         },
         "&:active": {
           backgroundColor: !darkMode
@@ -319,12 +317,6 @@ const useStyles = makeStyles(
           borderColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.12 })
             : colors.createWhiteColor({ alpha: 0.12 })
-        },
-        "&:hover": {
-          // Reset on touch devices, it doesn't add specificity
-          "@media (hover: none)": {
-            backgroundColor: colors.transparent
-          }
         }
       },
       outlinedPrimarySelected: {
@@ -338,10 +330,14 @@ const useStyles = makeStyles(
         "& $icon": {
           color: !darkMode ? colors.primary.origin : colors.primary.light
         },
-        "&:hover, &:focus": {
+        "&:hover": {
           backgroundColor: !darkMode
             ? colors.createPrimaryColor({ alpha: 0.12 })
-            : changeColor(colors.primary.light, { alpha: 0.12 })
+            : changeColor(colors.primary.light, { alpha: 0.12 }),
+          // Reset on touch devices, it doesn't add specificity
+          "@media (hover: none)": {
+            backgroundColor: colors.transparent
+          }
         },
         "&:active": {
           backgroundColor: !darkMode
@@ -363,12 +359,6 @@ const useStyles = makeStyles(
           borderColor: !darkMode
             ? colors.createPrimaryColor({ alpha: 0.12 })
             : changeColor(colors.primary.light, { alpha: 0.12 })
-        },
-        "&:hover": {
-          // Reset on touch devices, it doesn't add specificity
-          "@media (hover: none)": {
-            backgroundColor: colors.transparent
-          }
         }
       },
       outlinedSecondarySelected: {
@@ -382,10 +372,14 @@ const useStyles = makeStyles(
         "& $icon": {
           color: !darkMode ? colors.secondary.origin : colors.secondary.light
         },
-        "&:hover, &:focus": {
+        "&:hover": {
           backgroundColor: !darkMode
             ? colors.createSecondaryColor({ alpha: 0.12 })
-            : changeColor(colors.secondary.light, { alpha: 0.12 })
+            : changeColor(colors.secondary.light, { alpha: 0.12 }),
+          // Reset on touch devices, it doesn't add specificity
+          "@media (hover: none)": {
+            backgroundColor: colors.transparent
+          }
         },
         "&:active": {
           backgroundColor: !darkMode
@@ -407,13 +401,11 @@ const useStyles = makeStyles(
           borderColor: !darkMode
             ? colors.createSecondaryColor({ alpha: 0.12 })
             : changeColor(colors.secondary.light, { alpha: 0.12 })
-        },
-        "&:hover": {
-          // Reset on touch devices, it doesn't add specificity
-          "@media (hover: none)": {
-            backgroundColor: colors.transparent
-          }
         }
+      },
+      focusVisible: {
+        outline: `2px solid ${darkMode ? blue[300] : blue[500]}`,
+        outlineOffset: 1
       }
     };
   },
@@ -426,8 +418,12 @@ const ChoiceChip = React.memo(
       className,
       label,
       leadingIcon,
-      onToggle,
       onClick,
+      onFocus,
+      onBlur,
+      onKeyUp,
+      onKeyDown,
+      onToggle,
       selected,
       defaultSelected: defaultSelectedProp,
       variant: variantProp = "filled",
@@ -440,7 +436,7 @@ const ChoiceChip = React.memo(
 
     const classes = useStyles();
 
-    const { current: defaultSelected } = useRef(
+    const { current: defaultSelected } = React.useRef(
       selected != null
         ? undefined
         : defaultSelectedProp != null
@@ -474,13 +470,94 @@ const ChoiceChip = React.memo(
       !allowedVariants.includes(variantProp)
     );
 
+    const {
+      isFocusVisibleRef,
+      onBlur: handleBlurVisible,
+      onFocus: handleFocusVisible,
+      ref: focusVisibleRef
+    } = useIsFocusVisible();
+
+    const chipRef = React.useRef(null);
+
+    const handleOwnRef = useForkRef(focusVisibleRef, chipRef);
+    const handleRef = useForkRef(ref, handleOwnRef);
+
+    const [focusVisible, setFocusVisible] = React.useState(false);
+
+    if (disabled && focusVisible) {
+      setFocusVisible(false);
+    }
+
+    React.useEffect(() => {
+      isFocusVisibleRef.current = focusVisible;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [focusVisible]);
+
+    const handleFocus = useEventCallback(event => {
+      // Fix for https://github.com/facebook/react/issues/7769
+      if (!chipRef.current) chipRef.current = event.currentTarget;
+
+      handleFocusVisible(event);
+
+      if (isFocusVisibleRef.current === true) setFocusVisible(true);
+      if (onFocus) onFocus(event);
+    });
+
+    const handleBlur = useEventCallback(event => {
+      handleBlurVisible(event);
+
+      if (isFocusVisibleRef.current === false) setFocusVisible(false);
+      if (onBlur) onBlur(event);
+    });
+
+    const keyDownRef = React.useRef(false);
+
+    const handleKeyDown = useEventCallback(event => {
+      if (keyDownRef.current === false && focusVisible && event.key === " ") {
+        keyDownRef.current = true;
+      }
+
+      if (onKeyDown) onKeyDown(event);
+
+      // Keyboard accessibility for non interactive elements
+      if (
+        event.target === event.currentTarget &&
+        event.key.toLowerCase() === "enter" &&
+        !disabled
+      ) {
+        event.preventDefault();
+        toggleHandler(event);
+      }
+    });
+
+    const handleKeyUp = useEventCallback(event => {
+      if (!event.defaultPrevented && focusVisible && event.key === " ") {
+        keyDownRef.current = false;
+      }
+
+      if (onKeyUp) onKeyUp(event);
+
+      // Keyboard accessibility for non interactive elements
+      if (
+        event.target === event.currentTarget &&
+        event.key === " " &&
+        !event.defaultPrevented
+      ) {
+        toggleHandler(event);
+      }
+    });
+
     return label ? (
       <div
-        ref={ref}
+        ref={handleRef}
         role="button"
         aria-disabled={disabled ? "true" : "false"}
         tabIndex={disabled ? -1 : 0}
         onClick={toggleHandler}
+        onKeyUp={handleKeyUp}
+        onKeyDown={handleKeyDown}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         className={clx(
           className,
           classes.root,
@@ -488,6 +565,7 @@ const ChoiceChip = React.memo(
           classes[variant],
           {
             [classes.selected]: isSelected,
+            [classes.focusVisible]: focusVisible,
             [classes[camelCase(`${variant}-unselected`)]]: !isSelected,
             [classes[camelCase(`${variant}-${color}-selected`)]]: isSelected,
             [classes.rounded]: rounded,
@@ -513,11 +591,15 @@ ChoiceChip.propTypes = {
   disabled: PropTypes.bool,
   selected: PropTypes.bool,
   defaultSelected: PropTypes.bool,
-  onToggle: PropTypes.func,
-  onClick: PropTypes.func,
   size: PropTypes.oneOf(allowedSizes),
   color: PropTypes.oneOf(allowedColors),
-  variant: PropTypes.oneOf(allowedVariants)
+  variant: PropTypes.oneOf(allowedVariants),
+  onToggle: PropTypes.func,
+  onClick: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  onKeyDown: PropTypes.func,
+  onKeyUp: PropTypes.func
 };
 
 export default ChoiceChip;

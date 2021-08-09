@@ -692,14 +692,15 @@ const Button = React.memo(
     const keyDownRef = React.useRef(false);
 
     const handleKeyDown = useEventCallback(event => {
-      const isActionKey =
-        event.key === " " || event.key.toLowerCase() === "enter";
-
-      if (keyDownRef.current === false && focusVisible && isActionKey) {
+      if (keyDownRef.current === false && focusVisible && event.key === " ") {
         keyDownRef.current = true;
       }
 
-      if (event.target === event.currentTarget && !isNative && isActionKey) {
+      if (
+        event.target === event.currentTarget &&
+        !isNative &&
+        event.key === " "
+      ) {
         event.preventDefault();
       }
 
@@ -709,7 +710,7 @@ const Button = React.memo(
       if (
         event.target === event.currentTarget &&
         !isNative &&
-        isActionKey &&
+        event.key.toLowerCase() === "enter" &&
         !disabled
       ) {
         event.preventDefault();
@@ -718,10 +719,7 @@ const Button = React.memo(
     });
 
     const handleKeyUp = useEventCallback(event => {
-      const isActionKey =
-        event.key === " " || event.key.toLowerCase() === "enter";
-
-      if (!event.defaultPrevented && focusVisible && isActionKey) {
+      if (!event.defaultPrevented && focusVisible && event.key === " ") {
         keyDownRef.current = false;
       }
 
@@ -729,10 +727,9 @@ const Button = React.memo(
 
       // Keyboard accessibility for non interactive elements
       if (
-        onClick &&
         event.target === event.currentTarget &&
         !isNative &&
-        isActionKey &&
+        event.key === " " &&
         !event.defaultPrevented
       ) {
         if (onClick) onClick(event);

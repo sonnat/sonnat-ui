@@ -4,7 +4,11 @@ import React from "react";
 import Close from "../internals/icons/Close";
 import { changeColor } from "../styles/colorUtils";
 import makeStyles from "../styles/makeStyles";
+import { blue } from "../styles/pallete";
 import getVar from "../utils/getVar";
+import useEventCallback from "../utils/useEventCallback";
+import useForkRef from "../utils/useForkRef";
+import useIsFocusVisible from "../utils/useIsFocusVisible";
 
 const componentName = "RemovableChip";
 const allowedVariants = ["filled", "outlined"];
@@ -53,7 +57,6 @@ const useStyles = makeStyles(
         alignSelf: "center",
         borderRadius: pxToRem(2),
         verticalAlign: "middle",
-        overflow: "hidden",
         position: "relative",
         zIndex: "1",
         flexShrink: "0",
@@ -155,21 +158,19 @@ const useStyles = makeStyles(
       },
       filled: {
         "& $removeButton": {
-          "&:hover > $removeButtonIcon, &:focus > $removeButtonIcon": {
+          "&:hover > $removeButtonIcon": {
             backgroundColor: !darkMode
               ? colors.createBlackColor({ alpha: 0.12 })
-              : colors.createWhiteColor({ alpha: 0.12 })
+              : colors.createWhiteColor({ alpha: 0.12 }),
+            // Reset on touch devices, it doesn't add specificity
+            "@media (hover: none)": {
+              backgroundColor: colors.transparent
+            }
           },
           "&:active > $removeButtonIcon": {
             backgroundColor: !darkMode
               ? colors.createBlackColor({ alpha: 0.24 })
               : colors.createWhiteColor({ alpha: 0.24 })
-          },
-          "&:hover > $removeButtonIcon": {
-            // Reset on touch devices, it doesn't add specificity
-            "@media (hover: none)": {
-              backgroundColor: colors.transparent
-            }
           }
         },
         "&$disabled": {
@@ -224,21 +225,19 @@ const useStyles = makeStyles(
         color: colors.text.secondary,
         "& $icon, & $removeButtonIcon": { color: colors.text.secondary },
         "& $removeButton": {
-          "&:hover > $removeButtonIcon, &:focus > $removeButtonIcon": {
+          "&:hover > $removeButtonIcon": {
             backgroundColor: !darkMode
               ? colors.createBlackColor({ alpha: 0.12 })
-              : colors.createWhiteColor({ alpha: 0.12 })
+              : colors.createWhiteColor({ alpha: 0.12 }),
+            // Reset on touch devices, it doesn't add specificity
+            "@media (hover: none)": {
+              backgroundColor: colors.transparent
+            }
           },
           "&:active > $removeButtonIcon": {
             backgroundColor: !darkMode
               ? colors.createBlackColor({ alpha: 0.24 })
               : colors.createWhiteColor({ alpha: 0.24 })
-          },
-          "&:hover > $removeButtonIcon": {
-            // Reset on touch devices, it doesn't add specificity
-            "@media (hover: none)": {
-              backgroundColor: colors.transparent
-            }
           }
         },
         "&$disabled, &[disabled]": {
@@ -253,17 +252,15 @@ const useStyles = makeStyles(
         color: filledPrimaryMainBg,
         "& $icon, & $removeButtonIcon": { color: filledPrimaryMainBg },
         "& $removeButton": {
-          "&:hover > $removeButtonIcon, &:focus > $removeButtonIcon": {
-            backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.12 })
-          },
-          "&:active > $removeButtonIcon": {
-            backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.24 })
-          },
           "&:hover > $removeButtonIcon": {
+            backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.12 }),
             // Reset on touch devices, it doesn't add specificity
             "@media (hover: none)": {
               backgroundColor: colors.transparent
             }
+          },
+          "&:active > $removeButtonIcon": {
+            backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.24 })
           }
         },
         "&$disabled": {
@@ -282,17 +279,17 @@ const useStyles = makeStyles(
           color: filledSecondaryMainBg
         },
         "& $removeButton": {
-          "&:hover > $removeButtonIcon, &:focus > $removeButtonIcon": {
-            backgroundColor: changeColor(filledSecondaryMainBg, { alpha: 0.12 })
-          },
-          "&:active > $removeButtonIcon": {
-            backgroundColor: changeColor(filledSecondaryMainBg, { alpha: 0.24 })
-          },
           "&:hover > $removeButtonIcon": {
+            backgroundColor: changeColor(filledSecondaryMainBg, {
+              alpha: 0.12
+            }),
             // Reset on touch devices, it doesn't add specificity
             "@media (hover: none)": {
               backgroundColor: colors.transparent
             }
+          },
+          "&:active > $removeButtonIcon": {
+            backgroundColor: changeColor(filledSecondaryMainBg, { alpha: 0.24 })
           }
         },
         "&$disabled": {
@@ -302,6 +299,10 @@ const useStyles = makeStyles(
           },
           borderColor: changeColor(filledSecondaryMainBg, { alpha: 0.12 })
         }
+      },
+      focusVisible: {
+        outline: `2px solid ${darkMode ? blue[300] : blue[500]}`,
+        outlineOffset: 1
       }
     };
   },
@@ -313,8 +314,8 @@ const RemovableChip = React.memo(
     const {
       className,
       label,
-      onRemove,
       leadingIcon,
+      onRemove,
       rounded = false,
       disabled = false,
       variant: variantProp = "filled",
@@ -343,6 +344,43 @@ const RemovableChip = React.memo(
       if (!disabled && onRemove) onRemove(e);
     };
 
+    const {
+      isFocusVisibleRef,
+      onBlur: handleBlurVisible,
+      onFocus: handleFocusVisible,
+      ref: focusVisibleRef
+    } = useIsFocusVisible();
+
+    const removeRef = React.useRef(null);
+
+    const handleRemoveRef = useForkRef(focusVisibleRef, removeRef);
+
+    const [focusVisible, setFocusVisible] = React.useState(false);
+
+    if (disabled && focusVisible) {
+      setFocusVisible(false);
+    }
+
+    React.useEffect(() => {
+      isFocusVisibleRef.current = focusVisible;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [focusVisible]);
+
+    const handleFocus = useEventCallback(event => {
+      // Fix for https://github.com/facebook/react/issues/7769
+      if (!removeRef.current) removeRef.current = event.currentTarget;
+
+      handleFocusVisible(event);
+
+      if (isFocusVisibleRef.current === true) setFocusVisible(true);
+    });
+
+    const handleBlur = useEventCallback(event => {
+      handleBlurVisible(event);
+
+      if (isFocusVisibleRef.current === false) setFocusVisible(false);
+    });
+
     return label ? (
       <div
         aria-disabled={disabled ? "true" : "false"}
@@ -363,8 +401,14 @@ const RemovableChip = React.memo(
         {leadingIcon && <i className={clx(classes.icon)}>{leadingIcon}</i>}
         {label}
         <button
-          className={classes.removeButton}
+          aria-label={`Remove the chip with ${label} text`}
+          ref={handleRemoveRef}
+          className={clx(classes.removeButton, {
+            [classes.focusVisible]: focusVisible
+          })}
           onClick={removeHandler}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           disabled={disabled}
           tabIndex={disabled ? -1 : 0}
         >
@@ -385,10 +429,14 @@ RemovableChip.propTypes = {
   className: PropTypes.string,
   rounded: PropTypes.bool,
   disabled: PropTypes.bool,
-  onRemove: PropTypes.func,
   color: PropTypes.oneOf(allowedColors),
   variant: PropTypes.oneOf(allowedVariants),
-  size: PropTypes.oneOf(allowedSizes)
+  size: PropTypes.oneOf(allowedSizes),
+  onRemove: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  onKeyDown: PropTypes.func,
+  onKeyUp: PropTypes.func
 };
 
 export default RemovableChip;
