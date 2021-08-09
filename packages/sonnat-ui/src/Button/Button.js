@@ -3,7 +3,11 @@ import PropTypes from "prop-types";
 import React from "react";
 import ClipSpinner from "../Spinner/Clip";
 import { makeStyles, useTheme } from "../styles";
+import { blue } from "../styles/pallete";
 import getVar from "../utils/getVar";
+import useEventCallback from "../utils/useEventCallback";
+import useForkRef from "../utils/useForkRef";
+import useIsFocusVisible from "../utils/useIsFocusVisible";
 import createColorVariants from "./createColorVariants";
 
 const componentName = "Button";
@@ -23,6 +27,13 @@ const useStyles = makeStyles(
       mixins: { useIconWrapper },
       typography: { pxToRem, useText, fontWeight, fontFamily }
     } = theme;
+
+    const defaultTransitionList = [
+      "background-color 360ms ease",
+      "transform 360ms ease",
+      "box-shadow 400ms ease",
+      "border-color 360ms ease"
+    ];
 
     const {
       filledDefault,
@@ -55,8 +66,7 @@ const useStyles = makeStyles(
         whiteSpace: "nowrap",
         textOverflow: "ellipsis",
         overflow: "hidden",
-        transition:
-          "background-color 360ms ease, transform 360ms ease, border-radius 360ms ease, box-shadow 400ms ease, border-color 360ms ease"
+        transition: defaultTransitionList.join(",")
       },
       label: {
         ...useText({ fontWeight: fontWeight.medium }),
@@ -171,7 +181,7 @@ const useStyles = makeStyles(
         backgroundColor: filledDefault.background.main,
         "& $label": { color: filledDefault.text },
         "& $icon": { color: filledDefault.text },
-        "&:not($disabled):hover, &:not($disabled):focus": {
+        "&:not($disabled):hover": {
           backgroundColor: filledDefault.background.hover
         },
         "&:hover": {
@@ -191,7 +201,7 @@ const useStyles = makeStyles(
           })}, 0 1px 32px 0 ${colors.createBlackColor({
             alpha: 0.08
           })}`,
-          "&:hover, &:focus": {
+          "&:hover": {
             boxShadow: `0 2px 6px -1px ${colors.createBlackColor({
               alpha: 0.24
             })}, 0 4px 10px 0 ${colors.createBlackColor({
@@ -211,7 +221,7 @@ const useStyles = makeStyles(
         backgroundColor: filledPrimary.background.main,
         "& $label": { color: filledPrimary.text },
         "& $icon": { color: filledPrimary.text },
-        "&:not($disabled):hover, &:not($disabled):focus": {
+        "&:not($disabled):hover": {
           backgroundColor: filledPrimary.background.hover
         },
         "&:hover": {
@@ -232,7 +242,7 @@ const useStyles = makeStyles(
             })}, 0 12px 30px -8px ${colors.createPrimaryColor({
               alpha: 0.12
             })}`,
-            "&:hover, &:focus": {
+            "&:hover": {
               boxShadow: `0 0 6px -2px ${colors.createPrimaryColor({
                 alpha: 0.56
               })}, 0 4px 16px 0 ${colors.createPrimaryColor({
@@ -249,7 +259,7 @@ const useStyles = makeStyles(
             })}, 0 14px 16px 2px ${colors.createPrimaryColor({
               alpha: 0.14
             })}, 0 5px 20px 4px ${colors.createPrimaryColor({ alpha: 0.12 })}`,
-            "&:hover, &:focus": {
+            "&:hover": {
               boxShadow: `0 0 4px -2px ${colors.createPrimaryColor({
                 alpha: 0.56
               })}, 0 4px 8px 0 ${colors.createPrimaryColor({
@@ -266,7 +276,7 @@ const useStyles = makeStyles(
             })}, 0 14px 16px 2px ${colors.createPrimaryColor({
               alpha: 0.14
             })}, 0 5px 20px 4px ${colors.createPrimaryColor({ alpha: 0.12 })}`,
-            "&:hover, &:focus": {
+            "&:hover": {
               boxShadow: `0 0 4px -2px ${colors.createPrimaryColor({
                 alpha: 0.56
               })}, 0 4px 8px 0 ${colors.createPrimaryColor({
@@ -287,7 +297,7 @@ const useStyles = makeStyles(
         backgroundColor: filledSecondary.background.main,
         "& $label": { color: filledSecondary.text },
         "& $icon": { color: filledSecondary.text },
-        "&:not($disabled):hover, &:not($disabled):focus": {
+        "&:not($disabled):hover": {
           backgroundColor: filledSecondary.background.hover
         },
         "&:hover": {
@@ -308,7 +318,7 @@ const useStyles = makeStyles(
             })}, 0 12px 30px -8px ${colors.createSecondaryColor({
               alpha: 0.12
             })}`,
-            "&:hover, &:focus": {
+            "&:hover": {
               boxShadow: `0 0 6px -2px ${colors.createSecondaryColor({
                 alpha: 0.56
               })}, 0 4px 16px 0 ${colors.createSecondaryColor({
@@ -327,7 +337,7 @@ const useStyles = makeStyles(
             })}, 0 5px 20px 4px ${colors.createSecondaryColor({
               alpha: 0.12
             })}`,
-            "&:hover, &:focus": {
+            "&:hover": {
               boxShadow: `0 0 4px -2px ${colors.createSecondaryColor({
                 alpha: 0.56
               })}, 0 4px 8px 0 ${colors.createSecondaryColor({
@@ -346,7 +356,7 @@ const useStyles = makeStyles(
             })}, 0 5px 20px 4px ${colors.createSecondaryColor({
               alpha: 0.12
             })}`,
-            "&:hover, &:focus": {
+            "&:hover": {
               boxShadow: `0 0 4px -2px ${colors.createSecondaryColor({
                 alpha: 0.56
               })}, 0 4px 8px 0 ${colors.createSecondaryColor({
@@ -375,7 +385,7 @@ const useStyles = makeStyles(
         borderColor: outlinedDefault.border.main,
         "& $label": { color: outlinedDefault.text.main },
         "& $icon": { color: outlinedDefault.text.main },
-        "&:not($disabled):hover, &:not($disabled):focus": {
+        "&:not($disabled):hover": {
           "& $label": { color: outlinedDefault.text.hover },
           "& $icon": { color: outlinedDefault.text.hover },
           backgroundColor: outlinedDefault.background.hover
@@ -402,7 +412,7 @@ const useStyles = makeStyles(
         borderColor: outlinedPrimary.border.main,
         "& $label": { color: outlinedPrimary.text.main },
         "& $icon": { color: outlinedPrimary.text.main },
-        "&:not($disabled):hover, &:not($disabled):focus": {
+        "&:not($disabled):hover": {
           "& $label": { color: outlinedPrimary.text.hover },
           "& $icon": { color: outlinedPrimary.text.hover },
           borderColor: outlinedPrimary.border.hover,
@@ -431,7 +441,7 @@ const useStyles = makeStyles(
         borderColor: outlinedSecondary.border.main,
         "& $label": { color: outlinedSecondary.text.main },
         "& $icon": { color: outlinedSecondary.text.main },
-        "&:not($disabled):hover, &:not($disabled):focus": {
+        "&:not($disabled):hover": {
           "& $label": { color: outlinedSecondary.text.hover },
           "& $icon": { color: outlinedSecondary.text.hover },
           borderColor: outlinedSecondary.border.hover,
@@ -467,7 +477,7 @@ const useStyles = makeStyles(
       inlinedDefault: {
         "& $label": { color: inlinedDefault.text.main },
         "& $icon": { color: inlinedDefault.text.main },
-        "&:not($disabled):hover, &:not($disabled):focus": {
+        "&:not($disabled):hover": {
           backgroundColor: inlinedDefault.background.hover,
           "& $label": { color: inlinedDefault.text.hover },
           "& $icon": { color: inlinedDefault.text.hover }
@@ -490,7 +500,7 @@ const useStyles = makeStyles(
       inlinedPrimary: {
         "& $label": { color: inlinedPrimary.text.main },
         "& $icon": { color: inlinedPrimary.text.main },
-        "&:not($disabled):hover, &:not($disabled):focus": {
+        "&:not($disabled):hover": {
           backgroundColor: inlinedPrimary.background.hover,
           "& $label": { color: inlinedPrimary.text.hover },
           "& $icon": { color: inlinedPrimary.text.hover }
@@ -515,7 +525,7 @@ const useStyles = makeStyles(
       inlinedSecondary: {
         "& $label": { color: inlinedSecondary.text.main },
         "& $icon": { color: inlinedSecondary.text.main },
-        "&:not($disabled):hover, &:not($disabled):focus": {
+        "&:not($disabled):hover": {
           backgroundColor: inlinedSecondary.background.hover,
           "& $label": { color: inlinedSecondary.text.hover },
           "& $icon": { color: inlinedSecondary.text.hover }
@@ -562,7 +572,11 @@ const useStyles = makeStyles(
       loading: {},
       iconed: {},
       leadingIcon: {},
-      trailingIcon: {}
+      trailingIcon: {},
+      focusVisible: {
+        outline: `2px solid ${darkMode ? blue[300] : blue[500]}`,
+        outlineOffset: 1
+      }
     };
   },
   { name: `Sonnat${componentName}` }
@@ -575,6 +589,11 @@ const Button = React.memo(
       className,
       leadingIcon,
       trailingIcon,
+      onFocus,
+      onBlur,
+      onKeyDown,
+      onKeyUp,
+      onClick,
       rootNode: RootNode = "button",
       size: sizeProp = "medium",
       color: colorProp = "default",
@@ -629,6 +648,96 @@ const Button = React.memo(
     const isIconed = leadingIcon != null || trailingIcon != null;
     const isInvalid = !isLabeled && !isIconed;
     const isIconButton = !isInvalid && !isLabeled && isIconed;
+
+    const {
+      isFocusVisibleRef,
+      onBlur: handleBlurVisible,
+      onFocus: handleFocusVisible,
+      ref: focusVisibleRef
+    } = useIsFocusVisible();
+
+    const buttonRef = React.useRef(null);
+
+    const handleOwnRef = useForkRef(focusVisibleRef, buttonRef);
+    const handleRef = useForkRef(ref, handleOwnRef);
+
+    const [focusVisible, setFocusVisible] = React.useState(false);
+
+    if (disabled && focusVisible) {
+      setFocusVisible(false);
+    }
+
+    React.useEffect(() => {
+      isFocusVisibleRef.current = focusVisible;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [focusVisible]);
+
+    const handleFocus = useEventCallback(event => {
+      // Fix for https://github.com/facebook/react/issues/7769
+      if (!buttonRef.current) buttonRef.current = event.currentTarget;
+
+      handleFocusVisible(event);
+
+      if (isFocusVisibleRef.current === true) setFocusVisible(true);
+      if (onFocus) onFocus(event);
+    });
+
+    const handleBlur = useEventCallback(event => {
+      handleBlurVisible(event);
+
+      if (isFocusVisibleRef.current === false) setFocusVisible(false);
+      if (onBlur) onBlur(event);
+    });
+
+    const keyDownRef = React.useRef(false);
+
+    const handleKeyDown = useEventCallback(event => {
+      const isActionKey =
+        event.key === " " || event.key.toLowerCase() === "enter";
+
+      if (keyDownRef.current === false && focusVisible && isActionKey) {
+        keyDownRef.current = true;
+      }
+
+      if (event.target === event.currentTarget && !isNative && isActionKey) {
+        event.preventDefault();
+      }
+
+      if (onKeyDown) onKeyDown(event);
+
+      // Keyboard accessibility for non interactive elements
+      if (
+        event.target === event.currentTarget &&
+        !isNative &&
+        isActionKey &&
+        !disabled
+      ) {
+        event.preventDefault();
+        if (onClick) onClick(event);
+      }
+    });
+
+    const handleKeyUp = useEventCallback(event => {
+      const isActionKey =
+        event.key === " " || event.key.toLowerCase() === "enter";
+
+      if (!event.defaultPrevented && focusVisible && isActionKey) {
+        keyDownRef.current = false;
+      }
+
+      if (onKeyUp) onKeyUp(event);
+
+      // Keyboard accessibility for non interactive elements
+      if (
+        onClick &&
+        event.target === event.currentTarget &&
+        !isNative &&
+        isActionKey &&
+        !event.defaultPrevented
+      ) {
+        if (onClick) onClick(event);
+      }
+    });
 
     const conditionalProps = {};
 
@@ -685,7 +794,12 @@ const Button = React.memo(
       <RootNode
         type="button"
         tabIndex={disabled ? -1 : 0}
-        ref={ref}
+        ref={handleRef}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
+        onClick={onClick}
+        onKeyDown={handleKeyDown}
+        onKeyUp={handleKeyUp}
         className={clx(
           className,
           classes.root,
@@ -696,6 +810,7 @@ const Button = React.memo(
             [classes.loading]: loading,
             [classes.iconed]: isIconed,
             [classes.rounded]: rounded,
+            [classes.focusVisible]: focusVisible,
             [classes.raised]: invalidUsageOfRaised ? false : raised,
             [classes.disabled]: loading || (!loading && disabled),
             [classes.iconButton]: isIconButton
@@ -737,7 +852,12 @@ Button.propTypes = {
   variant: PropTypes.oneOf(allowedVariants),
   rootNode: PropTypes.elementType,
   leadingIcon: PropTypes.node,
-  trailingIcon: PropTypes.node
+  trailingIcon: PropTypes.node,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  onKeyDown: PropTypes.func,
+  onKeyUp: PropTypes.func,
+  onClick: PropTypes.func
 };
 
 export default Button;
