@@ -36,6 +36,11 @@ type BaseProps<P = {}> = P & {
    */
   indeterminated?: boolean;
   /**
+   * If `true`, the checkbox will be focused automatically.
+   * @default false
+   */
+  autoFocus?: boolean;
+  /**
    * If `true`, the checkbox will be read-only.
    * @default false
    */

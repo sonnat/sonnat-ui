@@ -1,13 +1,16 @@
-import React, { useState, useRef, useCallback } from "react";
-import PropTypes from "prop-types";
 import clx from "classnames";
-import useRadioGroup from "../RadioGroup/useRadioGroup";
+import PropTypes from "prop-types";
+import React from "react";
 import useFormControl from "../FormControl/useFormControl";
-import useEventListener from "../utils/useEventListener";
-import useForkRef from "../utils/useForkRef";
-import useControlled from "../utils/useControlled";
-import makeStyles from "../styles/makeStyles";
+import useRadioGroup from "../RadioGroup/useRadioGroup";
 import { changeColor } from "../styles/colorUtils";
+import makeStyles from "../styles/makeStyles";
+import getVar from "../utils/getVar";
+import useControlled from "../utils/useControlled";
+import useEnhancedEffect from "../utils/useEnhancedEffect";
+import useEventCallback from "../utils/useEventCallback";
+import useForkRef from "../utils/useForkRef";
+import useIsFocusVisible from "../utils/useIsFocusVisible";
 import useIsMounted from "../utils/useIsMounted";
 
 const componentName = "Radio";
@@ -32,7 +35,8 @@ const useStyles = makeStyles(
         alignItems: "center",
         boxSizing: "content-box",
         verticalAlign: "middle",
-        height: "auto"
+        height: "auto",
+        outline: "none"
       },
       label: useText({ color: colors.text.primary }),
       cell: {
@@ -217,7 +221,10 @@ const Radio = React.memo(
       onChange,
       onFocus,
       onBlur,
+      onKeyDown,
+      onKeyUp,
       label,
+      id: idProp,
       defaultChecked: defaultCheckedProp,
       value: valueProp,
       name: nameProp,
@@ -228,6 +235,7 @@ const Radio = React.memo(
       hasError = false,
       disabled = false,
       required = false,
+      autoFocus: autoFocusProp = false,
       size: sizeProp = "medium",
       ...otherProps
     } = props;
@@ -241,6 +249,7 @@ const Radio = React.memo(
       onChange: inputOnChangeProp,
       onFocus: inputOnFocusProp,
       onBlur: inputOnBlurProp,
+      autoFocus: inputAutoFocus = false,
       readOnly: inputReadOnly = false,
       checked: inputCheckedProp,
       defaultChecked: inputDefaultChecked,
@@ -249,7 +258,7 @@ const Radio = React.memo(
 
     const { className: labelClassName, ...otherLabelProps } = labelProps;
 
-    const { current: defaultChecked } = useRef(
+    const { current: defaultChecked } = React.useRef(
       checkedProp != null
         ? undefined
         : defaultCheckedProp != null
@@ -257,7 +266,7 @@ const Radio = React.memo(
         : false
     );
 
-    const inputRef = useRef();
+    const inputRef = React.useRef();
     const inputRefHandler = useForkRef(inputRef, inputRefProp);
 
     const classes = useStyles();
@@ -272,9 +281,7 @@ const Radio = React.memo(
 
     const isMountedRef = useIsMounted();
 
-    const [isFocused, setFocused] = useState(false);
-
-    const size = allowedSizes.includes(sizeProp) ? sizeProp : "medium";
+    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
 
     const isReadOnly = !!inputReadOnly || !!readOnly;
 
@@ -311,23 +318,12 @@ const Radio = React.memo(
       );
     }
 
+    const autoFocus = inputAutoFocus || autoFocusProp;
+
     const name = inputNameProp || nameProp;
     const value = inputValueProp || valueProp;
 
     const checkedState = radioGroup ? radioGroup.value === value : checked;
-
-    const keyboardListener = useCallback(e => {
-      // do nothing if the event was already processed
-      if (e.defaultPrevented) return;
-
-      if (e.key === " " || e.key === "Spacebar") {
-        // preventing the default behaviour
-        if (e.preventDefault) e.preventDefault();
-        else e.returnValue = null;
-
-        inputRef.current.click();
-      }
-    }, []);
 
     const controlProps = {
       name: radioGroup ? radioGroup.name : name,
@@ -336,29 +332,24 @@ const Radio = React.memo(
       required: formControl ? formControl.required : required,
       onFocus: e => {
         if (isMountedRef.current) {
-          if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onFocus) onFocus(e);
             if (inputOnFocusProp) inputOnFocusProp(e);
             if (formControl && formControl.onFocus) formControl.onFocus(e);
-            else setFocused(true);
           }
         }
       },
       onBlur: e => {
         if (isMountedRef.current) {
-          if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onBlur) onBlur(e);
             if (inputOnBlurProp) inputOnBlurProp(e);
             if (formControl && formControl.onBlur) formControl.onBlur(e);
-            else setFocused(false);
           }
         }
       },
       onChange: e => {
         if (isMountedRef.current) {
-          if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onChange) onChange(e, true);
             if (inputOnChangeProp) inputOnChangeProp(e, true);
@@ -373,26 +364,97 @@ const Radio = React.memo(
       ? inputId
       : controlProps.name && value
       ? `radiobox-${controlProps.name}-${value}`
-      : id
-      ? `radiobox-${id}`
+      : idProp
+      ? `radiobox-${idProp}`
       : undefined;
 
-    if (typeof document !== "undefined") {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useEventListener(
-        {
-          element: document,
-          eventName: "keyup",
-          listener: keyboardListener
-        },
-        isFocused
-      );
-    }
+    const {
+      isFocusVisibleRef,
+      onBlur: handleBlurVisible,
+      onFocus: handleFocusVisible,
+      ref: focusVisibleRef
+    } = useIsFocusVisible();
+
+    const rootRef = React.useRef(null);
+
+    const handleOwnRef = useForkRef(focusVisibleRef, rootRef);
+    const handleRef = useForkRef(ref, handleOwnRef);
+
+    const [isFocused, setFocused] = React.useState(false);
+
+    if (disabled && isFocused) setFocused(false);
+
+    // initially focus the component
+    useEnhancedEffect(() => {
+      if (!(controlProps.disabled || isReadOnly)) {
+        if (autoFocus && rootRef.current) rootRef.current.focus();
+      }
+    }, [autoFocus]);
+
+    React.useEffect(() => {
+      isFocusVisibleRef.current = isFocused;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isFocused]);
+
+    const handleFocus = useEventCallback(event => {
+      // Fix for https://github.com/facebook/react/issues/7769
+      if (!rootRef.current) rootRef.current = event.currentTarget;
+
+      handleFocusVisible(event);
+
+      if (isFocusVisibleRef.current === true) setFocused(true);
+      controlProps.onFocus(event);
+    });
+
+    const handleBlur = useEventCallback(event => {
+      handleBlurVisible(event);
+
+      if (isFocusVisibleRef.current === false) setFocused(false);
+      controlProps.onBlur(event);
+    });
+
+    const keyDownRef = React.useRef(false);
+
+    const handleKeyDown = useEventCallback(event => {
+      if (keyDownRef.current === false && isFocused && event.key === " ") {
+        keyDownRef.current = true;
+      }
+
+      if (event.target === event.currentTarget && event.key === " ") {
+        event.preventDefault();
+      }
+
+      if (onKeyDown) onKeyDown(event);
+    });
+
+    const handleKeyUp = useEventCallback(event => {
+      if (!event.defaultPrevented && isFocused && event.key === " ") {
+        keyDownRef.current = false;
+      }
+
+      if (onKeyUp) onKeyUp(event);
+
+      // Keyboard accessibility for non interactive elements
+      if (
+        event.target === event.currentTarget &&
+        event.key === " " &&
+        !event.defaultPrevented &&
+        !checkedState
+      ) {
+        controlProps.onChange(event);
+      }
+    });
 
     return (
       <div
+        role="button"
+        tabIndex={disabled ? -1 : 0}
         aria-disabled={controlProps.disabled}
-        ref={ref}
+        ref={handleRef}
+        onKeyDown={handleKeyDown}
+        onKeyUp={handleKeyUp}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         className={clx(classes.root, className, classes[size], {
           [classes.disabled]: controlProps.disabled,
           [classes.focused]: isFocused,
@@ -404,18 +466,16 @@ const Radio = React.memo(
       >
         <div className={classes.cell}>
           <input
+            id={id}
+            tabIndex={-1}
             name={controlProps.name}
             value={value}
-            id={id}
-            tabIndex={controlProps.disabled ? -1 : 0}
             disabled={controlProps.disabled}
             required={controlProps.required}
             className={clx(classes.input, inputClassNameProp)}
             onChange={controlProps.onChange}
-            onFocus={controlProps.onFocus}
-            onBlur={controlProps.onBlur}
-            checked={checkedState}
             type="radio"
+            checked={checkedState}
             ref={inputRefHandler}
             {...otherInputProps}
           />
@@ -438,10 +498,12 @@ const Radio = React.memo(
 Radio.displayName = componentName;
 
 Radio.propTypes = {
+  id: PropTypes.string,
   className: PropTypes.string,
   label: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.string,
+  autoFocus: PropTypes.bool,
   readOnly: PropTypes.bool,
   checked: PropTypes.bool,
   defaultChecked: PropTypes.bool,
@@ -451,6 +513,8 @@ Radio.propTypes = {
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
+  onKeyDown: PropTypes.func,
+  onKeyUp: PropTypes.func,
   inputProps: PropTypes.object,
   labelProps: PropTypes.object,
   size: PropTypes.oneOf(allowedSizes)

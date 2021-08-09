@@ -29,6 +29,11 @@ type BaseProps<P = {}> = P & {
    */
   value?: string;
   /**
+   * If `true`, the radio will be focused automatically.
+   * @default false
+   */
+  autoFocus?: boolean;
+  /**
    * If `true`, the radio will be readOnly.
    * @default false
    */

@@ -34,6 +34,11 @@ type BaseProps<P = {}> = P & {
    */
   size?: "large" | "medium" | "small";
   /**
+   * If `true`, the switch will be focused automatically.
+   * @default false
+   */
+  autoFocus?: boolean;
+  /**
    * If `true`, the switch will be readOnly.
    * @default false
    */
