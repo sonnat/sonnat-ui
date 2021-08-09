@@ -18,7 +18,6 @@ const useStyles = makeStyles(
       root: {
         direction,
         fontFamily: fontFamily[direction],
-        overflow: "hidden",
         borderRadius: pxToRem(4),
         backgroundColor: !darkMode
           ? colors.background.origin
