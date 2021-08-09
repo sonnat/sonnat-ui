@@ -5,9 +5,13 @@ import useIsMounted from "../utils/useIsMounted";
 const componentName = "NoSsr";
 
 const NoSsr = React.memo(function NoSsr({ children, fallback = null }) {
-  const isMounted = useIsMounted();
+  const isMountedRef = useIsMounted();
 
-  return <React.Fragment>{isMounted ? children : fallback}</React.Fragment>;
+  return (
+    <React.Fragment>
+      {isMountedRef.current ? children : fallback}
+    </React.Fragment>
+  );
 });
 
 NoSsr.displayName = componentName;

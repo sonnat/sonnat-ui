@@ -81,10 +81,11 @@ const MenuItem = React.memo(function MenuItem(props) {
 
   const { registerNode, dense } = useContext(FloatedListContext);
 
-  const isMounted = useIsMounted();
+  const isMountedRef = useIsMounted();
+
   const [isFocused, setFocused] = useState(false);
 
-  if (isMounted && itemRef.current && registerNode) {
+  if (isMountedRef.current && itemRef.current && registerNode) {
     itemRef.current.disabled = disabled;
     itemRef.current.focused = isFocused;
     registerNode(index, itemRef.current);

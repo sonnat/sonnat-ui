@@ -1,12 +1,14 @@
 import * as React from "react";
 
 export default function useIsMounted() {
-  const isMounted = React.useRef(false);
+  const isMountedRef = React.useRef(false);
 
   React.useEffect(() => {
-    isMounted.current = true;
-    return () => void (isMounted.current = false);
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
   }, []);
 
-  return isMounted.current;
+  return isMountedRef;
 }

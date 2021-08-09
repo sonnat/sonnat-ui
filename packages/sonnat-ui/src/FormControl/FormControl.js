@@ -38,7 +38,7 @@ const FormControl = React.memo(
 
     const classes = useStyles();
 
-    const isMounted = useIsMounted();
+    const isMountedRef = useIsMounted();
 
     const [isFocused, setFocused] = useState(focused);
 
@@ -50,13 +50,14 @@ const FormControl = React.memo(
         required,
         focusedState: disabled ? false : isFocused,
         onFocus: () => {
-          if (isMounted) setFocused(true);
+          if (isMountedRef.current) setFocused(true);
         },
         onBlur: () => {
-          if (isMounted) setFocused(false);
+          if (isMountedRef.current) setFocused(false);
         }
       }),
-      [fluid, disabled, hasError, required, isFocused, isMounted]
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [fluid, disabled, hasError, required, isFocused]
     );
 
     return (

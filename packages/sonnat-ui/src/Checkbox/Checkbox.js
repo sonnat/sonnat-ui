@@ -338,7 +338,7 @@ const Checkbox = React.memo(
       componentName
     );
 
-    const isMounted = useIsMounted();
+    const isMountedRef = useIsMounted();
 
     const [isFocused, setFocused] = useState(false);
 
@@ -405,7 +405,7 @@ const Checkbox = React.memo(
       hasError: formControl ? formControl.hasError : hasError,
       required: formControl ? formControl.required : required,
       onFocus: e => {
-        if (isMounted) {
+        if (isMountedRef.current) {
           if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onFocus) onFocus(e);
@@ -416,7 +416,7 @@ const Checkbox = React.memo(
         }
       },
       onBlur: e => {
-        if (isMounted) {
+        if (isMountedRef.current) {
           if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onBlur) onBlur(e);
@@ -427,7 +427,7 @@ const Checkbox = React.memo(
         }
       },
       onChange: e => {
-        if (isMounted) {
+        if (isMountedRef.current) {
           if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onChange) onChange(e, !checkedState);

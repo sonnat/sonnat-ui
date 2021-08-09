@@ -271,7 +271,7 @@ const Select = React.memo(
       !allowedVariants.includes(variantProp)
     );
 
-    const isMounted = useIsMounted();
+    const isMountedRef = useIsMounted();
 
     const [isOpen, setOpen] = useState(false);
     const [isFocused, setFocused] = useState(isAutoFocus);
@@ -314,7 +314,7 @@ const Select = React.memo(
       required: formControl ? formControl.required : required,
       fluid: formControl ? formControl.fluid : fluid,
       onFocus: e => {
-        if (isMounted) {
+        if (isMountedRef.current) {
           if (e && e.persist) e.persist();
           if (!controlProps.disabled) {
             if (onFocus) onFocus(e);
@@ -325,7 +325,7 @@ const Select = React.memo(
         }
       },
       onBlur: e => {
-        if (isMounted) {
+        if (isMountedRef.current) {
           if (e && e.persist) e.persist();
           if (!controlProps.disabled) {
             if (onBlur) onBlur(e);
@@ -336,7 +336,7 @@ const Select = React.memo(
         }
       },
       onChange: (e, v) => {
-        if (isMounted) {
+        if (isMountedRef.current) {
           if (e && e.persist) e.persist();
           if (!controlProps.disabled) {
             const newValue = v != null ? v : e != null ? e.target.value : null;
@@ -366,7 +366,7 @@ const Select = React.memo(
 
     // initially focus the component if it is focused
     useEnhancedEffect(() => {
-      if (isInit.current && isMounted && !controlProps.disabled) {
+      if (isInit.current && isMountedRef.current && !controlProps.disabled) {
         if (isAutoFocus || controlProps.focused) {
           if (inputRef.current) {
             updateOpenState(true);
@@ -374,7 +374,7 @@ const Select = React.memo(
           }
         }
       }
-    }, [isMounted]);
+    }, []);
 
     const removeChip = (e, childValue) => {
       const newValue = Array.isArray(value) ? value.slice() : [];

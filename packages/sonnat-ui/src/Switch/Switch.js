@@ -330,7 +330,8 @@ const Switch = React.memo(
       componentName
     );
 
-    const isMounted = useIsMounted();
+    const isMountedRef = useIsMounted();
+
     const [isFocused, setFocused] = useState(false);
 
     const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
@@ -392,7 +393,7 @@ const Switch = React.memo(
       hasError: formControl ? formControl.hasError : hasError,
       required: formControl ? formControl.required : required,
       onFocus: e => {
-        if (isMounted) {
+        if (isMountedRef.current) {
           if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onFocus) onFocus(e);
@@ -403,7 +404,7 @@ const Switch = React.memo(
         }
       },
       onBlur: e => {
-        if (isMounted) {
+        if (isMountedRef.current) {
           if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onBlur) onBlur(e);
@@ -414,7 +415,7 @@ const Switch = React.memo(
         }
       },
       onChange: e => {
-        if (isMounted) {
+        if (isMountedRef.current) {
           if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onChange) onChange(e, !checked);

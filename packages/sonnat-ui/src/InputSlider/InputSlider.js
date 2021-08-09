@@ -421,7 +421,7 @@ const InputSlider = React.memo(
     const isInitialRender = React.useRef(true);
     const isInitiated = React.useRef(false);
 
-    const isMounted = useIsMounted();
+    const isMountedRef = useIsMounted();
 
     const [transitions, setTransitions] = React.useState("");
     const [isDragStarted, setDragStarted] = React.useState(false);
@@ -456,21 +456,23 @@ const InputSlider = React.memo(
     const handleSelector = `.${classes.handle}`;
 
     React.useEffect(() => {
-      if (isMounted) {
+      if (isMountedRef.current) {
         if (onMount) onMount();
       } else if (onDismount) onDismount();
-    }, [isMounted, onMount, onDismount]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [onMount, onDismount]);
 
     // update parentWidth when resizeDetector detects any changes in width of the parent
     React.useEffect(() => {
       let newWidth = 0;
 
-      if (isMounted && parentRef.current) {
+      if (isMountedRef.current && parentRef.current) {
         newWidth = parentRef.current.getBoundingClientRect().width;
       } else if (rootWidth) newWidth = rootWidth - 36;
 
       setParentWidth(newWidth);
-    }, [isMounted, rootWidth]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [rootWidth]);
 
     const prevParentWidth = usePreviousValue(parentWidth);
     const widthPerStep = parentWidth / (stepsCount - 1);
@@ -573,7 +575,11 @@ const InputSlider = React.memo(
     };
 
     React.useEffect(() => {
-      if (isMounted && parentWidth && parentWidth !== prevParentWidth) {
+      if (
+        isMountedRef.current &&
+        parentWidth &&
+        parentWidth !== prevParentWidth
+      ) {
         if (!isInitialRender.current) {
           setTimeout(() => {
             onResize();
@@ -581,7 +587,7 @@ const InputSlider = React.memo(
         }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isMounted, parentWidth, prevParentWidth]);
+    }, [parentWidth, prevParentWidth]);
 
     const clickListener = e => {
       const clientX = e.clientX;

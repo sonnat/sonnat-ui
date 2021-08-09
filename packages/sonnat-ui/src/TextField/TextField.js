@@ -293,7 +293,7 @@ const TextField = React.memo(
     const hasLeadingAdornment = !!leadingAdornment;
     const hasLimitedLength = !!otherInputProps.maxLength;
 
-    const isMounted = useIsMounted();
+    const isMountedRef = useIsMounted();
 
     const [isFocused, setFocused] = useState(isAutoFocus);
     const [charCount, setCharCount] = useState(
@@ -312,7 +312,7 @@ const TextField = React.memo(
       required: formControl ? formControl.required : required,
       fluid: formControl ? formControl.fluid : fluid,
       onFocus: e => {
-        if (isMounted) {
+        if (isMountedRef.current) {
           if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onFocus) onFocus(e);
@@ -323,7 +323,7 @@ const TextField = React.memo(
         }
       },
       onBlur: e => {
-        if (isMounted) {
+        if (isMountedRef.current) {
           if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onBlur) onBlur(e);
@@ -334,7 +334,7 @@ const TextField = React.memo(
         }
       },
       onChange: e => {
-        if (isMounted) {
+        if (isMountedRef.current) {
           if (e && e.persist) e.persist();
           if (!(controlProps.disabled || isReadOnly)) {
             if (onChange) onChange(e, e.target.value);
@@ -354,7 +354,7 @@ const TextField = React.memo(
     useEnhancedEffect(() => {
       if (
         isInit.current &&
-        isMounted &&
+        isMountedRef.current &&
         !(controlProps.disabled || isReadOnly)
       ) {
         if (isAutoFocus || controlProps.focused) {

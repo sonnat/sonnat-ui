@@ -44,9 +44,10 @@ const useStyles = makeStyles(
       control: {
         display: "flex",
         alignItems: "center",
-        width: "100%",
+        flex: "1 1",
         height: "100%",
-        position: "relative"
+        position: "relative",
+        overflow: "hidden"
       },
       label: {
         ...useText({ color: colors.text.secondary }),

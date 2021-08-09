@@ -424,7 +424,7 @@ const Tooltip = React.memo(
 
     const prevPlacement = usePreviousValue(placement);
 
-    const isMounted = useIsMounted();
+    const isMountedRef = useIsMounted();
 
     const [currentPlacement, setCurrentPlacement] = React.useState(placement);
 
@@ -441,7 +441,7 @@ const Tooltip = React.memo(
 
     React.useEffect(() => {
       if (
-        isMounted &&
+        isMountedRef.current &&
         !isInitialized.current &&
         tooltipRef.current &&
         anchorRef.current
@@ -459,10 +459,15 @@ const Tooltip = React.memo(
           setCurrentPlacement(newPlacement);
         });
       }
-    }, [isMounted, placement]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [placement]);
 
     React.useEffect(() => {
-      if (isMounted && isInitialized.current && prevPlacement !== placement) {
+      if (
+        isMountedRef.current &&
+        isInitialized.current &&
+        prevPlacement !== placement
+      ) {
         const { newPlacement, newPosition } = positioning(
           placement,
           tooltipRef.current,
@@ -472,7 +477,8 @@ const Tooltip = React.memo(
         setCurrentPositon(newPosition);
         setCurrentPlacement(newPlacement);
       }
-    }, [isMounted, placement, prevPlacement]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [placement, prevPlacement]);
 
     const outsideClickHandler = React.useCallback(
       e => {
