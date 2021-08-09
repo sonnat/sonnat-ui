@@ -26,6 +26,8 @@ export { default as HTMLElementType } from "./HTMLElementType";
 
 export { default as useEnhancedEffect } from "./useEnhancedEffect";
 
+export { default as useEventCallback } from "./useEventCallback";
+
 export { default as useIntersection } from "./useIntersection";
 
 export { default as useIsMounted } from "./useIsMounted";

@@ -47,6 +47,9 @@ export * from "./HTMLElementType";
 export { default as useEnhancedEffect } from "./useEnhancedEffect";
 export * from "./useEnhancedEffect";
 
+export { default as useEventCallback } from "./useEventCallback";
+export * from "./useEventCallback";
+
 export { default as useSyncEffect } from "./useSyncEffect";
 export * from "./useSyncEffect";
 
