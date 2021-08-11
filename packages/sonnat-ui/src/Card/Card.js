@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
 
-export const componentName = "Card";
+const componentName = "Card";
 
 const useStyles = makeStyles(
   theme => {

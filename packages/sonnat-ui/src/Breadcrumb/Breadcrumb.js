@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import { isFragment } from "react-is";
 import makeStyles from "../styles/makeStyles";
-import { componentName as childName } from "./Item";
+import Item from "./Item";
 
 const componentName = "Breadcrumb";
 
@@ -88,7 +88,7 @@ const Breadcrumb = React.memo(
         );
       }
 
-      if (child.type.displayName !== childName) {
+      if (child.type !== Item) {
         // eslint-disable-next-line no-console
         console.error(
           "Sonnat: The Breadcrumb component only accepts `Breadcrumb/Item` as a child."

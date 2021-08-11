@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from "../../internals/icons";
 import makeStyles from "../../styles/makeStyles";
 import useTheme from "../../styles/useTheme";
 
-export const componentName = "BreadcrumbItem";
+const componentName = "BreadcrumbItem";
 
 const useStyles = makeStyles(
   theme => {
