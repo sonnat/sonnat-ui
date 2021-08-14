@@ -2,7 +2,7 @@ import clx from "classnames";
 import debounce from "lodash.debounce";
 import PropTypes from "prop-types";
 import React from "react";
-import { useFormControl } from "../FormControl";
+import useFormControl from "../FormControl/useFormControl";
 import makeStyles from "../styles/makeStyles";
 import { blue } from "../styles/pallete";
 import {
@@ -412,6 +412,10 @@ const TextArea = React.memo(
         }
       }
     };
+
+    React.useEffect(() => {
+      setFocused(isFormControlFocused);
+    }, [isFormControlFocused]);
 
     // prevent component from being focused if it is disabled or readOnly
     React.useEffect(() => {

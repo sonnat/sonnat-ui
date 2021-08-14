@@ -342,6 +342,10 @@ const TextField = React.memo(
       }
     };
 
+    React.useEffect(() => {
+      setFocused(isFormControlFocused);
+    }, [isFormControlFocused]);
+
     // prevent component from being focused if it is disabled or readOnly
     React.useEffect(() => {
       if ((controlProps.disabled || isReadOnly) && isFocused) {
