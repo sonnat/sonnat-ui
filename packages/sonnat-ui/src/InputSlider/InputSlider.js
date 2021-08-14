@@ -469,10 +469,10 @@ const InputSlider = React.memo(
     const handleSelector = `.${classes.handle}`;
 
     React.useEffect(() => {
-      if (isMountedRef.current) {
-        if (onMount) onMount();
-      } else if (onDismount) onDismount();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      if (onMount) onMount();
+      return () => {
+        if (onDismount) onDismount();
+      };
     }, [onMount, onDismount]);
 
     // update parentWidth when resizeDetector detects any changes in width of the parent

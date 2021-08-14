@@ -440,12 +440,7 @@ const Tooltip = React.memo(
     );
 
     React.useEffect(() => {
-      if (
-        isMountedRef.current &&
-        !isInitialized.current &&
-        tooltipRef.current &&
-        anchorRef.current
-      ) {
+      if (!isInitialized.current && tooltipRef.current && anchorRef.current) {
         onNextFrame(() => {
           isInitialized.current = true;
 
@@ -463,11 +458,7 @@ const Tooltip = React.memo(
     }, [placement]);
 
     React.useEffect(() => {
-      if (
-        isMountedRef.current &&
-        isInitialized.current &&
-        prevPlacement !== placement
-      ) {
+      if (isInitialized.current && prevPlacement !== placement) {
         const { newPlacement, newPosition } = positioning(
           placement,
           tooltipRef.current,
