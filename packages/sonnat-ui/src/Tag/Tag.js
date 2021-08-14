@@ -1,10 +1,14 @@
-import React from "react";
+import clx from "classnames";
 import PropTypes from "prop-types";
-import useConstantProp from "../utils/useConstantProp";
+import React from "react";
 import Close from "../internals/icons/Close";
 import { changeColor } from "../styles/colorUtils";
-import clx from "classnames";
 import makeStyles from "../styles/makeStyles";
+import { blue } from "../styles/pallete";
+import useConstantProp from "../utils/useConstantProp";
+import useEventCallback from "../utils/useEventCallback";
+import useForkRef from "../utils/useForkRef";
+import useIsFocusVisible from "../utils/useIsFocusVisible";
 
 const componentName = "Tag";
 
@@ -91,12 +95,12 @@ const useStyles = makeStyles(
       removeBtn: {
         padding: "0",
         margin: "0",
-        outline: "none",
         cursor: "pointer",
         borderRadius: "0",
         border: "none",
         minWidth: "auto",
         height: "100%",
+        appearance: "none",
         backgroundColor: colors.transparent,
         zIndex: "2",
         pointerEvents: "auto",
@@ -121,6 +125,8 @@ const useStyles = makeStyles(
         transition: "background-color 360ms ease, color 360ms ease"
       },
       outlined: {},
+      filled: {},
+      removable: {},
       dense: {
         height: pxToRem(24),
         "& $label": { fontSize: pxToRem(12) }
@@ -136,7 +142,8 @@ const useStyles = makeStyles(
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
-          "&:hover > $removeBtnIcon, &:focus > $removeBtnIcon": {
+          color: colors.text.secondary,
+          "&:hover > $removeBtnIcon": {
             backgroundColor: !darkMode
               ? colors.createBlackColor({ alpha: 0.12 })
               : colors.createWhiteColor({ alpha: 0.12 })
@@ -158,7 +165,7 @@ const useStyles = makeStyles(
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
-          "&:hover > $removeBtnIcon, &:focus > $removeBtnIcon": {
+          "&:hover > $removeBtnIcon": {
             backgroundColor: primaryMiddleColor
           },
           "&:active > $removeBtnIcon": {
@@ -176,7 +183,7 @@ const useStyles = makeStyles(
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
-          "&:hover > $removeBtnIcon, &:focus > $removeBtnIcon": {
+          "&:hover > $removeBtnIcon": {
             backgroundColor: secondaryMiddleColor
           },
           "&:active > $removeBtnIcon": {
@@ -194,7 +201,7 @@ const useStyles = makeStyles(
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
-          "&:hover > $removeBtnIcon, &:focus > $removeBtnIcon": {
+          "&:hover > $removeBtnIcon": {
             backgroundColor: successMiddleColor
           },
           "&:active > $removeBtnIcon": {
@@ -212,7 +219,7 @@ const useStyles = makeStyles(
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
-          "&:hover > $removeBtnIcon, &:focus > $removeBtnIcon": {
+          "&:hover > $removeBtnIcon": {
             backgroundColor: errorMiddleColor
           },
           "&:active > $removeBtnIcon": {
@@ -230,7 +237,7 @@ const useStyles = makeStyles(
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
-          "&:hover > $removeBtnIcon, &:focus > $removeBtnIcon": {
+          "&:hover > $removeBtnIcon": {
             backgroundColor: warningMiddleColor
           },
           "&:active > $removeBtnIcon": {
@@ -248,13 +255,17 @@ const useStyles = makeStyles(
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
-          "&:hover > $removeBtnIcon, &:focus > $removeBtnIcon": {
+          "&:hover > $removeBtnIcon": {
             backgroundColor: infoMiddleColor
           },
           "&:active > $removeBtnIcon": {
             backgroundColor: infoBorderColor
           }
         }
+      },
+      focusVisible: {
+        outline: `2px solid ${darkMode ? blue[300] : blue[500]}`,
+        outlineOffset: 1
       }
     };
   },
@@ -282,6 +293,43 @@ const Tag = React.memo(
       propName: "onRemove"
     });
 
+    const {
+      isFocusVisibleRef,
+      onBlur: handleBlurVisible,
+      onFocus: handleFocusVisible,
+      ref: focusVisibleRef
+    } = useIsFocusVisible();
+
+    const removeRef = React.useRef(null);
+
+    const handleRemoveRef = useForkRef(focusVisibleRef, removeRef);
+
+    const [focusVisible, setFocusVisible] = React.useState(false);
+
+    React.useEffect(() => {
+      if (!visible && focusVisible) setFocusVisible(false);
+    }, [visible, focusVisible]);
+
+    React.useEffect(() => {
+      isFocusVisibleRef.current = focusVisible;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [focusVisible]);
+
+    const handleFocus = useEventCallback(event => {
+      // Fix for https://github.com/facebook/react/issues/7769
+      if (!removeRef.current) removeRef.current = event.currentTarget;
+
+      handleFocusVisible(event);
+
+      if (isFocusVisibleRef.current === true) setFocusVisible(true);
+    });
+
+    const handleBlur = useEventCallback(event => {
+      handleBlurVisible(event);
+
+      if (isFocusVisibleRef.current === false) setFocusVisible(false);
+    });
+
     return visible ? (
       <div
         ref={ref}
@@ -296,16 +344,21 @@ const Tag = React.memo(
         {icon && <i className={classes.icon}>{icon}</i>}
         <span className={classes.label}>{label}</span>
         {isRemovable && (
-          <div
-            role="button"
-            tabIndex={0}
-            className={classes.removeBtn}
+          <button
+            aria-label={`Remove the tag with ${label} text`}
+            ref={handleRemoveRef}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            tabIndex={visible ? 0 : -1}
+            className={clx(classes.removeBtn, {
+              [classes.focusVisible]: focusVisible
+            })}
             onClick={onRemove}
           >
             <i className={classes.removeBtnIcon}>
               <Close />
             </i>
-          </div>
+          </button>
         )}
       </div>
     ) : null;

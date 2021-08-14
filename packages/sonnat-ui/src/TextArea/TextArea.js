@@ -3,8 +3,8 @@ import debounce from "lodash.debounce";
 import PropTypes from "prop-types";
 import React from "react";
 import { useFormControl } from "../FormControl";
-import { changeColor } from "../styles/colorUtils";
 import makeStyles from "../styles/makeStyles";
+import { blue } from "../styles/pallete";
 import {
   clamp,
   getVar,
@@ -28,12 +28,6 @@ const getOwnerDocument = node => (node && node.ownerDocument) || document;
  * @type {(node: Node | null | undefined) => Window}
  */
 const getOwnerWindow = node => getOwnerDocument(node).defaultView || window;
-
-/**
- * @type {(style: React.CSSProperties, property: string) => number}
- */
-const getStyleNumericValue = (style, property) =>
-  parseInt(style[property], 10) || 0;
 
 const useStyles = makeStyles(
   theme => {
@@ -59,7 +53,6 @@ const useStyles = makeStyles(
         display: "inline-flex",
         position: "relative",
         minWidth: "0",
-        width: "100%",
         verticalAlign: "top",
         flexDirection: "column",
         "&:after": {
@@ -95,6 +88,7 @@ const useStyles = makeStyles(
         top: 0,
         left: 0,
         height: 0,
+        padding: [[pxToRem(8), pxToRem(16)]],
 
         // Create a new layer, increase the isolation of the computed values
         transform: "translateZ(0)"
@@ -159,7 +153,7 @@ const useStyles = makeStyles(
         justifyContent: "flex-end",
         flexShrink: 0
       },
-      fluid: { width: "100%" },
+      fluid: { width: "100%", "& $wrapper": { width: "100%" } },
       errored: {
         "& $wrapper:after": {
           borderColor: !darkMode ? colors.error.origin : colors.error.light
@@ -198,9 +192,7 @@ const useStyles = makeStyles(
       focused: {
         "&:not($errored) $wrapper:after": {
           borderWidth: 2,
-          borderColor: !darkMode
-            ? colors.createPrimaryColor({ alpha: 0.56 })
-            : changeColor(colors.primary.light, { alpha: 0.56 })
+          borderColor: !darkMode ? blue[500] : blue[300]
         },
         "&$errored $wrapper:after": {
           borderWidth: 2,
@@ -215,8 +207,8 @@ const useStyles = makeStyles(
         "& $helperIcon": {
           ...useIconWrapper(14)
         },
-        "& $input": { padding: [[pxToRem(2), pxToRem(8)]] },
         "& $input, & $shadow": {
+          padding: [[pxToRem(2), pxToRem(8)]],
           fontSize: pxToRem(12),
           lineHeight: 1.6666666667,
           "&::-webkit-input-placeholder": {
@@ -238,8 +230,8 @@ const useStyles = makeStyles(
         }
       },
       medium: {
-        "& $input": { padding: [[pxToRem(6), pxToRem(8)]] },
         "& $input, & $shadow": {
+          padding: [[pxToRem(6), pxToRem(8)]],
           fontSize: pxToRem(12),
           lineHeight: 1.6666666667,
           "&::-webkit-input-placeholder": {
@@ -362,16 +354,22 @@ const TextArea = React.memo(
 
     const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
 
-    const isInit = React.useRef(true);
     const { current: initialValue } = React.useRef(value);
 
+    const isFormControlFocused = formControl
+      ? !!formControl.focusedState
+      : false;
+
+    const isAutoFocus =
+      isFormControlFocused || !!inputAutoFocusProp || autoFocus || focused;
+
     const isReadOnly = !!inputReadOnlyProp || readOnly;
-    const isAutoFocus = !!inputAutoFocusProp || autoFocus || focused;
     const hasLimitedLength = !!otherInputProps.maxLength;
 
     const isMountedRef = useIsMounted();
 
     const [isFocused, setFocused] = React.useState(isAutoFocus);
+
     const [charCount, setCharCount] = React.useState(
       clamp(
         initialValue.length,
@@ -382,68 +380,55 @@ const TextArea = React.memo(
 
     // inherit properties from FormControl
     const controlProps = {
-      focused: formControl ? formControl.focusedState : isFocused,
       disabled: formControl ? formControl.disabled : disabled,
       hasError: formControl ? formControl.hasError : hasError,
       required: formControl ? formControl.required : required,
       fluid: formControl ? formControl.fluid : fluid,
       onFocus: e => {
-        if (isMountedRef.current) {
-          if (e && e.persist) e.persist();
-          if (!(controlProps.disabled || isReadOnly)) {
-            if (onFocus) onFocus(e);
-            if (inputOnFocusProp) inputOnFocusProp(e);
-            if (formControl && formControl.onFocus) formControl.onFocus(e);
-            else setFocused(true);
-          }
+        if (isMountedRef.current && !(controlProps.disabled || isReadOnly)) {
+          if (onFocus) onFocus(e);
+          if (inputOnFocusProp) inputOnFocusProp(e);
+          if (formControl && formControl.onFocus) formControl.onFocus(e);
+          else setFocused(true);
         }
       },
       onBlur: e => {
-        if (isMountedRef.current) {
-          if (e && e.persist) e.persist();
-          if (!(controlProps.disabled || isReadOnly)) {
-            if (onBlur) onBlur(e);
-            if (inputOnBlurProp) inputOnBlurProp(e);
-            if (formControl && formControl.onBlur) formControl.onBlur(e);
-            else setFocused(false);
-          }
+        if (isMountedRef.current && !(controlProps.disabled || isReadOnly)) {
+          if (onBlur) onBlur(e);
+          if (inputOnBlurProp) inputOnBlurProp(e);
+          if (formControl && formControl.onBlur) formControl.onBlur(e);
+          else setFocused(false);
         }
       },
       onChange: e => {
-        if (isMountedRef.current) {
-          if (e && e.persist) e.persist();
-          if (!(controlProps.disabled || isReadOnly)) {
-            renders.current = 0;
+        if (isMountedRef.current && !(controlProps.disabled || isReadOnly)) {
+          renders.current = 0;
 
-            if (onChange) onChange(e, e.target.value);
-            if (inputOnChangeProp) inputClassNameProp(e, e.target.value);
-            if (!isControlled && autoResize) syncHeight();
-            setValue(e.target.value);
-            setCharCount(e.target.value.length);
-          }
+          if (onChange) onChange(e, e.target.value);
+          if (inputOnChangeProp) inputClassNameProp(e, e.target.value);
+          if (!isControlled && autoResize) syncHeight();
+          setValue(e.target.value);
+          setCharCount(e.target.value.length);
         }
       }
     };
 
     // prevent component from being focused if it is disabled or readOnly
-    controlProps.focused =
-      controlProps.disabled || isReadOnly ? false : controlProps.focused;
+    React.useEffect(() => {
+      if ((controlProps.disabled || isReadOnly) && isFocused) {
+        setFocused(false);
+      }
+    }, [controlProps.disabled, isReadOnly, isFocused]);
 
-    // initially focus the component if it is focused
+    // initially focus the component
     useEnhancedEffect(() => {
-      if (
-        isInit.current &&
-        isMountedRef.current &&
-        !(controlProps.disabled || isReadOnly)
-      ) {
-        if (isAutoFocus || controlProps.focused) {
-          if (inputRef.current) {
-            inputRef.current.focus();
-            isInit.current = false;
-          }
+      if (!(controlProps.disabled || isReadOnly)) {
+        if (isAutoFocus && inputRef.current) {
+          inputRef.current.focus();
+          setFocused(true);
         }
       }
-    });
+    }, []);
 
     React.useImperativeHandle(ref, () => ({
       focus: () => {
@@ -483,14 +468,6 @@ const TextArea = React.memo(
         inputShadow.value += " ";
       }
 
-      const boxSizing = computedStyle["box-sizing"];
-      const padding =
-        getStyleNumericValue(computedStyle, "padding-bottom") +
-        getStyleNumericValue(computedStyle, "padding-top");
-      const border =
-        getStyleNumericValue(computedStyle, "border-bottom-width") +
-        getStyleNumericValue(computedStyle, "border-top-width");
-
       // The height of the inner content
       const innerHeight = inputShadow.scrollHeight;
 
@@ -507,9 +484,7 @@ const TextArea = React.memo(
         outerHeight = Math.min(Number(maxRows) * singleRowHeight, outerHeight);
       outerHeight = Math.max(outerHeight, singleRowHeight);
 
-      // Take the box sizing into account for applying this value as a style.
-      const outerHeightStyle =
-        outerHeight + (boxSizing === "border-box" ? padding + border : 0);
+      const outerHeightStyle = outerHeight;
       const overflow = Math.abs(outerHeight - innerHeight) <= 1;
 
       setStyleState(prevState => {
@@ -578,7 +553,7 @@ const TextArea = React.memo(
       <div
         className={clx(classes.root, className, classes[size], {
           [classes.resizable]: resizable,
-          [classes.focused]: controlProps.focused,
+          [classes.focused]: isFocused,
           [classes.disabled]: controlProps.disabled,
           [classes.readOnly]: isReadOnly,
           [classes.fluid]: controlProps.fluid,
@@ -601,6 +576,7 @@ const TextArea = React.memo(
             onBlur={controlProps.onBlur}
             readOnly={isReadOnly}
             rows={minRows}
+            tabIndex={controlProps.disabled || isReadOnly ? -1 : 0}
             style={{
               height: styleState.outerHeightStyle,
 
@@ -625,8 +601,7 @@ const TextArea = React.memo(
             tabIndex={-1}
             style={{
               ...style,
-              ...inputStyleProp,
-              padding: 0
+              ...inputStyleProp
             }}
           />
         </div>

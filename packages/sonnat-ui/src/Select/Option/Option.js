@@ -2,7 +2,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export const componentName = "SelectOption";
+const componentName = "SelectOption";
 
 const SelectOption = React.memo(function SelectOption({ children }) {
   return <React.Fragment>{children}</React.Fragment>;

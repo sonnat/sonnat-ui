@@ -1,9 +1,17 @@
 import clx from "classnames";
 import PropTypes from "prop-types";
-import React, { useReducer, useRef } from "react";
+import React from "react";
 import { Minus, Plus } from "../internals/icons";
 import makeStyles from "../styles/makeStyles";
-import { clamp, useControlled, useForkRef, getVar } from "../utils";
+import { blue } from "../styles/pallete";
+import {
+  clamp,
+  getVar,
+  useControlled,
+  useEventCallback,
+  useForkRef,
+  useIsFocusVisible
+} from "../utils";
 import {
   allowAdditionAndSubtraction,
   preventAddition,
@@ -27,7 +35,7 @@ const useStyles = makeStyles(
 
     return {
       root: {
-        direction: "rtl",
+        direction: "ltr",
         fontFamily: fontFamily[direction],
         position: "relative",
         display: "inline-flex",
@@ -63,7 +71,7 @@ const useStyles = makeStyles(
         margin: "0",
         backgroundColor: colors.transparent,
         transition: "background-color 360ms ease",
-        "&:hover, &:focus": {
+        "&:hover": {
           backgroundColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.04 })
             : colors.createWhiteColor({ alpha: 0.04 }),
@@ -80,17 +88,17 @@ const useStyles = makeStyles(
           opacity: "1",
           transition: "opacity 360ms ease"
         },
-        "&:after": { marginRight: "auto" },
-        "&:before": { marginLeft: "auto" }
+        "&:after": { marginLeft: "auto" },
+        "&:before": { marginRight: "auto" }
       },
       addAction: {
         borderRadius: `0 ${pxToRem(4)} ${pxToRem(4)} 0`,
-        "&:after": { content: '""' },
+        "&:before": { content: '""' },
         "& $actionIcon": { marginRight: "auto" }
       },
       subtractAction: {
         borderRadius: `${pxToRem(4)} 0 0 ${pxToRem(4)}`,
-        "&:before": { content: '""' },
+        "&:after": { content: '""' },
         "& $actionIcon": { marginLeft: "auto" }
       },
       actionIcon: {
@@ -160,6 +168,10 @@ const useStyles = makeStyles(
           "&:after,&:before": { height: pxToRem(24) }
         },
         "& $actionIcon": useIconWrapper(20)
+      },
+      focusVisible: {
+        outline: `2px solid ${darkMode ? blue[300] : blue[500]}`,
+        outlineOffset: 1
       }
     };
   },
@@ -240,20 +252,20 @@ const InputStepper = React.memo(
 
     const name = inputNameProp || nameProp;
 
-    const [permissions, dispatch] = useReducer(reducer, {
+    const [permissions, dispatch] = React.useReducer(reducer, {
       addition: true,
       subtraction: true
     });
 
-    const inputRef = useRef();
+    const inputRef = React.useRef(null);
     const handleInputRef = useForkRef(inputRef, inputRefProp);
 
-    const { current: min } = useRef(minProp);
-    const { current: max } = useRef(maxProp);
+    const { current: min } = React.useRef(minProp);
+    const { current: max } = React.useRef(maxProp);
 
     const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
 
-    const { current: defaultValue } = useRef(
+    const { current: defaultValue } = React.useRef(
       valueProp != null
         ? undefined
         : Math.floor(
@@ -292,7 +304,6 @@ const InputStepper = React.memo(
     };
 
     const changeHandler = e => {
-      if (e && e.persist) e.persist();
       if (!disabled) {
         const newValue = parseInt(e.target.value);
 
@@ -307,6 +318,81 @@ const InputStepper = React.memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value]);
 
+    const {
+      isFocusVisibleRef: isIncFocusVisibleRef,
+      onBlur: handleIncBlurVisible,
+      onFocus: handleIncFocusVisible,
+      ref: incFocusVisibleRef
+    } = useIsFocusVisible();
+
+    const {
+      isFocusVisibleRef: isDecFocusVisibleRef,
+      onBlur: handleDecBlurVisible,
+      onFocus: handleDecFocusVisible,
+      ref: decFocusVisibleRef
+    } = useIsFocusVisible();
+
+    const increaseRef = React.useRef(null);
+    const decreaseRef = React.useRef(null);
+
+    const handleIncreaseRef = useForkRef(incFocusVisibleRef, increaseRef);
+    const handleDecreaseRef = useForkRef(decFocusVisibleRef, decreaseRef);
+
+    const [isIncFocusVisible, setIncFocusVisible] = React.useState(false);
+    const [isDecFocusVisible, setDecFocusVisible] = React.useState(false);
+
+    React.useEffect(() => {
+      if (disabled) {
+        setIncFocusVisible(false);
+        setDecFocusVisible(false);
+      }
+    }, [disabled]);
+
+    React.useEffect(() => {
+      if (!permissions.addition) setIncFocusVisible(false);
+      if (!permissions.subtraction) setDecFocusVisible(false);
+    }, [permissions]);
+
+    React.useEffect(() => {
+      isIncFocusVisibleRef.current = isIncFocusVisible;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isIncFocusVisible]);
+
+    React.useEffect(() => {
+      isIncFocusVisibleRef.current = isDecFocusVisible;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isDecFocusVisible]);
+
+    const handleFocus = useEventCallback((event, handleType = "increase") => {
+      if (handleType === "increase") {
+        // Fix for https://github.com/facebook/react/issues/7769
+        if (!increaseRef.current) increaseRef.current = event.currentTarget;
+
+        handleIncFocusVisible(event);
+
+        if (isIncFocusVisibleRef.current === true) setIncFocusVisible(true);
+      } else if (handleType === "decrease") {
+        // Fix for https://github.com/facebook/react/issues/7769
+        if (!decreaseRef.current) decreaseRef.current = event.currentTarget;
+
+        handleDecFocusVisible(event);
+
+        if (isDecFocusVisibleRef.current === true) setDecFocusVisible(true);
+      }
+    });
+
+    const handleBlur = useEventCallback((event, handleType = "increase") => {
+      if (handleType === "increase") {
+        handleIncBlurVisible(event);
+
+        if (isIncFocusVisibleRef.current === false) setIncFocusVisible(false);
+      } else if (handleType === "decrease") {
+        handleDecBlurVisible(event);
+
+        if (isDecFocusVisibleRef.current === false) setDecFocusVisible(false);
+      }
+    });
+
     return (
       <div
         ref={ref}
@@ -318,15 +404,20 @@ const InputStepper = React.memo(
         {...otherProps}
       >
         <button
-          tabIndex={!permissions.addition ? -1 : 0}
-          disabled={!permissions.addition}
-          className={clx(classes.action, classes.addAction, {
-            [classes.disabled]: !permissions.addition
+          aria-label={`Decrease the value of ${name} number input`}
+          ref={handleDecreaseRef}
+          tabIndex={!permissions.subtraction ? -1 : 0}
+          disabled={!permissions.subtraction}
+          className={clx(classes.action, classes.subtractAction, {
+            [classes.disabled]: !permissions.subtraction,
+            [classes.focusVisible]: isDecFocusVisible
           })}
-          onClick={onAdd}
+          onClick={onSubtract}
+          onFocus={e => void handleFocus(e, "decrease")}
+          onBlur={e => void handleBlur(e, "decrease")}
         >
           <i className={classes.actionIcon}>
-            <Plus />
+            <Minus />
           </i>
         </button>
         <div className={classes.inputContainer}>
@@ -344,15 +435,20 @@ const InputStepper = React.memo(
           />
         </div>
         <button
-          tabIndex={!permissions.subtraction ? -1 : 0}
-          disabled={!permissions.subtraction}
-          className={clx(classes.action, classes.subtractAction, {
-            [classes.disabled]: !permissions.subtraction
+          aria-label={`Increase the value of ${name} number input`}
+          ref={handleIncreaseRef}
+          tabIndex={!permissions.addition ? -1 : 0}
+          disabled={!permissions.addition}
+          className={clx(classes.action, classes.addAction, {
+            [classes.disabled]: !permissions.addition,
+            [classes.focusVisible]: isIncFocusVisible
           })}
-          onClick={onSubtract}
+          onClick={onAdd}
+          onFocus={e => void handleFocus(e, "increase")}
+          onBlur={e => void handleBlur(e, "increase")}
         >
           <i className={classes.actionIcon}>
-            <Minus />
+            <Plus />
           </i>
         </button>
       </div>

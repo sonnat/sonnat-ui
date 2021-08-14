@@ -4,10 +4,10 @@ import clx from "classnames";
 import generateUniqueString from "../../utils/generateUniqueString";
 import FloatedListContext from "../context";
 import { isFragment } from "react-is";
-import { componentName as itemName } from "../Item";
+import Item from "../Item";
 import makeStyles from "../../styles/makeStyles";
 
-export const componentName = "MenuItemGroup";
+const componentName = "MenuItemGroup";
 
 const useStyles = makeStyles(
   theme => {
@@ -68,7 +68,7 @@ const MenuItemGroup = React.memo(function MenuItemGroup(props) {
       return null;
     }
 
-    if (child.type.displayName !== itemName) {
+    if (child.type !== Item) {
       // eslint-disable-next-line no-console
       console.error(
         "Sonnat: The MenuItemGroup component only accepts `Menu/Item` component."

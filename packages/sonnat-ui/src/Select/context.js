@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 const SelectContext = createContext({
-  isNative: false
+  isMultiple: false
 });
 
 if (process.env.NODE_ENV !== "production")

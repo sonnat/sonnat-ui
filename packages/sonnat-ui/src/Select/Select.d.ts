@@ -69,11 +69,6 @@ type BaseProps<P = {}> = P & {
    */
   focused?: boolean;
   /**
-   * If `true`, the component uses a native `Select` element.
-   * @default false
-   */
-  native?: boolean;
-  /**
    * If `true`, the Select will be focused on mount.
    * @default false
    */

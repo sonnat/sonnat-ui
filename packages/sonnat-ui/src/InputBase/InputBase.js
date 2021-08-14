@@ -1,11 +1,12 @@
 import clx from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
-import { changeColor } from "../styles/colorUtils";
 import makeStyles from "../styles/makeStyles";
-import useTextField from "../TextField/useTextField";
+import { blue } from "../styles/pallete";
+import TextFieldContext from "../TextField/context";
+import SelectContext from "../Select/context";
 import getVar from "../utils/getVar";
-import TextInputBaseContext from "./context";
+import InputBaseContext from "./context";
 
 const componentName = "InputBase";
 
@@ -136,9 +137,7 @@ const useStyles = makeStyles(
           transition: "max-width 100ms ease 50ms"
         },
         "&:not($errored) $notchedOutline": {
-          borderColor: !darkMode
-            ? colors.createPrimaryColor({ alpha: 0.56 })
-            : changeColor(colors.primary.light, { alpha: 0.56 })
+          borderColor: !darkMode ? blue[500] : blue[300]
         },
         "& $notchedOutline": {
           borderWidth: pxToRem(2)
@@ -355,7 +354,10 @@ const useStyles = makeStyles(
         },
         "&:not($small) $legendLabel": { maxWidth: "999px" }
       },
-      withTrailingAdornment: {}
+      withTrailingAdornment: {},
+      multipleSelect: {
+        "& $control": { overflow: "visible" }
+      }
     };
   },
   { name: `Sonnat${componentName}` }
@@ -383,7 +385,9 @@ const InputBase = React.memo(
     } = props;
 
     const classes = useStyles();
-    const { isEmpty } = useTextField();
+
+    const { isEmpty } = React.useContext(TextFieldContext);
+    const { isMultiple } = React.useContext(SelectContext);
 
     const isLegendLabeled = !!legendLabel;
     const hasLeadingAdornment = !!leadingAdornment;
@@ -415,7 +419,7 @@ const InputBase = React.memo(
     }
 
     return (
-      <TextInputBaseContext.Provider value={{ size, disabled, hasError }}>
+      <InputBaseContext.Provider value={{ size, disabled, hasError }}>
         <div
           ref={ref}
           className={clx(
@@ -433,6 +437,7 @@ const InputBase = React.memo(
               [classes.withTrailingAdornment]: hasTrailingAdornment,
               [classes.rounded]: rounded,
               [classes.errored]: hasError,
+              [classes.multipleSelect]: isMultiple,
               [classes.legendLabeled]: !invalidUsageOfLegend && isLegendLabeled
             }
           )}
@@ -463,7 +468,7 @@ const InputBase = React.memo(
           </div>
         </div>
         {children}
-      </TextInputBaseContext.Provider>
+      </InputBaseContext.Provider>
     );
   })
 );

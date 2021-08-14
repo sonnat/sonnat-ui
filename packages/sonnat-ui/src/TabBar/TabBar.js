@@ -7,15 +7,16 @@ import { withResizeDetector } from "react-resize-detector";
 import { ChevronLeftLarge, ChevronRightLarge } from "../internals/icons";
 import { makeStyles, useTheme } from "../styles";
 import {
+  clamp,
   detectScrollType,
   getNormalizedScrollLeft,
+  getVar,
   setRef,
   useConstantProp,
-  useControlled,
-  getVar
+  useControlled
 } from "../utils";
 import TabBarContext from "./context";
-import { componentName as childName } from "./Tab";
+import Tab from "./Tab";
 
 const componentName = "TabBar";
 
@@ -174,10 +175,10 @@ const TabBar = React.memo(
     const {
       // These properties are passed from `react-resize-detector`.
       // We are trying to exclude them from the `otherProps` property.
-      /* eslint-disable no-unused-vars, react/prop-types */
+      /* eslint-disable */
       targetRef,
       height: rootHeight,
-      /* eslint-enable no-unused-vars, react/prop-types */
+      /* eslint-enable */
       className,
       activeTab,
       defaultActiveTab,
@@ -273,7 +274,7 @@ const TabBar = React.memo(
         );
       }
 
-      if (child.type.displayName !== childName) {
+      if (child.type !== Tab) {
         // eslint-disable-next-line no-console
         console.error(
           "Sonnat: The TabBar component only accepts `TabBar/Tab` as a child."
@@ -519,13 +520,40 @@ const TabBar = React.memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value]);
 
+    const focusLeftAdjacentTab = identifier => {
+      const tabIndex = identifierToIndex.get(identifier);
+      const childrenLength = Array.from(listRef.current.children).length;
+
+      if (tabIndex - 1 < 0) return;
+
+      const child = getChildren(clamp(tabIndex - 1, 0, childrenLength));
+
+      child.click();
+      child.focus();
+    };
+
+    const focusRightAdjacentTab = identifier => {
+      const tabIndex = identifierToIndex.get(identifier);
+      const childrenLength = Array.from(listRef.current.children).length;
+
+      if (tabIndex + 1 >= childrenLength) return;
+
+      const child = getChildren(clamp(tabIndex + 1, 0, childrenLength - 1));
+
+      child.click();
+      child.focus();
+    };
+
     const context = React.useMemo(
       () => ({
         fluid: isFluid,
         scrollable: isScrollable,
         onChange: changeListener,
+        focusLeftAdjacentTab,
+        focusRightAdjacentTab,
         size
       }),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [isFluid, isScrollable, changeListener, size]
     );
 

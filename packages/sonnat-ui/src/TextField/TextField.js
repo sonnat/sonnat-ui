@@ -1,6 +1,6 @@
 import clx from "classnames";
 import PropTypes from "prop-types";
-import React, { useImperativeHandle, useRef, useState } from "react";
+import React from "react";
 import useFormControl from "../FormControl/useFormControl";
 import InputBase from "../InputBase";
 import makeStyles from "../styles/makeStyles";
@@ -255,12 +255,12 @@ const TextField = React.memo(
 
     const name = inputNameProp || nameProp;
 
-    const inputRef = useRef();
+    const inputRef = React.useRef();
 
     const classes = useStyles();
     const formControl = useFormControl();
 
-    const { current: _default_ } = useRef(
+    const { current: _default_ } = React.useRef(
       inputValueProp || valueProp != null
         ? undefined
         : defaultValue != null
@@ -284,19 +284,25 @@ const TextField = React.memo(
 
     const type = getVar(typeProp, "text", !allowedTypes.includes(typeProp));
 
-    const isInit = useRef(true);
-    const { current: initialValue } = useRef(value);
+    const { current: initialValue } = React.useRef(value);
+
+    const isFormControlFocused = formControl
+      ? !!formControl.focusedState
+      : false;
+
+    const isAutoFocus =
+      isFormControlFocused || !!inputAutoFocusProp || autoFocus || focused;
 
     const isLegendLabeled = !!legendLabel;
     const isReadOnly = !!inputReadOnlyProp || readOnly;
-    const isAutoFocus = !!inputAutoFocusProp || autoFocus || focused;
     const hasLeadingAdornment = !!leadingAdornment;
     const hasLimitedLength = !!otherInputProps.maxLength;
 
     const isMountedRef = useIsMounted();
 
-    const [isFocused, setFocused] = useState(isAutoFocus);
-    const [charCount, setCharCount] = useState(
+    const [isFocused, setFocused] = React.useState(isAutoFocus);
+
+    const [charCount, setCharCount] = React.useState(
       clamp(
         initialValue.length,
         0,
@@ -306,67 +312,54 @@ const TextField = React.memo(
 
     // inherit properties from FormControl
     const controlProps = {
-      focused: formControl ? formControl.focusedState : isFocused,
       disabled: formControl ? formControl.disabled : disabled,
       hasError: formControl ? formControl.hasError : hasError,
       required: formControl ? formControl.required : required,
       fluid: formControl ? formControl.fluid : fluid,
       onFocus: e => {
-        if (isMountedRef.current) {
-          if (e && e.persist) e.persist();
-          if (!(controlProps.disabled || isReadOnly)) {
-            if (onFocus) onFocus(e);
-            if (inputOnFocusProp) inputOnFocusProp(e);
-            if (formControl && formControl.onFocus) formControl.onFocus(e);
-            else setFocused(true);
-          }
+        if (isMountedRef.current && !(controlProps.disabled || isReadOnly)) {
+          if (onFocus) onFocus(e);
+          if (inputOnFocusProp) inputOnFocusProp(e);
+          if (formControl && formControl.onFocus) formControl.onFocus(e);
+          else setFocused(true);
         }
       },
       onBlur: e => {
-        if (isMountedRef.current) {
-          if (e && e.persist) e.persist();
-          if (!(controlProps.disabled || isReadOnly)) {
-            if (onBlur) onBlur(e);
-            if (inputOnBlurProp) inputOnBlurProp(e);
-            if (formControl && formControl.onBlur) formControl.onBlur(e);
-            else setFocused(false);
-          }
+        if (isMountedRef.current && !(controlProps.disabled || isReadOnly)) {
+          if (onBlur) onBlur(e);
+          if (inputOnBlurProp) inputOnBlurProp(e);
+          if (formControl && formControl.onBlur) formControl.onBlur(e);
+          else setFocused(false);
         }
       },
       onChange: e => {
-        if (isMountedRef.current) {
-          if (e && e.persist) e.persist();
-          if (!(controlProps.disabled || isReadOnly)) {
-            if (onChange) onChange(e, e.target.value);
-            if (inputOnChangeProp) inputOnChangeProp(e, e.target.value);
-            setValue(e.target.value);
-            setCharCount(e.target.value.length);
-          }
+        if (isMountedRef.current && !(controlProps.disabled || isReadOnly)) {
+          if (onChange) onChange(e, e.target.value);
+          if (inputOnChangeProp) inputOnChangeProp(e, e.target.value);
+          setValue(e.target.value);
+          setCharCount(e.target.value.length);
         }
       }
     };
 
     // prevent component from being focused if it is disabled or readOnly
-    controlProps.focused =
-      controlProps.disabled || isReadOnly ? false : controlProps.focused;
+    React.useEffect(() => {
+      if ((controlProps.disabled || isReadOnly) && isFocused) {
+        setFocused(false);
+      }
+    }, [controlProps.disabled, isReadOnly, isFocused]);
 
-    // initially focus the component if it is focused
+    // initially focus the component
     useEnhancedEffect(() => {
-      if (
-        isInit.current &&
-        isMountedRef.current &&
-        !(controlProps.disabled || isReadOnly)
-      ) {
-        if (isAutoFocus || controlProps.focused) {
-          if (inputRef.current) {
-            inputRef.current.focus();
-            isInit.current = false;
-          }
+      if (!(controlProps.disabled || isReadOnly)) {
+        if (isAutoFocus && inputRef.current) {
+          inputRef.current.focus();
+          setFocused(true);
         }
       }
-    });
+    }, []);
 
-    useImperativeHandle(ref, () => ({
+    React.useImperativeHandle(ref, () => ({
       focus: () => {
         inputRef.current.focus();
       },
@@ -403,7 +396,7 @@ const TextField = React.memo(
         >
           <InputBase
             legendLabel={legendLabel}
-            focused={controlProps.focused}
+            focused={isFocused}
             readOnly={isReadOnly}
             rounded={rounded}
             hasError={controlProps.hasError}
@@ -441,6 +434,7 @@ const TextField = React.memo(
                 onFocus={controlProps.onFocus}
                 onBlur={controlProps.onBlur}
                 onChange={controlProps.onChange}
+                tabIndex={controlProps.disabled || isReadOnly ? -1 : 0}
                 {...otherInputProps}
               />
             }

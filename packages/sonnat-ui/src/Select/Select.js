@@ -1,11 +1,6 @@
 import clx from "classnames";
 import PropTypes from "prop-types";
-import React, {
-  useCallback,
-  useImperativeHandle,
-  useRef,
-  useState
-} from "react";
+import React from "react";
 import { isFragment } from "react-is";
 import useFormControl from "../FormControl/useFormControl";
 import InputAdornment from "../InputAdornment";
@@ -13,19 +8,21 @@ import InputBase from "../InputBase";
 import { Check, ChevronDown } from "../internals/icons";
 import Menu, { MenuItem, MenuItemGroup } from "../Menu";
 import RemovableChip from "../RemovableChip";
+import SelectContext from "./context";
 import { makeStyles, useTheme } from "../styles";
 import {
   closest,
   generateUniqueString,
   getVar,
-  setRef,
+  useEventCallback,
   useControlled,
   useEnhancedEffect,
-  useForkRef
+  useForkRef,
+  useIsMounted,
+  useIsFocusVisible
 } from "../utils";
-import useIsMounted from "../utils/useIsMounted";
-import { componentName as optionName } from "./Option";
-import { componentName as optionGroupName } from "./OptionGroup";
+import Option from "./Option";
+import OptionGroup from "./OptionGroup";
 
 const componentName = "Select";
 
@@ -48,7 +45,8 @@ const useStyles = makeStyles(
         fontFamily: fontFamily[direction],
         display: "inline-flex",
         position: "relative",
-        flexDirection: "column"
+        flexDirection: "column",
+        outline: "none"
       },
       base: { cursor: "pointer" },
       input: {
@@ -161,7 +159,8 @@ const useStyles = makeStyles(
           }
         }
       },
-      native: {}
+      native: {},
+      focusVisible: {}
     };
   },
   { name: `Sonnat${componentName}` }
@@ -178,7 +177,7 @@ const areEqual = (a, b) => {
 const isEmpty = value => value === undefined || value === null || value === "";
 
 const Select = React.memo(
-  React.forwardRef(function Select(props, refProp) {
+  React.forwardRef(function Select(props, ref) {
     const {
       className,
       onChange,
@@ -186,6 +185,8 @@ const Select = React.memo(
       onBlur,
       onOpen,
       onClose,
+      onKeyDown,
+      onKeyUp,
       helperText,
       helperIcon,
       leadingAdornment,
@@ -204,7 +205,6 @@ const Select = React.memo(
       multiple = false,
       searchable = false,
       autoFocus = false,
-      native = false,
       focused = false,
       disabled = false,
       fluid = false,
@@ -227,20 +227,33 @@ const Select = React.memo(
       ...otherInputProps
     } = inputProps;
 
-    const inputRef = useRef();
-    const inputBaseRef = useRef();
-    const menuRef = useRef();
-    const rootRef = useRef();
+    const {
+      isFocusVisibleRef,
+      onBlur: handleBlurVisible,
+      onFocus: handleFocusVisible,
+      ref: focusVisibleRef
+    } = useIsFocusVisible();
 
-    const ref = useForkRef(rootRef, refProp);
+    const rootRef = React.useRef(null);
+    const handleRef = useForkRef(ref, rootRef);
+
+    const inputRef = React.useRef(null);
+    const inputBaseRef = React.useRef(null);
+    const menuRef = React.useRef(null);
+
+    const preventFocus = React.useRef(false);
+    const keyboardInteractedWithChip = React.useRef(false);
+
+    const handleInputOwnRef = useForkRef(inputRef, inputRefProp);
+    const handleInputRef = useForkRef(focusVisibleRef, handleInputOwnRef);
 
     const classes = useStyles();
     const formControl = useFormControl();
 
     const theme = useTheme();
 
-    const { current: isOpenControlled } = useRef(openProp != null);
-    const { current: defaultValue } = useRef(
+    const { current: isOpenControlled } = React.useRef(openProp != null);
+    const { current: defaultValue } = React.useRef(
       valueProp != null
         ? undefined
         : defaultValueProp != null
@@ -250,17 +263,21 @@ const Select = React.memo(
         : ""
     );
 
-    const [value, setValue, isControlled] = useControlled(
+    const [value, setValue] = useControlled(
       valueProp,
       defaultValue,
       componentName
     );
 
-    const isInit = useRef(true);
-
     const name = inputNameProp || nameProp;
 
-    const isAutoFocus = !!inputAutoFocusProp || autoFocus || focused;
+    const isFormControlFocused = formControl
+      ? !!formControl.focusedState
+      : false;
+
+    const isAutoFocus =
+      isFormControlFocused || !!inputAutoFocusProp || autoFocus || focused;
+
     const isRTL = theme.direction === "rtl";
 
     const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
@@ -273,8 +290,8 @@ const Select = React.memo(
 
     const isMountedRef = useIsMounted();
 
-    const [isOpen, setOpen] = useState(false);
-    const [isFocused, setFocused] = useState(isAutoFocus);
+    const [isOpen, setOpen] = React.useState(false);
+    const [isFocused, setFocused] = React.useState(isAutoFocus);
 
     const placeholder =
       placeholderProp ||
@@ -308,73 +325,50 @@ const Select = React.memo(
 
     // inherit properties from FormControl
     const controlProps = {
-      focused: formControl ? formControl.focusedState : isFocused,
       disabled: formControl ? formControl.disabled : disabled,
       hasError: formControl ? formControl.hasError : hasError,
       required: formControl ? formControl.required : required,
       fluid: formControl ? formControl.fluid : fluid,
       onFocus: e => {
-        if (isMountedRef.current) {
-          if (e && e.persist) e.persist();
-          if (!controlProps.disabled) {
-            if (onFocus) onFocus(e);
-            if (inputOnFocusProp) inputOnFocusProp(e);
-            if (formControl && formControl.onFocus) formControl.onFocus(e);
-            else setFocused(true);
-          }
+        if (isMountedRef.current && !controlProps.disabled) {
+          if (onFocus) onFocus(e);
+          if (inputOnFocusProp) inputOnFocusProp(e);
+          if (formControl && formControl.onFocus) formControl.onFocus(e);
         }
       },
       onBlur: e => {
-        if (isMountedRef.current) {
-          if (e && e.persist) e.persist();
-          if (!controlProps.disabled) {
-            if (onBlur) onBlur(e);
-            if (inputOnBlurProp) inputOnBlurProp(e);
-            if (formControl && formControl.onBlur) formControl.onBlur(e);
-            else setFocused(false);
-          }
+        if (isMountedRef.current && !controlProps.disabled) {
+          if (onBlur) onBlur(e);
+          if (inputOnBlurProp) inputOnBlurProp(e);
+          if (formControl && formControl.onBlur) formControl.onBlur(e);
         }
       },
       onChange: (e, v) => {
-        if (isMountedRef.current) {
-          if (e && e.persist) e.persist();
-          if (!controlProps.disabled) {
-            const newValue = v != null ? v : e != null ? e.target.value : null;
+        if (isMountedRef.current && !controlProps.disabled) {
+          const newValue = v != null ? v : e != null ? e.target.value : null;
 
-            if (onChange) onChange(e, newValue);
-            if (inputOnChangeProp) inputOnChangeProp(e, newValue);
-            setValue(newValue);
-          }
+          if (onChange) onChange(e, newValue);
+          if (inputOnChangeProp) inputOnChangeProp(e, newValue);
+          setValue(newValue);
         }
       }
     };
 
-    // prevent component from being focused if it is disabled
-    controlProps.focused = controlProps.disabled ? false : controlProps.focused;
-
-    const updateOpenState = newOpenState => {
-      if (newOpenState) {
-        if (onOpen) onOpen();
-        setFocused(true);
-      } else {
-        if (onClose) onClose();
-        setFocused(false);
-      }
-
-      if (!isOpenControlled) setOpen(newOpenState);
+    const handleOpen = () => {
+      if (onOpen) onOpen();
     };
 
-    // initially focus the component if it is focused
-    useEnhancedEffect(() => {
-      if (isInit.current && isMountedRef.current && !controlProps.disabled) {
-        if (isAutoFocus || controlProps.focused) {
-          if (inputRef.current) {
-            updateOpenState(true);
-            isInit.current = false;
-          }
-        }
-      }
-    }, []);
+    const handleClose = () => {
+      if (onClose) onClose();
+    };
+
+    const closeMenu = () => {
+      if (!isOpenControlled) setOpen(false);
+    };
+
+    const openMenu = () => {
+      if (!isOpenControlled) setOpen(true);
+    };
 
     const removeChip = (e, childValue) => {
       const newValue = Array.isArray(value) ? value.slice() : [];
@@ -387,11 +381,19 @@ const Select = React.memo(
         controlProps.onChange(e, newValue);
       }
 
-      updateOpenState(false);
+      closeMenu();
+    };
+
+    const keepFocus = () => {
+      setTimeout(() => {
+        inputRef.current.focus();
+      }, 200);
     };
 
     const itemClickListener = (e, childValue) => {
       let newValue;
+
+      e.preventDefault();
 
       if (multiple) {
         newValue = Array.isArray(value) ? value.slice() : [];
@@ -408,7 +410,10 @@ const Select = React.memo(
         controlProps.onChange(e, newValue);
       }
 
-      if (!multiple) updateOpenState(false);
+      if (!multiple) {
+        closeMenu();
+        keepFocus();
+      }
     };
 
     const shouldSelectChild = childValue => {
@@ -426,18 +431,12 @@ const Select = React.memo(
       }
     };
 
-    useImperativeHandle(refProp, () => ({
+    React.useImperativeHandle(ref, () => ({
       focus: () => {
-        if (!controlProps.disabled) {
-          if (native) inputRef.current.focus();
-          else updateOpenState(true);
-        }
+        if (!controlProps.disabled) inputRef.current.focus();
       },
       blur: () => {
-        if (!controlProps.disabled) {
-          if (native) inputRef.current.blur();
-          else updateOpenState(false);
-        }
+        if (!controlProps.disabled) inputRef.current.blur();
       },
       clear: () => {
         const newValue = multiple ? [] : "";
@@ -447,7 +446,7 @@ const Select = React.memo(
           controlProps.onChange(undefined, newValue);
         }
 
-        updateOpenState(false);
+        closeMenu();
       }
     }));
 
@@ -463,7 +462,7 @@ const Select = React.memo(
         return null;
       }
 
-      if (![optionGroupName, optionName].includes(child.type.displayName)) {
+      if (child.type !== Option && child.type !== OptionGroup) {
         // eslint-disable-next-line no-console
         console.error(
           "Sonnat: The Select component only accepts `Select/OptionGroup` or `Select/Option` components."
@@ -473,7 +472,7 @@ const Select = React.memo(
       }
 
       let selected;
-      const isGroup = child.type.displayName === optionGroupName;
+      const isGroup = child.type === OptionGroup;
 
       if (isGroup) {
         const { children, className, title, ...otherGroupProps } = child.props;
@@ -493,9 +492,8 @@ const Select = React.memo(
                 className,
                 value,
                 onClick,
-                onFocus,
-                onBlur,
                 disabled,
+                onMouseDown,
                 ...otherOptionProps
               } = child.props;
 
@@ -516,8 +514,10 @@ const Select = React.memo(
                     if (onClick) onClick(e);
                     itemClickListener(e, value);
                   }}
-                  onFocus={onFocus}
-                  onBlur={onBlur}
+                  onMouseDown={e => {
+                    if (onMouseDown) onMouseDown(e);
+                    itemClickListener(e, value);
+                  }}
                   {...otherOptionProps}
                 >
                   {multiple && (
@@ -538,9 +538,8 @@ const Select = React.memo(
           className,
           value,
           onClick,
-          onFocus,
-          onBlur,
           disabled,
+          onMouseDown,
           ...otherOptionProps
         } = child.props;
 
@@ -560,8 +559,10 @@ const Select = React.memo(
               if (onClick) onClick(e);
               itemClickListener(e, value);
             }}
-            onFocus={onFocus}
-            onBlur={onBlur}
+            onMouseDown={e => {
+              if (onMouseDown) onMouseDown(e);
+              itemClickListener(e, value);
+            }}
             {...otherOptionProps}
           >
             {multiple && (
@@ -577,47 +578,119 @@ const Select = React.memo(
 
     if (computeDisplay) display = multiple ? displayValues : displayValue;
 
-    const InputComponent = native ? "select" : "div";
+    const [isFocusVisible, setFocusVisible] = React.useState(false);
+
+    // prevent component from being focused if it is disabled
+    React.useEffect(() => {
+      if (controlProps.disabled && isFocused) {
+        setFocused(false);
+        setFocusVisible(false);
+      }
+    }, [controlProps.disabled, isFocused]);
+
+    React.useEffect(() => {
+      isFocusVisibleRef.current = isFocusVisible;
+      // isFocusVisibleRef.current = isFocused;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isFocusVisible]);
+
+    React.useEffect(() => {
+      if (!preventFocus.current) setFocused(isFocusVisible);
+    }, [isFocusVisible]);
+
+    // initially focus the component
+    useEnhancedEffect(() => {
+      if (!controlProps.disabled) {
+        if (isAutoFocus && inputRef.current) {
+          inputRef.current.focus();
+        }
+      }
+    }, []);
+
+    const handleFocus = useEventCallback(event => {
+      // Fix for https://github.com/facebook/react/issues/7769
+      if (!inputRef.current) inputRef.current = event.currentTarget;
+
+      handleFocusVisible(event);
+
+      if (isFocusVisibleRef.current === true) {
+        // setFocused(true);
+        setFocusVisible(true);
+      }
+      controlProps.onFocus(event);
+    });
+
+    const handleBlur = useEventCallback(event => {
+      handleBlurVisible(event);
+
+      if (isFocusVisibleRef.current === false) {
+        // setFocused(false);
+        setFocusVisible(false);
+      }
+      controlProps.onBlur(event);
+    });
+
+    const keyDownRef = React.useRef(false);
+
+    const handleKeyDown = useEventCallback(event => {
+      if (keyDownRef.current === false && isFocused && event.key === " ") {
+        keyDownRef.current = true;
+      }
+
+      if (event.target === event.currentTarget && event.key === " ") {
+        event.preventDefault();
+      }
+
+      if (onKeyDown) onKeyDown(event);
+
+      if (
+        !disabled &&
+        isFocused &&
+        event.target === event.currentTarget &&
+        (event.key === "Down" || event.key === "ArrowDown")
+      ) {
+        inputRef.current.blur();
+      }
+    });
+
+    const handleKeyUp = useEventCallback(event => {
+      if (!event.defaultPrevented && isFocused && event.key === " ") {
+        keyDownRef.current = false;
+      }
+
+      if (onKeyUp) onKeyUp(event);
+
+      if (
+        !event.defaultPrevented &&
+        isFocused &&
+        event.target === event.currentTarget &&
+        event.key === " "
+      ) {
+        if (openState) closeMenu();
+        else openMenu();
+      }
+    });
 
     const createInputController = () => {
-      let inputProps;
-
-      if (native) {
-        inputProps = {
-          value: isControlled ? value : undefined,
-          defaultValue: !isControlled ? defaultValue : undefined,
-          name: name,
-          required: controlProps.required,
-          disabled: controlProps.disabled,
-          onFocus: controlProps.onFocus,
-          onBlur: controlProps.onBlur,
-          onChange: e => controlProps.onChange(e, undefined),
-          tabIndex: controlProps.disabled ? -1 : 0
-        };
-      } else
-        inputProps = {
-          tabIndex: controlProps.disabled ? -1 : 0,
-          role: "button",
-          "aria-haspopup": "listbox",
-          "aria-disabled": controlProps.disabled,
-          ...otherInputProps
-        };
-
       return (
-        <InputComponent
+        <div
+          aria-haspopup="listbox"
+          aria-disabled={controlProps.disabled}
+          tabIndex={controlProps.disabled ? -1 : 0}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          onKeyUp={handleKeyUp}
+          onKeyDown={handleKeyDown}
           id={
             inputIdProp || name
               ? `sonnat-select-input-component-${name}`
               : undefined
           }
           className={clx(classes.input, inputClassNameProp, {
-            [classes.native]: native
+            [classes.focusVisible]: isFocusVisible
           })}
-          ref={node => {
-            if (inputRefProp) setRef(inputRefProp, node);
-            setRef(inputRef, node);
-          }}
-          {...inputProps}
+          ref={handleInputRef}
+          {...otherInputProps}
         >
           <div className={classes.display}>
             {!display || display.length === 0 ? (
@@ -627,13 +700,45 @@ const Select = React.memo(
                 {display.map((item, index) => {
                   const [content, value] = item;
 
+                  const isContentArray =
+                    typeof content !== "string" &&
+                    typeof content === "object" &&
+                    Array.isArray(content);
+
                   return (
                     <RemovableChip
                       disabled={disabled}
                       size={size}
                       className={classes.chip}
-                      onRemove={e => removeChip(e, value)}
-                      label={content}
+                      onRemove={e => {
+                        removeChip(e, value);
+
+                        if (keyboardInteractedWithChip.current) {
+                          preventFocus.current = false;
+                          keyboardInteractedWithChip.current = false;
+
+                          inputRef.current.focus();
+                          setFocused(true);
+                        }
+                      }}
+                      onKeyUp={e => {
+                        if (e.key === " ") {
+                          keyboardInteractedWithChip.current = true;
+                        }
+                      }}
+                      onKeyDown={e => {
+                        if (e.key.toLowerCase() === "enter") {
+                          keyboardInteractedWithChip.current = true;
+                        }
+                      }}
+                      onFocus={() => {
+                        setFocused(false);
+                        preventFocus.current = true;
+                      }}
+                      onBlur={() => {
+                        preventFocus.current = false;
+                      }}
+                      label={isContentArray ? content.join("") : content}
                       key={`${generateUniqueString}/${index}`}
                     />
                   );
@@ -643,7 +748,7 @@ const Select = React.memo(
               <span className={classes.displaySingle}>{display}</span>
             )}
           </div>
-        </InputComponent>
+        </div>
       );
     };
 
@@ -654,62 +759,68 @@ const Select = React.memo(
       !menuRef.current.contains(e.target) &&
       !rootRef.current.contains(e.target);
 
-    const outsideClickHandler = useCallback(
-      () => {
-        updateOpenState(false);
-      },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      []
-    );
+    const outsideClickHandler = useEventCallback(() => {
+      closeMenu();
+    });
+
+    const handleEscapeKeyDown = useEventCallback(() => {
+      closeMenu();
+      keepFocus();
+    });
 
     return (
       <div
-        ref={ref}
+        ref={handleRef}
+        role="button"
         className={clx(classes.root, className, classes[size], {
           [classes.fluid]: controlProps.fluid
         })}
         {...otherProps}
       >
-        <InputBase
-          ref={inputBaseRef}
-          focused={controlProps.focused}
-          rounded={rounded}
-          hasError={controlProps.hasError}
-          disabled={controlProps.disabled}
-          fluid={controlProps.fluid}
-          size={size}
-          variant={variant}
-          onMouseDown={e => {
-            if (!controlProps.disabled) {
-              const chipSelector = `.${classes.chip}`;
-              if (
-                !closest(e.target, chipSelector) &&
-                !menuRef.current.contains(e.target)
-              )
-                updateOpenState(!openState);
-            }
-          }}
-          leadingAdornment={leadingAdornment}
-          trailingAdornment={
-            <InputAdornment>
-              {trailingAdornment}
-              <InputAdornment variant="icon" className={classes.caretIcon}>
-                <ChevronDown />
+        <SelectContext.Provider value={{ isMultiple: multiple }}>
+          <InputBase
+            ref={inputBaseRef}
+            focused={isFocused}
+            rounded={rounded}
+            hasError={controlProps.hasError}
+            disabled={controlProps.disabled}
+            fluid={controlProps.fluid}
+            size={size}
+            variant={variant}
+            leadingAdornment={leadingAdornment}
+            trailingAdornment={
+              <InputAdornment>
+                {trailingAdornment}
+                <InputAdornment variant="icon" className={classes.caretIcon}>
+                  <ChevronDown />
+                </InputAdornment>
               </InputAdornment>
-            </InputAdornment>
-          }
-          className={clx(classes.base, {
-            [classes.open]: openState,
-            [classes.disabled]: controlProps.disabled,
-            [classes.errored]: controlProps.hasError
-          })}
-          controller={createInputController()}
-          controllerId={
-            inputIdProp || name
-              ? `sonnat-select-input-component-${name}`
-              : undefined
-          }
-        />
+            }
+            onMouseDown={e => {
+              if (!controlProps.disabled) {
+                const chipSelector = `.${classes.chip}`;
+                if (
+                  !closest(e.target, chipSelector) &&
+                  !menuRef.current.contains(e.target)
+                ) {
+                  if (openState) closeMenu();
+                  else openMenu();
+                }
+              }
+            }}
+            className={clx(classes.base, {
+              [classes.open]: openState,
+              [classes.disabled]: controlProps.disabled,
+              [classes.errored]: controlProps.hasError
+            })}
+            controller={createInputController()}
+            controllerId={
+              inputIdProp || name
+                ? `sonnat-select-input-component-${name}`
+                : undefined
+            }
+          />
+        </SelectContext.Provider>
         {(!!helperText || !!otherInputProps.maxLength) && (
           <div className={classes.helperRow}>
             {helperText && (
@@ -722,26 +833,25 @@ const Select = React.memo(
             )}
           </div>
         )}
-        {native ? null : (
-          <Menu
-            role="listbox"
-            anchorNode={inputBaseRef.current}
-            ref={menuRef}
-            className={classes.menu}
-            preventPageScrolling={preventPageScrolling}
-            onOutsideClick={outsideClickHandler}
-            outsideClickDetector={detectOutsideClicks}
-            searchable={searchable}
-            searchPlaceholder={searchPlaceholder}
-            searchEmptyStatementText={searchEmptyStatementText}
-            dense={size !== "large"}
-            onOpen={onOpen}
-            onClose={onClose}
-            open={openState}
-          >
-            {children}
-          </Menu>
-        )}
+        <Menu
+          role="listbox"
+          anchorNode={inputBaseRef.current}
+          ref={menuRef}
+          className={classes.menu}
+          preventPageScrolling={preventPageScrolling}
+          onOutsideClick={outsideClickHandler}
+          outsideClickDetector={detectOutsideClicks}
+          searchable={searchable}
+          searchPlaceholder={searchPlaceholder}
+          searchEmptyStatementText={searchEmptyStatementText}
+          onEscapeKeyDown={handleEscapeKeyDown}
+          dense={size !== "large"}
+          onOpen={handleOpen}
+          onClose={handleClose}
+          open={openState}
+        >
+          {children}
+        </Menu>
       </div>
     );
   })
@@ -765,7 +875,6 @@ Select.propTypes = {
   multiple: PropTypes.bool,
   searchable: PropTypes.bool,
   focused: PropTypes.bool,
-  native: PropTypes.bool,
   autoFocus: PropTypes.bool,
   disabled: PropTypes.bool,
   rounded: PropTypes.bool,
@@ -777,6 +886,8 @@ Select.propTypes = {
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
+  onKeyDown: PropTypes.func,
+  onKeyUp: PropTypes.func,
   inputProps: PropTypes.object,
   size: PropTypes.oneOf(allowedSizes),
   variant: PropTypes.oneOf(allowedVariants)

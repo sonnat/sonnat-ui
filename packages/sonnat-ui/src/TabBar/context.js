@@ -4,6 +4,8 @@ const TabBarContext = createContext({
   fluid: false,
   scrollable: false,
   size: "medium",
+  focusLeftAdjacentTab: () => {},
+  focusRightAdjacentTab: () => {},
   onChange: () => {}
 });
 

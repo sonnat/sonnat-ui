@@ -1,11 +1,15 @@
-import React, { useContext } from "react";
-import PropTypes from "prop-types";
 import clx from "classnames";
-import makeStyles from "../../styles/makeStyles";
+import PropTypes from "prop-types";
+import React from "react";
 import { changeColor } from "../../styles/colorUtils";
+import makeStyles from "../../styles/makeStyles";
+import { blue } from "../../styles/pallete";
+import useEventCallback from "../../utils/useEventCallback";
+import useForkRef from "../../utils/useForkRef";
+import useIsFocusVisible from "../../utils/useIsFocusVisible";
 import TabBarContext from "../context";
 
-export const componentName = "Tab";
+const componentName = "Tab";
 
 const useStyles = makeStyles(
   theme => {
@@ -36,6 +40,15 @@ const useStyles = makeStyles(
           backgroundColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.08 })
             : colors.createWhiteColor({ alpha: 0.08 })
+        },
+        "&:after": {
+          content: "''",
+          position: "absolute",
+          width: "100%",
+          height: `calc(100% - ${pxToRem(8)})`,
+          border: `2px solid ${darkMode ? blue[300] : blue[500]}`,
+          opacity: 0,
+          visibility: "hidden"
         }
       },
       content: {
@@ -128,7 +141,13 @@ const useStyles = makeStyles(
         }
       },
       leadingIconed: {},
-      iconTab: { "& $content": { justifyContent: "center" } }
+      iconTab: { "& $content": { justifyContent: "center" } },
+      focusVisible: {
+        "&:after": {
+          opacity: 1,
+          visibility: "visible"
+        }
+      }
     };
   },
   { name: `Sonnat${componentName}` }
@@ -141,6 +160,9 @@ const Tab = React.memo(
       label,
       icon,
       onClick,
+      onFocus,
+      onBlur,
+      onKeyDown,
       active,
       identifier,
       ...otherProps
@@ -151,14 +173,86 @@ const Tab = React.memo(
     const hasLeadingIcon = icon != null && icon;
     const isIconTab = label == null || label.length === 0;
 
-    const { size, onChange, scrollable, fluid } = useContext(TabBarContext);
+    const {
+      size,
+      onChange,
+      scrollable,
+      fluid,
+      focusLeftAdjacentTab,
+      focusRightAdjacentTab
+    } = React.useContext(TabBarContext);
+
+    const {
+      isFocusVisibleRef,
+      onBlur: handleBlurVisible,
+      onFocus: handleFocusVisible,
+      ref: focusVisibleRef
+    } = useIsFocusVisible();
+
+    const tabRef = React.useRef(null);
+
+    const handleOwnRef = useForkRef(focusVisibleRef, tabRef);
+    const handleRef = useForkRef(ref, handleOwnRef);
+
+    const [focusVisible, setFocusVisible] = React.useState(false);
+
+    if (!active && focusVisible) {
+      setFocusVisible(false);
+    }
+
+    React.useEffect(() => {
+      isFocusVisibleRef.current = focusVisible;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [focusVisible]);
+
+    const handleFocus = useEventCallback(event => {
+      // Fix for https://github.com/facebook/react/issues/7769
+      if (!tabRef.current) tabRef.current = event.currentTarget;
+
+      handleFocusVisible(event);
+
+      if (isFocusVisibleRef.current === true) setFocusVisible(true);
+      if (onFocus) onFocus(event);
+    });
+
+    const handleBlur = useEventCallback(event => {
+      handleBlurVisible(event);
+
+      if (isFocusVisibleRef.current === false) setFocusVisible(false);
+      if (onBlur) onBlur(event);
+    });
+
+    const handleKeyDown = useEventCallback(event => {
+      if (onKeyDown) onKeyDown(event);
+
+      if (
+        event.target === event.currentTarget &&
+        (event.key === "Left" || event.key === "ArrowLeft") &&
+        active
+      ) {
+        event.preventDefault();
+        focusLeftAdjacentTab(identifier);
+      }
+
+      if (
+        event.target === event.currentTarget &&
+        (event.key === "Right" || event.key === "ArrowRight") &&
+        active
+      ) {
+        event.preventDefault();
+        focusRightAdjacentTab(identifier);
+      }
+    });
 
     return (
       <div
         role="tab"
-        ref={ref}
+        ref={handleRef}
         aria-selected={active}
         tabIndex={active ? 0 : -1}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
         onClick={e => {
           if (!active) {
             if (onChange) onChange(e, identifier);
@@ -170,7 +264,8 @@ const Tab = React.memo(
           [classes.fluid]: fluid,
           [classes.stable]: !scrollable,
           [classes.leadingIconed]: hasLeadingIcon,
-          [classes.iconTab]: isIconTab
+          [classes.iconTab]: isIconTab,
+          [classes.focusVisible]: focusVisible
         })}
         {...otherProps}
       >
@@ -191,6 +286,9 @@ Tab.propTypes = {
   icon: PropTypes.node,
   active: PropTypes.bool,
   onClick: PropTypes.func,
+  onKeyDown: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
   identifier: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 

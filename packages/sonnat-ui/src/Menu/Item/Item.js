@@ -1,11 +1,11 @@
 import clx from "classnames";
 import PropTypes from "prop-types";
-import React, { useContext, useRef, useState } from "react";
+import React from "react";
 import makeStyles from "../../styles/makeStyles";
-import useIsMounted from "../../utils/useIsMounted";
+import useEnhancedEffect from "../../utils/useEnhancedEffect";
 import FloatedListContext from "../context";
 
-export const componentName = "MenuItem";
+const componentName = "MenuItem";
 
 const useStyles = makeStyles(
   theme => {
@@ -33,6 +33,7 @@ const useStyles = makeStyles(
         minHeight: pxToRem(40),
         cursor: "pointer",
         overflow: "hidden",
+        outline: "none",
         transition: "color 240ms ease, background-color 240ms ease",
         "&:hover": {
           backgroundColor: !darkMode
@@ -47,8 +48,7 @@ const useStyles = makeStyles(
       focused: {
         backgroundColor: !darkMode
           ? colors.createBlackColor({ alpha: 0.04 })
-          : colors.createWhiteColor({ alpha: 0.04 }),
-        outline: `1px solid ${colors.divider}`
+          : colors.createWhiteColor({ alpha: 0.04 })
       },
       disabled: {
         pointerEvents: "none",
@@ -75,21 +75,20 @@ const MenuItem = React.memo(function MenuItem(props) {
     ...otherProps
   } = props;
 
-  const itemRef = useRef();
-
   const classes = useStyles();
 
-  const { registerNode, dense } = useContext(FloatedListContext);
+  const { registerNode, dense } = React.useContext(FloatedListContext);
 
-  const isMountedRef = useIsMounted();
+  const itemRef = React.useRef(null);
 
-  const [isFocused, setFocused] = useState(false);
+  const [isFocused, setFocused] = React.useState(false);
 
-  if (isMountedRef.current && itemRef.current && registerNode) {
-    itemRef.current.disabled = disabled;
-    itemRef.current.focused = isFocused;
-    registerNode(index, itemRef.current);
-  }
+  useEnhancedEffect(() => {
+    if (itemRef.current && registerNode) {
+      itemRef.current.disabled = disabled;
+      registerNode(index, itemRef.current);
+    }
+  });
 
   return (
     <div

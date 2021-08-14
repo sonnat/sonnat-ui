@@ -2,10 +2,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { isFragment } from "react-is";
-import { componentName as optionName } from "../Option";
+import Option from "../Option";
 import generateUniqueString from "../../utils/generateUniqueString";
 
-export const componentName = "SelectOptionGroup";
+const componentName = "SelectOptionGroup";
 
 const SelectOptionGroup = React.memo(function SelectOptionGroup({
   children: childrenProp
@@ -22,7 +22,7 @@ const SelectOptionGroup = React.memo(function SelectOptionGroup({
       return null;
     }
 
-    if (child.type.displayName !== optionName) {
+    if (child.type !== Option) {
       // eslint-disable-next-line no-console
       console.error(
         "Sonnat: The SelectOptionGroup component only accepts `Select/Option` component."

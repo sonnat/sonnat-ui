@@ -5,6 +5,7 @@ import { withResizeDetector } from "react-resize-detector";
 import { ChevronLeft, ChevronRight } from "../internals/icons";
 import { changeColor } from "../styles/colorUtils";
 import makeStyles from "../styles/makeStyles";
+import { blue } from "../styles/pallete";
 import {
   clamp,
   closest,
@@ -14,7 +15,9 @@ import {
   useEventListener,
   useForkRef,
   useIsMounted,
-  usePreviousValue
+  usePreviousValue,
+  useEventCallback,
+  useIsFocusVisible
 } from "../utils";
 
 const componentName = "InputSlider";
@@ -118,7 +121,7 @@ const useStyles = makeStyles(
           transition:
             "transform 240ms ease, opacity 240ms ease, background-color 240ms ease"
         },
-        "&:hover:after": {
+        "&:not($focusVisible):hover:after": {
           backgroundColor: !darkMode
             ? colors.createPrimaryColor({ alpha: 0.04 })
             : changeColor(colors.primary.light, { alpha: 0.04 }),
@@ -196,6 +199,14 @@ const useStyles = makeStyles(
           backgroundColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.08 })
             : colors.createWhiteColor({ alpha: 0.08 })
+        }
+      },
+      focusVisible: {
+        outline: "none",
+        "&:after": {
+          backgroundColor: darkMode ? blue[300] : blue[500],
+          opacity: darkMode ? 0.32 : 0.12,
+          transform: "scale(1)"
         }
       }
     };
@@ -411,8 +422,10 @@ const InputSlider = React.memo(
     }
 
     const parentRef = React.useRef();
-    const supHandleRef = React.useRef();
-    const infHandleRef = React.useRef();
+
+    const supRef = React.useRef();
+    const infRef = React.useRef();
+
     const trackRef = React.useRef();
     const stepsRef = React.useRef([]);
 
@@ -423,7 +436,7 @@ const InputSlider = React.memo(
 
     const isMountedRef = useIsMounted();
 
-    const [transitions, setTransitions] = React.useState("");
+    const [transitions, setTransitions] = React.useState(undefined);
     const [isDragStarted, setDragStarted] = React.useState(false);
     const [isClickAllowed, setClickAllowed] = React.useState(true);
     const [currentHandle, setCurrentHandle] = React.useState("sup");
@@ -482,7 +495,7 @@ const InputSlider = React.memo(
     };
 
     const enableTransitions = () => {
-      setTransitions("");
+      setTransitions(undefined);
     };
 
     const steps = React.useMemo(
@@ -575,11 +588,7 @@ const InputSlider = React.memo(
     };
 
     React.useEffect(() => {
-      if (
-        isMountedRef.current &&
-        parentWidth &&
-        parentWidth !== prevParentWidth
-      ) {
+      if (parentWidth && parentWidth !== prevParentWidth) {
         if (!isInitialRender.current) {
           setTimeout(() => {
             onResize();
@@ -664,8 +673,8 @@ const InputSlider = React.memo(
       const currentHandleName = getHandleName(
         e.target,
         handleSelector,
-        supHandleRef.current,
-        infHandleRef.current
+        supRef.current,
+        infRef.current
       );
 
       if (currentHandleName) {
@@ -693,8 +702,8 @@ const InputSlider = React.memo(
 
         if (onDragStartProp) {
           onDragStartProp(e, {
-            sup: { ...newSupState, element: supHandleRef.current },
-            inf: { ...newInfState, element: infHandleRef.current },
+            sup: { ...newSupState, element: supRef.current },
+            inf: { ...newInfState, element: infRef.current },
             track: { ...trackState, element: trackRef.current }
           });
         }
@@ -726,13 +735,13 @@ const InputSlider = React.memo(
             ...(currentHandle === "sup"
               ? { ...supState, active: false, initialX: supState.currentX }
               : supState),
-            element: supHandleRef.current
+            element: supRef.current
           },
           inf: {
             ...(currentHandle === "inf"
               ? { ...infState, active: false, initialX: infState.currentX }
               : infState),
-            element: infHandleRef.current
+            element: infRef.current
           },
           track: { ...trackState, element: trackRef.current }
         });
@@ -819,14 +828,14 @@ const InputSlider = React.memo(
               currentX: finalCurrentX,
               offsetX: finalCurrentX,
               right: Math.abs(finalCurrentX),
-              element: supHandleRef.current
+              element: supRef.current
             },
             inf: {
               ...infState,
               currentX: finalCurrentX,
               offsetX: finalCurrentX,
               left: Math.abs(finalCurrentX),
-              element: infHandleRef.current
+              element: infRef.current
             },
             track: { ...newTrackState, element: trackRef.current }
           });
@@ -839,6 +848,160 @@ const InputSlider = React.memo(
       else updateHandles(value);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value]);
+
+    const {
+      isFocusVisibleRef: isInfFocusVisibleRef,
+      onBlur: handleInfBlurVisible,
+      onFocus: handleInfFocusVisible,
+      ref: infFocusVisibleRef
+    } = useIsFocusVisible();
+
+    const {
+      isFocusVisibleRef: isSupFocusVisibleRef,
+      onBlur: handleSupBlurVisible,
+      onFocus: handleSupFocusVisible,
+      ref: supFocusVisibleRef
+    } = useIsFocusVisible();
+
+    const handleInfRef = useForkRef(infFocusVisibleRef, infRef);
+    const handleSupRef = useForkRef(supFocusVisibleRef, supRef);
+
+    const [isInfFocusVisible, setInfFocusVisible] = React.useState(false);
+    const [isSupFocusVisible, setSupFocusVisible] = React.useState(false);
+
+    React.useEffect(() => {
+      if (disabled) {
+        setInfFocusVisible(false);
+        setSupFocusVisible(false);
+      }
+    }, [disabled]);
+
+    React.useEffect(() => {
+      isInfFocusVisibleRef.current = isInfFocusVisible;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isInfFocusVisible]);
+
+    React.useEffect(() => {
+      isSupFocusVisibleRef.current = isSupFocusVisible;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isSupFocusVisible]);
+
+    const handleFocus = useEventCallback((event, handleType = "inf") => {
+      if (handleType === "inf") {
+        // Fix for https://github.com/facebook/react/issues/7769
+        if (!infRef.current) infRef.current = event.currentTarget;
+
+        handleInfFocusVisible(event);
+
+        if (isInfFocusVisibleRef.current === true) {
+          setInfState(s => ({ ...s, zIndex: 2 }));
+          setSupState(s => ({ ...s, zIndex: 1 }));
+          setInfFocusVisible(true);
+        }
+      } else if (handleType === "sup") {
+        // Fix for https://github.com/facebook/react/issues/7769
+        if (!supRef.current) supRef.current = event.currentTarget;
+
+        handleSupFocusVisible(event);
+
+        if (isSupFocusVisibleRef.current === true) {
+          setSupState(s => ({ ...s, zIndex: 2 }));
+          setInfState(s => ({ ...s, zIndex: 1 }));
+          setSupFocusVisible(true);
+        }
+      }
+    });
+
+    const handleBlur = useEventCallback((event, handleType = "inf") => {
+      if (handleType === "inf") {
+        handleInfBlurVisible(event);
+
+        if (isInfFocusVisibleRef.current === false) {
+          setInfFocusVisible(false);
+        }
+      } else if (handleType === "sup") {
+        handleSupBlurVisible(event);
+
+        if (isSupFocusVisibleRef.current === false) {
+          setSupFocusVisible(false);
+        }
+      }
+    });
+
+    const handleKeyDown = (event, handleType = "inf") => {
+      if (event.target === event.currentTarget && !disabled) {
+        let v;
+        let newValue;
+
+        const stepper = isDiscrete && step ? step : 1;
+
+        const bounds = { min, max };
+
+        if (handleType === "inf") {
+          v = isBidirectional ? value[0] : value;
+          bounds.max = isBidirectional ? value[1] : max;
+        } else if (handleType === "sup") {
+          v = isBidirectional ? value[1] : value;
+          bounds.min = isBidirectional ? value[0] : min;
+        }
+
+        if (
+          event.key === "Down" ||
+          event.key === "ArrowDown" ||
+          event.key === "Left" ||
+          event.key === "ArrowLeft"
+        ) {
+          event.preventDefault();
+          newValue = clamp(v - stepper, bounds.min, bounds.max);
+        } else if (
+          event.key === "Up" ||
+          event.key === "ArrowUp" ||
+          event.key === "Right" ||
+          event.key === "ArrowRight"
+        ) {
+          event.preventDefault();
+          newValue = clamp(v + stepper, bounds.min, bounds.max);
+        }
+
+        if (newValue != null) {
+          let _v;
+          let isUniqueValue = false;
+
+          if (handleType === "inf") {
+            _v = isBidirectional ? [newValue, value[1]] : newValue;
+          } else if (handleType === "sup") {
+            _v = isBidirectional ? [value[0], newValue] : newValue;
+          }
+
+          if (isBidirectional) {
+            isUniqueValue = value[0] !== _v[0] || value[1] !== _v[1];
+          } else {
+            isUniqueValue = value !== _v;
+          }
+
+          if (isUniqueValue) {
+            disableTransitions();
+            updateHandles(_v, isDiscrete);
+            setValue(_v);
+          }
+        }
+      }
+    };
+
+    const handleKeyUp = useEventCallback(event => {
+      if (
+        event.key === "Down" ||
+        event.key === "ArrowDown" ||
+        event.key === "Left" ||
+        event.key === "ArrowLeft" ||
+        event.key === "Up" ||
+        event.key === "ArrowUp" ||
+        event.key === "Right" ||
+        event.key === "ArrowRight"
+      ) {
+        enableTransitions();
+      }
+    });
 
     if (typeof window !== "undefined") {
       /* eslint-disable react-hooks/rules-of-hooks */
@@ -877,6 +1040,7 @@ const InputSlider = React.memo(
 
     return (
       <div
+        tabIndex={-1}
         ref={rootRefHandler}
         onClick={e => {
           if (isClickAllowed) {
@@ -893,25 +1057,34 @@ const InputSlider = React.memo(
         <div className={classes.wrapper}>
           <div className={classes.steps}>{steps}</div>
           <div className={classes.interval}>
-            <div
-              ref={supHandleRef}
-              onTouchStart={dragStart}
-              onMouseDown={dragStart}
-              className={clx(classes.supHandle, classes.handle)}
-              style={{
-                right: `${supState.right}px`,
-                zIndex: `${supState.zIndex}`,
-                transition: transitions
-              }}
-            >
-              <button className={classes.handleCircle}>
-                {isBidirectional && (
+            {isBidirectional && (
+              <div
+                aria-label={`The left handle of the InputSlider`}
+                tabIndex={disabled ? -1 : 0}
+                role="button"
+                ref={handleInfRef}
+                onFocus={e => void handleFocus(e, "inf")}
+                onBlur={e => void handleBlur(e, "inf")}
+                onKeyDown={e => void handleKeyDown(e, "inf")}
+                onKeyUp={handleKeyUp}
+                onTouchStart={dragStart}
+                onMouseDown={dragStart}
+                className={clx(classes.infHandle, classes.handle, {
+                  [classes.focusVisible]: isInfFocusVisible
+                })}
+                style={{
+                  left: `${infState.left}px`,
+                  zIndex: `${infState.zIndex}`,
+                  transition: transitions
+                }}
+              >
+                <button tabIndex={-1} className={classes.handleCircle}>
                   <i className={classes.handleIcon}>
-                    <ChevronLeft />
+                    <ChevronRight />
                   </i>
-                )}
-              </button>
-            </div>
+                </button>
+              </div>
+            )}
             <div
               ref={trackRef}
               className={classes.track}
@@ -921,25 +1094,34 @@ const InputSlider = React.memo(
                 transition: transitions
               }}
             ></div>
-            {isBidirectional && (
-              <div
-                ref={infHandleRef}
-                onTouchStart={dragStart}
-                onMouseDown={dragStart}
-                className={clx(classes.infHandle, classes.handle)}
-                style={{
-                  left: `${infState.left}px`,
-                  zIndex: `${infState.zIndex}`,
-                  transition: transitions
-                }}
-              >
-                <button className={classes.handleCircle}>
+            <div
+              aria-label={`The right handle of the InputSlider`}
+              tabIndex={disabled ? -1 : 0}
+              role="button"
+              ref={handleSupRef}
+              onFocus={e => void handleFocus(e, "sup")}
+              onBlur={e => void handleBlur(e, "sup")}
+              onKeyDown={e => void handleKeyDown(e, "sup")}
+              onKeyUp={handleKeyUp}
+              onTouchStart={dragStart}
+              onMouseDown={dragStart}
+              className={clx(classes.supHandle, classes.handle, {
+                [classes.focusVisible]: isSupFocusVisible
+              })}
+              style={{
+                right: `${supState.right}px`,
+                zIndex: `${supState.zIndex}`,
+                transition: transitions
+              }}
+            >
+              <button tabIndex={-1} className={classes.handleCircle}>
+                {isBidirectional && (
                   <i className={classes.handleIcon}>
-                    <ChevronRight />
+                    <ChevronLeft />
                   </i>
-                </button>
-              </div>
-            )}
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -1,25 +1,25 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
-import { isFragment } from "react-is";
-import PropTypes from "prop-types";
-import throttle from "lodash.throttle";
 import clx from "classnames";
-import TextField from "../TextField";
-import PortalDestination from "../PortalDestination";
+import throttle from "lodash.throttle";
+import PropTypes from "prop-types";
+import React from "react";
+import { isFragment } from "react-is";
 import InputAdornment from "../InputAdornment";
 import Magnifier from "../internals/icons/Magnifier";
-import MenuContext from "./context";
-import { componentName as groupName } from "./ItemGroup";
-import { componentName as itemName } from "./Item";
-import {
-  generateUniqueString,
-  useEventListener,
-  HTMLElementType,
-  detectScrollBarWidth,
-  useForkRef,
-  getOffsetFromWindow,
-  clamp
-} from "../utils";
+import PortalDestination from "../PortalDestination";
 import { makeStyles, useTheme } from "../styles";
+import TextField from "../TextField";
+import {
+  clamp,
+  detectScrollBarWidth,
+  generateUniqueString,
+  getOffsetFromWindow,
+  HTMLElementType,
+  useEventListener,
+  useForkRef
+} from "../utils";
+import MenuContext from "./context";
+import Item from "./Item";
+import ItemGroup from "./ItemGroup";
 
 const isSSR = typeof window === "undefined";
 
@@ -132,7 +132,7 @@ const checkGroupChildren = children => {
       if (
         !React.isValidElement(child) ||
         isFragment(child) ||
-        child.type.displayName !== itemName
+        child.type !== Item
       ) {
         report.invalids.push(child);
       } else report.valids.push(child);
@@ -165,6 +165,7 @@ const Menu = React.memo(
       minWidth,
       onOutsideClick,
       outsideClickDetector,
+      onEscapeKeyDown,
       anchorNode,
       children: childrenProp,
       searchPlaceholder: searchPlaceholderProp,
@@ -182,16 +183,21 @@ const Menu = React.memo(
     const classes = useStyles();
     const theme = useTheme();
 
-    const [searchResult, setSearchResult] = useState(null);
-    const [searchValue, setSearchValue] = useState("");
-    const [meta, setMeta] = useState({ left: 0, top: 0, width: 0 });
+    const [searchResult, setSearchResult] = React.useState(null);
+    const [searchValue, setSearchValue] = React.useState("");
 
-    const focusIndex = useRef(-1);
-    const focusedNode = useRef(null);
-    const indexToNode = useRef(new Map());
+    const [meta, setMeta] = React.useState({ left: 0, top: 0, width: 0 });
 
-    const rootRef = useRef();
+    const isFirstRender = React.useRef(true);
+
+    const focusIndex = React.useRef(-1);
+    const focusedNode = React.useRef(null);
+    const indexToNode = React.useRef(new Map());
+
+    const rootRef = React.useRef(null);
     const ref = useForkRef(refProp, rootRef);
+
+    const listRef = React.useRef(null);
 
     const isRTL = theme.direction === "rtl";
     const isSearchResultEmpty = !!searchResult && searchResult.length === 0;
@@ -256,7 +262,7 @@ const Menu = React.memo(
       setSearchValue(value);
     };
 
-    const outsideClickHandler = useCallback(
+    const outsideClickHandler = React.useCallback(
       e => {
         if (outsideClickDetector != null) {
           if (outsideClickDetector(e) && onOutsideClick) onOutsideClick(e);
@@ -287,7 +293,7 @@ const Menu = React.memo(
         return null;
       }
 
-      if (![groupName, itemName].includes(child.type.displayName)) {
+      if (child.type !== Item && child.type !== ItemGroup) {
         // eslint-disable-next-line no-console
         console.error(
           "Sonnat: The Menu component only accepts `Menu/Group` or `Menu/Item` components."
@@ -298,7 +304,7 @@ const Menu = React.memo(
 
       indexToNode.current = new Map();
 
-      const isGroup = child.type.displayName === groupName;
+      const isGroup = child.type === ItemGroup;
       const isHidden = searchResult ? !searchResult.includes(itemIndex) : false;
       const currentIndex = itemIndex;
 
@@ -318,46 +324,57 @@ const Menu = React.memo(
       });
     });
 
-    useEffect(() => {
-      if (openState) {
-        if (onOpen) onOpen();
-        if (preventPageScrolling) preventPageScroll();
-      } else {
-        if (onClose) onClose();
-        if (preventPageScrolling) allowPageScroll();
-      }
+    const handleOpen = () => {
+      if (onOpen) onOpen();
+      if (preventPageScrolling) preventPageScroll();
+    };
 
-      const anchorMeta = getAnchorMeta();
+    const handleClose = () => {
+      if (onClose) onClose();
+      if (preventPageScrolling) allowPageScroll();
+    };
 
-      if (anchorMeta) {
-        let newMeta = {
-          width: clamp(
-            anchorMeta.offsetWidth,
-            minWidth || 0,
-            document.body.offsetWidth - anchorMeta.left
-          ),
-          top: anchorMeta.top + anchorMeta.offsetHeight
-        };
+    React.useEffect(() => {
+      const shouldCalc = isSSR ? false : !isFirstRender.current;
 
-        if (allowedPlacements.includes(placement)) {
-          if (placement === "left") {
-            newMeta = { ...newMeta, left: anchorMeta.left };
-          } else if (placement === "right") {
-            newMeta = { ...newMeta, left: anchorMeta.right - newMeta.width };
+      if (shouldCalc) {
+        if (openState) handleOpen();
+        else handleClose();
+
+        const anchorMeta = getAnchorMeta();
+
+        if (anchorMeta) {
+          let newMeta = {
+            width: clamp(
+              anchorMeta.offsetWidth,
+              minWidth || 0,
+              document.body.offsetWidth - anchorMeta.left
+            ),
+            top: anchorMeta.top + anchorMeta.offsetHeight
+          };
+
+          if (allowedPlacements.includes(placement)) {
+            if (placement === "left") {
+              newMeta = { ...newMeta, left: anchorMeta.left };
+            } else if (placement === "right") {
+              newMeta = { ...newMeta, left: anchorMeta.right - newMeta.width };
+            }
           }
-        }
 
-        setMeta(newMeta);
+          setMeta(newMeta);
+        }
+        reset();
+      } else if (!isSSR) {
+        isFirstRender.current = false;
       }
-      reset();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [openState, onOpen, onClose]);
+    }, [openState]);
 
     const registerNode = (index, node) => {
       indexToNode.current.set(index, node);
     };
 
-    const arrowDownListener = useCallback(() => {
+    const arrowDownListener = React.useCallback(() => {
       const hasValidResults = searchResult !== null;
 
       const itemsSize = hasValidResults
@@ -382,7 +399,7 @@ const Menu = React.memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchResult]);
 
-    const arrowUpListener = useCallback(() => {
+    const arrowUpListener = React.useCallback(() => {
       const hasValidResults = searchResult !== null;
 
       const itemsSize = hasValidResults
@@ -410,7 +427,7 @@ const Menu = React.memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchResult]);
 
-    const keyboardListener = useCallback(
+    const keyboardListener = React.useCallback(
       e => {
         // do nothing if the event was already processed
         if (e.defaultPrevented) return;
@@ -430,7 +447,16 @@ const Menu = React.memo(
             else e.returnValue = null;
 
             return arrowUpListener();
-          case "Enter":
+          case "Escape" || "Esc" || "escape" || "esc":
+            // preventing the default behaviour
+            if (e.preventDefault) e.preventDefault();
+            else e.returnValue = null;
+
+            document.activeElement.blur();
+
+            if (onEscapeKeyDown) onEscapeKeyDown(e);
+            break;
+          case " ":
             // preventing the default behaviour
             if (e.preventDefault) e.preventDefault();
             else e.returnValue = null;
@@ -441,8 +467,7 @@ const Menu = React.memo(
             return;
         }
       },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      [arrowDownListener, arrowUpListener]
+      [arrowDownListener, arrowUpListener, onEscapeKeyDown]
     );
 
     if (!isSSR) {
@@ -505,7 +530,12 @@ const Menu = React.memo(
                     />
                   </div>
                 )}
-                <div className={classes.list} role={role} tabIndex={-1}>
+                <div
+                  ref={listRef}
+                  className={classes.list}
+                  role={role}
+                  tabIndex={-1}
+                >
                   {isSearchResultEmpty && (
                     <div className={classes.emptyStatement}>
                       {searchEmptyStatementText}
@@ -545,7 +575,8 @@ Menu.propTypes = {
   onOpen: PropTypes.func,
   onClose: PropTypes.func,
   onOutsideClick: PropTypes.func,
-  outsideClickDetector: PropTypes.func
+  outsideClickDetector: PropTypes.func,
+  onEscapeKeyDown: PropTypes.func
 };
 
 export default Menu;

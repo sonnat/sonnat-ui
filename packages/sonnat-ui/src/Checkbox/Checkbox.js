@@ -385,7 +385,11 @@ const Checkbox = React.memo(
       );
     }
 
-    const autoFocus = inputAutoFocus || autoFocusProp;
+    const isFormControlFocused = formControl
+      ? !!formControl.focusedState
+      : false;
+
+    const autoFocus = isFormControlFocused || !!inputAutoFocus || autoFocusProp;
 
     const name = inputNameProp || nameProp;
     const value = inputValueProp || valueProp;
@@ -449,9 +453,14 @@ const Checkbox = React.memo(
     const handleOwnRef = useForkRef(focusVisibleRef, rootRef);
     const handleRef = useForkRef(ref, handleOwnRef);
 
-    const [isFocused, setFocused] = React.useState(false);
+    const [isFocused, setFocused] = React.useState(autoFocus);
 
-    if (disabled && isFocused) setFocused(false);
+    // prevent component from being focused if it is disabled
+    React.useEffect(() => {
+      if (controlProps.disabled && isFocused) {
+        setFocused(false);
+      }
+    }, [controlProps.disabled, isFocused]);
 
     // initially focus the component
     useEnhancedEffect(() => {
