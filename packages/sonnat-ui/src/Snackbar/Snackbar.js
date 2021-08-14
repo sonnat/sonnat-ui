@@ -1,6 +1,6 @@
 import clx from "classnames";
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Button from "../Button";
 import CloseLarge from "../internals/icons/CloseLarge";
 import { makeStyles, ThemeProvider, useDarkMode, useTheme } from "../styles";
@@ -121,6 +121,40 @@ const useStyles = makeStyles(
         "&$left": {},
         "&$right": {},
         "&$center": { transform: "translateX(-50%) scale(1)" }
+      },
+      hideDurationWrapper: {
+        position: "absolute",
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: 3,
+        opacity: 0,
+        transform: "translateY(100%)",
+        visibility: "hidden",
+        backgroundColor: !darkMode
+          ? colors.pallete.grey[900]
+          : colors.pallete.grey[50]
+      },
+      hideDurationIndicator: {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        width: 0,
+        backgroundColor: !darkMode
+          ? colors.secondary.dark
+          : colors.secondary.light
+      },
+      autoHidable: {
+        borderRadius: `${pxToRem(4)} ${pxToRem(4)} 0 0`,
+        "&$open $hideDurationWrapper": {
+          opacity: 1,
+          visibility: "visible"
+        },
+        "&$open $hideDurationIndicator": {
+          width: "100%"
+        }
       }
     };
   },
@@ -136,6 +170,7 @@ const Snackbar = React.memo(
       onUndo,
       onClose,
       onTransitionEnd,
+      autoHide = false,
       open = false,
       undoable = false,
       closable = false,
@@ -150,14 +185,34 @@ const Snackbar = React.memo(
     const isDarkMode = theme.darkMode;
     const newTheme = useDarkMode(!isDarkMode, theme);
 
-    const [isHidden, setHidden] = useState(open);
-    const [isOpen, setOpen] = useState(false);
+    const timeout = React.useRef();
 
-    useEffect(() => {
+    const [isHidden, setHidden] = React.useState(open);
+    const [isOpen, setOpen] = React.useState(false);
+
+    const isAutoHidable = !!autoHide;
+    const hasNumericAutoCloseInput = typeof autoHide === "number";
+
+    const numWords = text.length ? text.split(" ").length : 0;
+
+    const autoHideValue = isAutoHidable
+      ? hasNumericAutoCloseInput
+        ? autoHide
+        : numWords * 300 + 1250
+      : 0;
+
+    React.useEffect(() => {
       if (open) {
         setHidden(false);
         onNextFrame(() => setOpen(true));
+
+        if (autoHide) {
+          timeout.current = setTimeout(() => {
+            setOpen(false);
+          }, autoHideValue);
+        }
       } else setOpen(false);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open]);
 
     const transitionEndHandler = e => {
@@ -172,10 +227,19 @@ const Snackbar = React.memo(
           role="alert"
           onTransitionEnd={transitionEndHandler}
           className={clx(classes.root, classes[placement], className, {
-            [classes.open]: isOpen
+            [classes.open]: isOpen,
+            [classes.autoHidable]: hasNumericAutoCloseInput && isAutoHidable
           })}
           {...otherProps}
         >
+          {hasNumericAutoCloseInput && (
+            <div className={classes.hideDurationWrapper}>
+              <div
+                className={classes.hideDurationIndicator}
+                style={{ transition: `width ${autoHideValue}ms ease` }}
+              ></div>
+            </div>
+          )}
           {icon && <i className={classes.icon}>{icon}</i>}
           <span className={classes.text}>{text}</span>
           {undoable && (
@@ -198,7 +262,10 @@ const Snackbar = React.memo(
               variant="inlined"
               className={classes.closeButton}
               leadingIcon={<CloseLarge className={classes.closeButtonIcon} />}
-              onClick={onClose}
+              onClick={e => {
+                if (timeout.current != null) clearTimeout(timeout.current);
+                if (onClose) onClose(e);
+              }}
             />
           )}
         </div>
@@ -215,6 +282,7 @@ Snackbar.propTypes = {
   icon: PropTypes.node,
   undoButtonLabel: PropTypes.string,
   placement: PropTypes.oneOf(allowedPlacements),
+  autoHide: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   open: PropTypes.bool,
   closable: PropTypes.bool,
   undoable: PropTypes.bool,
