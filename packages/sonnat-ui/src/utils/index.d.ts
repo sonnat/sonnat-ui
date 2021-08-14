@@ -50,6 +50,9 @@ export * from "./useEnhancedEffect";
 export { default as useEventCallback } from "./useEventCallback";
 export * from "./useEventCallback";
 
+export { default as useIsFocusVisible } from "./useIsFocusVisible";
+export * from "./useIsFocusVisible";
+
 export { default as useSyncEffect } from "./useSyncEffect";
 export * from "./useSyncEffect";
 
