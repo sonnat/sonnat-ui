@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { MergeElementProps } from "../typings";
+import type { MergeElementProps } from "../../typings";
 
 type BaseProps<P = {}> = P & {
   /** The content of the component. */

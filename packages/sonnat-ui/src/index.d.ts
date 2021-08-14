@@ -98,15 +98,6 @@ export * from "./TextField";
 export { default as FormControl } from "./FormControl";
 export * from "./FormControl";
 
-export { default as FormControlLabel } from "./FormControlLabel";
-export * from "./FormControlLabel";
-
-export { default as FormControlDescription } from "./FormControlDescription";
-export * from "./FormControlDescription";
-
-export { default as FormControlFeedback } from "./FormControlFeedback";
-export * from "./FormControlFeedback";
-
 export { default as Snackbar } from "./Snackbar";
 export * from "./Snackbar";
 

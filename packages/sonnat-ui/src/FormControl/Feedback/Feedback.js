@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import clx from "classnames";
-import makeStyles from "../styles/makeStyles";
-import useFormControl from "../FormControl/useFormControl";
+import makeStyles from "../../styles/makeStyles";
+import useFormControl from "../useFormControl";
 
 const componentName = "FormControlFeedback";
 
