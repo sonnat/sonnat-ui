@@ -11,7 +11,6 @@ import {
   useControlled,
   useEventListener,
   useForkRef,
-  useIsMounted,
   usePreviousValue
 } from "../utils";
 
@@ -423,8 +422,6 @@ const Tooltip = React.memo(
     const tooltipRefHandle = useForkRef(tooltipRef, ref);
 
     const prevPlacement = usePreviousValue(placement);
-
-    const isMountedRef = useIsMounted();
 
     const [currentPlacement, setCurrentPlacement] = React.useState(placement);
 

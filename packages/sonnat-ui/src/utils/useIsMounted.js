@@ -10,5 +10,5 @@ export default function useIsMounted() {
     };
   }, []);
 
-  return isMountedRef;
+  return React.useCallback(() => isMountedRef.current, [isMountedRef]);
 }

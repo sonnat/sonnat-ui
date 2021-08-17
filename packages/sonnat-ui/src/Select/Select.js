@@ -288,7 +288,7 @@ const Select = React.memo(
       !allowedVariants.includes(variantProp)
     );
 
-    const isMountedRef = useIsMounted();
+    const isMounted = useIsMounted();
 
     const [isOpen, setOpen] = React.useState(false);
     const [isFocused, setFocused] = React.useState(isAutoFocus);
@@ -330,21 +330,21 @@ const Select = React.memo(
       required: formControl ? formControl.required : required,
       fluid: formControl ? formControl.fluid : fluid,
       onFocus: e => {
-        if (isMountedRef.current && !controlProps.disabled) {
+        if (isMounted() && !controlProps.disabled) {
           if (onFocus) onFocus(e);
           if (inputOnFocusProp) inputOnFocusProp(e);
           if (formControl && formControl.onFocus) formControl.onFocus(e);
         }
       },
       onBlur: e => {
-        if (isMountedRef.current && !controlProps.disabled) {
+        if (isMounted() && !controlProps.disabled) {
           if (onBlur) onBlur(e);
           if (inputOnBlurProp) inputOnBlurProp(e);
           if (formControl && formControl.onBlur) formControl.onBlur(e);
         }
       },
       onChange: (e, v) => {
-        if (isMountedRef.current && !controlProps.disabled) {
+        if (isMounted() && !controlProps.disabled) {
           const newValue = v != null ? v : e != null ? e.target.value : null;
 
           if (onChange) onChange(e, newValue);

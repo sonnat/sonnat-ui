@@ -279,7 +279,7 @@ const Radio = React.memo(
       componentName
     );
 
-    const isMountedRef = useIsMounted();
+    const isMounted = useIsMounted();
 
     const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
 
@@ -335,7 +335,7 @@ const Radio = React.memo(
       hasError: formControl ? formControl.hasError : hasError,
       required: formControl ? formControl.required : required,
       onFocus: e => {
-        if (isMountedRef.current) {
+        if (isMounted()) {
           if (!(controlProps.disabled || isReadOnly)) {
             if (onFocus) onFocus(e);
             if (inputOnFocusProp) inputOnFocusProp(e);
@@ -344,7 +344,7 @@ const Radio = React.memo(
         }
       },
       onBlur: e => {
-        if (isMountedRef.current) {
+        if (isMounted()) {
           if (!(controlProps.disabled || isReadOnly)) {
             if (onBlur) onBlur(e);
             if (inputOnBlurProp) inputOnBlurProp(e);
@@ -353,7 +353,7 @@ const Radio = React.memo(
         }
       },
       onChange: e => {
-        if (isMountedRef.current) {
+        if (isMounted()) {
           if (!(controlProps.disabled || isReadOnly)) {
             if (onChange) onChange(e, true);
             if (inputOnChangeProp) inputOnChangeProp(e, true);

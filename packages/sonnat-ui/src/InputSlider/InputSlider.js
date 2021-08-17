@@ -434,7 +434,7 @@ const InputSlider = React.memo(
     const isInitialRender = React.useRef(true);
     const isInitiated = React.useRef(false);
 
-    const isMountedRef = useIsMounted();
+    const isMounted = useIsMounted();
 
     const [transitions, setTransitions] = React.useState(undefined);
     const [isDragStarted, setDragStarted] = React.useState(false);
@@ -479,13 +479,13 @@ const InputSlider = React.memo(
     React.useEffect(() => {
       let newWidth = 0;
 
-      if (isMountedRef.current && parentRef.current) {
+      if (isMounted() && parentRef.current) {
         newWidth = parentRef.current.getBoundingClientRect().width;
       } else if (rootWidth) newWidth = rootWidth - 36;
 
       setParentWidth(newWidth);
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [rootWidth]);
+    }, [isMounted, rootWidth]);
 
     const prevParentWidth = usePreviousValue(parentWidth);
     const widthPerStep = parentWidth / (stepsCount - 1);
