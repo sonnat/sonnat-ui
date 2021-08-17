@@ -127,3 +127,6 @@ export * from "./Table";
 
 export { default as Skeleton } from "./Skeleton";
 export * from "./Skeleton";
+
+export { default as Flex } from "./Flex";
+export * from "./Flex";
