@@ -15,10 +15,14 @@
  * Returns a 3-tuple (triple) of the `value`,
  * the value `updater` callback, and the `isControlled` flag.
  */
-// eslint-disable-next-line no-unused-vars
+/* eslint-disable */
 export default function useControlled<T>(
   controlledValue: T,
   defaultValue: T,
   componentName: string
-  // eslint-disable-next-line no-unused-vars
-): [value: T, updater: (value: T) => void, isControlled: boolean];
+): [
+  value: NonNullable<T>,
+  updater: (value: NonNullable<T>) => void,
+  isControlled: boolean
+];
+/* eslint-enable */
