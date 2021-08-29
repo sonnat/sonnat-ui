@@ -133,8 +133,8 @@ const useStyles = makeStyles(
         height: pxToRem(24),
         padding: `0 ${pxToRem(12)}`,
         "&$iconButton": {
-          height: pxToRem(32),
-          width: pxToRem(32),
+          height: pxToRem(24),
+          width: pxToRem(24),
           "& > $icon": useIconWrapper(16),
           "& > $spinner": { width: pxToRem(16), height: pxToRem(16) }
         },
@@ -550,9 +550,7 @@ const useStyles = makeStyles(
         padding: "0",
         minWidth: "auto",
         borderRadius: "50%",
-        "& > $icon": {
-          margin: "0 !important"
-        }
+        "& > $icon": { margin: "0 !important" }
       },
       spinner: {
         position: "absolute",
