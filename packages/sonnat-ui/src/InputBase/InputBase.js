@@ -31,11 +31,21 @@ const useStyles = makeStyles(
         minWidth: "0",
         verticalAlign: "top",
         flexDirection: "column",
-        "&:not($focused):not($errored):hover": {
-          "& $notchedOutline": {
-            borderColor: !darkMode
-              ? colors.createBlackColor({ alpha: 0.48 })
-              : colors.createWhiteColor({ alpha: 0.48 })
+        "&:not($focused):not($errored)": {
+          "&$filled:hover": {
+            "& $notchedOutline": {
+              border: "none",
+              backgroundColor: darkMode
+                ? "rgba(255, 255, 255, 0.08)"
+                : "rgba(0, 0, 0, 0.08)"
+            }
+          },
+          "&$outlined:hover": {
+            "& $notchedOutline": {
+              borderColor: !darkMode
+                ? colors.createBlackColor({ alpha: 0.48 })
+                : colors.createWhiteColor({ alpha: 0.48 })
+            }
           }
         },
         "&:not($small):not($empty) $legendLabel": {
@@ -96,12 +106,13 @@ const useStyles = makeStyles(
         overflow: "hidden",
         position: "absolute",
         borderStyle: "solid",
-        borderWidth: pxToRem(1),
+        borderWidth: 1,
         borderColor: !darkMode
           ? colors.createBlackColor({ alpha: 0.24 })
           : colors.createWhiteColor({ alpha: 0.24 }),
         borderRadius: "inherit",
-        pointerEvents: "none"
+        pointerEvents: "none",
+        transition: "background-color 240ms ease, border-color 240ms ease"
       },
       adornment: {
         display: "flex",
@@ -139,9 +150,7 @@ const useStyles = makeStyles(
         "&:not($errored) $notchedOutline": {
           borderColor: !darkMode ? blue[500] : blue[300]
         },
-        "& $notchedOutline": {
-          borderWidth: pxToRem(2)
-        },
+        "& $notchedOutline": { borderWidth: `${pxToRem(2)} !important` },
         "&:not($errored) $label": {
           color: !darkMode ? colors.primary.origin : colors.primary.light
         }
@@ -311,18 +320,24 @@ const useStyles = makeStyles(
       },
       rounded: {},
       errored: {
-        "&:not($disabled)": {
-          "& $notchedOutline": {
-            borderColor: !darkMode ? colors.error.origin : colors.error.light
-          },
-          "& $label": {
-            color: !darkMode ? colors.error.origin : colors.error.light
-          }
+        "&:not($disabled) $notchedOutline": {
+          borderColor: !darkMode ? colors.error.origin : colors.error.light
+        },
+        "&:not($disabled) $label": {
+          color: !darkMode ? colors.error.origin : colors.error.light
+        },
+        "&$filled:not($disabled) $notchedOutline": {
+          borderWidth: 1
         }
       },
       outlined: {},
       filled: {
-        "& $notchedOutline": { border: "none" }
+        "& $notchedOutline": {
+          borderWidth: 0,
+          backgroundColor: darkMode
+            ? "rgba(255, 255, 255, 0.04)"
+            : "rgba(0, 0, 0, 0.04)"
+        }
       },
       empty: {},
       withLeadingAdornment: {
