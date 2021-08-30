@@ -155,7 +155,7 @@ const Text = React.memo(
     let displayClass = "";
 
     if (display && allowedDisplays.includes(display)) {
-      displayClass = classes[`${camelCase(display)}`] || "";
+      displayClass = classes[`${camelCase(display)}Display`] || "";
     }
 
     return (
