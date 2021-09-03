@@ -23,6 +23,14 @@ type BaseProps<P = {}> = P & {
    */
   placement?: "left" | "center" | "right";
   /**
+   * If `true`, the Snackbar automatically closes after a calculated time.
+   * This calculated time depends on the number of characters in the Snackbar's content.
+   *
+   * If a number is entered, the Snackbar will be closed after that amount of time (in miliseconds).
+   * @default false
+   */
+  autoHide?: number | boolean;
+  /**
    * If `true`, the component will be open.
    * @default false
    */
