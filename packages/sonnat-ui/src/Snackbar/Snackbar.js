@@ -92,7 +92,7 @@ const useStyles = makeStyles(
         alignSelf: "flex-start",
         flexShrink: "0",
         position: "relative",
-        top: pxToRem(8)
+        top: pxToRem(12)
       },
       closeButtonIcon: {},
       divider: {
@@ -215,6 +215,10 @@ const Snackbar = React.memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open]);
 
+    React.useEffect(() => {
+      if (!isOpen && onClose) onClose();
+    }, [isOpen, onClose]);
+
     const transitionEndHandler = e => {
       if (onTransitionEnd) onTransitionEnd(e);
       if (!isOpen) setHidden(true);
@@ -262,9 +266,9 @@ const Snackbar = React.memo(
               variant="inlined"
               className={classes.closeButton}
               leadingIcon={<CloseLarge className={classes.closeButtonIcon} />}
-              onClick={e => {
+              onClick={() => {
                 if (timeout.current != null) clearTimeout(timeout.current);
-                if (onClose) onClose(e);
+                if (onClose) onClose();
               }}
             />
           )}
