@@ -53,6 +53,12 @@ type BaseProps<P = {}> = P & {
   /** The Callback fires when the menu has closed. */
   onClose?: () => void;
   /**
+   * The callback fires when the `Escape` key is released.
+   *
+   * @param {KeyboardEvent} event The event source of the callback.
+   */
+  onEscapeKeyDown?: (event: KeyboardEvent) => void;
+  /**
    * The Callback fires when user has clicked outside of the menu.
    *
    * @param {React.MouseEvent<HTMLElement, MouseEvent>} event The event source of the callback.
