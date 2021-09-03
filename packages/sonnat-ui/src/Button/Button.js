@@ -642,6 +642,8 @@ const Button = React.memo(
     }
 
     const isNative = RootNode === "button";
+    const isLink = RootNode === "a";
+
     const isLabeled = label != null;
     const isIconed = leadingIcon != null || trailingIcon != null;
     const isInvalid = !isLabeled && !isIconed;
@@ -708,6 +710,7 @@ const Button = React.memo(
       if (
         event.target === event.currentTarget &&
         !isNative &&
+        !isLink &&
         event.key.toLowerCase() === "enter" &&
         !disabled
       ) {
