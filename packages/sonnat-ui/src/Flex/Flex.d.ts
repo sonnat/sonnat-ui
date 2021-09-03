@@ -64,7 +64,7 @@ type BaseProps<P = {}, T extends React.ElementType = "div"> = P & {
    * @default "start"
    */
   contentAlignment?: ResponsivePropType<
-    "start" | "end" | "center" | "between" | "around" | "stretch"
+    "start" | "end" | "center" | "between" | "around" | "evenly" | "stretch"
   >;
 };
 

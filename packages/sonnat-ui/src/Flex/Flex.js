@@ -14,6 +14,8 @@ const allowedContentAlignments = [
   "end",
   "center",
   "between",
+  "around",
+  "evenly",
   "stretch"
 ];
 const allowedMainAxisAlignments = [
@@ -51,6 +53,8 @@ const baseStyles = {
   contentEnd: { alignContent: "flex-end" },
   contentCenter: { alignContent: "center" },
   contentBetween: { alignContent: "space-between" },
+  contentAround: { alignContent: "space-around" },
+  contentEvenly: { alignContent: "space-evenly" },
   contentStretch: { alignContent: "stretch" },
   alignStart: { alignItems: "flex-start" },
   alignEnd: { alignItems: "flex-end" },
