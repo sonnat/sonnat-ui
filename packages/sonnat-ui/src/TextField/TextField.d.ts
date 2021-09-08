@@ -14,10 +14,6 @@ type BaseProps<P = {}> = P & {
   className?: string;
   /** The name of the text field. */
   name?: string;
-  /**
-   * The text of the label in legend style.
-   */
-  legendLabel?: string;
   /** The `placeholder` property of the text field. */
   placeholder?: string;
   /**

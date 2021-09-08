@@ -1,8 +1,6 @@
 import { createContext } from "react";
 
-const SelectContext = createContext({
-  isMultiple: false
-});
+const SelectContext = createContext();
 
 if (process.env.NODE_ENV !== "production")
   SelectContext.displayName = "SelectContext";

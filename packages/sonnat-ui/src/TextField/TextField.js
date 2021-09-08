@@ -2,6 +2,7 @@ import clx from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 import useFormControl from "../FormControl/useFormControl";
+import SelectContext from "../Select/context";
 import InputBase from "../InputBase";
 import makeStyles from "../styles/makeStyles";
 import {
@@ -189,7 +190,6 @@ const useStyles = makeStyles(
 const TextField = React.memo(
   React.forwardRef(function TextField(props, ref) {
     const {
-      legendLabel,
       placeholder,
       className,
       onChange,
@@ -260,6 +260,10 @@ const TextField = React.memo(
     const classes = useStyles();
     const formControl = useFormControl();
 
+    const selectContext = React.useContext(SelectContext);
+
+    const isSelectDeepChild = !!selectContext;
+
     const { current: _default_ } = React.useRef(
       inputValueProp || valueProp != null
         ? undefined
@@ -286,16 +290,19 @@ const TextField = React.memo(
 
     const { current: initialValue } = React.useRef(value);
 
-    const isFormControlFocused = formControl
-      ? !!formControl.focusedState
-      : false;
+    const formControlFocusState = formControl
+      ? formControl.focusedState
+      : undefined;
 
-    const isAutoFocus =
-      isFormControlFocused || !!inputAutoFocusProp || autoFocus || focused;
+    const { current: isAutoFocus } = React.useRef(
+      isSelectDeepChild
+        ? !!inputAutoFocusProp || autoFocus || focused
+        : typeof formControlFocusState === "undefined"
+        ? !!inputAutoFocusProp || autoFocus || focused
+        : formControlFocusState
+    );
 
-    const isLegendLabeled = !!legendLabel;
     const isReadOnly = !!inputReadOnlyProp || readOnly;
-    const hasLeadingAdornment = !!leadingAdornment;
     const hasLimitedLength = !!otherInputProps.maxLength;
 
     const isMounted = useIsMounted();
@@ -310,6 +317,16 @@ const TextField = React.memo(
       )
     );
 
+    const finalValue = hasLimitedLength
+      ? value.substr(0, otherInputProps.maxLength)
+      : value;
+
+    let focusState = isSelectDeepChild
+      ? isFocused
+      : typeof formControlFocusState === "boolean"
+      ? formControlFocusState
+      : isFocused;
+
     // inherit properties from FormControl
     const controlProps = {
       disabled: formControl ? formControl.disabled : disabled,
@@ -320,16 +337,18 @@ const TextField = React.memo(
         if (isMounted() && !(controlProps.disabled || isReadOnly)) {
           if (onFocus) onFocus(e);
           if (inputOnFocusProp) inputOnFocusProp(e);
-          if (formControl && formControl.onFocus) formControl.onFocus(e);
-          else setFocused(true);
+          if (!isSelectDeepChild && formControl && formControl.onFocus)
+            formControl.onFocus(e);
+          setFocused(true);
         }
       },
       onBlur: e => {
         if (isMounted() && !(controlProps.disabled || isReadOnly)) {
           if (onBlur) onBlur(e);
           if (inputOnBlurProp) inputOnBlurProp(e);
-          if (formControl && formControl.onBlur) formControl.onBlur(e);
-          else setFocused(false);
+          if (!isSelectDeepChild && formControl && formControl.onBlur)
+            formControl.onBlur(e);
+          setFocused(false);
         }
       },
       onChange: e => {
@@ -342,16 +361,17 @@ const TextField = React.memo(
       }
     };
 
-    React.useEffect(() => {
-      setFocused(isFormControlFocused);
-    }, [isFormControlFocused]);
-
-    // prevent component from being focused if it is disabled or readOnly
-    React.useEffect(() => {
-      if ((controlProps.disabled || isReadOnly) && isFocused) {
-        setFocused(false);
+    if (process.env.NODE_ENV !== "production") {
+      if (controlProps.disabled && isReadOnly) {
+        throw new Error(
+          "[Sonnat]: You can't use `disabled` and `readOnly` props at the same time!"
+        );
       }
-    }, [controlProps.disabled, isReadOnly, isFocused]);
+    }
+
+    if ((controlProps.disabled || isReadOnly) && focusState) {
+      focusState = false;
+    }
 
     // initially focus the component
     useEnhancedEffect(() => {
@@ -383,10 +403,6 @@ const TextField = React.memo(
       }
     }));
 
-    const finalValue = hasLimitedLength
-      ? value.substr(0, otherInputProps.maxLength)
-      : value;
-
     return (
       <TextFieldContext.Provider value={{ isEmpty: isEmpty(value) }}>
         <div
@@ -399,8 +415,7 @@ const TextField = React.memo(
           {...otherProps}
         >
           <InputBase
-            legendLabel={legendLabel}
-            focused={isFocused}
+            focused={focusState}
             readOnly={isReadOnly}
             rounded={rounded}
             hasError={controlProps.hasError}
@@ -419,13 +434,7 @@ const TextField = React.memo(
                 id={inputIdProp}
                 name={name}
                 value={finalValue}
-                placeholder={
-                  isLegendLabeled
-                    ? hasLeadingAdornment
-                      ? placeholder
-                      : undefined
-                    : placeholder
-                }
+                placeholder={placeholder}
                 readOnly={isReadOnly}
                 disabled={controlProps.disabled}
                 required={controlProps.required}
@@ -442,7 +451,6 @@ const TextField = React.memo(
                 {...otherInputProps}
               />
             }
-            controllerId={inputIdProp}
           />
           {(!!helperText || !!otherInputProps.maxLength) && (
             <div className={classes.helperRow}>
@@ -470,7 +478,6 @@ const TextField = React.memo(
 TextField.propTypes = {
   name: PropTypes.string,
   value: PropTypes.string,
-  legendLabel: PropTypes.string,
   className: PropTypes.string,
   placeholder: PropTypes.string,
   helperText: PropTypes.string,

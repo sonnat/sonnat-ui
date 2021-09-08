@@ -814,44 +814,40 @@ const Select = React.memo(
               [classes.errored]: controlProps.hasError
             })}
             controller={createInputController()}
-            controllerId={
-              inputIdProp || name
-                ? `sonnat-select-input-component-${name}`
-                : undefined
-            }
           />
+
+          {(!!helperText || !!otherInputProps.maxLength) && (
+            <div className={classes.helperRow}>
+              {helperText && (
+                <p className={classes.helperContent}>
+                  {helperIcon && (
+                    <i className={classes.helperIcon}>{helperIcon}</i>
+                  )}
+                  <span className={classes.helperText}>{helperText}</span>
+                </p>
+              )}
+            </div>
+          )}
+          <Menu
+            role="listbox"
+            anchorNode={inputBaseRef.current}
+            ref={menuRef}
+            className={classes.menu}
+            preventPageScrolling={preventPageScrolling}
+            onOutsideClick={outsideClickHandler}
+            outsideClickDetector={detectOutsideClicks}
+            searchable={searchable}
+            searchPlaceholder={searchPlaceholder}
+            searchEmptyStatementText={searchEmptyStatementText}
+            onEscapeKeyDown={handleEscapeKeyDown}
+            dense={size !== "large"}
+            onOpen={handleOpen}
+            onClose={handleClose}
+            open={openState}
+          >
+            {children}
+          </Menu>
         </SelectContext.Provider>
-        {(!!helperText || !!otherInputProps.maxLength) && (
-          <div className={classes.helperRow}>
-            {helperText && (
-              <p className={classes.helperContent}>
-                {helperIcon && (
-                  <i className={classes.helperIcon}>{helperIcon}</i>
-                )}
-                <span className={classes.helperText}>{helperText}</span>
-              </p>
-            )}
-          </div>
-        )}
-        <Menu
-          role="listbox"
-          anchorNode={inputBaseRef.current}
-          ref={menuRef}
-          className={classes.menu}
-          preventPageScrolling={preventPageScrolling}
-          onOutsideClick={outsideClickHandler}
-          outsideClickDetector={detectOutsideClicks}
-          searchable={searchable}
-          searchPlaceholder={searchPlaceholder}
-          searchEmptyStatementText={searchEmptyStatementText}
-          onEscapeKeyDown={handleEscapeKeyDown}
-          dense={size !== "large"}
-          onOpen={handleOpen}
-          onClose={handleClose}
-          open={openState}
-        >
-          {children}
-        </Menu>
       </div>
     );
   })

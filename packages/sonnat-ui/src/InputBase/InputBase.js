@@ -32,24 +32,17 @@ const useStyles = makeStyles(
         verticalAlign: "top",
         flexDirection: "column",
         "&:not($focused):not($errored)": {
-          "&$filled:hover": {
-            "& $notchedOutline": {
-              border: "none",
-              backgroundColor: darkMode
-                ? "rgba(255, 255, 255, 0.08)"
-                : "rgba(0, 0, 0, 0.08)"
-            }
+          "&$filled:hover $notchedOutline": {
+            border: "none",
+            backgroundColor: darkMode
+              ? "rgba(255, 255, 255, 0.08)"
+              : "rgba(0, 0, 0, 0.08)"
           },
-          "&$outlined:hover": {
-            "& $notchedOutline": {
-              borderColor: !darkMode
-                ? colors.createBlackColor({ alpha: 0.48 })
-                : colors.createWhiteColor({ alpha: 0.48 })
-            }
+          "&$outlined:hover $notchedOutline": {
+            borderColor: !darkMode
+              ? colors.createBlackColor({ alpha: 0.48 })
+              : colors.createWhiteColor({ alpha: 0.48 })
           }
-        },
-        "&:not($small):not($empty) $legendLabel": {
-          maxWidth: "999px"
         }
       },
       control: {
@@ -70,23 +63,6 @@ const useStyles = makeStyles(
         transition:
           "color 180ms ease, transform 180ms ease, font-size 180ms ease",
         position: "absolute"
-      },
-      legendLabel: {
-        visibility: "hidden",
-        maxWidth: 0,
-        display: "block",
-        whiteSpace: "nowrap",
-        transition: "max-width 50ms ease 0ms"
-      },
-      legendLabelText: {
-        ...useText({
-          fontSize: pxToRem(12),
-          lineHeight: 1.6666666667,
-          color: colors.text.secondary
-        }),
-        display: "inline-block",
-        paddingLeft: pxToRem(4),
-        paddingRight: pxToRem(4)
       },
       wrapper: {
         display: "flex",
@@ -137,16 +113,10 @@ const useStyles = makeStyles(
       },
       disabled: {
         pointerEvents: "none",
-        "& $notchedOutline": {
-          borderColor: colors.divider
-        },
+        "& $notchedOutline": { borderColor: colors.divider },
         "& $label": { color: colors.text.hint }
       },
       focused: {
-        "&:not($small) $legendLabel": {
-          maxWidth: "999px",
-          transition: "max-width 100ms ease 50ms"
-        },
         "&:not($errored) $notchedOutline": {
           borderColor: !darkMode ? blue[500] : blue[300]
         },
@@ -202,7 +172,6 @@ const useStyles = makeStyles(
       medium: {
         "& $wrapper": { minHeight: pxToRem(32) },
         "& $label": { fontSize: pxToRem(12), lineHeight: 1.6666666667 },
-        "& $legendLabelText": { fontSize: pxToRem(10), lineHeight: 1.8 },
         "&:not($empty) $label, &$focused $label": {
           ...(direction === "rtl"
             ? {
@@ -315,9 +284,6 @@ const useStyles = makeStyles(
             : { marginLeft: pxToRem(8) })
         }
       },
-      legendLabeled: {
-        "& $notchedOutline": { top: pxToRem(-10) }
-      },
       rounded: {},
       errored: {
         "&:not($disabled) $notchedOutline": {
@@ -366,13 +332,10 @@ const useStyles = makeStyles(
                   -13
                 )}) scale(0.8333333333)`
               })
-        },
-        "&:not($small) $legendLabel": { maxWidth: "999px" }
+        }
       },
       withTrailingAdornment: {},
-      multipleSelect: {
-        "& $control": { overflow: "visible" }
-      }
+      multipleSelect: { "& $control": { overflow: "visible" } }
     };
   },
   { name: `Sonnat${componentName}` }
@@ -384,10 +347,8 @@ const InputBase = React.memo(
       children,
       controller,
       className,
-      legendLabel,
       leadingAdornment,
       trailingAdornment,
-      controllerId,
       variant: variantProp = "outlined",
       size: sizeProp = "medium",
       focused = false,
@@ -401,10 +362,9 @@ const InputBase = React.memo(
 
     const classes = useStyles();
 
-    const { isEmpty } = React.useContext(TextFieldContext);
-    const { isMultiple } = React.useContext(SelectContext);
+    const textFieldContext = React.useContext(TextFieldContext);
+    const selectContext = React.useContext(SelectContext);
 
-    const isLegendLabeled = !!legendLabel;
     const hasLeadingAdornment = !!leadingAdornment;
     const hasTrailingAdornment = !!trailingAdornment;
 
@@ -416,23 +376,6 @@ const InputBase = React.memo(
       !allowedVariants.includes(variantProp)
     );
 
-    let invalidUsageOfLegend = false;
-
-    if (isLegendLabeled && size === "small") {
-      if (process.env.NODE_ENV !== "production") {
-        // eslint-disable-next-line no-console
-        console.error(
-          [
-            `Sonnat: You can not use the \`size="small"\` and \`legendLabel="${legendLabel}"\` properties ` +
-              "at the same time on `TextField` component.",
-            `We will fallback to \`size="small"\` and \`legendLabel={undefined}\`.`
-          ].join("\n")
-        );
-      }
-
-      invalidUsageOfLegend = true;
-    }
-
     return (
       <InputBaseContext.Provider value={{ size, disabled, hasError }}>
         <div
@@ -443,7 +386,12 @@ const InputBase = React.memo(
             classes[size],
             classes[variant],
             {
-              [classes.empty]: isEmpty,
+              [classes.empty]: textFieldContext
+                ? textFieldContext.isEmpty
+                : undefined,
+              [classes.multipleSelect]: selectContext
+                ? selectContext.isMultiple
+                : undefined,
               [classes.fluid]: fluid,
               [classes.disabled]: disabled,
               [classes.readOnly]: readOnly,
@@ -451,19 +399,12 @@ const InputBase = React.memo(
               [classes.withLeadingAdornment]: hasLeadingAdornment,
               [classes.withTrailingAdornment]: hasTrailingAdornment,
               [classes.rounded]: rounded,
-              [classes.errored]: hasError,
-              [classes.multipleSelect]: isMultiple,
-              [classes.legendLabeled]: !invalidUsageOfLegend && isLegendLabeled
+              [classes.errored]: hasError
             }
           )}
           {...otherProps}
         >
           <div className={classes.wrapper}>
-            {legendLabel && size !== "small" && (
-              <label className={classes.label} htmlFor={controllerId}>
-                {legendLabel}
-              </label>
-            )}
             {leadingAdornment && (
               <div className={classes.leadingAdornment}>{leadingAdornment}</div>
             )}
@@ -473,13 +414,7 @@ const InputBase = React.memo(
                 {trailingAdornment}
               </div>
             )}
-            <fieldset aria-hidden={true} className={classes.notchedOutline}>
-              {!invalidUsageOfLegend && legendLabel && (
-                <legend className={classes.legendLabel}>
-                  <span className={classes.legendLabelText}>{legendLabel}</span>
-                </legend>
-              )}
-            </fieldset>
+            <div aria-hidden={true} className={classes.notchedOutline} />
           </div>
         </div>
         {children}
@@ -491,9 +426,7 @@ const InputBase = React.memo(
 InputBase.propTypes = {
   children: PropTypes.node,
   controller: PropTypes.node,
-  controllerId: PropTypes.string,
   className: PropTypes.string,
-  legendLabel: PropTypes.string,
   leadingAdornment: PropTypes.node,
   trailingAdornment: PropTypes.node,
   focused: PropTypes.bool,

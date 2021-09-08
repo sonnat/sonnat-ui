@@ -10,10 +10,6 @@ type BaseProps<P = {}> = P & {
    */
   className?: string;
   /**
-   * The text of the label in legend style.
-   */
-  legendLabel?: string;
-  /**
    * Leading adornment for this component.
    *
    * This can be used to add a prefix, a suffix or an action to the leading of your input.
