@@ -42,6 +42,8 @@ export { default as useControlled } from "./useControlled";
 
 export { default as useConstantProp } from "./useConstantProp";
 
+export { default as useOnChange } from "./useOnChange";
+
 export { default as detectScrollBarWidth } from "./detectScrollBarWidth";
 
 export { default as getVar } from "./getVar";
