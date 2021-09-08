@@ -356,12 +356,15 @@ const TextArea = React.memo(
 
     const { current: initialValue } = React.useRef(value);
 
-    const isFormControlFocused = formControl
-      ? !!formControl.focusedState
-      : false;
+    const formControlFocusState = formControl
+      ? formControl.focusedState
+      : undefined;
 
-    const isAutoFocus =
-      isFormControlFocused || !!inputAutoFocusProp || autoFocus || focused;
+    const { current: isAutoFocus } = React.useRef(
+      typeof formControlFocusState === "undefined"
+        ? !!inputAutoFocusProp || autoFocus || focused
+        : formControlFocusState
+    );
 
     const isReadOnly = !!inputReadOnlyProp || readOnly;
     const hasLimitedLength = !!otherInputProps.maxLength;
@@ -377,6 +380,15 @@ const TextArea = React.memo(
         hasLimitedLength ? otherInputProps.maxLength : Infinity
       )
     );
+
+    const finalValue = hasLimitedLength
+      ? value.substr(0, otherInputProps.maxLength)
+      : value;
+
+    let focusState =
+      typeof formControlFocusState === "boolean"
+        ? formControlFocusState
+        : isFocused;
 
     // inherit properties from FormControl
     const controlProps = {
@@ -413,16 +425,17 @@ const TextArea = React.memo(
       }
     };
 
-    React.useEffect(() => {
-      setFocused(isFormControlFocused);
-    }, [isFormControlFocused]);
-
-    // prevent component from being focused if it is disabled or readOnly
-    React.useEffect(() => {
-      if ((controlProps.disabled || isReadOnly) && isFocused) {
-        setFocused(false);
+    if (process.env.NODE_ENV !== "production") {
+      if (controlProps.disabled && isReadOnly) {
+        throw new Error(
+          "[Sonnat]: You can't use `disabled` and `readOnly` props at the same time!"
+        );
       }
-    }, [controlProps.disabled, isReadOnly, isFocused]);
+    }
+
+    if ((controlProps.disabled || isReadOnly) && focusState) {
+      focusState = false;
+    }
 
     // initially focus the component
     useEnhancedEffect(() => {
@@ -549,15 +562,11 @@ const TextArea = React.memo(
       renders.current = 0;
     }, [value]);
 
-    const finalValue = hasLimitedLength
-      ? value.substr(0, otherInputProps.maxLength)
-      : value;
-
     return (
       <div
         className={clx(classes.root, className, classes[size], {
           [classes.resizable]: resizable,
-          [classes.focused]: isFocused,
+          [classes.focused]: focusState,
           [classes.disabled]: controlProps.disabled,
           [classes.readOnly]: isReadOnly,
           [classes.fluid]: controlProps.fluid,
