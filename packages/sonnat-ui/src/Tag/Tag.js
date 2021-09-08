@@ -165,6 +165,7 @@ const useStyles = makeStyles(
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
+          color: primaryColor,
           "&:hover > $removeBtnIcon": {
             backgroundColor: primaryMiddleColor
           },
@@ -183,6 +184,7 @@ const useStyles = makeStyles(
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
+          color: secondaryColor,
           "&:hover > $removeBtnIcon": {
             backgroundColor: secondaryMiddleColor
           },
@@ -201,6 +203,7 @@ const useStyles = makeStyles(
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
+          color: successColor,
           "&:hover > $removeBtnIcon": {
             backgroundColor: successMiddleColor
           },
@@ -219,6 +222,7 @@ const useStyles = makeStyles(
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
+          color: errorColor,
           "&:hover > $removeBtnIcon": {
             backgroundColor: errorMiddleColor
           },
@@ -237,6 +241,7 @@ const useStyles = makeStyles(
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
+          color: warningColor,
           "&:hover > $removeBtnIcon": {
             backgroundColor: warningMiddleColor
           },
@@ -255,6 +260,7 @@ const useStyles = makeStyles(
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
+          color: infoColor,
           "&:hover > $removeBtnIcon": {
             backgroundColor: infoMiddleColor
           },
