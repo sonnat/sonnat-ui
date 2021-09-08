@@ -71,7 +71,7 @@ const useStyles = makeStyles(
         alignItems: "center",
         justifyContent: "center",
         borderRadius: `${pxToRem(4)} ${pxToRem(4)} 0 0`,
-        boxShadow: `0 1px 2px 0 ${colors.createBlackColor({ alpha: 0.12 })}`
+        padding: pxToRem(4)
       },
       list: {
         width: "100%",
@@ -108,10 +108,10 @@ const useStyles = makeStyles(
       },
       searchable: {
         "&$dense $list": {
-          height: `calc(100% - ${pxToRem(32)})`
+          height: `calc(100% - ${pxToRem(40)})`
         },
         "&:not($dense) $list": {
-          height: `calc(100% - ${pxToRem(40)})`
+          height: `calc(100% - ${pxToRem(48)})`
         }
       },
       dense: {
