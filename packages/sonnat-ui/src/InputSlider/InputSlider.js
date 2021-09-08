@@ -983,6 +983,7 @@ const InputSlider = React.memo(
             disableTransitions();
             updateHandles(_v, isDiscrete);
             setValue(_v);
+            if (onChange) onChange(event, _v);
           }
         }
       }
