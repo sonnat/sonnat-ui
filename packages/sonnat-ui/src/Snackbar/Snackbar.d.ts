@@ -46,7 +46,7 @@ type BaseProps<P = {}> = P & {
    */
   undoable?: boolean;
   /**
-   * The Callback fires when the component has closed.
+   * The Callback fires when the close button is clicked.
    */
   onClose?: () => void;
   /**
@@ -58,7 +58,6 @@ type BaseProps<P = {}> = P & {
    *
    * @param {React.TransitionEvent<HTMLDivElement>} event The event source of the callback.
    */
-  // eslint-disable-next-line no-unused-vars
   onTransitionEnd?: (event: React.TransitionEvent<HTMLDivElement>) => void;
 };
 

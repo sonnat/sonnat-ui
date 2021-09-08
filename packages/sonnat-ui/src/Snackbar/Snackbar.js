@@ -215,10 +215,6 @@ const Snackbar = React.memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open]);
 
-    React.useEffect(() => {
-      if (!isOpen && onClose) onClose();
-    }, [isOpen, onClose]);
-
     const transitionEndHandler = e => {
       if (onTransitionEnd) onTransitionEnd(e);
       if (!isOpen) setHidden(true);
