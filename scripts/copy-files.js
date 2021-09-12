@@ -69,13 +69,8 @@ async function createPackageFile() {
   );
 
   /* eslint-disable no-unused-vars */
-  const {
-    nyc,
-    scripts,
-    devDependencies,
-    workspaces,
-    ...packageDataOther
-  } = JSON.parse(packageData);
+  const { nyc, scripts, devDependencies, workspaces, ...packageDataOther } =
+    JSON.parse(packageData);
   /* eslint-enable no-unused-vars */
 
   const newPackageData = {
