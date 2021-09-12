@@ -1,7 +1,10 @@
 import * as React from "react";
-import type { MergeElementProps } from "../typings";
+import type { EmptyIntersectionObject, MergeElementProps } from "../typings";
 
-type BaseProps<P = {}, T extends React.ElementType = "button"> = P & {
+type BaseProps<
+  P extends Record<string, unknown> = EmptyIntersectionObject,
+  T extends React.ElementType = "button"
+> = P & {
   /**
    * The component used for the root node.
    * Either a string to use a HTML element or a component.
@@ -66,12 +69,12 @@ type BaseProps<P = {}, T extends React.ElementType = "button"> = P & {
 };
 
 export type ButtonProps<
-  P = {},
+  P extends Record<string, unknown> = EmptyIntersectionObject,
   T extends React.ElementType = "button"
 > = MergeElementProps<T, BaseProps<P, T>>;
 
 declare const Button: <T extends React.ElementType = "button">(
-  props: ButtonProps<{}, T>
+  props: ButtonProps<EmptyIntersectionObject, T>
 ) => JSX.Element;
 
 export default Button;

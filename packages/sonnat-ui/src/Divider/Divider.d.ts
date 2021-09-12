@@ -1,7 +1,10 @@
 import * as React from "react";
-import type { MergeElementProps } from "../typings";
+import type { EmptyIntersectionObject, MergeElementProps } from "../typings";
 
-type BaseProps<P = {}, T extends React.ElementType = "hr"> = P & {
+type BaseProps<
+  P extends Record<string, unknown> = EmptyIntersectionObject,
+  T extends React.ElementType = "hr"
+> = P & {
   /**
    * The component used for the root node.
    * Either a string to use a HTML element or a component.
@@ -35,12 +38,12 @@ type BaseProps<P = {}, T extends React.ElementType = "hr"> = P & {
 };
 
 export type DividerProps<
-  P = {},
+  P extends Record<string, unknown> = EmptyIntersectionObject,
   T extends React.ElementType = "hr"
 > = MergeElementProps<T, BaseProps<P, T>>;
 
 declare const Divider: <T extends React.ElementType = "hr">(
-  props: DividerProps<{}, T>
+  props: DividerProps<EmptyIntersectionObject, T>
 ) => JSX.Element;
 
 export default Divider;

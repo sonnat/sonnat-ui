@@ -1,7 +1,10 @@
 import * as React from "react";
-import type { MergeElementProps } from "../typings";
+import type { EmptyIntersectionObject, MergeElementProps } from "../typings";
 
-type BaseProps<P = {}, T extends React.ElementType = "span"> = {
+type BaseProps<
+  P extends Record<string, unknown> = EmptyIntersectionObject,
+  T extends React.ElementType = "span"
+> = P & {
   /**
    * The component used for the root node.
    * Either a string to use a HTML element or a component.
@@ -38,12 +41,12 @@ type BaseProps<P = {}, T extends React.ElementType = "span"> = {
 };
 
 export type SkeletonProps<
-  P = {},
+  P extends Record<string, unknown> = EmptyIntersectionObject,
   T extends React.ElementType = "span"
 > = MergeElementProps<T, BaseProps<P, T>>;
 
 declare const Skeleton: <T extends React.ElementType = "span">(
-  props: SkeletonProps<{}, T>
+  props: SkeletonProps<EmptyIntersectionObject, T>
 ) => JSX.Element;
 
 export default Skeleton;

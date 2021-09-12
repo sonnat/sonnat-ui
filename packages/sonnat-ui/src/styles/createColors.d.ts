@@ -68,5 +68,5 @@ export interface ColorsInputs {
 
 export default function createColors(
   colors: ColorsInputs,
-  themeMode: string
+  themeMode?: string
 ): Colors;

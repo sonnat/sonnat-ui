@@ -16,6 +16,9 @@ type GenerateStringUnion<T> = Extract<
   string
 >;
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type EmptyIntersectionObject = {};
+
 /** Removes types from T that are assignable to U */
 export type Diff<T, U> = T extends U ? never : T;
 
@@ -37,9 +40,10 @@ export type Overwrite<T, U> = Omit<T, keyof U> & U;
  * If the property value was `true`, the property key will be added to the
  * string union.
  */
-export type OverridableStringUnion<T, U = {}> = GenerateStringUnion<
-  Overwrite<T, U>
->;
+export type OverridableStringUnion<
+  T,
+  U = EmptyIntersectionObject
+> = GenerateStringUnion<Overwrite<T, U>>;
 
 export type GenerateClassName = JssGenerateId;
 export type SheetsRegistry = JssSheetsRegistry;
@@ -62,5 +66,5 @@ export type Classes<Name extends string = string> = JssClasses<Name>;
 
 export type MergeElementProps<
   T extends React.ElementType,
-  P extends object = {}
+  P extends Record<string, unknown> = Record<string, never>
 > = Omit<React.ComponentPropsWithRef<T>, keyof P> & P;

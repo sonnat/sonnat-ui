@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { MergeElementProps } from "../typings";
+import type { EmptyIntersectionObject, MergeElementProps } from "../typings";
 
 type Breakpoint<T> = {
   xxs?: T;
@@ -12,7 +12,10 @@ type Breakpoint<T> = {
 
 type ResponsivePropType<T> = T | Breakpoint<T>;
 
-type BaseProps<P = {}, T extends React.ElementType = "div"> = P & {
+type BaseProps<
+  P extends Record<string, unknown> = EmptyIntersectionObject,
+  T extends React.ElementType = "div"
+> = P & {
   /**
    * The component used for the root node.
    * Either a string to use a HTML element or a component.
@@ -69,12 +72,12 @@ type BaseProps<P = {}, T extends React.ElementType = "div"> = P & {
 };
 
 export type FlexProps<
-  P = {},
+  P extends Record<string, unknown> = EmptyIntersectionObject,
   T extends React.ElementType = "div"
 > = MergeElementProps<T, BaseProps<P, T>>;
 
 declare const Flex: <T extends React.ElementType = "div">(
-  props: FlexProps<{}, T>
+  props: FlexProps<EmptyIntersectionObject, T>
 ) => JSX.Element;
 
 export default Flex;
