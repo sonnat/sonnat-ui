@@ -156,401 +156,399 @@ const allowPageScroll = () => {
   document.body.style.paddingRight = "";
 };
 
-const Menu = React.memo(
-  React.forwardRef(function Menu(props, refProp) {
-    const {
-      className,
-      onOpen,
-      onClose,
-      minWidth,
-      onOutsideClick,
-      outsideClickDetector,
-      onEscapeKeyDown,
-      anchorNode,
-      children: childrenProp,
-      searchPlaceholder: searchPlaceholderProp,
-      searchEmptyStatementText: searchEmptyStatementTextProp,
-      placement: placementProp,
-      style = {},
-      role = "menu",
-      open: openState = false,
-      dense = false,
-      searchable = false,
-      preventPageScrolling = false,
-      ...otherProps
-    } = props;
+const Menu = React.forwardRef(function Menu(props, refProp) {
+  const {
+    className,
+    onOpen,
+    onClose,
+    minWidth,
+    onOutsideClick,
+    outsideClickDetector,
+    onEscapeKeyDown,
+    anchorNode,
+    children: childrenProp,
+    searchPlaceholder: searchPlaceholderProp,
+    searchEmptyStatementText: searchEmptyStatementTextProp,
+    placement: placementProp,
+    style = {},
+    role = "menu",
+    open: openState = false,
+    dense = false,
+    searchable = false,
+    preventPageScrolling = false,
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
-    const theme = useTheme();
+  const classes = useStyles();
+  const theme = useTheme();
 
-    const [searchResult, setSearchResult] = React.useState(null);
-    const [searchValue, setSearchValue] = React.useState("");
+  const [searchResult, setSearchResult] = React.useState(null);
+  const [searchValue, setSearchValue] = React.useState("");
 
-    const [meta, setMeta] = React.useState({ left: 0, top: 0, width: 0 });
+  const [meta, setMeta] = React.useState({ left: 0, top: 0, width: 0 });
 
-    const isFirstRender = React.useRef(true);
+  const isFirstRender = React.useRef(true);
 
-    const focusIndex = React.useRef(-1);
-    const focusedNode = React.useRef(null);
-    const indexToNode = React.useRef(new Map());
+  const focusIndex = React.useRef(-1);
+  const focusedNode = React.useRef(null);
+  const indexToNode = React.useRef(new Map());
 
-    const rootRef = React.useRef(null);
-    const ref = useForkRef(refProp, rootRef);
+  const rootRef = React.useRef(null);
+  const ref = useForkRef(refProp, rootRef);
 
-    const listRef = React.useRef(null);
+  const listRef = React.useRef(null);
 
-    const isRTL = theme.direction === "rtl";
-    const isSearchResultEmpty = !!searchResult && searchResult.length === 0;
+  const isRTL = theme.direction === "rtl";
+  const isSearchResultEmpty = !!searchResult && searchResult.length === 0;
 
-    const searchPlaceholder =
-      searchPlaceholderProp || (isRTL ? "جستجو" : "Search");
+  const searchPlaceholder =
+    searchPlaceholderProp || (isRTL ? "جستجو" : "Search");
 
-    const searchEmptyStatementText =
-      searchEmptyStatementTextProp ||
-      (isRTL ? "هیچ موردی یافت نشد!" : "There is no such option!");
+  const searchEmptyStatementText =
+    searchEmptyStatementTextProp ||
+    (isRTL ? "هیچ موردی یافت نشد!" : "There is no such option!");
 
-    const placement = placementProp || (isRTL ? "right" : "left");
+  const placement = placementProp || (isRTL ? "right" : "left");
 
-    const getAnchorMeta = () => {
-      let meta;
+  const getAnchorMeta = () => {
+    let meta;
 
-      if (anchorNode) {
-        const { left, top } = getOffsetFromWindow(anchorNode);
+    if (anchorNode) {
+      const { left, top } = getOffsetFromWindow(anchorNode);
 
-        meta = {
-          offsetWidth: anchorNode.offsetWidth,
-          offsetHeight: anchorNode.offsetHeight,
-          top,
-          left,
-          right: left + anchorNode.offsetWidth,
-          bottom: top + anchorNode.offsetHeight
-        };
-      }
-
-      return meta;
-    };
-
-    const resetFocus = () => {
-      focusIndex.current = -1;
-      focusedNode.current = null;
-    };
-
-    const reset = () => {
-      setSearchValue("");
-      setSearchResult(null);
-      resetFocus();
-      indexToNode.current = new Map();
-    };
-
-    const searchChangeListener = e => {
-      const value = e.target.value;
-      let results = null;
-
-      if (value.length > 0) {
-        results = [];
-
-        indexToNode.current.forEach((el, key) => {
-          const content = el.textContent;
-          if (content.toLowerCase().includes(value.toLowerCase())) {
-            results.push(key);
-          }
-        });
-      }
-
-      resetFocus();
-      setSearchResult(results);
-      setSearchValue(value);
-    };
-
-    const outsideClickHandler = React.useCallback(
-      e => {
-        if (outsideClickDetector != null) {
-          if (outsideClickDetector(e) && onOutsideClick) onOutsideClick(e);
-        } else if (
-          rootRef.current !== null &&
-          rootRef.current !== e.target &&
-          !rootRef.current.contains(e.target) &&
-          anchorNode &&
-          !anchorNode.contains(e.target)
-        ) {
-          if (onOutsideClick) onOutsideClick(e);
-        }
-      },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      [onOutsideClick, outsideClickDetector]
-    );
-
-    let itemIndex = 0;
-    const children = React.Children.map(childrenProp, child => {
-      if (!React.isValidElement(child)) return null;
-
-      if (isFragment(child)) {
-        // eslint-disable-next-line no-console
-        console.error(
-          "Sonnat: The Menu component doesn't accept a Fragment as a child."
-        );
-
-        return null;
-      }
-
-      if (child.type !== Item && child.type !== ItemGroup) {
-        // eslint-disable-next-line no-console
-        console.error(
-          "Sonnat: The Menu component only accepts `Menu/Group` or `Menu/Item` components."
-        );
-
-        return null;
-      }
-
-      indexToNode.current = new Map();
-
-      const isGroup = child.type === ItemGroup;
-      const isHidden = searchResult ? !searchResult.includes(itemIndex) : false;
-      const currentIndex = itemIndex;
-
-      if (isGroup) {
-        itemIndex =
-          itemIndex + checkGroupChildren(child.props.children).valids.length;
-      } else itemIndex++;
-
-      return React.cloneElement(child, {
-        className: clx(child.props.className, {
-          [classes.group]: isGroup,
-          [classes.option]: !isGroup
-        }),
-        index: currentIndex,
-        key: `${generateUniqueString()}`,
-        ...(isGroup ? { visibleChilds: searchResult } : { hide: isHidden })
-      });
-    });
-
-    const handleOpen = () => {
-      if (onOpen) onOpen();
-      if (preventPageScrolling) preventPageScroll();
-    };
-
-    const handleClose = () => {
-      if (onClose) onClose();
-      if (preventPageScrolling) allowPageScroll();
-    };
-
-    React.useEffect(() => {
-      const shouldCalc = isSSR ? false : !isFirstRender.current;
-
-      if (shouldCalc) {
-        if (openState) handleOpen();
-        else handleClose();
-
-        const anchorMeta = getAnchorMeta();
-
-        if (anchorMeta) {
-          let newMeta = {
-            width: clamp(
-              anchorMeta.offsetWidth,
-              minWidth || 0,
-              document.body.offsetWidth - anchorMeta.left
-            ),
-            top: anchorMeta.top + anchorMeta.offsetHeight
-          };
-
-          if (allowedPlacements.includes(placement)) {
-            if (placement === "left") {
-              newMeta = { ...newMeta, left: anchorMeta.left };
-            } else if (placement === "right") {
-              newMeta = { ...newMeta, left: anchorMeta.right - newMeta.width };
-            }
-          }
-
-          setMeta(newMeta);
-        }
-        reset();
-      } else if (!isSSR) {
-        isFirstRender.current = false;
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [openState]);
-
-    const registerNode = (index, node) => {
-      indexToNode.current.set(index, node);
-    };
-
-    const arrowDownListener = React.useCallback(() => {
-      const hasValidResults = searchResult !== null;
-
-      const itemsSize = hasValidResults
-        ? searchResult.length
-        : indexToNode.current.size;
-
-      if (itemsSize) {
-        focusIndex.current = clamp(focusIndex.current + 1, 0, itemsSize - 1);
-
-        const node = hasValidResults
-          ? indexToNode.current.get(searchResult[focusIndex.current])
-          : indexToNode.current.get(focusIndex.current);
-
-        if (!node) return;
-
-        if (!node.disabled) {
-          node.focus();
-          focusedNode.current = node;
-        } else if (focusIndex.current !== itemsSize - 1) arrowDownListener();
-        else focusIndex.current--;
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchResult]);
-
-    const arrowUpListener = React.useCallback(() => {
-      const hasValidResults = searchResult !== null;
-
-      const itemsSize = hasValidResults
-        ? searchResult.length
-        : indexToNode.current.size;
-
-      if (itemsSize) {
-        focusIndex.current =
-          focusIndex.current === -1
-            ? 0
-            : clamp(focusIndex.current - 1, 0, itemsSize - 1);
-
-        const node = hasValidResults
-          ? indexToNode.current.get(searchResult[focusIndex.current])
-          : indexToNode.current.get(focusIndex.current);
-
-        if (!node) return;
-
-        if (!node.disabled) {
-          node.focus();
-          focusedNode.current = node;
-        } else if (focusIndex.current !== 0) arrowUpListener();
-        else focusIndex.current++;
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchResult]);
-
-    const keyboardListener = React.useCallback(
-      e => {
-        // do nothing if the event was already processed
-        if (e.defaultPrevented) return;
-
-        switch (e.key) {
-          case "Down":
-          case "ArrowDown":
-            // preventing the default behaviour
-            if (e.preventDefault) e.preventDefault();
-            else e.returnValue = null;
-
-            return arrowDownListener();
-          case "Up":
-          case "ArrowUp":
-            // preventing the default behaviour
-            if (e.preventDefault) e.preventDefault();
-            else e.returnValue = null;
-
-            return arrowUpListener();
-          case "Escape" || "Esc" || "escape" || "esc":
-            // preventing the default behaviour
-            if (e.preventDefault) e.preventDefault();
-            else e.returnValue = null;
-
-            document.activeElement.blur();
-
-            if (onEscapeKeyDown) onEscapeKeyDown(e);
-            break;
-          case " ":
-            // preventing the default behaviour
-            if (e.preventDefault) e.preventDefault();
-            else e.returnValue = null;
-
-            if (focusedNode.current) focusedNode.current.click();
-            break;
-          default:
-            return;
-        }
-      },
-      [arrowDownListener, arrowUpListener, onEscapeKeyDown]
-    );
-
-    if (!isSSR) {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useEventListener(
-        {
-          element: document,
-          eventName: "mousedown",
-          listener: outsideClickHandler,
-          options: { useCapture: true }
-        },
-        openState && onOutsideClick != null
-      );
-
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useEventListener(
-        {
-          element: document,
-          eventName: "keydown",
-          listener: keyboardListener
-        },
-        openState
-      );
+      meta = {
+        offsetWidth: anchorNode.offsetWidth,
+        offsetHeight: anchorNode.offsetHeight,
+        top,
+        left,
+        right: left + anchorNode.offsetWidth,
+        bottom: top + anchorNode.offsetHeight
+      };
     }
 
-    return (
-      <MenuContext.Provider value={{ registerNode, dense }}>
-        <PortalDestination aria-hidden={!openState}>
-          <div
-            tabIndex={-1}
-            ref={ref}
-            className={clx(classes.root, className, {
-              [classes.dense]: dense,
-              [classes.searchable]: searchable
-            })}
-            style={{
-              ...style,
-              ...meta
-            }}
-            {...otherProps}
-          >
-            {openState && (
-              <div className={classes.container}>
-                {searchable && (
-                  <div className={classes.searchRow}>
-                    <TextField
-                      fluid
-                      variant="filled"
-                      placeholder={searchPlaceholder}
-                      value={searchValue}
-                      size={dense ? "medium" : "large"}
-                      onChange={throttle(e => {
-                        searchChangeListener(e);
-                      }, 250)}
-                      leadingAdornment={
-                        <InputAdornment variant="icon">
-                          <Magnifier />
-                        </InputAdornment>
-                      }
-                    />
+    return meta;
+  };
+
+  const resetFocus = () => {
+    focusIndex.current = -1;
+    focusedNode.current = null;
+  };
+
+  const reset = () => {
+    setSearchValue("");
+    setSearchResult(null);
+    resetFocus();
+    indexToNode.current = new Map();
+  };
+
+  const searchChangeListener = e => {
+    const value = e.target.value;
+    let results = null;
+
+    if (value.length > 0) {
+      results = [];
+
+      indexToNode.current.forEach((el, key) => {
+        const content = el.textContent;
+        if (content.toLowerCase().includes(value.toLowerCase())) {
+          results.push(key);
+        }
+      });
+    }
+
+    resetFocus();
+    setSearchResult(results);
+    setSearchValue(value);
+  };
+
+  const outsideClickHandler = React.useCallback(
+    e => {
+      if (outsideClickDetector != null) {
+        if (outsideClickDetector(e) && onOutsideClick) onOutsideClick(e);
+      } else if (
+        rootRef.current !== null &&
+        rootRef.current !== e.target &&
+        !rootRef.current.contains(e.target) &&
+        anchorNode &&
+        !anchorNode.contains(e.target)
+      ) {
+        if (onOutsideClick) onOutsideClick(e);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [onOutsideClick, outsideClickDetector]
+  );
+
+  let itemIndex = 0;
+  const children = React.Children.map(childrenProp, child => {
+    if (!React.isValidElement(child)) return null;
+
+    if (isFragment(child)) {
+      // eslint-disable-next-line no-console
+      console.error(
+        "Sonnat: The Menu component doesn't accept a Fragment as a child."
+      );
+
+      return null;
+    }
+
+    if (child.type !== Item && child.type !== ItemGroup) {
+      // eslint-disable-next-line no-console
+      console.error(
+        "Sonnat: The Menu component only accepts `Menu/Group` or `Menu/Item` components."
+      );
+
+      return null;
+    }
+
+    indexToNode.current = new Map();
+
+    const isGroup = child.type === ItemGroup;
+    const isHidden = searchResult ? !searchResult.includes(itemIndex) : false;
+    const currentIndex = itemIndex;
+
+    if (isGroup) {
+      itemIndex =
+        itemIndex + checkGroupChildren(child.props.children).valids.length;
+    } else itemIndex++;
+
+    return React.cloneElement(child, {
+      className: clx(child.props.className, {
+        [classes.group]: isGroup,
+        [classes.option]: !isGroup
+      }),
+      index: currentIndex,
+      key: `${generateUniqueString()}`,
+      ...(isGroup ? { visibleChilds: searchResult } : { hide: isHidden })
+    });
+  });
+
+  const handleOpen = () => {
+    if (onOpen) onOpen();
+    if (preventPageScrolling) preventPageScroll();
+  };
+
+  const handleClose = () => {
+    if (onClose) onClose();
+    if (preventPageScrolling) allowPageScroll();
+  };
+
+  React.useEffect(() => {
+    const shouldCalc = isSSR ? false : !isFirstRender.current;
+
+    if (shouldCalc) {
+      if (openState) handleOpen();
+      else handleClose();
+
+      const anchorMeta = getAnchorMeta();
+
+      if (anchorMeta) {
+        let newMeta = {
+          width: clamp(
+            anchorMeta.offsetWidth,
+            minWidth || 0,
+            document.body.offsetWidth - anchorMeta.left
+          ),
+          top: anchorMeta.top + anchorMeta.offsetHeight
+        };
+
+        if (allowedPlacements.includes(placement)) {
+          if (placement === "left") {
+            newMeta = { ...newMeta, left: anchorMeta.left };
+          } else if (placement === "right") {
+            newMeta = { ...newMeta, left: anchorMeta.right - newMeta.width };
+          }
+        }
+
+        setMeta(newMeta);
+      }
+      reset();
+    } else if (!isSSR) {
+      isFirstRender.current = false;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openState]);
+
+  const registerNode = (index, node) => {
+    indexToNode.current.set(index, node);
+  };
+
+  const arrowDownListener = React.useCallback(() => {
+    const hasValidResults = searchResult !== null;
+
+    const itemsSize = hasValidResults
+      ? searchResult.length
+      : indexToNode.current.size;
+
+    if (itemsSize) {
+      focusIndex.current = clamp(focusIndex.current + 1, 0, itemsSize - 1);
+
+      const node = hasValidResults
+        ? indexToNode.current.get(searchResult[focusIndex.current])
+        : indexToNode.current.get(focusIndex.current);
+
+      if (!node) return;
+
+      if (!node.disabled) {
+        node.focus();
+        focusedNode.current = node;
+      } else if (focusIndex.current !== itemsSize - 1) arrowDownListener();
+      else focusIndex.current--;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchResult]);
+
+  const arrowUpListener = React.useCallback(() => {
+    const hasValidResults = searchResult !== null;
+
+    const itemsSize = hasValidResults
+      ? searchResult.length
+      : indexToNode.current.size;
+
+    if (itemsSize) {
+      focusIndex.current =
+        focusIndex.current === -1
+          ? 0
+          : clamp(focusIndex.current - 1, 0, itemsSize - 1);
+
+      const node = hasValidResults
+        ? indexToNode.current.get(searchResult[focusIndex.current])
+        : indexToNode.current.get(focusIndex.current);
+
+      if (!node) return;
+
+      if (!node.disabled) {
+        node.focus();
+        focusedNode.current = node;
+      } else if (focusIndex.current !== 0) arrowUpListener();
+      else focusIndex.current++;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchResult]);
+
+  const keyboardListener = React.useCallback(
+    e => {
+      // do nothing if the event was already processed
+      if (e.defaultPrevented) return;
+
+      switch (e.key) {
+        case "Down":
+        case "ArrowDown":
+          // preventing the default behaviour
+          if (e.preventDefault) e.preventDefault();
+          else e.returnValue = null;
+
+          return arrowDownListener();
+        case "Up":
+        case "ArrowUp":
+          // preventing the default behaviour
+          if (e.preventDefault) e.preventDefault();
+          else e.returnValue = null;
+
+          return arrowUpListener();
+        case "Escape" || "Esc" || "escape" || "esc":
+          // preventing the default behaviour
+          if (e.preventDefault) e.preventDefault();
+          else e.returnValue = null;
+
+          document.activeElement.blur();
+
+          if (onEscapeKeyDown) onEscapeKeyDown(e);
+          break;
+        case " ":
+          // preventing the default behaviour
+          if (e.preventDefault) e.preventDefault();
+          else e.returnValue = null;
+
+          if (focusedNode.current) focusedNode.current.click();
+          break;
+        default:
+          return;
+      }
+    },
+    [arrowDownListener, arrowUpListener, onEscapeKeyDown]
+  );
+
+  if (!isSSR) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEventListener(
+      {
+        element: document,
+        eventName: "mousedown",
+        listener: outsideClickHandler,
+        options: { useCapture: true }
+      },
+      openState && onOutsideClick != null
+    );
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEventListener(
+      {
+        element: document,
+        eventName: "keydown",
+        listener: keyboardListener
+      },
+      openState
+    );
+  }
+
+  return (
+    <MenuContext.Provider value={{ registerNode, dense }}>
+      <PortalDestination aria-hidden={!openState}>
+        <div
+          tabIndex={-1}
+          ref={ref}
+          className={clx(classes.root, className, {
+            [classes.dense]: dense,
+            [classes.searchable]: searchable
+          })}
+          style={{
+            ...style,
+            ...meta
+          }}
+          {...otherProps}
+        >
+          {openState && (
+            <div className={classes.container}>
+              {searchable && (
+                <div className={classes.searchRow}>
+                  <TextField
+                    fluid
+                    variant="filled"
+                    placeholder={searchPlaceholder}
+                    value={searchValue}
+                    size={dense ? "medium" : "large"}
+                    onChange={throttle(e => {
+                      searchChangeListener(e);
+                    }, 250)}
+                    leadingAdornment={
+                      <InputAdornment variant="icon">
+                        <Magnifier />
+                      </InputAdornment>
+                    }
+                  />
+                </div>
+              )}
+              <div
+                ref={listRef}
+                className={classes.list}
+                role={role}
+                tabIndex={-1}
+              >
+                {isSearchResultEmpty && (
+                  <div className={classes.emptyStatement}>
+                    {searchEmptyStatementText}
                   </div>
                 )}
-                <div
-                  ref={listRef}
-                  className={classes.list}
-                  role={role}
-                  tabIndex={-1}
-                >
-                  {isSearchResultEmpty && (
-                    <div className={classes.emptyStatement}>
-                      {searchEmptyStatementText}
-                    </div>
-                  )}
-                  {children}
-                </div>
+                {children}
               </div>
-            )}
-          </div>
-        </PortalDestination>
-      </MenuContext.Provider>
-    );
-  })
-);
+            </div>
+          )}
+        </div>
+      </PortalDestination>
+    </MenuContext.Provider>
+  );
+});
 
 Menu.displayName = componentName;
 

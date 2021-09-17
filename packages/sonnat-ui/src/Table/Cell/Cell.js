@@ -54,35 +54,33 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const TableCell = React.memo(
-  React.forwardRef((props, ref) => {
-    const { className, children, textAlign = "inherit", ...otherProps } = props;
+const TableCell = React.forwardRef((props, ref) => {
+  const { className, children, textAlign = "inherit", ...otherProps } = props;
 
-    const { cellVariant } = React.useContext(TableInnerContext);
-    const { isDense } = React.useContext(TableContext);
-    const { isSelected } = React.useContext(TableRowContext);
+  const { cellVariant } = React.useContext(TableInnerContext);
+  const { isDense } = React.useContext(TableContext);
+  const { isSelected } = React.useContext(TableRowContext);
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const Node = cellVariant === "header" ? "th" : "td";
+  const Node = cellVariant === "header" ? "th" : "td";
 
-    return (
-      <Node
-        ref={ref}
-        className={clx(
-          className,
-          classes.root,
-          classes[`${cellVariant}Cell`],
-          classes[camelCase(`text-align-${textAlign}`)],
-          { [classes.dense]: isDense, [classes.selected]: isSelected }
-        )}
-        {...otherProps}
-      >
-        {children}
-      </Node>
-    );
-  })
-);
+  return (
+    <Node
+      ref={ref}
+      className={clx(
+        className,
+        classes.root,
+        classes[`${cellVariant}Cell`],
+        classes[camelCase(`text-align-${textAlign}`)],
+        { [classes.dense]: isDense, [classes.selected]: isSelected }
+      )}
+      {...otherProps}
+    >
+      {children}
+    </Node>
+  );
+});
 
 TableCell.displayName = componentName;
 

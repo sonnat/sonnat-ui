@@ -197,264 +197,262 @@ const setNativeValue = (element, value) => {
   element.dispatchEvent(new Event("input", { bubbles: true }));
 };
 
-const InputStepper = React.memo(
-  React.forwardRef(function InputStepper(props, ref) {
-    const {
-      className,
-      onChange,
-      inputProps = {},
-      name: nameProp,
-      value: valueProp,
-      defaultValue: defaultValueProp,
-      onAdd: onAddProp,
-      onSubtract: onSubtractProp,
-      min: minProp = 0,
-      max: maxProp = Infinity,
-      disabled = false,
-      fluid = false,
-      size: sizeProp = "medium",
-      ...otherProps
-    } = props;
+const InputStepper = React.forwardRef(function InputStepper(props, ref) {
+  const {
+    className,
+    onChange,
+    inputProps = {},
+    name: nameProp,
+    value: valueProp,
+    defaultValue: defaultValueProp,
+    onAdd: onAddProp,
+    onSubtract: onSubtractProp,
+    min: minProp = 0,
+    max: maxProp = Infinity,
+    disabled = false,
+    fluid = false,
+    size: sizeProp = "medium",
+    ...otherProps
+  } = props;
 
-    const {
-      className: inputClassNameProp,
-      id: inputIdProp,
-      ref: inputRefProp,
-      name: inputNameProp,
-      onChange: inputOnChangeProp,
-      ...otherInputProps
-    } = inputProps;
+  const {
+    className: inputClassNameProp,
+    id: inputIdProp,
+    ref: inputRefProp,
+    name: inputNameProp,
+    onChange: inputOnChangeProp,
+    ...otherInputProps
+  } = inputProps;
 
-    if (valueProp != null && isNaN(valueProp)) {
-      throw new Error(
-        `[Sonnat]: Invalid \`value\` property supplied to \`${componentName}\` component. ` +
-          `Expected an \`integer\`.`
-      );
-    } else if (defaultValueProp != null && isNaN(defaultValueProp)) {
-      throw new Error(
-        `[Sonnat]: Invalid \`defaultValue\` property supplied to \`${componentName}\` component. ` +
-          `Expected an \`integer\`.`
-      );
-    }
-
-    if (inputNameProp != null && nameProp != null) {
-      // eslint-disable-next-line no-console
-      console.error(
-        [
-          "Sonnat: You are passing the `name` prop twice." +
-            "(one as `name` property and the other one as a property of `inputProps`)",
-          `We are assuming \`name="${inputNameProp}"\`!`
-        ].join("\n")
-      );
-    }
-
-    const classes = useStyles();
-
-    const name = inputNameProp || nameProp;
-
-    const [permissions, dispatch] = React.useReducer(reducer, {
-      addition: true,
-      subtraction: true
-    });
-
-    const inputRef = React.useRef(null);
-    const handleInputRef = useForkRef(inputRef, inputRefProp);
-
-    const { current: min } = React.useRef(minProp);
-    const { current: max } = React.useRef(maxProp);
-
-    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
-
-    const { current: defaultValue } = React.useRef(
-      valueProp != null
-        ? undefined
-        : Math.floor(
-            clamp(defaultValueProp != null ? defaultValueProp : 0, min, max)
-          )
+  if (valueProp != null && isNaN(valueProp)) {
+    throw new Error(
+      `[Sonnat]: Invalid \`value\` property supplied to \`${componentName}\` component. ` +
+        `Expected an \`integer\`.`
     );
-
-    const [value, setValue] = useControlled(
-      valueProp != null ? Math.floor(valueProp) : undefined,
-      defaultValue,
-      componentName
+  } else if (defaultValueProp != null && isNaN(defaultValueProp)) {
+    throw new Error(
+      `[Sonnat]: Invalid \`defaultValue\` property supplied to \`${componentName}\` component. ` +
+        `Expected an \`integer\`.`
     );
+  }
 
-    const updateActionVisibility = newValue => {
-      if (newValue === min) dispatch(preventSubtraction());
-      else if (newValue === max) dispatch(preventAddition());
-      else dispatch(allowAdditionAndSubtraction());
-    };
+  if (inputNameProp != null && nameProp != null) {
+    // eslint-disable-next-line no-console
+    console.error(
+      [
+        "Sonnat: You are passing the `name` prop twice." +
+          "(one as `name` property and the other one as a property of `inputProps`)",
+        `We are assuming \`name="${inputNameProp}"\`!`
+      ].join("\n")
+    );
+  }
 
-    const onAdd = e => {
-      const newValue = clamp(value + 1, min, max);
+  const classes = useStyles();
 
-      if (onAddProp) onAddProp(e, newValue);
+  const name = inputNameProp || nameProp;
+
+  const [permissions, dispatch] = React.useReducer(reducer, {
+    addition: true,
+    subtraction: true
+  });
+
+  const inputRef = React.useRef(null);
+  const handleInputRef = useForkRef(inputRef, inputRefProp);
+
+  const { current: min } = React.useRef(minProp);
+  const { current: max } = React.useRef(maxProp);
+
+  const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+
+  const { current: defaultValue } = React.useRef(
+    valueProp != null
+      ? undefined
+      : Math.floor(
+          clamp(defaultValueProp != null ? defaultValueProp : 0, min, max)
+        )
+  );
+
+  const [value, setValue] = useControlled(
+    valueProp != null ? Math.floor(valueProp) : undefined,
+    defaultValue,
+    componentName
+  );
+
+  const updateActionVisibility = newValue => {
+    if (newValue === min) dispatch(preventSubtraction());
+    else if (newValue === max) dispatch(preventAddition());
+    else dispatch(allowAdditionAndSubtraction());
+  };
+
+  const onAdd = e => {
+    const newValue = clamp(value + 1, min, max);
+
+    if (onAddProp) onAddProp(e, newValue);
+    setValue(newValue);
+
+    setNativeValue(inputRef.current, newValue);
+  };
+
+  const onSubtract = e => {
+    const newValue = clamp(value - 1, min, max);
+
+    if (onSubtractProp) onSubtractProp(e, newValue);
+    setValue(newValue);
+
+    setNativeValue(inputRef.current, newValue);
+  };
+
+  const changeHandler = e => {
+    if (!disabled) {
+      const newValue = parseInt(e.target.value);
+
+      if (onChange) onChange(e, newValue);
+      if (inputOnChangeProp) inputOnChangeProp(e, newValue);
       setValue(newValue);
+    }
+  };
 
-      setNativeValue(inputRef.current, newValue);
-    };
+  React.useEffect(() => {
+    updateActionVisibility(value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
-    const onSubtract = e => {
-      const newValue = clamp(value - 1, min, max);
+  const {
+    isFocusVisibleRef: isIncFocusVisibleRef,
+    onBlur: handleIncBlurVisible,
+    onFocus: handleIncFocusVisible,
+    ref: incFocusVisibleRef
+  } = useIsFocusVisible();
 
-      if (onSubtractProp) onSubtractProp(e, newValue);
-      setValue(newValue);
+  const {
+    isFocusVisibleRef: isDecFocusVisibleRef,
+    onBlur: handleDecBlurVisible,
+    onFocus: handleDecFocusVisible,
+    ref: decFocusVisibleRef
+  } = useIsFocusVisible();
 
-      setNativeValue(inputRef.current, newValue);
-    };
+  const increaseRef = React.useRef(null);
+  const decreaseRef = React.useRef(null);
 
-    const changeHandler = e => {
-      if (!disabled) {
-        const newValue = parseInt(e.target.value);
+  const handleIncreaseRef = useForkRef(incFocusVisibleRef, increaseRef);
+  const handleDecreaseRef = useForkRef(decFocusVisibleRef, decreaseRef);
 
-        if (onChange) onChange(e, newValue);
-        if (inputOnChangeProp) inputOnChangeProp(e, newValue);
-        setValue(newValue);
-      }
-    };
+  const [isIncFocusVisible, setIncFocusVisible] = React.useState(false);
+  const [isDecFocusVisible, setDecFocusVisible] = React.useState(false);
 
-    React.useEffect(() => {
-      updateActionVisibility(value);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value]);
+  React.useEffect(() => {
+    if (disabled) {
+      setIncFocusVisible(false);
+      setDecFocusVisible(false);
+    }
+  }, [disabled]);
 
-    const {
-      isFocusVisibleRef: isIncFocusVisibleRef,
-      onBlur: handleIncBlurVisible,
-      onFocus: handleIncFocusVisible,
-      ref: incFocusVisibleRef
-    } = useIsFocusVisible();
+  React.useEffect(() => {
+    if (!permissions.addition) setIncFocusVisible(false);
+    if (!permissions.subtraction) setDecFocusVisible(false);
+  }, [permissions]);
 
-    const {
-      isFocusVisibleRef: isDecFocusVisibleRef,
-      onBlur: handleDecBlurVisible,
-      onFocus: handleDecFocusVisible,
-      ref: decFocusVisibleRef
-    } = useIsFocusVisible();
+  React.useEffect(() => {
+    isIncFocusVisibleRef.current = isIncFocusVisible;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isIncFocusVisible]);
 
-    const increaseRef = React.useRef(null);
-    const decreaseRef = React.useRef(null);
+  React.useEffect(() => {
+    isIncFocusVisibleRef.current = isDecFocusVisible;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDecFocusVisible]);
 
-    const handleIncreaseRef = useForkRef(incFocusVisibleRef, increaseRef);
-    const handleDecreaseRef = useForkRef(decFocusVisibleRef, decreaseRef);
+  const handleFocus = useEventCallback((event, handleType = "increase") => {
+    if (handleType === "increase") {
+      // Fix for https://github.com/facebook/react/issues/7769
+      if (!increaseRef.current) increaseRef.current = event.currentTarget;
 
-    const [isIncFocusVisible, setIncFocusVisible] = React.useState(false);
-    const [isDecFocusVisible, setDecFocusVisible] = React.useState(false);
+      handleIncFocusVisible(event);
 
-    React.useEffect(() => {
-      if (disabled) {
-        setIncFocusVisible(false);
-        setDecFocusVisible(false);
-      }
-    }, [disabled]);
+      if (isIncFocusVisibleRef.current === true) setIncFocusVisible(true);
+    } else if (handleType === "decrease") {
+      // Fix for https://github.com/facebook/react/issues/7769
+      if (!decreaseRef.current) decreaseRef.current = event.currentTarget;
 
-    React.useEffect(() => {
-      if (!permissions.addition) setIncFocusVisible(false);
-      if (!permissions.subtraction) setDecFocusVisible(false);
-    }, [permissions]);
+      handleDecFocusVisible(event);
 
-    React.useEffect(() => {
-      isIncFocusVisibleRef.current = isIncFocusVisible;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isIncFocusVisible]);
+      if (isDecFocusVisibleRef.current === true) setDecFocusVisible(true);
+    }
+  });
 
-    React.useEffect(() => {
-      isIncFocusVisibleRef.current = isDecFocusVisible;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isDecFocusVisible]);
+  const handleBlur = useEventCallback((event, handleType = "increase") => {
+    if (handleType === "increase") {
+      handleIncBlurVisible(event);
 
-    const handleFocus = useEventCallback((event, handleType = "increase") => {
-      if (handleType === "increase") {
-        // Fix for https://github.com/facebook/react/issues/7769
-        if (!increaseRef.current) increaseRef.current = event.currentTarget;
+      if (isIncFocusVisibleRef.current === false) setIncFocusVisible(false);
+    } else if (handleType === "decrease") {
+      handleDecBlurVisible(event);
 
-        handleIncFocusVisible(event);
+      if (isDecFocusVisibleRef.current === false) setDecFocusVisible(false);
+    }
+  });
 
-        if (isIncFocusVisibleRef.current === true) setIncFocusVisible(true);
-      } else if (handleType === "decrease") {
-        // Fix for https://github.com/facebook/react/issues/7769
-        if (!decreaseRef.current) decreaseRef.current = event.currentTarget;
-
-        handleDecFocusVisible(event);
-
-        if (isDecFocusVisibleRef.current === true) setDecFocusVisible(true);
-      }
-    });
-
-    const handleBlur = useEventCallback((event, handleType = "increase") => {
-      if (handleType === "increase") {
-        handleIncBlurVisible(event);
-
-        if (isIncFocusVisibleRef.current === false) setIncFocusVisible(false);
-      } else if (handleType === "decrease") {
-        handleDecBlurVisible(event);
-
-        if (isDecFocusVisibleRef.current === false) setDecFocusVisible(false);
-      }
-    });
-
-    return (
-      <div
-        ref={ref}
-        className={clx(classes.root, className, {
-          [classes[size]]: allowedSizes.includes(size),
-          [classes.disabled]: disabled,
-          [classes.fluid]: fluid
+  return (
+    <div
+      ref={ref}
+      className={clx(classes.root, className, {
+        [classes[size]]: allowedSizes.includes(size),
+        [classes.disabled]: disabled,
+        [classes.fluid]: fluid
+      })}
+      {...otherProps}
+    >
+      <button
+        aria-label={`Decrease the value of ${name} number input`}
+        ref={handleDecreaseRef}
+        tabIndex={!permissions.subtraction ? -1 : 0}
+        disabled={!permissions.subtraction}
+        className={clx(classes.action, classes.subtractAction, {
+          [classes.disabled]: !permissions.subtraction,
+          [classes.focusVisible]: isDecFocusVisible
         })}
-        {...otherProps}
+        onClick={onSubtract}
+        onFocus={e => void handleFocus(e, "decrease")}
+        onBlur={e => void handleBlur(e, "decrease")}
       >
-        <button
-          aria-label={`Decrease the value of ${name} number input`}
-          ref={handleDecreaseRef}
-          tabIndex={!permissions.subtraction ? -1 : 0}
-          disabled={!permissions.subtraction}
-          className={clx(classes.action, classes.subtractAction, {
-            [classes.disabled]: !permissions.subtraction,
-            [classes.focusVisible]: isDecFocusVisible
-          })}
-          onClick={onSubtract}
-          onFocus={e => void handleFocus(e, "decrease")}
-          onBlur={e => void handleBlur(e, "decrease")}
-        >
-          <i className={classes.actionIcon}>
-            <Minus />
-          </i>
-        </button>
-        <div className={classes.inputContainer}>
-          <input
-            name={name}
-            id={inputIdProp}
-            ref={handleInputRef}
-            type="text"
-            tabIndex={-1}
-            onChange={changeHandler}
-            value={value}
-            readOnly
-            className={clx(classes.input, inputClassNameProp)}
-            {...otherInputProps}
-          />
-        </div>
-        <button
-          aria-label={`Increase the value of ${name} number input`}
-          ref={handleIncreaseRef}
-          tabIndex={!permissions.addition ? -1 : 0}
-          disabled={!permissions.addition}
-          className={clx(classes.action, classes.addAction, {
-            [classes.disabled]: !permissions.addition,
-            [classes.focusVisible]: isIncFocusVisible
-          })}
-          onClick={onAdd}
-          onFocus={e => void handleFocus(e, "increase")}
-          onBlur={e => void handleBlur(e, "increase")}
-        >
-          <i className={classes.actionIcon}>
-            <Plus />
-          </i>
-        </button>
+        <i className={classes.actionIcon}>
+          <Minus />
+        </i>
+      </button>
+      <div className={classes.inputContainer}>
+        <input
+          name={name}
+          id={inputIdProp}
+          ref={handleInputRef}
+          type="text"
+          tabIndex={-1}
+          onChange={changeHandler}
+          value={value}
+          readOnly
+          className={clx(classes.input, inputClassNameProp)}
+          {...otherInputProps}
+        />
       </div>
-    );
-  })
-);
+      <button
+        aria-label={`Increase the value of ${name} number input`}
+        ref={handleIncreaseRef}
+        tabIndex={!permissions.addition ? -1 : 0}
+        disabled={!permissions.addition}
+        className={clx(classes.action, classes.addAction, {
+          [classes.disabled]: !permissions.addition,
+          [classes.focusVisible]: isIncFocusVisible
+        })}
+        onClick={onAdd}
+        onFocus={e => void handleFocus(e, "increase")}
+        onBlur={e => void handleBlur(e, "increase")}
+      >
+        <i className={classes.actionIcon}>
+          <Plus />
+        </i>
+      </button>
+    </div>
+  );
+});
 
 InputStepper.displayName = componentName;
 

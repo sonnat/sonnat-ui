@@ -48,27 +48,25 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Code = React.memo(
-  React.forwardRef(function Code(props, ref) {
-    const { className, children, codeBlock = false, ...otherProps } = props;
+const Code = React.forwardRef(function Code(props, ref) {
+  const { className, children, codeBlock = false, ...otherProps } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const RootNode = codeBlock ? "pre" : "code";
+  const RootNode = codeBlock ? "pre" : "code";
 
-    return (
-      <RootNode
-        ref={ref}
-        className={clx(classes.root, className, {
-          [classes.codeBlock]: codeBlock
-        })}
-        {...otherProps}
-      >
-        {children}
-      </RootNode>
-    );
-  })
-);
+  return (
+    <RootNode
+      ref={ref}
+      className={clx(classes.root, className, {
+        [classes.codeBlock]: codeBlock
+      })}
+      {...otherProps}
+    >
+      {children}
+    </RootNode>
+  );
+});
 
 Code.displayName = componentName;
 

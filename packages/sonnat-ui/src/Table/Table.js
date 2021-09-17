@@ -48,46 +48,44 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Table = React.memo(
-  React.forwardRef((props, ref) => {
-    const {
-      className,
-      children,
-      caption,
-      htmlTableProps = {},
-      dense = false,
-      borderLess = false,
-      ...otherProps
-    } = props;
+const Table = React.forwardRef((props, ref) => {
+  const {
+    className,
+    children,
+    caption,
+    htmlTableProps = {},
+    dense = false,
+    borderLess = false,
+    ...otherProps
+  } = props;
 
-    const { className: htmlClassNameProp, ...otherTableProps } = htmlTableProps;
+  const { className: htmlClassNameProp, ...otherTableProps } = htmlTableProps;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const context = React.useMemo(() => ({ isDense: dense }), [dense]);
+  const context = React.useMemo(() => ({ isDense: dense }), [dense]);
 
-    return (
-      <div
-        ref={ref}
-        className={clx(className, classes.root, {
-          [classes.dense]: dense,
-          [classes.borderLess]: borderLess
-        })}
-        {...otherProps}
+  return (
+    <div
+      ref={ref}
+      className={clx(className, classes.root, {
+        [classes.dense]: dense,
+        [classes.borderLess]: borderLess
+      })}
+      {...otherProps}
+    >
+      <table
+        className={clx(htmlClassNameProp, classes.table)}
+        {...otherTableProps}
       >
-        <table
-          className={clx(htmlClassNameProp, classes.table)}
-          {...otherTableProps}
-        >
-          {caption && <caption className={classes.caption}>{caption}</caption>}
-          <TableContext.Provider value={context}>
-            {children}
-          </TableContext.Provider>
-        </table>
-      </div>
-    );
-  })
-);
+        {caption && <caption className={classes.caption}>{caption}</caption>}
+        <TableContext.Provider value={context}>
+          {children}
+        </TableContext.Provider>
+      </table>
+    </div>
+  );
+});
 
 Table.displayName = componentName;
 

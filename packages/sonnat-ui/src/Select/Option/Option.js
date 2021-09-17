@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 
 const componentName = "SelectOption";
 
-const SelectOption = React.memo(function SelectOption({ children }) {
+const SelectOption = function SelectOption({ children }) {
   return <React.Fragment>{children}</React.Fragment>;
-});
+};
 
 SelectOption.displayName = componentName;
 

@@ -64,7 +64,7 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const ClipSpinner = React.memo(function ClipSpinner(props) {
+const ClipSpinner = function ClipSpinner(props) {
   const {
     className,
     size,
@@ -124,7 +124,7 @@ const ClipSpinner = React.memo(function ClipSpinner(props) {
       </svg>
     </div>
   );
-});
+};
 
 ClipSpinner.displayName = componentName;
 

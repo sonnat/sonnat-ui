@@ -38,7 +38,7 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const MenuItemGroup = React.memo(function MenuItemGroup(props) {
+const MenuItemGroup = function MenuItemGroup(props) {
   const {
     className,
     titleClassName,
@@ -106,7 +106,7 @@ const MenuItemGroup = React.memo(function MenuItemGroup(props) {
       {children}
     </div>
   );
-});
+};
 
 MenuItemGroup.displayName = componentName;
 

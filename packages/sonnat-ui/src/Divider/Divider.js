@@ -68,7 +68,7 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Divider = React.memo(function Divider(props) {
+const Divider = function Divider(props) {
   const {
     className,
     rootNode: HTMLTag = "hr",
@@ -91,7 +91,7 @@ const Divider = React.memo(function Divider(props) {
       {...otherProps}
     />
   );
-});
+};
 
 Divider.displayName = componentName;
 

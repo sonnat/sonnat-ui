@@ -138,152 +138,150 @@ const register = (name, map) => {
   };
 };
 
-const Dialog = React.memo(
-  React.forwardRef(function Dialog(props, ref) {
-    const {
-      children,
-      className,
-      maxWidth,
-      onOpen,
-      onClose,
-      onBackdropClick,
-      onEscapeKeyUp,
-      "aria-describedby": ariaDescribedBy,
-      "aria-labelledby": ariaLabelledByProp,
-      fullScreen: isFullScreen = false,
-      open: openState = false,
-      ...otherProps
-    } = props;
+const Dialog = React.forwardRef(function Dialog(props, ref) {
+  const {
+    children,
+    className,
+    maxWidth,
+    onOpen,
+    onClose,
+    onBackdropClick,
+    onEscapeKeyUp,
+    "aria-describedby": ariaDescribedBy,
+    "aria-labelledby": ariaLabelledByProp,
+    fullScreen: isFullScreen = false,
+    open: openState = false,
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const nodesMap = new Map();
+  const nodesMap = new Map();
 
-    const [state, setState] = React.useState({
-      hasOverflow: false,
-      bodyHeight: 0
-    });
+  const [state, setState] = React.useState({
+    hasOverflow: false,
+    bodyHeight: 0
+  });
 
-    const dialogRef = React.useRef();
-    const ariaLabelledby = useId(ariaLabelledByProp);
+  const dialogRef = React.useRef();
+  const ariaLabelledby = useId(ariaLabelledByProp);
 
-    const getStatus = () => {
-      if (dialogRef.current && openState) {
-        let headerHeight = 0;
-        let actionBarHeight = 0;
+  const getStatus = () => {
+    if (dialogRef.current && openState) {
+      let headerHeight = 0;
+      let actionBarHeight = 0;
 
-        const header = nodesMap.get("header");
-        const actionBar = nodesMap.get("actionBar");
-        const body = nodesMap.get("body");
+      const header = nodesMap.get("header");
+      const actionBar = nodesMap.get("actionBar");
+      const body = nodesMap.get("body");
 
-        if (body) {
-          const currentHeight = body.style.height;
+      if (body) {
+        const currentHeight = body.style.height;
 
-          if (header) headerHeight = header.offsetHeight;
-          if (actionBar) actionBarHeight = actionBar.offsetHeight;
+        if (header) headerHeight = header.offsetHeight;
+        if (actionBar) actionBarHeight = actionBar.offsetHeight;
 
-          body.style.height = "";
-          const rootHeight = dialogRef.current.offsetHeight;
-          const rootScrollHeight = dialogRef.current.scrollHeight;
-          body.style.height = currentHeight;
+        body.style.height = "";
+        const rootHeight = dialogRef.current.offsetHeight;
+        const rootScrollHeight = dialogRef.current.scrollHeight;
+        body.style.height = currentHeight;
 
-          const newHeight = rootHeight - (headerHeight + actionBarHeight);
+        const newHeight = rootHeight - (headerHeight + actionBarHeight);
 
-          return {
-            bodyHeight: newHeight,
-            hasOverflow: rootScrollHeight > rootHeight
-          };
-        }
-
-        return null;
+        return {
+          bodyHeight: newHeight,
+          hasOverflow: rootScrollHeight > rootHeight
+        };
       }
-    };
 
-    React.useEffect(() => {
-      if (openState) {
-        if (onOpen) onOpen();
-        preventPageScroll();
-
-        const status = getStatus();
-
-        if (status) {
-          setState({
-            bodyHeight: status.bodyHeight,
-            hasOverflow: status.hasOverflow
-          });
-        }
-      } else {
-        if (onClose) onClose();
-        allowPageScroll();
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [openState, onOpen, onClose]);
-
-    const backdropClickHandler = e => {
-      if (onBackdropClick) onBackdropClick(e);
-    };
-
-    const escapeKeyUpHandler = e => {
-      if (e.key.toLowerCase() === "escape" || e.key.toLowerCase() === "esc") {
-        if (onEscapeKeyUp) onEscapeKeyUp(e);
-      }
-    };
-
-    if (!isSsr) {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useEventListener(
-        {
-          element: document,
-          eventName: "keyup",
-          listener: escapeKeyUpHandler
-        },
-        openState && onEscapeKeyUp != null
-      );
+      return null;
     }
+  };
 
-    return (
-      <PortalDestination aria-hidden={!openState}>
-        <div
-          tabIndex={-1}
-          ref={ref}
-          className={clx(classes.root, className, {
-            [classes.fullScreen]: isFullScreen,
-            [classes.open]: openState
-          })}
-          {...otherProps}
-        >
-          <div
-            aria-hidden="true"
-            className={classes.backdrop}
-            onClick={backdropClickHandler}
-          ></div>
-          <div
-            aria-describedby={ariaDescribedBy}
-            aria-labelledby={ariaLabelledby}
-            role="dialog"
-            ref={dialogRef}
-            className={classes.dialog}
-            style={{ maxWidth }}
-          >
-            <DialogContext.Provider
-              value={{
-                nodesMap,
-                registerHeader: register("header", nodesMap),
-                registerBody: register("body", nodesMap),
-                registerActionBar: register("actionBar", nodesMap),
-                id: ariaLabelledby,
-                hasOverflow: state.hasOverflow,
-                bodyHeight: state.bodyHeight
-              }}
-            >
-              {children}
-            </DialogContext.Provider>
-          </div>
-        </div>
-      </PortalDestination>
+  React.useEffect(() => {
+    if (openState) {
+      if (onOpen) onOpen();
+      preventPageScroll();
+
+      const status = getStatus();
+
+      if (status) {
+        setState({
+          bodyHeight: status.bodyHeight,
+          hasOverflow: status.hasOverflow
+        });
+      }
+    } else {
+      if (onClose) onClose();
+      allowPageScroll();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openState, onOpen, onClose]);
+
+  const backdropClickHandler = e => {
+    if (onBackdropClick) onBackdropClick(e);
+  };
+
+  const escapeKeyUpHandler = e => {
+    if (e.key.toLowerCase() === "escape" || e.key.toLowerCase() === "esc") {
+      if (onEscapeKeyUp) onEscapeKeyUp(e);
+    }
+  };
+
+  if (!isSsr) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEventListener(
+      {
+        element: document,
+        eventName: "keyup",
+        listener: escapeKeyUpHandler
+      },
+      openState && onEscapeKeyUp != null
     );
-  })
-);
+  }
+
+  return (
+    <PortalDestination aria-hidden={!openState}>
+      <div
+        tabIndex={-1}
+        ref={ref}
+        className={clx(classes.root, className, {
+          [classes.fullScreen]: isFullScreen,
+          [classes.open]: openState
+        })}
+        {...otherProps}
+      >
+        <div
+          aria-hidden="true"
+          className={classes.backdrop}
+          onClick={backdropClickHandler}
+        ></div>
+        <div
+          aria-describedby={ariaDescribedBy}
+          aria-labelledby={ariaLabelledby}
+          role="dialog"
+          ref={dialogRef}
+          className={classes.dialog}
+          style={{ maxWidth }}
+        >
+          <DialogContext.Provider
+            value={{
+              nodesMap,
+              registerHeader: register("header", nodesMap),
+              registerBody: register("body", nodesMap),
+              registerActionBar: register("actionBar", nodesMap),
+              id: ariaLabelledby,
+              hasOverflow: state.hasOverflow,
+              bodyHeight: state.bodyHeight
+            }}
+          >
+            {children}
+          </DialogContext.Provider>
+        </div>
+      </div>
+    </PortalDestination>
+  );
+});
 
 Dialog.displayName = componentName;
 

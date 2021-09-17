@@ -56,7 +56,7 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const MoonSpinner = React.memo(function MoonSpinner(props) {
+const MoonSpinner = function MoonSpinner(props) {
   const {
     className,
     size,
@@ -107,7 +107,7 @@ const MoonSpinner = React.memo(function MoonSpinner(props) {
       </div>
     </div>
   );
-});
+};
 
 MoonSpinner.displayName = componentName;
 

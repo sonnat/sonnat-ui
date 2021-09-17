@@ -161,118 +161,116 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Snackbar = React.memo(
-  React.forwardRef(function Snackbar(props, ref) {
-    const {
-      text,
-      className,
-      icon,
-      onUndo,
-      onClose,
-      onTransitionEnd,
-      autoHide = false,
-      open = false,
-      undoable = false,
-      closable = false,
-      undoButtonLabel = "Undo",
-      placement = "center",
-      ...otherProps
-    } = props;
+const Snackbar = React.forwardRef(function Snackbar(props, ref) {
+  const {
+    text,
+    className,
+    icon,
+    onUndo,
+    onClose,
+    onTransitionEnd,
+    autoHide = false,
+    open = false,
+    undoable = false,
+    closable = false,
+    undoButtonLabel = "Undo",
+    placement = "center",
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
-    const theme = useTheme();
+  const classes = useStyles();
+  const theme = useTheme();
 
-    const isDarkMode = theme.darkMode;
-    const newTheme = useDarkMode(!isDarkMode, theme);
+  const isDarkMode = theme.darkMode;
+  const newTheme = useDarkMode(!isDarkMode, theme);
 
-    const timeout = React.useRef();
+  const timeout = React.useRef();
 
-    const [isHidden, setHidden] = React.useState(open);
-    const [isOpen, setOpen] = React.useState(false);
+  const [isHidden, setHidden] = React.useState(open);
+  const [isOpen, setOpen] = React.useState(false);
 
-    const isAutoHidable = !!autoHide;
-    const hasNumericAutoCloseInput = typeof autoHide === "number";
+  const isAutoHidable = !!autoHide;
+  const hasNumericAutoCloseInput = typeof autoHide === "number";
 
-    const numWords = text.length ? text.split(" ").length : 0;
+  const numWords = text.length ? text.split(" ").length : 0;
 
-    const autoHideValue = isAutoHidable
-      ? hasNumericAutoCloseInput
-        ? autoHide
-        : numWords * 300 + 1250
-      : 0;
+  const autoHideValue = isAutoHidable
+    ? hasNumericAutoCloseInput
+      ? autoHide
+      : numWords * 300 + 1250
+    : 0;
 
-    React.useEffect(() => {
-      if (open) {
-        setHidden(false);
-        onNextFrame(() => setOpen(true));
+  React.useEffect(() => {
+    if (open) {
+      setHidden(false);
+      onNextFrame(() => setOpen(true));
 
-        if (autoHide) {
-          timeout.current = setTimeout(() => {
-            setOpen(false);
-          }, autoHideValue);
-        }
-      } else setOpen(false);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [open]);
+      if (autoHide) {
+        timeout.current = setTimeout(() => {
+          setOpen(false);
+        }, autoHideValue);
+      }
+    } else setOpen(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
-    const transitionEndHandler = e => {
-      if (onTransitionEnd) onTransitionEnd(e);
-      if (!isOpen) setHidden(true);
-    };
+  const transitionEndHandler = e => {
+    if (onTransitionEnd) onTransitionEnd(e);
+    if (!isOpen) setHidden(true);
+  };
 
-    return !isHidden ? (
-      <ThemeProvider theme={newTheme}>
-        <div
-          ref={ref}
-          role="alert"
-          onTransitionEnd={transitionEndHandler}
-          className={clx(classes.root, classes[placement], className, {
-            [classes.open]: isOpen,
-            [classes.autoHidable]: hasNumericAutoCloseInput && isAutoHidable
-          })}
-          {...otherProps}
-        >
-          {hasNumericAutoCloseInput && (
-            <div className={classes.hideDurationWrapper}>
-              <div
-                className={classes.hideDurationIndicator}
-                style={{ transition: `width ${autoHideValue}ms ease` }}
-              ></div>
-            </div>
-          )}
-          {icon && <i className={classes.icon}>{icon}</i>}
-          <span className={classes.text}>{text}</span>
-          {undoable && (
-            <React.Fragment>
-              <Button
-                size="small"
-                variant="inlined"
-                color="secondary"
-                label={undoButtonLabel}
-                className={classes.undoButton}
-                onClick={onUndo}
-              />
-              {closable && <div className={classes.divider}></div>}
-            </React.Fragment>
-          )}
-          {closable && (
+  return !isHidden ? (
+    <ThemeProvider theme={newTheme}>
+      <div
+        ref={ref}
+        role="alert"
+        onTransitionEnd={transitionEndHandler}
+        className={clx(classes.root, classes[placement], className, {
+          [classes.open]: isOpen,
+          [classes.autoHidable]: hasNumericAutoCloseInput && isAutoHidable
+        })}
+        {...otherProps}
+      >
+        {hasNumericAutoCloseInput && (
+          <div className={classes.hideDurationWrapper}>
+            <div
+              className={classes.hideDurationIndicator}
+              style={{ transition: `width ${autoHideValue}ms ease` }}
+            ></div>
+          </div>
+        )}
+        {icon && <i className={classes.icon}>{icon}</i>}
+        <span className={classes.text}>{text}</span>
+        {undoable && (
+          <React.Fragment>
             <Button
-              aria-label="Close Button"
               size="small"
               variant="inlined"
-              className={classes.closeButton}
-              leadingIcon={<CloseLarge className={classes.closeButtonIcon} />}
-              onClick={() => {
-                if (timeout.current != null) clearTimeout(timeout.current);
-                if (onClose) onClose();
-              }}
+              color="secondary"
+              label={undoButtonLabel}
+              className={classes.undoButton}
+              onClick={onUndo}
             />
-          )}
-        </div>
-      </ThemeProvider>
-    ) : null;
-  })
-);
+            {closable && <div className={classes.divider}></div>}
+          </React.Fragment>
+        )}
+        {closable && (
+          <Button
+            aria-label="Close Button"
+            size="small"
+            variant="inlined"
+            className={classes.closeButton}
+            leadingIcon={<CloseLarge className={classes.closeButtonIcon} />}
+            onClick={() => {
+              if (timeout.current != null) clearTimeout(timeout.current);
+              if (onClose) onClose();
+            }}
+          />
+        )}
+      </div>
+    </ThemeProvider>
+  ) : null;
+});
 
 Snackbar.displayName = componentName;
 

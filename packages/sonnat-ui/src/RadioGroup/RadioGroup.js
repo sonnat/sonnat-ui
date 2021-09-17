@@ -23,54 +23,52 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const RadioGroup = React.memo(
-  React.forwardRef(function RadioGroup(props, ref) {
-    const {
-      name,
-      children,
-      onChange,
-      className,
-      defaultValue,
-      value: valueProp,
-      layoutDirection = "column",
-      ...otherProps
-    } = props;
+const RadioGroup = React.forwardRef(function RadioGroup(props, ref) {
+  const {
+    name,
+    children,
+    onChange,
+    className,
+    defaultValue,
+    value: valueProp,
+    layoutDirection = "column",
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const rootRef = useRef();
-    const forkRef = useForkRef(ref, rootRef);
+  const rootRef = useRef();
+  const forkRef = useForkRef(ref, rootRef);
 
-    const [value, setValue] = useControlled(
-      valueProp,
-      defaultValue,
-      componentName
-    );
+  const [value, setValue] = useControlled(
+    valueProp,
+    defaultValue,
+    componentName
+  );
 
-    const changeListener = e => {
-      if (onChange) onChange(e, e.target.value);
-      setValue(e.target.value);
-    };
+  const changeListener = e => {
+    if (onChange) onChange(e, e.target.value);
+    setValue(e.target.value);
+  };
 
-    return (
-      <RadioGroupContext.Provider
-        value={{ name, value, onChange: changeListener }}
+  return (
+    <RadioGroupContext.Provider
+      value={{ name, value, onChange: changeListener }}
+    >
+      <div
+        role="radiogroup"
+        ref={forkRef}
+        className={clx(classes.root, className, {
+          [classes[layoutDirection]]:
+            allowedDirections.includes(layoutDirection)
+        })}
+        {...otherProps}
       >
-        <div
-          role="radiogroup"
-          ref={forkRef}
-          className={clx(classes.root, className, {
-            [classes[layoutDirection]]:
-              allowedDirections.includes(layoutDirection)
-          })}
-          {...otherProps}
-        >
-          {children}
-        </div>
-      </RadioGroupContext.Provider>
-    );
-  })
-);
+        {children}
+      </div>
+    </RadioGroupContext.Provider>
+  );
+});
 
 RadioGroup.propTypes = {
   children: PropTypes.node,

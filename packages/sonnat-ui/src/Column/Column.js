@@ -82,91 +82,89 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Column = React.memo(
-  React.forwardRef(function Column(props, ref) {
-    const { children, className, all, ...otherProps } = props;
+const Column = React.forwardRef(function Column(props, ref) {
+  const { children, className, all, ...otherProps } = props;
 
-    const classes = useStyles();
-    const theme = useTheme();
+  const classes = useStyles();
+  const theme = useTheme();
 
-    let generatedClasses = [];
+  let generatedClasses = [];
 
-    if (all != null) {
-      if (typeof all === "string" || typeof all === "number") {
-        const size = all;
+  if (all != null) {
+    if (typeof all === "string" || typeof all === "number") {
+      const size = all;
 
+      generatedClasses = [...generatedClasses, classes[`column${size}`]];
+    } else if (typeof all === "object") {
+      const { size, order, offset } = all;
+
+      if (size != null) {
         generatedClasses = [...generatedClasses, classes[`column${size}`]];
-      } else if (typeof all === "object") {
-        const { size, order, offset } = all;
+      }
+
+      if (order != null) {
+        generatedClasses = [...generatedClasses, classes[`order${order}`]];
+      }
+
+      if (offset != null) {
+        generatedClasses = [...generatedClasses, classes[`offset${offset}`]];
+      }
+    }
+  }
+
+  theme.breakpoints.keys.forEach(breakpoint => {
+    const prop = otherProps[breakpoint];
+
+    if (prop != null) {
+      if (typeof prop === "string" || typeof prop === "number") {
+        const size = prop;
+
+        if (size) {
+          generatedClasses = [
+            ...generatedClasses,
+            classes[`${breakpoint}Column${size}`]
+          ];
+        }
+      } else if (typeof prop === "object") {
+        const { size, order, offset } = prop;
 
         if (size != null) {
-          generatedClasses = [...generatedClasses, classes[`column${size}`]];
+          generatedClasses = [
+            ...generatedClasses,
+            classes[`${breakpoint}Column${size}`]
+          ];
         }
 
         if (order != null) {
-          generatedClasses = [...generatedClasses, classes[`order${order}`]];
+          generatedClasses = [
+            ...generatedClasses,
+            classes[`${breakpoint}Order${order}`]
+          ];
         }
 
         if (offset != null) {
-          generatedClasses = [...generatedClasses, classes[`offset${offset}`]];
+          generatedClasses = [
+            ...generatedClasses,
+            classes[`${breakpoint}Offset${offset}`]
+          ];
         }
       }
     }
+  });
 
-    theme.breakpoints.keys.forEach(breakpoint => {
-      const prop = otherProps[breakpoint];
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+  const { xxs, xs, sm, md, lg, xlg, ...otherColumnProps } = otherProps;
 
-      if (prop != null) {
-        if (typeof prop === "string" || typeof prop === "number") {
-          const size = prop;
-
-          if (size) {
-            generatedClasses = [
-              ...generatedClasses,
-              classes[`${breakpoint}Column${size}`]
-            ];
-          }
-        } else if (typeof prop === "object") {
-          const { size, order, offset } = prop;
-
-          if (size != null) {
-            generatedClasses = [
-              ...generatedClasses,
-              classes[`${breakpoint}Column${size}`]
-            ];
-          }
-
-          if (order != null) {
-            generatedClasses = [
-              ...generatedClasses,
-              classes[`${breakpoint}Order${order}`]
-            ];
-          }
-
-          if (offset != null) {
-            generatedClasses = [
-              ...generatedClasses,
-              classes[`${breakpoint}Offset${offset}`]
-            ];
-          }
-        }
-      }
-    });
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-    const { xxs, xs, sm, md, lg, xlg, ...otherColumnProps } = otherProps;
-
-    return (
-      <div
-        ref={ref}
-        className={clx(classes.root, className, ...generatedClasses)}
-        {...otherColumnProps}
-      >
-        {children}
-      </div>
-    );
-  })
-);
+  return (
+    <div
+      ref={ref}
+      className={clx(classes.root, className, ...generatedClasses)}
+      {...otherColumnProps}
+    >
+      {children}
+    </div>
+  );
+});
 
 Column.displayName = componentName;
 

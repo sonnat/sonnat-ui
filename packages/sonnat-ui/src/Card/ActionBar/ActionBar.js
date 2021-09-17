@@ -29,19 +29,17 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const CardActionBar = React.memo(
-  React.forwardRef(function CardActionBar(props, ref) {
-    const { className, children, ...otherProps } = props;
+const CardActionBar = React.forwardRef(function CardActionBar(props, ref) {
+  const { className, children, ...otherProps } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-      <div ref={ref} className={clx(classes.root, className)} {...otherProps}>
-        {children}
-      </div>
-    );
-  })
-);
+  return (
+    <div ref={ref} className={clx(classes.root, className)} {...otherProps}>
+      {children}
+    </div>
+  );
+});
 
 CardActionBar.displayName = componentName;
 

@@ -134,53 +134,51 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Text = React.memo(
-  React.forwardRef(function Text(props, ref) {
-    const {
-      children,
-      className,
-      variant,
-      align,
-      display,
-      weight,
-      rootNode: HTMLTag = "span",
-      textOverflow = "ellipsis",
-      color = "inherit",
-      noWrap = false,
-      ...otherProps
-    } = props;
+const Text = React.forwardRef(function Text(props, ref) {
+  const {
+    children,
+    className,
+    variant,
+    align,
+    display,
+    weight,
+    rootNode: HTMLTag = "span",
+    textOverflow = "ellipsis",
+    color = "inherit",
+    noWrap = false,
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    let displayClass = "";
+  let displayClass = "";
 
-    if (display && allowedDisplays.includes(display)) {
-      displayClass = classes[`${camelCase(display)}Display`] || "";
-    }
+  if (display && allowedDisplays.includes(display)) {
+    displayClass = classes[`${camelCase(display)}Display`] || "";
+  }
 
-    return (
-      <HTMLTag
-        ref={ref}
-        className={clx(
-          className,
-          classes.root,
-          classes[`${color}Color`],
-          classes[`${textOverflow}Overflow`],
-          displayClass,
-          {
-            [classes.noWrap]: noWrap,
-            [classes[variant]]: variant != null && !!variant,
-            [classes[`${weight}Weight`]]: weight != null && !!weight,
-            [classes[`${align}Alignment`]]: align != null && !!align
-          }
-        )}
-        {...otherProps}
-      >
-        {children}
-      </HTMLTag>
-    );
-  })
-);
+  return (
+    <HTMLTag
+      ref={ref}
+      className={clx(
+        className,
+        classes.root,
+        classes[`${color}Color`],
+        classes[`${textOverflow}Overflow`],
+        displayClass,
+        {
+          [classes.noWrap]: noWrap,
+          [classes[variant]]: variant != null && !!variant,
+          [classes[`${weight}Weight`]]: weight != null && !!weight,
+          [classes[`${align}Alignment`]]: align != null && !!align
+        }
+      )}
+      {...otherProps}
+    >
+      {children}
+    </HTMLTag>
+  );
+});
 
 Text.displayName = componentName;
 

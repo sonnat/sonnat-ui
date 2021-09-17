@@ -18,19 +18,17 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const CardBody = React.memo(
-  React.forwardRef(function CardBody(props, ref) {
-    const { className, children, ...otherProps } = props;
+const CardBody = React.forwardRef(function CardBody(props, ref) {
+  const { className, children, ...otherProps } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-      <div ref={ref} className={clx(classes.root, className)} {...otherProps}>
-        {children}
-      </div>
-    );
-  })
-);
+  return (
+    <div ref={ref} className={clx(classes.root, className)} {...otherProps}>
+      {children}
+    </div>
+  );
+});
 
 CardBody.displayName = componentName;
 

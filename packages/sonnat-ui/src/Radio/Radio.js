@@ -214,295 +214,291 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Radio = React.memo(
-  React.forwardRef(function Radio(props, ref) {
-    const {
-      className,
-      onChange,
-      onFocus,
-      onBlur,
-      onKeyDown,
-      onKeyUp,
-      label,
-      id: idProp,
-      defaultChecked: defaultCheckedProp,
-      value: valueProp,
-      name: nameProp,
-      checked: checkedProp,
-      inputProps = {},
-      labelProps = {},
-      readOnly = false,
-      hasError = false,
-      disabled = false,
-      required = false,
-      autoFocus: autoFocusProp = false,
-      size: sizeProp = "medium",
-      ...otherProps
-    } = props;
+const Radio = React.forwardRef(function Radio(props, ref) {
+  const {
+    className,
+    onChange,
+    onFocus,
+    onBlur,
+    onKeyDown,
+    onKeyUp,
+    label,
+    id: idProp,
+    defaultChecked: defaultCheckedProp,
+    value: valueProp,
+    name: nameProp,
+    checked: checkedProp,
+    inputProps = {},
+    labelProps = {},
+    readOnly = false,
+    hasError = false,
+    disabled = false,
+    required = false,
+    autoFocus: autoFocusProp = false,
+    size: sizeProp = "medium",
+    ...otherProps
+  } = props;
 
-    const {
-      className: inputClassNameProp,
-      id: inputId,
-      ref: inputRefProp,
-      name: inputNameProp,
-      value: inputValueProp,
-      onChange: inputOnChangeProp,
-      onFocus: inputOnFocusProp,
-      onBlur: inputOnBlurProp,
-      autoFocus: inputAutoFocus = false,
-      readOnly: inputReadOnly = false,
-      checked: inputCheckedProp,
-      defaultChecked: inputDefaultChecked,
-      ...otherInputProps
-    } = inputProps;
+  const {
+    className: inputClassNameProp,
+    id: inputId,
+    ref: inputRefProp,
+    name: inputNameProp,
+    value: inputValueProp,
+    onChange: inputOnChangeProp,
+    onFocus: inputOnFocusProp,
+    onBlur: inputOnBlurProp,
+    autoFocus: inputAutoFocus = false,
+    readOnly: inputReadOnly = false,
+    checked: inputCheckedProp,
+    defaultChecked: inputDefaultChecked,
+    ...otherInputProps
+  } = inputProps;
 
-    const { className: labelClassName, ...otherLabelProps } = labelProps;
+  const { className: labelClassName, ...otherLabelProps } = labelProps;
 
-    const { current: defaultChecked } = React.useRef(
-      checkedProp != null
-        ? undefined
-        : defaultCheckedProp != null
-        ? defaultCheckedProp
-        : false
+  const { current: defaultChecked } = React.useRef(
+    checkedProp != null
+      ? undefined
+      : defaultCheckedProp != null
+      ? defaultCheckedProp
+      : false
+  );
+
+  const inputRef = React.useRef();
+  const inputRefHandler = useForkRef(inputRef, inputRefProp);
+
+  const classes = useStyles();
+  const radioGroup = useRadioGroup();
+  const formControl = useFormControl();
+
+  const [checked, setChecked] = useControlled(
+    checkedProp,
+    defaultChecked,
+    componentName
+  );
+
+  const isMounted = useIsMounted();
+
+  const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+
+  const isReadOnly = !!inputReadOnly || !!readOnly;
+
+  if (inputCheckedProp != null) {
+    // eslint-disable-next-line no-console
+    console.error(
+      "Sonnat: do not pass the `checked` prop as a `inputProps` property!"
     );
-
-    const inputRef = React.useRef();
-    const inputRefHandler = useForkRef(inputRef, inputRefProp);
-
-    const classes = useStyles();
-    const radioGroup = useRadioGroup();
-    const formControl = useFormControl();
-
-    const [checked, setChecked] = useControlled(
-      checkedProp,
-      defaultChecked,
-      componentName
+  }
+  if (inputDefaultChecked != null) {
+    // eslint-disable-next-line no-console
+    console.error(
+      "Sonnat: do not pass the `defaultChecked` prop as a `inputProps` property!"
     );
+  }
+  if (inputNameProp != null && nameProp != null) {
+    // eslint-disable-next-line no-console
+    console.error(
+      [
+        "Sonnat: You are passing the `name` prop twice." +
+          "(one as `name` prop and the other one as a property of `inputProps`)",
+        `We are assuming \`name="${inputNameProp}"\`!`
+      ].join("\n")
+    );
+  }
+  if (inputValueProp != null && valueProp != null) {
+    // eslint-disable-next-line no-console
+    console.error(
+      [
+        "Sonnat: You are passing the `value` prop twice." +
+          "(one as `value` prop and the other one as a property of `inputProps`)",
+        `We are assuming \`value="${inputValueProp}"\`!`
+      ].join("\n")
+    );
+  }
 
-    const isMounted = useIsMounted();
+  const isFormControlFocused = formControl ? !!formControl.focusedState : false;
 
-    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+  const autoFocus = isFormControlFocused || !!inputAutoFocus || autoFocusProp;
 
-    const isReadOnly = !!inputReadOnly || !!readOnly;
+  const name = inputNameProp || nameProp;
+  const value = inputValueProp || valueProp;
 
-    if (inputCheckedProp != null) {
-      // eslint-disable-next-line no-console
-      console.error(
-        "Sonnat: do not pass the `checked` prop as a `inputProps` property!"
-      );
-    }
-    if (inputDefaultChecked != null) {
-      // eslint-disable-next-line no-console
-      console.error(
-        "Sonnat: do not pass the `defaultChecked` prop as a `inputProps` property!"
-      );
-    }
-    if (inputNameProp != null && nameProp != null) {
-      // eslint-disable-next-line no-console
-      console.error(
-        [
-          "Sonnat: You are passing the `name` prop twice." +
-            "(one as `name` prop and the other one as a property of `inputProps`)",
-          `We are assuming \`name="${inputNameProp}"\`!`
-        ].join("\n")
-      );
-    }
-    if (inputValueProp != null && valueProp != null) {
-      // eslint-disable-next-line no-console
-      console.error(
-        [
-          "Sonnat: You are passing the `value` prop twice." +
-            "(one as `value` prop and the other one as a property of `inputProps`)",
-          `We are assuming \`value="${inputValueProp}"\`!`
-        ].join("\n")
-      );
-    }
+  const checkedState = radioGroup ? radioGroup.value === value : checked;
 
-    const isFormControlFocused = formControl
-      ? !!formControl.focusedState
-      : false;
-
-    const autoFocus = isFormControlFocused || !!inputAutoFocus || autoFocusProp;
-
-    const name = inputNameProp || nameProp;
-    const value = inputValueProp || valueProp;
-
-    const checkedState = radioGroup ? radioGroup.value === value : checked;
-
-    const controlProps = {
-      name: radioGroup ? radioGroup.name : name,
-      disabled: formControl ? formControl.disabled : disabled,
-      hasError: formControl ? formControl.hasError : hasError,
-      required: formControl ? formControl.required : required,
-      onFocus: e => {
-        if (isMounted()) {
-          if (!(controlProps.disabled || isReadOnly)) {
-            if (onFocus) onFocus(e);
-            if (inputOnFocusProp) inputOnFocusProp(e);
-            if (formControl && formControl.onFocus) formControl.onFocus(e);
-          }
-        }
-      },
-      onBlur: e => {
-        if (isMounted()) {
-          if (!(controlProps.disabled || isReadOnly)) {
-            if (onBlur) onBlur(e);
-            if (inputOnBlurProp) inputOnBlurProp(e);
-            if (formControl && formControl.onBlur) formControl.onBlur(e);
-          }
-        }
-      },
-      onChange: e => {
-        if (isMounted()) {
-          if (!(controlProps.disabled || isReadOnly)) {
-            if (onChange) onChange(e, true);
-            if (inputOnChangeProp) inputOnChangeProp(e, true);
-            if (radioGroup && radioGroup.onChange) radioGroup.onChange(e);
-            setChecked(true);
-          }
+  const controlProps = {
+    name: radioGroup ? radioGroup.name : name,
+    disabled: formControl ? formControl.disabled : disabled,
+    hasError: formControl ? formControl.hasError : hasError,
+    required: formControl ? formControl.required : required,
+    onFocus: e => {
+      if (isMounted()) {
+        if (!(controlProps.disabled || isReadOnly)) {
+          if (onFocus) onFocus(e);
+          if (inputOnFocusProp) inputOnFocusProp(e);
+          if (formControl && formControl.onFocus) formControl.onFocus(e);
         }
       }
-    };
-
-    const id = inputId
-      ? inputId
-      : controlProps.name && value
-      ? `radiobox-${controlProps.name}-${value}`
-      : idProp
-      ? `radiobox-${idProp}`
-      : undefined;
-
-    const {
-      isFocusVisibleRef,
-      onBlur: handleBlurVisible,
-      onFocus: handleFocusVisible,
-      ref: focusVisibleRef
-    } = useIsFocusVisible();
-
-    const rootRef = React.useRef(null);
-
-    const handleOwnRef = useForkRef(focusVisibleRef, rootRef);
-    const handleRef = useForkRef(ref, handleOwnRef);
-
-    const [isFocused, setFocused] = React.useState(autoFocus);
-
-    // prevent component from being focused if it is disabled
-    React.useEffect(() => {
-      if (controlProps.disabled && isFocused) {
-        setFocused(false);
+    },
+    onBlur: e => {
+      if (isMounted()) {
+        if (!(controlProps.disabled || isReadOnly)) {
+          if (onBlur) onBlur(e);
+          if (inputOnBlurProp) inputOnBlurProp(e);
+          if (formControl && formControl.onBlur) formControl.onBlur(e);
+        }
       }
-    }, [controlProps.disabled, isFocused]);
-
-    // initially focus the component
-    useEnhancedEffect(() => {
-      if (!(controlProps.disabled || isReadOnly)) {
-        if (autoFocus && rootRef.current) rootRef.current.focus();
+    },
+    onChange: e => {
+      if (isMounted()) {
+        if (!(controlProps.disabled || isReadOnly)) {
+          if (onChange) onChange(e, true);
+          if (inputOnChangeProp) inputOnChangeProp(e, true);
+          if (radioGroup && radioGroup.onChange) radioGroup.onChange(e);
+          setChecked(true);
+        }
       }
-    }, [autoFocus]);
+    }
+  };
 
-    React.useEffect(() => {
-      isFocusVisibleRef.current = isFocused;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isFocused]);
+  const id = inputId
+    ? inputId
+    : controlProps.name && value
+    ? `radiobox-${controlProps.name}-${value}`
+    : idProp
+    ? `radiobox-${idProp}`
+    : undefined;
 
-    const handleFocus = useEventCallback(event => {
-      // Fix for https://github.com/facebook/react/issues/7769
-      if (!rootRef.current) rootRef.current = event.currentTarget;
+  const {
+    isFocusVisibleRef,
+    onBlur: handleBlurVisible,
+    onFocus: handleFocusVisible,
+    ref: focusVisibleRef
+  } = useIsFocusVisible();
 
-      handleFocusVisible(event);
+  const rootRef = React.useRef(null);
 
-      if (isFocusVisibleRef.current === true) setFocused(true);
-      controlProps.onFocus(event);
-    });
+  const handleOwnRef = useForkRef(focusVisibleRef, rootRef);
+  const handleRef = useForkRef(ref, handleOwnRef);
 
-    const handleBlur = useEventCallback(event => {
-      handleBlurVisible(event);
+  const [isFocused, setFocused] = React.useState(autoFocus);
 
-      if (isFocusVisibleRef.current === false) setFocused(false);
-      controlProps.onBlur(event);
-    });
+  // prevent component from being focused if it is disabled
+  React.useEffect(() => {
+    if (controlProps.disabled && isFocused) {
+      setFocused(false);
+    }
+  }, [controlProps.disabled, isFocused]);
 
-    const keyDownRef = React.useRef(false);
+  // initially focus the component
+  useEnhancedEffect(() => {
+    if (!(controlProps.disabled || isReadOnly)) {
+      if (autoFocus && rootRef.current) rootRef.current.focus();
+    }
+  }, [autoFocus]);
 
-    const handleKeyDown = useEventCallback(event => {
-      if (keyDownRef.current === false && isFocused && event.key === " ") {
-        keyDownRef.current = true;
-      }
+  React.useEffect(() => {
+    isFocusVisibleRef.current = isFocused;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFocused]);
 
-      if (event.target === event.currentTarget && event.key === " ") {
-        event.preventDefault();
-      }
+  const handleFocus = useEventCallback(event => {
+    // Fix for https://github.com/facebook/react/issues/7769
+    if (!rootRef.current) rootRef.current = event.currentTarget;
 
-      if (onKeyDown) onKeyDown(event);
-    });
+    handleFocusVisible(event);
 
-    const handleKeyUp = useEventCallback(event => {
-      if (!event.defaultPrevented && isFocused && event.key === " ") {
-        keyDownRef.current = false;
-      }
+    if (isFocusVisibleRef.current === true) setFocused(true);
+    controlProps.onFocus(event);
+  });
 
-      if (onKeyUp) onKeyUp(event);
+  const handleBlur = useEventCallback(event => {
+    handleBlurVisible(event);
 
-      // Keyboard accessibility for non interactive elements
-      if (
-        event.target === event.currentTarget &&
-        event.key === " " &&
-        !event.defaultPrevented &&
-        !checkedState
-      ) {
-        controlProps.onChange(event);
-      }
-    });
+    if (isFocusVisibleRef.current === false) setFocused(false);
+    controlProps.onBlur(event);
+  });
 
-    return (
-      <div
-        role="button"
-        tabIndex={disabled ? -1 : 0}
-        aria-disabled={controlProps.disabled}
-        ref={handleRef}
-        onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        className={clx(classes.root, className, classes[size], {
-          [classes.disabled]: controlProps.disabled,
-          [classes.focused]: isFocused,
-          [classes.checked]: checkedState,
-          [classes.checkedDisabled]: checkedState && controlProps.disabled,
-          [classes.checkedFocused]: checkedState && isFocused
-        })}
-        {...otherProps}
-      >
-        <div className={classes.cell}>
-          <input
-            id={id}
-            tabIndex={-1}
-            name={controlProps.name}
-            value={value}
-            disabled={controlProps.disabled}
-            required={controlProps.required}
-            className={clx(classes.input, inputClassNameProp)}
-            onChange={controlProps.onChange}
-            type="radio"
-            checked={checkedState}
-            ref={inputRefHandler}
-            {...otherInputProps}
-          />
-          <div className={classes.button}></div>
-        </div>
-        {label && (
-          <label
-            className={clx(classes.label, labelClassName)}
-            htmlFor={id}
-            {...otherLabelProps}
-          >
-            {label}
-          </label>
-        )}
+  const keyDownRef = React.useRef(false);
+
+  const handleKeyDown = useEventCallback(event => {
+    if (keyDownRef.current === false && isFocused && event.key === " ") {
+      keyDownRef.current = true;
+    }
+
+    if (event.target === event.currentTarget && event.key === " ") {
+      event.preventDefault();
+    }
+
+    if (onKeyDown) onKeyDown(event);
+  });
+
+  const handleKeyUp = useEventCallback(event => {
+    if (!event.defaultPrevented && isFocused && event.key === " ") {
+      keyDownRef.current = false;
+    }
+
+    if (onKeyUp) onKeyUp(event);
+
+    // Keyboard accessibility for non interactive elements
+    if (
+      event.target === event.currentTarget &&
+      event.key === " " &&
+      !event.defaultPrevented &&
+      !checkedState
+    ) {
+      controlProps.onChange(event);
+    }
+  });
+
+  return (
+    <div
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      aria-disabled={controlProps.disabled}
+      ref={handleRef}
+      onKeyDown={handleKeyDown}
+      onKeyUp={handleKeyUp}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      className={clx(classes.root, className, classes[size], {
+        [classes.disabled]: controlProps.disabled,
+        [classes.focused]: isFocused,
+        [classes.checked]: checkedState,
+        [classes.checkedDisabled]: checkedState && controlProps.disabled,
+        [classes.checkedFocused]: checkedState && isFocused
+      })}
+      {...otherProps}
+    >
+      <div className={classes.cell}>
+        <input
+          id={id}
+          tabIndex={-1}
+          name={controlProps.name}
+          value={value}
+          disabled={controlProps.disabled}
+          required={controlProps.required}
+          className={clx(classes.input, inputClassNameProp)}
+          onChange={controlProps.onChange}
+          type="radio"
+          checked={checkedState}
+          ref={inputRefHandler}
+          {...otherInputProps}
+        />
+        <div className={classes.button}></div>
       </div>
-    );
-  })
-);
+      {label && (
+        <label
+          className={clx(classes.label, labelClassName)}
+          htmlFor={id}
+          {...otherLabelProps}
+        >
+          {label}
+        </label>
+      )}
+    </div>
+  );
+});
 
 Radio.displayName = componentName;
 

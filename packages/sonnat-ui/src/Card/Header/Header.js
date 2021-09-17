@@ -34,20 +34,18 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const CardHeader = React.memo(
-  React.forwardRef(function CardHeader(props, ref) {
-    const { className, children, action, ...otherProps } = props;
+const CardHeader = React.forwardRef(function CardHeader(props, ref) {
+  const { className, children, action, ...otherProps } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-      <div ref={ref} className={clx(classes.root, className)} {...otherProps}>
-        <div className={classes.body}>{children}</div>
-        {action && <div className={classes.action}>{action}</div>}
-      </div>
-    );
-  })
-);
+  return (
+    <div ref={ref} className={clx(classes.root, className)} {...otherProps}>
+      <div className={classes.body}>{children}</div>
+      {action && <div className={classes.action}>{action}</div>}
+    </div>
+  );
+});
 
 CardHeader.displayName = componentName;
 

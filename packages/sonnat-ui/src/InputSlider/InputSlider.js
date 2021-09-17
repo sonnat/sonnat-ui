@@ -280,855 +280,842 @@ const getClosestHandle = (xFromLeft, supOffset, infOffset) => {
       };
 };
 
-const InputSlider = React.memo(
-  React.forwardRef(function InputSlider(props, ref) {
-    const {
-      className,
-      // Exclude from the `otherProps` property.
-      /* eslint-disable */
-      targetRef,
-      height: rootHeight,
-      onClick: onClickProp,
-      /* eslint-enable */
-      onChange,
-      onMount,
-      onDismount,
-      step: stepProp,
-      max: maxProp,
-      min: minProp,
-      width: rootWidth = 0,
-      value: valueProp,
-      defaultValue: defaultValueProp,
-      onDragEnd: onDragEndProp,
-      onDragStart: onDragStartProp,
-      onDragging: onDraggingProp,
-      variant: variantProp,
-      fractionDigits = 4,
-      disabled = false,
-      ...otherProps
-    } = props;
+const InputSlider = React.forwardRef(function InputSlider(props, ref) {
+  const {
+    className,
+    // Exclude from the `otherProps` property.
+    /* eslint-disable */
+    targetRef,
+    height: rootHeight,
+    onClick: onClickProp,
+    /* eslint-enable */
+    onChange,
+    onMount,
+    onDismount,
+    step: stepProp,
+    max: maxProp,
+    min: minProp,
+    width: rootWidth = 0,
+    value: valueProp,
+    defaultValue: defaultValueProp,
+    onDragEnd: onDragEndProp,
+    onDragStart: onDragStartProp,
+    onDragging: onDraggingProp,
+    variant: variantProp,
+    fractionDigits = 4,
+    disabled = false,
+    ...otherProps
+  } = props;
 
-    const min = useConstantProp(minProp, 0, { componentName, propName: "min" });
-    const max = useConstantProp(maxProp, 100, {
-      componentName,
-      propName: "max"
-    });
+  const min = useConstantProp(minProp, 0, { componentName, propName: "min" });
+  const max = useConstantProp(maxProp, 100, {
+    componentName,
+    propName: "max"
+  });
 
-    const step = useConstantProp(stepProp, undefined, {
-      componentName,
-      propName: "step"
-    });
+  const step = useConstantProp(stepProp, undefined, {
+    componentName,
+    propName: "step"
+  });
 
-    const variant = useConstantProp(variantProp, "continuous", {
-      componentName,
-      propName: "variant"
-    });
+  const variant = useConstantProp(variantProp, "continuous", {
+    componentName,
+    propName: "variant"
+  });
 
-    const { current: isDiscrete } = React.useRef(variant === "discrete");
-    const { current: stepsCount } = React.useRef(
-      Math.floor(isDiscrete ? (max - min) / step + 1 : 0)
+  const { current: isDiscrete } = React.useRef(variant === "discrete");
+  const { current: stepsCount } = React.useRef(
+    Math.floor(isDiscrete ? (max - min) / step + 1 : 0)
+  );
+
+  const bidirectionalCandidate =
+    (Array.isArray(valueProp) && valueProp.length === 2) ||
+    (Array.isArray(defaultValueProp) && defaultValueProp.length === 2);
+
+  if (max <= min) {
+    throw new Error(
+      "[Sonnat]: `max` prop must be greater than and not equal to `min` prop!"
     );
+  }
 
-    const bidirectionalCandidate =
-      (Array.isArray(valueProp) && valueProp.length === 2) ||
-      (Array.isArray(defaultValueProp) && defaultValueProp.length === 2);
+  if (Array.isArray(valueProp) && valueProp.length > 2) {
+    throw new Error(
+      "[Sonnat]: The array version of `value` prop only accepts two elements! (it's a touple)"
+    );
+  }
 
-    if (max <= min) {
+  if (isDiscrete && step == null) {
+    throw new Error(
+      '[Sonnat]: `step` prop is required when `variant="discrete"`!'
+    );
+  }
+
+  const { current: defaultValue } = React.useRef(
+    valueProp != null
+      ? undefined
+      : defaultValueProp != null
+      ? bidirectionalCandidate
+        ? [
+            clamp(defaultValueProp[0], min, max),
+            clamp(defaultValueProp[1], min, max)
+          ]
+        : clamp(defaultValueProp, min, max)
+      : 0
+  );
+
+  const [value, setValue] = useControlled(
+    valueProp,
+    defaultValue,
+    componentName
+  );
+
+  const isBidirectional = useConstantProp(bidirectionalCandidate, false, {
+    componentName,
+    errorHandler: () => {
+      return [
+        `You are changing the ${
+          isBidirectional ? "bi" : "uni"
+        }directional state of ${componentName} to be ${
+          isBidirectional ? "uni" : "bi"
+        }bidirectional.`,
+        "This behaviour is forbidden!" +
+          "Do not change the `number` value to `number[]` (or vice versa)" +
+          "after component being initialized!"
+      ].join("\n");
+    }
+  });
+
+  if (isBidirectional) {
+    const inf = value[0];
+    const sup = value[1];
+
+    if (!(min <= inf && inf <= max) || !(min <= sup && sup <= max)) {
       throw new Error(
-        "[Sonnat]: `max` prop must be greater than and not equal to `min` prop!"
+        `[Sonnat][${componentName}]: \`value\` and \`defaultValue\` props must be within range \`[${min}, ${max}]\`!`
       );
     }
 
-    if (Array.isArray(valueProp) && valueProp.length > 2) {
+    if (!(inf <= sup)) {
       throw new Error(
-        "[Sonnat]: The array version of `value` prop only accepts two elements! (it's a touple)"
+        `[Sonnat][${componentName}]: \`value[1]\` must be greater than or equal to \`value[0]\`!`
       );
     }
 
-    if (isDiscrete && step == null) {
+    if (inf < 0 || sup < 0) {
       throw new Error(
-        '[Sonnat]: `step` prop is required when `variant="discrete"`!'
+        `[Sonnat][${componentName}]: \`value\` accepts only positive numbers!`
+      );
+    }
+  } else {
+    if (!(min <= value && value <= max)) {
+      throw new Error(
+        `[Sonnat][${componentName}]: \`value\` and \`defaultValue\` props must be within range \`[${min}, ${max}]\`!`
       );
     }
 
-    const { current: defaultValue } = React.useRef(
-      valueProp != null
-        ? undefined
-        : defaultValueProp != null
-        ? bidirectionalCandidate
-          ? [
-              clamp(defaultValueProp[0], min, max),
-              clamp(defaultValueProp[1], min, max)
-            ]
-          : clamp(defaultValueProp, min, max)
-        : 0
-    );
+    if (value < 0) {
+      throw new Error(
+        `[Sonnat][${componentName}]: \`value\` accepts only positive numbers!`
+      );
+    }
+  }
 
-    const [value, setValue] = useControlled(
-      valueProp,
-      defaultValue,
-      componentName
-    );
+  const parentRef = React.useRef();
 
-    const isBidirectional = useConstantProp(bidirectionalCandidate, false, {
-      componentName,
-      errorHandler: () => {
-        return [
-          `You are changing the ${
-            isBidirectional ? "bi" : "uni"
-          }directional state of ${componentName} to be ${
-            isBidirectional ? "uni" : "bi"
-          }bidirectional.`,
-          "This behaviour is forbidden!" +
-            "Do not change the `number` value to `number[]` (or vice versa)" +
-            "after component being initialized!"
-        ].join("\n");
-      }
-    });
+  const supRef = React.useRef();
+  const infRef = React.useRef();
+
+  const trackRef = React.useRef();
+  const stepsRef = React.useRef([]);
+
+  const rootRefHandler = useForkRef(parentRef, ref);
+
+  const isInitialRender = React.useRef(true);
+  const isInitiated = React.useRef(false);
+
+  const isMounted = useIsMounted();
+
+  const [transitions, setTransitions] = React.useState(undefined);
+  const [isDragStarted, setDragStarted] = React.useState(false);
+  const [isClickAllowed, setClickAllowed] = React.useState(true);
+  const [currentHandle, setCurrentHandle] = React.useState("sup");
+  const [parentWidth, setParentWidth] = React.useState(rootWidth);
+
+  const [infState, setInfState] = React.useState({
+    active: false,
+    currentX: 0,
+    initialX: 0,
+    offsetX: 0,
+    zIndex: 1,
+    left: 0
+  });
+
+  const [supState, setSupState] = React.useState({
+    active: false,
+    currentX: 0,
+    initialX: 0,
+    offsetX: 0,
+    zIndex: 1,
+    right: 0
+  });
+
+  const [trackState, setTrackState] = React.useState({
+    left: 0,
+    right: 0
+  });
+
+  const classes = useStyles();
+  const handleSelector = `.${classes.handle}`;
+
+  React.useEffect(() => {
+    if (onMount) onMount();
+    return () => {
+      if (onDismount) onDismount();
+    };
+  }, [onMount, onDismount]);
+
+  // update parentWidth when resizeDetector detects any changes in width of the parent
+  React.useEffect(() => {
+    let newWidth = 0;
+
+    if (isMounted() && parentRef.current) {
+      newWidth = parentRef.current.getBoundingClientRect().width;
+    } else if (rootWidth) newWidth = rootWidth - 36;
+
+    setParentWidth(newWidth);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMounted, rootWidth]);
+
+  const prevParentWidth = usePreviousValue(parentWidth);
+  const widthPerStep = parentWidth / (stepsCount - 1);
+
+  const disableTransitions = () => {
+    setTransitions("all 0ms ease");
+  };
+
+  const enableTransitions = () => {
+    setTransitions(undefined);
+  };
+
+  const steps = React.useMemo(
+    () =>
+      isDiscrete
+        ? createSteps(stepsCount, stepsRef.current, widthPerStep, classes.step)
+        : null,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [widthPerStep, classes.step]
+  );
+
+  const calculateValue = track => {
+    let newValue;
 
     if (isBidirectional) {
-      const inf = value[0];
-      const sup = value[1];
-
-      if (!(min <= inf && inf <= max) || !(min <= sup && sup <= max)) {
-        throw new Error(
-          `[Sonnat][${componentName}]: \`value\` and \`defaultValue\` props must be within range \`[${min}, ${max}]\`!`
-        );
-      }
-
-      if (!(inf <= sup)) {
-        throw new Error(
-          `[Sonnat][${componentName}]: \`value[1]\` must be greater than or equal to \`value[0]\`!`
-        );
-      }
-
-      if (inf < 0 || sup < 0) {
-        throw new Error(
-          `[Sonnat][${componentName}]: \`value\` accepts only positive numbers!`
-        );
-      }
+      newValue = [
+        parseFloat(
+          map(track.left, 0, parentWidth, min, max).toFixed(fractionDigits)
+        ),
+        parseFloat(
+          (max - map(track.right, 0, parentWidth, min, max)).toFixed(
+            fractionDigits
+          )
+        )
+      ];
     } else {
-      if (!(min <= value && value <= max)) {
-        throw new Error(
-          `[Sonnat][${componentName}]: \`value\` and \`defaultValue\` props must be within range \`[${min}, ${max}]\`!`
-        );
-      }
-
-      if (value < 0) {
-        throw new Error(
-          `[Sonnat][${componentName}]: \`value\` accepts only positive numbers!`
-        );
-      }
+      newValue = max - map(track.right, 0, parentWidth, min, max);
+      newValue = parseFloat(newValue.toFixed(fractionDigits));
     }
 
-    const parentRef = React.useRef();
+    return newValue;
+  };
 
-    const supRef = React.useRef();
-    const infRef = React.useRef();
+  const updateHandles = (value, checkSteps = false) => {
+    let supPos = 0;
+    let infPos = 0;
 
-    const trackRef = React.useRef();
-    const stepsRef = React.useRef([]);
+    if (!isInitiated.current) isInitiated.current = true;
 
-    const rootRefHandler = useForkRef(parentRef, ref);
+    if (isBidirectional) {
+      supPos = map(value[1], min, max, parentWidth, 0);
+      infPos = map(value[0], min, max, 0, parentWidth);
+    } else {
+      supPos = map(value, min, max, parentWidth, 0);
+    }
 
-    const isInitialRender = React.useRef(true);
-    const isInitiated = React.useRef(false);
+    if (isDiscrete && checkSteps) {
+      const supStepNumber = Math.round(
+        map(supPos / step, 0, parentWidth / step, 0, stepsCount - 1)
+      );
+      const infStepNumber = Math.round(
+        map(infPos / step, 0, parentWidth / step, 0, stepsCount - 1)
+      );
 
-    const isMounted = useIsMounted();
+      const supStepPosition = getStepPosition(supStepNumber, stepsRef.current);
+      const infStepPosition = getStepPosition(infStepNumber, stepsRef.current);
 
-    const [transitions, setTransitions] = React.useState(undefined);
-    const [isDragStarted, setDragStarted] = React.useState(false);
-    const [isClickAllowed, setClickAllowed] = React.useState(true);
-    const [currentHandle, setCurrentHandle] = React.useState("sup");
-    const [parentWidth, setParentWidth] = React.useState(rootWidth);
+      if (supStepPosition !== null) supPos = supStepPosition;
+      if (infStepPosition !== null) infPos = infStepPosition;
+    }
 
-    const [infState, setInfState] = React.useState({
-      active: false,
-      currentX: 0,
-      initialX: 0,
-      offsetX: 0,
-      zIndex: 1,
-      left: 0
-    });
+    setInfState(state => ({
+      ...state,
+      currentX: infPos,
+      offsetX: infPos,
+      left: infPos
+    }));
+    setSupState(state => ({
+      ...state,
+      currentX: -supPos,
+      offsetX: -supPos,
+      right: supPos
+    }));
+    setTrackState({ left: infPos, right: supPos });
+  };
 
-    const [supState, setSupState] = React.useState({
-      active: false,
-      currentX: 0,
-      initialX: 0,
-      offsetX: 0,
-      zIndex: 1,
-      right: 0
-    });
+  const onResize = () => {
+    updateHandles(value, !isInitiated.current);
+  };
 
-    const [trackState, setTrackState] = React.useState({
-      left: 0,
-      right: 0
-    });
+  React.useEffect(() => {
+    if (parentWidth && parentWidth !== prevParentWidth) {
+      if (!isInitialRender.current) {
+        setTimeout(() => {
+          onResize();
+        }, TRANSITION_DURATION_IN_MILIS);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [parentWidth, prevParentWidth]);
 
-    const classes = useStyles();
-    const handleSelector = `.${classes.handle}`;
+  const clickListener = e => {
+    const clientX = e.clientX;
+    const isHandleClicked = e.target.closest(handleSelector) !== null;
 
-    React.useEffect(() => {
-      if (onMount) onMount();
-      return () => {
-        if (onDismount) onDismount();
-      };
-    }, [onMount, onDismount]);
+    const parentRect = parentRef.current.getBoundingClientRect();
+    const handleState = currentHandle === "sup" ? supState : infState;
 
-    // update parentWidth when resizeDetector detects any changes in width of the parent
-    React.useEffect(() => {
-      let newWidth = 0;
+    if (!handleState.active && !isHandleClicked) {
+      if (e.preventDefault) e.preventDefault();
+      else e.returnValue = null;
 
-      if (isMounted() && parentRef.current) {
-        newWidth = parentRef.current.getBoundingClientRect().width;
-      } else if (rootWidth) newWidth = rootWidth - 36;
+      let xFromLeft = clamp(clientX - parentRect.left, 0, parentWidth);
+      let xFromRight = parentWidth - xFromLeft;
 
-      setParentWidth(newWidth);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isMounted, rootWidth]);
+      const horizontalOffset = getHorizontalOffset(
+        parentWidth,
+        supState.right,
+        infState.left
+      );
 
-    const prevParentWidth = usePreviousValue(parentWidth);
-    const widthPerStep = parentWidth / (stepsCount - 1);
-
-    const disableTransitions = () => {
-      setTransitions("all 0ms ease");
-    };
-
-    const enableTransitions = () => {
-      setTransitions(undefined);
-    };
-
-    const steps = React.useMemo(
-      () =>
-        isDiscrete
-          ? createSteps(
-              stepsCount,
-              stepsRef.current,
-              widthPerStep,
-              classes.step
-            )
-          : null,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      [widthPerStep, classes.step]
-    );
-
-    const calculateValue = track => {
-      let newValue;
-
-      if (isBidirectional) {
-        newValue = [
-          parseFloat(
-            map(track.left, 0, parentWidth, min, max).toFixed(fractionDigits)
-          ),
-          parseFloat(
-            (max - map(track.right, 0, parentWidth, min, max)).toFixed(
-              fractionDigits
-            )
+      const closestHandleInfo = isBidirectional
+        ? getClosestHandle(
+            xFromLeft,
+            horizontalOffset.sup,
+            horizontalOffset.inf
           )
-        ];
-      } else {
-        newValue = max - map(track.right, 0, parentWidth, min, max);
-        newValue = parseFloat(newValue.toFixed(fractionDigits));
-      }
+        : { cssProperty: "right", name: "sup" };
 
-      return newValue;
-    };
-
-    const updateHandles = (value, checkSteps = false) => {
-      let supPos = 0;
-      let infPos = 0;
-
-      if (!isInitiated.current) isInitiated.current = true;
-
-      if (isBidirectional) {
-        supPos = map(value[1], min, max, parentWidth, 0);
-        infPos = map(value[0], min, max, 0, parentWidth);
-      } else {
-        supPos = map(value, min, max, parentWidth, 0);
-      }
-
-      if (isDiscrete && checkSteps) {
-        const supStepNumber = Math.round(
-          map(supPos / step, 0, parentWidth / step, 0, stepsCount - 1)
-        );
-        const infStepNumber = Math.round(
-          map(infPos / step, 0, parentWidth / step, 0, stepsCount - 1)
-        );
-
-        const supStepPosition = getStepPosition(
-          supStepNumber,
-          stepsRef.current
-        );
-        const infStepPosition = getStepPosition(
-          infStepNumber,
-          stepsRef.current
-        );
-
-        if (supStepPosition !== null) supPos = supStepPosition;
-        if (infStepPosition !== null) infPos = infStepPosition;
-      }
-
-      setInfState(state => ({
-        ...state,
-        currentX: infPos,
-        offsetX: infPos,
-        left: infPos
-      }));
-      setSupState(state => ({
-        ...state,
-        currentX: -supPos,
-        offsetX: -supPos,
-        right: supPos
-      }));
-      setTrackState({ left: infPos, right: supPos });
-    };
-
-    const onResize = () => {
-      updateHandles(value, !isInitiated.current);
-    };
-
-    React.useEffect(() => {
-      if (parentWidth && parentWidth !== prevParentWidth) {
-        if (!isInitialRender.current) {
-          setTimeout(() => {
-            onResize();
-          }, TRANSITION_DURATION_IN_MILIS);
-        }
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [parentWidth, prevParentWidth]);
-
-    const clickListener = e => {
-      const clientX = e.clientX;
-      const isHandleClicked = e.target.closest(handleSelector) !== null;
-
-      const parentRect = parentRef.current.getBoundingClientRect();
-      const handleState = currentHandle === "sup" ? supState : infState;
-
-      if (!handleState.active && !isHandleClicked) {
-        if (e.preventDefault) e.preventDefault();
-        else e.returnValue = null;
-
-        let xFromLeft = clamp(clientX - parentRect.left, 0, parentWidth);
-        let xFromRight = parentWidth - xFromLeft;
-
-        const horizontalOffset = getHorizontalOffset(
-          parentWidth,
-          supState.right,
-          infState.left
-        );
-
-        const closestHandleInfo = isBidirectional
-          ? getClosestHandle(
-              xFromLeft,
-              horizontalOffset.sup,
-              horizontalOffset.inf
-            )
+      const otherHandle =
+        closestHandleInfo.name === "sup"
+          ? { cssProperty: "left", name: "inf" }
           : { cssProperty: "right", name: "sup" };
 
-        const otherHandle =
-          closestHandleInfo.name === "sup"
-            ? { cssProperty: "left", name: "inf" }
-            : { cssProperty: "right", name: "sup" };
+      const otherHandleOffset = horizontalOffset[otherHandle.name];
 
-        const otherHandleOffset = horizontalOffset[otherHandle.name];
+      xFromRight = clamp(xFromRight, 0, parentWidth - otherHandleOffset.left);
+      xFromLeft = clamp(xFromLeft, 0, parentWidth - otherHandleOffset.right);
 
-        xFromRight = clamp(xFromRight, 0, parentWidth - otherHandleOffset.left);
-        xFromLeft = clamp(xFromLeft, 0, parentWidth - otherHandleOffset.right);
+      let finalCurrentX =
+        closestHandleInfo.name === "sup" ? xFromRight : xFromLeft;
 
-        let finalCurrentX =
-          closestHandleInfo.name === "sup" ? xFromRight : xFromLeft;
+      if (isDiscrete) {
+        const stepNumber = Math.round(
+          map(finalCurrentX / step, 0, parentWidth / step, 0, stepsCount - 1)
+        );
 
-        if (isDiscrete) {
-          const stepNumber = Math.round(
-            map(finalCurrentX / step, 0, parentWidth / step, 0, stepsCount - 1)
-          );
+        const stepPosition = getStepPosition(stepNumber, stepsRef.current);
+        if (stepPosition !== null) finalCurrentX = stepPosition;
+      }
 
-          const stepPosition = getStepPosition(stepNumber, stepsRef.current);
-          if (stepPosition !== null) finalCurrentX = stepPosition;
-        }
+      const newTrackState = {
+        ...trackState,
+        [closestHandleInfo.name === "sup" ? "right" : "left"]: finalCurrentX
+      };
 
-        const newTrackState = {
-          ...trackState,
-          [closestHandleInfo.name === "sup" ? "right" : "left"]: finalCurrentX
-        };
+      const newValue = calculateValue(newTrackState);
 
-        const newValue = calculateValue(newTrackState);
-
-        if (isBidirectional) {
-          if (value[0] !== newValue[0] || value[1] !== newValue[1]) {
-            if (onChange) onChange(e, newValue);
-            setValue(newValue);
-          }
-        } else if (value !== newValue) {
+      if (isBidirectional) {
+        if (value[0] !== newValue[0] || value[1] !== newValue[1]) {
           if (onChange) onChange(e, newValue);
           setValue(newValue);
         }
+      } else if (value !== newValue) {
+        if (onChange) onChange(e, newValue);
+        setValue(newValue);
       }
-    };
+    }
+  };
 
-    const dragStart = e => {
-      let clientX = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
-      const rect = parentRef.current.getBoundingClientRect();
-      const currentHandleName = getHandleName(
-        e.target,
-        handleSelector,
-        supRef.current,
-        infRef.current
-      );
+  const dragStart = e => {
+    let clientX = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
+    const rect = parentRef.current.getBoundingClientRect();
+    const currentHandleName = getHandleName(
+      e.target,
+      handleSelector,
+      supRef.current,
+      infRef.current
+    );
 
-      if (currentHandleName) {
-        const handleState = currentHandleName === "sup" ? supState : infState;
+    if (currentHandleName) {
+      const handleState = currentHandleName === "sup" ? supState : infState;
 
-        setDragStarted(true);
-        setClickAllowed(false);
-        setCurrentHandle(currentHandleName);
+      setDragStarted(true);
+      setClickAllowed(false);
+      setCurrentHandle(currentHandleName);
 
-        clientX = clientX - rect.left;
-        const initialX = clientX - handleState.offsetX;
+      clientX = clientX - rect.left;
+      const initialX = clientX - handleState.offsetX;
 
-        const newSupState =
-          currentHandleName === "sup"
-            ? { ...supState, active: true, initialX, zIndex: 2 }
-            : { ...supState, zIndex: 1 };
+      const newSupState =
+        currentHandleName === "sup"
+          ? { ...supState, active: true, initialX, zIndex: 2 }
+          : { ...supState, zIndex: 1 };
 
-        const newInfState =
-          currentHandleName === "inf"
-            ? { ...infState, active: true, initialX, zIndex: 2 }
-            : { ...infState, zIndex: 1 };
+      const newInfState =
+        currentHandleName === "inf"
+          ? { ...infState, active: true, initialX, zIndex: 2 }
+          : { ...infState, zIndex: 1 };
 
-        setSupState(newSupState);
-        setInfState(newInfState);
+      setSupState(newSupState);
+      setInfState(newInfState);
 
-        if (onDragStartProp) {
-          onDragStartProp(e, {
-            sup: { ...newSupState, element: supRef.current },
-            inf: { ...newInfState, element: infRef.current },
-            track: { ...trackState, element: trackRef.current }
-          });
-        }
-      }
-    };
-
-    const dragEnd = e => {
-      enableTransitions();
-
-      const [handleState, handleStateUpdater] =
-        currentHandle === "sup"
-          ? [supState, setSupState]
-          : [infState, setInfState];
-
-      if (handleState.active) {
-        setDragStarted(false);
-        setTimeout(() => setClickAllowed(true), 10);
-
-        handleStateUpdater(state => ({
-          ...state,
-          active: false,
-          initialX: state.currentX
-        }));
-      }
-
-      if (onDragEndProp) {
-        onDragEndProp(e, {
-          sup: {
-            ...(currentHandle === "sup"
-              ? { ...supState, active: false, initialX: supState.currentX }
-              : supState),
-            element: supRef.current
-          },
-          inf: {
-            ...(currentHandle === "inf"
-              ? { ...infState, active: false, initialX: infState.currentX }
-              : infState),
-            element: infRef.current
-          },
+      if (onDragStartProp) {
+        onDragStartProp(e, {
+          sup: { ...newSupState, element: supRef.current },
+          inf: { ...newInfState, element: infRef.current },
           track: { ...trackState, element: trackRef.current }
         });
       }
-    };
+    }
+  };
 
-    const dragging = e => {
-      const handleState = currentHandle === "sup" ? supState : infState;
-      const otherHandleState = currentHandle === "sup" ? infState : supState;
+  const dragEnd = e => {
+    enableTransitions();
 
-      if (handleState.active) {
-        if (e.preventDefault) e.preventDefault();
-        else e.returnValue = false;
+    const [handleState, handleStateUpdater] =
+      currentHandle === "sup"
+        ? [supState, setSupState]
+        : [infState, setInfState];
 
-        let clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
+    if (handleState.active) {
+      setDragStarted(false);
+      setTimeout(() => setClickAllowed(true), 10);
 
-        const sign = currentHandle === "sup" ? -1 : 1;
+      handleStateUpdater(state => ({
+        ...state,
+        active: false,
+        initialX: state.currentX
+      }));
+    }
 
-        const rect = parentRef.current.getBoundingClientRect();
-        clientX = clientX - rect.left;
+    if (onDragEndProp) {
+      onDragEndProp(e, {
+        sup: {
+          ...(currentHandle === "sup"
+            ? { ...supState, active: false, initialX: supState.currentX }
+            : supState),
+          element: supRef.current
+        },
+        inf: {
+          ...(currentHandle === "inf"
+            ? { ...infState, active: false, initialX: infState.currentX }
+            : infState),
+          element: infRef.current
+        },
+        track: { ...trackState, element: trackRef.current }
+      });
+    }
+  };
 
-        const cClientX = clamp(clientX, 0, parentWidth);
-        const currentX = cClientX - handleState.initialX;
-        const cCurrentX = clamp(
-          currentX,
-          Math.min(0, sign * parentWidth),
-          Math.max(0, sign * parentWidth)
+  const dragging = e => {
+    const handleState = currentHandle === "sup" ? supState : infState;
+    const otherHandleState = currentHandle === "sup" ? infState : supState;
+
+    if (handleState.active) {
+      if (e.preventDefault) e.preventDefault();
+      else e.returnValue = false;
+
+      let clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
+
+      const sign = currentHandle === "sup" ? -1 : 1;
+
+      const rect = parentRef.current.getBoundingClientRect();
+      clientX = clientX - rect.left;
+
+      const cClientX = clamp(clientX, 0, parentWidth);
+      const currentX = cClientX - handleState.initialX;
+      const cCurrentX = clamp(
+        currentX,
+        Math.min(0, sign * parentWidth),
+        Math.max(0, sign * parentWidth)
+      );
+
+      let finalCurrentX = cCurrentX;
+
+      if (isBidirectional) {
+        const otherHandlePosition = parseFloat(
+          currentHandle === "sup"
+            ? otherHandleState.left
+            : otherHandleState.right
         );
 
-        let finalCurrentX = cCurrentX;
+        finalCurrentX = clamp(
+          finalCurrentX,
+          Math.min(0, sign * (parentWidth - otherHandlePosition)),
+          Math.max(0, sign * (parentWidth - otherHandlePosition))
+        );
+      }
 
-        if (isBidirectional) {
-          const otherHandlePosition = parseFloat(
-            currentHandle === "sup"
-              ? otherHandleState.left
-              : otherHandleState.right
-          );
+      if (isDiscrete) {
+        const stepNumber = Math.round(
+            map(
+              Math.abs(finalCurrentX / step),
+              0,
+              parentWidth / step,
+              0,
+              stepsCount - 1
+            )
+          ),
+          stepPosition = getStepPosition(stepNumber, stepsRef.current);
 
-          finalCurrentX = clamp(
-            finalCurrentX,
-            Math.min(0, sign * (parentWidth - otherHandlePosition)),
-            Math.max(0, sign * (parentWidth - otherHandlePosition))
-          );
-        }
+        if (stepPosition !== null) finalCurrentX = sign * stepPosition;
+      }
 
-        if (isDiscrete) {
-          const stepNumber = Math.round(
-              map(
-                Math.abs(finalCurrentX / step),
-                0,
-                parentWidth / step,
-                0,
-                stepsCount - 1
-              )
-            ),
-            stepPosition = getStepPosition(stepNumber, stepsRef.current);
+      disableTransitions();
 
-          if (stepPosition !== null) finalCurrentX = sign * stepPosition;
-        }
+      const newTrackState = {
+        ...trackState,
+        [currentHandle === "sup" ? "right" : "left"]: Math.abs(finalCurrentX)
+      };
 
-        disableTransitions();
+      const newValue = calculateValue(newTrackState);
 
-        const newTrackState = {
-          ...trackState,
-          [currentHandle === "sup" ? "right" : "left"]: Math.abs(finalCurrentX)
-        };
-
-        const newValue = calculateValue(newTrackState);
-
-        if (isBidirectional) {
-          if (value[0] !== newValue[0] || value[1] !== newValue[1]) {
-            if (onChange) onChange(e, newValue);
-            setValue(newValue);
-          }
-        } else if (value !== newValue) {
+      if (isBidirectional) {
+        if (value[0] !== newValue[0] || value[1] !== newValue[1]) {
           if (onChange) onChange(e, newValue);
           setValue(newValue);
         }
-
-        if (onDraggingProp) {
-          onDraggingProp(e, {
-            sup: {
-              ...supState,
-              currentX: finalCurrentX,
-              offsetX: finalCurrentX,
-              right: Math.abs(finalCurrentX),
-              element: supRef.current
-            },
-            inf: {
-              ...infState,
-              currentX: finalCurrentX,
-              offsetX: finalCurrentX,
-              left: Math.abs(finalCurrentX),
-              element: infRef.current
-            },
-            track: { ...newTrackState, element: trackRef.current }
-          });
-        }
+      } else if (value !== newValue) {
+        if (onChange) onChange(e, newValue);
+        setValue(newValue);
       }
-    };
 
-    React.useEffect(() => {
-      if (isInitialRender.current) isInitialRender.current = false;
-      else updateHandles(value);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value]);
+      if (onDraggingProp) {
+        onDraggingProp(e, {
+          sup: {
+            ...supState,
+            currentX: finalCurrentX,
+            offsetX: finalCurrentX,
+            right: Math.abs(finalCurrentX),
+            element: supRef.current
+          },
+          inf: {
+            ...infState,
+            currentX: finalCurrentX,
+            offsetX: finalCurrentX,
+            left: Math.abs(finalCurrentX),
+            element: infRef.current
+          },
+          track: { ...newTrackState, element: trackRef.current }
+        });
+      }
+    }
+  };
 
-    const {
-      isFocusVisibleRef: isInfFocusVisibleRef,
-      onBlur: handleInfBlurVisible,
-      onFocus: handleInfFocusVisible,
-      ref: infFocusVisibleRef
-    } = useIsFocusVisible();
+  React.useEffect(() => {
+    if (isInitialRender.current) isInitialRender.current = false;
+    else updateHandles(value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
-    const {
-      isFocusVisibleRef: isSupFocusVisibleRef,
-      onBlur: handleSupBlurVisible,
-      onFocus: handleSupFocusVisible,
-      ref: supFocusVisibleRef
-    } = useIsFocusVisible();
+  const {
+    isFocusVisibleRef: isInfFocusVisibleRef,
+    onBlur: handleInfBlurVisible,
+    onFocus: handleInfFocusVisible,
+    ref: infFocusVisibleRef
+  } = useIsFocusVisible();
 
-    const handleInfRef = useForkRef(infFocusVisibleRef, infRef);
-    const handleSupRef = useForkRef(supFocusVisibleRef, supRef);
+  const {
+    isFocusVisibleRef: isSupFocusVisibleRef,
+    onBlur: handleSupBlurVisible,
+    onFocus: handleSupFocusVisible,
+    ref: supFocusVisibleRef
+  } = useIsFocusVisible();
 
-    const [isInfFocusVisible, setInfFocusVisible] = React.useState(false);
-    const [isSupFocusVisible, setSupFocusVisible] = React.useState(false);
+  const handleInfRef = useForkRef(infFocusVisibleRef, infRef);
+  const handleSupRef = useForkRef(supFocusVisibleRef, supRef);
 
-    React.useEffect(() => {
-      if (disabled) {
+  const [isInfFocusVisible, setInfFocusVisible] = React.useState(false);
+  const [isSupFocusVisible, setSupFocusVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    if (disabled) {
+      setInfFocusVisible(false);
+      setSupFocusVisible(false);
+    }
+  }, [disabled]);
+
+  React.useEffect(() => {
+    isInfFocusVisibleRef.current = isInfFocusVisible;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isInfFocusVisible]);
+
+  React.useEffect(() => {
+    isSupFocusVisibleRef.current = isSupFocusVisible;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSupFocusVisible]);
+
+  const handleFocus = useEventCallback((event, handleType = "inf") => {
+    if (handleType === "inf") {
+      // Fix for https://github.com/facebook/react/issues/7769
+      if (!infRef.current) infRef.current = event.currentTarget;
+
+      handleInfFocusVisible(event);
+
+      if (isInfFocusVisibleRef.current === true) {
+        setInfState(s => ({ ...s, zIndex: 2 }));
+        setSupState(s => ({ ...s, zIndex: 1 }));
+        setInfFocusVisible(true);
+      }
+    } else if (handleType === "sup") {
+      // Fix for https://github.com/facebook/react/issues/7769
+      if (!supRef.current) supRef.current = event.currentTarget;
+
+      handleSupFocusVisible(event);
+
+      if (isSupFocusVisibleRef.current === true) {
+        setSupState(s => ({ ...s, zIndex: 2 }));
+        setInfState(s => ({ ...s, zIndex: 1 }));
+        setSupFocusVisible(true);
+      }
+    }
+  });
+
+  const handleBlur = useEventCallback((event, handleType = "inf") => {
+    if (handleType === "inf") {
+      handleInfBlurVisible(event);
+
+      if (isInfFocusVisibleRef.current === false) {
         setInfFocusVisible(false);
+      }
+    } else if (handleType === "sup") {
+      handleSupBlurVisible(event);
+
+      if (isSupFocusVisibleRef.current === false) {
         setSupFocusVisible(false);
       }
-    }, [disabled]);
+    }
+  });
 
-    React.useEffect(() => {
-      isInfFocusVisibleRef.current = isInfFocusVisible;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isInfFocusVisible]);
+  const handleKeyDown = (event, handleType = "inf") => {
+    if (event.target === event.currentTarget && !disabled) {
+      let v;
+      let newValue;
 
-    React.useEffect(() => {
-      isSupFocusVisibleRef.current = isSupFocusVisible;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isSupFocusVisible]);
+      const stepper = isDiscrete && step ? step : 1;
 
-    const handleFocus = useEventCallback((event, handleType = "inf") => {
+      const bounds = { min, max };
+
       if (handleType === "inf") {
-        // Fix for https://github.com/facebook/react/issues/7769
-        if (!infRef.current) infRef.current = event.currentTarget;
-
-        handleInfFocusVisible(event);
-
-        if (isInfFocusVisibleRef.current === true) {
-          setInfState(s => ({ ...s, zIndex: 2 }));
-          setSupState(s => ({ ...s, zIndex: 1 }));
-          setInfFocusVisible(true);
-        }
+        v = isBidirectional ? value[0] : value;
+        bounds.max = isBidirectional ? value[1] : max;
       } else if (handleType === "sup") {
-        // Fix for https://github.com/facebook/react/issues/7769
-        if (!supRef.current) supRef.current = event.currentTarget;
-
-        handleSupFocusVisible(event);
-
-        if (isSupFocusVisibleRef.current === true) {
-          setSupState(s => ({ ...s, zIndex: 2 }));
-          setInfState(s => ({ ...s, zIndex: 1 }));
-          setSupFocusVisible(true);
-        }
+        v = isBidirectional ? value[1] : value;
+        bounds.min = isBidirectional ? value[0] : min;
       }
-    });
 
-    const handleBlur = useEventCallback((event, handleType = "inf") => {
-      if (handleType === "inf") {
-        handleInfBlurVisible(event);
-
-        if (isInfFocusVisibleRef.current === false) {
-          setInfFocusVisible(false);
-        }
-      } else if (handleType === "sup") {
-        handleSupBlurVisible(event);
-
-        if (isSupFocusVisibleRef.current === false) {
-          setSupFocusVisible(false);
-        }
-      }
-    });
-
-    const handleKeyDown = (event, handleType = "inf") => {
-      if (event.target === event.currentTarget && !disabled) {
-        let v;
-        let newValue;
-
-        const stepper = isDiscrete && step ? step : 1;
-
-        const bounds = { min, max };
-
-        if (handleType === "inf") {
-          v = isBidirectional ? value[0] : value;
-          bounds.max = isBidirectional ? value[1] : max;
-        } else if (handleType === "sup") {
-          v = isBidirectional ? value[1] : value;
-          bounds.min = isBidirectional ? value[0] : min;
-        }
-
-        if (
-          event.key === "Down" ||
-          event.key === "ArrowDown" ||
-          event.key === "Left" ||
-          event.key === "ArrowLeft"
-        ) {
-          event.preventDefault();
-          newValue = clamp(v - stepper, bounds.min, bounds.max);
-        } else if (
-          event.key === "Up" ||
-          event.key === "ArrowUp" ||
-          event.key === "Right" ||
-          event.key === "ArrowRight"
-        ) {
-          event.preventDefault();
-          newValue = clamp(v + stepper, bounds.min, bounds.max);
-        }
-
-        if (newValue != null) {
-          let _v;
-          let isUniqueValue = false;
-
-          if (handleType === "inf") {
-            _v = isBidirectional ? [newValue, value[1]] : newValue;
-          } else if (handleType === "sup") {
-            _v = isBidirectional ? [value[0], newValue] : newValue;
-          }
-
-          if (isBidirectional) {
-            isUniqueValue = value[0] !== _v[0] || value[1] !== _v[1];
-          } else {
-            isUniqueValue = value !== _v;
-          }
-
-          if (isUniqueValue) {
-            disableTransitions();
-            updateHandles(_v, isDiscrete);
-            setValue(_v);
-            if (onChange) onChange(event, _v);
-          }
-        }
-      }
-    };
-
-    const handleKeyUp = useEventCallback(event => {
       if (
         event.key === "Down" ||
         event.key === "ArrowDown" ||
         event.key === "Left" ||
-        event.key === "ArrowLeft" ||
+        event.key === "ArrowLeft"
+      ) {
+        event.preventDefault();
+        newValue = clamp(v - stepper, bounds.min, bounds.max);
+      } else if (
         event.key === "Up" ||
         event.key === "ArrowUp" ||
         event.key === "Right" ||
         event.key === "ArrowRight"
       ) {
-        enableTransitions();
+        event.preventDefault();
+        newValue = clamp(v + stepper, bounds.min, bounds.max);
       }
-    });
 
-    if (typeof window !== "undefined") {
-      /* eslint-disable react-hooks/rules-of-hooks */
-      useEventListener({
-        element: document,
-        eventName: "touchend",
-        listener: dragEnd,
-        options: { passive: false }
-      });
-      useEventListener({
-        element: document,
-        eventName: "mouseup",
-        listener: dragEnd,
-        options: { passive: false }
-      });
-      useEventListener(
-        {
-          element: document,
-          eventName: "touchmove",
-          listener: dragging,
-          options: { passive: false }
-        },
-        isDragStarted
-      );
-      useEventListener(
-        {
-          element: document,
-          eventName: "mousemove",
-          listener: dragging,
-          options: { passive: false }
-        },
-        isDragStarted
-      );
-      /* eslint-enable react-hooks/rules-of-hooks */
+      if (newValue != null) {
+        let _v;
+        let isUniqueValue = false;
+
+        if (handleType === "inf") {
+          _v = isBidirectional ? [newValue, value[1]] : newValue;
+        } else if (handleType === "sup") {
+          _v = isBidirectional ? [value[0], newValue] : newValue;
+        }
+
+        if (isBidirectional) {
+          isUniqueValue = value[0] !== _v[0] || value[1] !== _v[1];
+        } else {
+          isUniqueValue = value !== _v;
+        }
+
+        if (isUniqueValue) {
+          disableTransitions();
+          updateHandles(_v, isDiscrete);
+          setValue(_v);
+          if (onChange) onChange(event, _v);
+        }
+      }
     }
+  };
 
-    return (
-      <div
-        tabIndex={-1}
-        ref={rootRefHandler}
-        onClick={e => {
-          if (isClickAllowed) {
-            clickListener(e);
-            if (onClickProp) onClickProp(e);
-          }
-        }}
-        className={clx(classes.root, className, {
-          [classes.disabled]: disabled,
-          [classes[variant]]: allowedVariants.includes(variant)
-        })}
-        {...otherProps}
-      >
-        <div className={classes.wrapper}>
-          <div className={classes.steps}>{steps}</div>
-          <div className={classes.interval}>
-            {isBidirectional && (
-              <div
-                aria-label={`The left handle of the InputSlider`}
-                tabIndex={disabled ? -1 : 0}
-                role="button"
-                ref={handleInfRef}
-                onFocus={e => void handleFocus(e, "inf")}
-                onBlur={e => void handleBlur(e, "inf")}
-                onKeyDown={e => void handleKeyDown(e, "inf")}
-                onKeyUp={handleKeyUp}
-                onTouchStart={dragStart}
-                onMouseDown={dragStart}
-                className={clx(classes.infHandle, classes.handle, {
-                  [classes.focusVisible]: isInfFocusVisible
-                })}
-                style={{
-                  left: `${infState.left}px`,
-                  zIndex: `${infState.zIndex}`,
-                  transition: transitions
-                }}
-              >
-                <button tabIndex={-1} className={classes.handleCircle}>
-                  <i className={classes.handleIcon}>
-                    <ChevronRight />
-                  </i>
-                </button>
-              </div>
-            )}
+  const handleKeyUp = useEventCallback(event => {
+    if (
+      event.key === "Down" ||
+      event.key === "ArrowDown" ||
+      event.key === "Left" ||
+      event.key === "ArrowLeft" ||
+      event.key === "Up" ||
+      event.key === "ArrowUp" ||
+      event.key === "Right" ||
+      event.key === "ArrowRight"
+    ) {
+      enableTransitions();
+    }
+  });
+
+  if (typeof window !== "undefined") {
+    /* eslint-disable react-hooks/rules-of-hooks */
+    useEventListener({
+      element: document,
+      eventName: "touchend",
+      listener: dragEnd,
+      options: { passive: false }
+    });
+    useEventListener({
+      element: document,
+      eventName: "mouseup",
+      listener: dragEnd,
+      options: { passive: false }
+    });
+    useEventListener(
+      {
+        element: document,
+        eventName: "touchmove",
+        listener: dragging,
+        options: { passive: false }
+      },
+      isDragStarted
+    );
+    useEventListener(
+      {
+        element: document,
+        eventName: "mousemove",
+        listener: dragging,
+        options: { passive: false }
+      },
+      isDragStarted
+    );
+    /* eslint-enable react-hooks/rules-of-hooks */
+  }
+
+  return (
+    <div
+      tabIndex={-1}
+      ref={rootRefHandler}
+      onClick={e => {
+        if (isClickAllowed) {
+          clickListener(e);
+          if (onClickProp) onClickProp(e);
+        }
+      }}
+      className={clx(classes.root, className, {
+        [classes.disabled]: disabled,
+        [classes[variant]]: allowedVariants.includes(variant)
+      })}
+      {...otherProps}
+    >
+      <div className={classes.wrapper}>
+        <div className={classes.steps}>{steps}</div>
+        <div className={classes.interval}>
+          {isBidirectional && (
             <div
-              ref={trackRef}
-              className={classes.track}
-              style={{
-                left: `${trackState.left}px`,
-                right: `${trackState.right}px`,
-                transition: transitions
-              }}
-            ></div>
-            <div
-              aria-label={`The right handle of the InputSlider`}
+              aria-label={`The left handle of the InputSlider`}
               tabIndex={disabled ? -1 : 0}
               role="button"
-              ref={handleSupRef}
-              onFocus={e => void handleFocus(e, "sup")}
-              onBlur={e => void handleBlur(e, "sup")}
-              onKeyDown={e => void handleKeyDown(e, "sup")}
+              ref={handleInfRef}
+              onFocus={e => void handleFocus(e, "inf")}
+              onBlur={e => void handleBlur(e, "inf")}
+              onKeyDown={e => void handleKeyDown(e, "inf")}
               onKeyUp={handleKeyUp}
               onTouchStart={dragStart}
               onMouseDown={dragStart}
-              className={clx(classes.supHandle, classes.handle, {
-                [classes.focusVisible]: isSupFocusVisible
+              className={clx(classes.infHandle, classes.handle, {
+                [classes.focusVisible]: isInfFocusVisible
               })}
               style={{
-                right: `${supState.right}px`,
-                zIndex: `${supState.zIndex}`,
+                left: `${infState.left}px`,
+                zIndex: `${infState.zIndex}`,
                 transition: transitions
               }}
             >
               <button tabIndex={-1} className={classes.handleCircle}>
-                {isBidirectional && (
-                  <i className={classes.handleIcon}>
-                    <ChevronLeft />
-                  </i>
-                )}
+                <i className={classes.handleIcon}>
+                  <ChevronRight />
+                </i>
               </button>
             </div>
+          )}
+          <div
+            ref={trackRef}
+            className={classes.track}
+            style={{
+              left: `${trackState.left}px`,
+              right: `${trackState.right}px`,
+              transition: transitions
+            }}
+          ></div>
+          <div
+            aria-label={`The right handle of the InputSlider`}
+            tabIndex={disabled ? -1 : 0}
+            role="button"
+            ref={handleSupRef}
+            onFocus={e => void handleFocus(e, "sup")}
+            onBlur={e => void handleBlur(e, "sup")}
+            onKeyDown={e => void handleKeyDown(e, "sup")}
+            onKeyUp={handleKeyUp}
+            onTouchStart={dragStart}
+            onMouseDown={dragStart}
+            className={clx(classes.supHandle, classes.handle, {
+              [classes.focusVisible]: isSupFocusVisible
+            })}
+            style={{
+              right: `${supState.right}px`,
+              zIndex: `${supState.zIndex}`,
+              transition: transitions
+            }}
+          >
+            <button tabIndex={-1} className={classes.handleCircle}>
+              {isBidirectional && (
+                <i className={classes.handleIcon}>
+                  <ChevronLeft />
+                </i>
+              )}
+            </button>
           </div>
         </div>
       </div>
-    );
-  })
-);
+    </div>
+  );
+});
 
 InputSlider.displayName = componentName;
 

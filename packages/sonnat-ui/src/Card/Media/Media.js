@@ -12,19 +12,17 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const CardMedia = React.memo(
-  React.forwardRef(function CardMedia(props, ref) {
-    const { className, children, ...otherProps } = props;
+const CardMedia = React.forwardRef(function CardMedia(props, ref) {
+  const { className, children, ...otherProps } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-      <div ref={ref} className={clx(classes.root, className)} {...otherProps}>
-        {children}
-      </div>
-    );
-  })
-);
+  return (
+    <div ref={ref} className={clx(classes.root, className)} {...otherProps}>
+      {children}
+    </div>
+  );
+});
 
 CardMedia.displayName = componentName;
 

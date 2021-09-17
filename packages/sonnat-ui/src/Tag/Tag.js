@@ -278,98 +278,96 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Tag = React.memo(
-  React.forwardRef(function Tag(props, ref) {
-    const {
-      className,
-      icon,
-      label,
-      onRemove,
-      variant = "filled",
-      color = "default",
-      visible = true,
-      dense = false,
-      ...otherProps
-    } = props;
+const Tag = React.forwardRef(function Tag(props, ref) {
+  const {
+    className,
+    icon,
+    label,
+    onRemove,
+    variant = "filled",
+    color = "default",
+    visible = true,
+    dense = false,
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const isRemovable = useConstantProp(onRemove != null, false, {
-      componentName,
-      propName: "onRemove"
-    });
+  const isRemovable = useConstantProp(onRemove != null, false, {
+    componentName,
+    propName: "onRemove"
+  });
 
-    const {
-      isFocusVisibleRef,
-      onBlur: handleBlurVisible,
-      onFocus: handleFocusVisible,
-      ref: focusVisibleRef
-    } = useIsFocusVisible();
+  const {
+    isFocusVisibleRef,
+    onBlur: handleBlurVisible,
+    onFocus: handleFocusVisible,
+    ref: focusVisibleRef
+  } = useIsFocusVisible();
 
-    const removeRef = React.useRef(null);
+  const removeRef = React.useRef(null);
 
-    const handleRemoveRef = useForkRef(focusVisibleRef, removeRef);
+  const handleRemoveRef = useForkRef(focusVisibleRef, removeRef);
 
-    const [focusVisible, setFocusVisible] = React.useState(false);
+  const [focusVisible, setFocusVisible] = React.useState(false);
 
-    React.useEffect(() => {
-      if (!visible && focusVisible) setFocusVisible(false);
-    }, [visible, focusVisible]);
+  React.useEffect(() => {
+    if (!visible && focusVisible) setFocusVisible(false);
+  }, [visible, focusVisible]);
 
-    React.useEffect(() => {
-      isFocusVisibleRef.current = focusVisible;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [focusVisible]);
+  React.useEffect(() => {
+    isFocusVisibleRef.current = focusVisible;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusVisible]);
 
-    const handleFocus = useEventCallback(event => {
-      // Fix for https://github.com/facebook/react/issues/7769
-      if (!removeRef.current) removeRef.current = event.currentTarget;
+  const handleFocus = useEventCallback(event => {
+    // Fix for https://github.com/facebook/react/issues/7769
+    if (!removeRef.current) removeRef.current = event.currentTarget;
 
-      handleFocusVisible(event);
+    handleFocusVisible(event);
 
-      if (isFocusVisibleRef.current === true) setFocusVisible(true);
-    });
+    if (isFocusVisibleRef.current === true) setFocusVisible(true);
+  });
 
-    const handleBlur = useEventCallback(event => {
-      handleBlurVisible(event);
+  const handleBlur = useEventCallback(event => {
+    handleBlurVisible(event);
 
-      if (isFocusVisibleRef.current === false) setFocusVisible(false);
-    });
+    if (isFocusVisibleRef.current === false) setFocusVisible(false);
+  });
 
-    return visible ? (
-      <div
-        ref={ref}
-        className={clx(classes.root, className, {
-          [classes[variant]]: allowedVariants.includes(variant),
-          [classes[color]]: allowedColors.includes(color),
-          [classes.removable]: isRemovable,
-          [classes.dense]: dense
-        })}
-        {...otherProps}
-      >
-        {icon && <i className={classes.icon}>{icon}</i>}
-        <span className={classes.label}>{label}</span>
-        {isRemovable && (
-          <button
-            aria-label={`Remove the tag with ${label} text`}
-            ref={handleRemoveRef}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            tabIndex={visible ? 0 : -1}
-            className={clx(classes.removeBtn, {
-              [classes.focusVisible]: focusVisible
-            })}
-            onClick={onRemove}
-          >
-            <i className={classes.removeBtnIcon}>
-              <Close />
-            </i>
-          </button>
-        )}
-      </div>
-    ) : null;
-  })
-);
+  return visible ? (
+    <div
+      ref={ref}
+      className={clx(classes.root, className, {
+        [classes[variant]]: allowedVariants.includes(variant),
+        [classes[color]]: allowedColors.includes(color),
+        [classes.removable]: isRemovable,
+        [classes.dense]: dense
+      })}
+      {...otherProps}
+    >
+      {icon && <i className={classes.icon}>{icon}</i>}
+      <span className={classes.label}>{label}</span>
+      {isRemovable && (
+        <button
+          aria-label={`Remove the tag with ${label} text`}
+          ref={handleRemoveRef}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          tabIndex={visible ? 0 : -1}
+          className={clx(classes.removeBtn, {
+            [classes.focusVisible]: focusVisible
+          })}
+          onClick={onRemove}
+        >
+          <i className={classes.removeBtnIcon}>
+            <Close />
+          </i>
+        </button>
+      )}
+    </div>
+  ) : null;
+});
 
 Tag.displayName = componentName;
 

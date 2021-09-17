@@ -65,59 +65,57 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Breadcrumb = React.memo(
-  React.forwardRef(function Breadcrumb(props, ref) {
-    const {
-      className,
-      // eslint-disable-next-line react/prop-types
-      "aria-label": ariaLabel = "breadcrumb",
-      children: childrenProp,
-      showOnlyPreviousStep = false,
-      ...otherProps
-    } = props;
+const Breadcrumb = React.forwardRef(function Breadcrumb(props, ref) {
+  const {
+    className,
+    // eslint-disable-next-line react/prop-types
+    "aria-label": ariaLabel = "breadcrumb",
+    children: childrenProp,
+    showOnlyPreviousStep = false,
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const children = React.Children.map(childrenProp, child => {
-      if (!React.isValidElement(child)) return null;
+  const children = React.Children.map(childrenProp, child => {
+    if (!React.isValidElement(child)) return null;
 
-      if (isFragment(child)) {
-        // eslint-disable-next-line no-console
-        console.error(
-          "Sonnat: The Breadcrumb component doesn't accept a Fragment as a child."
-        );
-      }
+    if (isFragment(child)) {
+      // eslint-disable-next-line no-console
+      console.error(
+        "Sonnat: The Breadcrumb component doesn't accept a Fragment as a child."
+      );
+    }
 
-      if (child.type !== Item) {
-        // eslint-disable-next-line no-console
-        console.error(
-          "Sonnat: The Breadcrumb component only accepts `Breadcrumb/Item` as a child."
-        );
-      }
+    if (child.type !== Item) {
+      // eslint-disable-next-line no-console
+      console.error(
+        "Sonnat: The Breadcrumb component only accepts `Breadcrumb/Item` as a child."
+      );
+    }
 
-      return React.cloneElement(child, {
-        className: clx(child.props.className, classes.item)
-      });
+    return React.cloneElement(child, {
+      className: clx(child.props.className, classes.item)
     });
+  });
 
-    return (
-      <nav
-        aria-label={ariaLabel}
-        className={clx(classes.root, className)}
-        ref={ref}
-        {...otherProps}
+  return (
+    <nav
+      aria-label={ariaLabel}
+      className={clx(classes.root, className)}
+      ref={ref}
+      {...otherProps}
+    >
+      <ol
+        className={clx(classes.list, {
+          [classes.onlyPreviousStep]: showOnlyPreviousStep
+        })}
       >
-        <ol
-          className={clx(classes.list, {
-            [classes.onlyPreviousStep]: showOnlyPreviousStep
-          })}
-        >
-          {children}
-        </ol>
-      </nav>
-    );
-  })
-);
+        {children}
+      </ol>
+    </nav>
+  );
+});
 
 Breadcrumb.displayName = componentName;
 

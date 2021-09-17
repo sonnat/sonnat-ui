@@ -128,150 +128,148 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const InputAdornment = React.memo(
-  React.forwardRef(function InputAdornment(props, ref) {
-    const {
-      className,
-      children,
-      onFocus,
-      onBlur,
-      onKeyDown,
-      onKeyUp,
-      onClick,
-      variant: variantProp = "node",
-      ...otherProps
-    } = props;
+const InputAdornment = React.forwardRef(function InputAdornment(props, ref) {
+  const {
+    className,
+    children,
+    onFocus,
+    onBlur,
+    onKeyDown,
+    onKeyUp,
+    onClick,
+    variant: variantProp = "node",
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const variant = getVar(
-      variantProp,
-      "node",
-      !allowedVariants.includes(variantProp)
-    );
+  const variant = getVar(
+    variantProp,
+    "node",
+    !allowedVariants.includes(variantProp)
+  );
 
-    const RootNode = variant === "icon" ? "i" : "div";
+  const RootNode = variant === "icon" ? "i" : "div";
 
-    const isActionable = onClick != null;
+  const isActionable = onClick != null;
 
-    const { size, disabled, hasError } = useInputBase();
+  const { size, disabled, hasError } = useInputBase();
 
-    const {
-      isFocusVisibleRef,
-      onBlur: handleBlurVisible,
-      onFocus: handleFocusVisible,
-      ref: focusVisibleRef
-    } = useIsFocusVisible();
+  const {
+    isFocusVisibleRef,
+    onBlur: handleBlurVisible,
+    onFocus: handleFocusVisible,
+    ref: focusVisibleRef
+  } = useIsFocusVisible();
 
-    const adornmentRef = React.useRef(null);
+  const adornmentRef = React.useRef(null);
 
-    const handleOwnRef = useForkRef(focusVisibleRef, adornmentRef);
-    const handleRef = useForkRef(ref, handleOwnRef);
+  const handleOwnRef = useForkRef(focusVisibleRef, adornmentRef);
+  const handleRef = useForkRef(ref, handleOwnRef);
 
-    const [focusVisible, setFocusVisible] = React.useState(false);
+  const [focusVisible, setFocusVisible] = React.useState(false);
 
-    if (disabled && focusVisible) {
-      setFocusVisible(false);
+  if (disabled && focusVisible) {
+    setFocusVisible(false);
+  }
+
+  React.useEffect(() => {
+    isFocusVisibleRef.current = focusVisible;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusVisible]);
+
+  const handleFocus = useEventCallback(event => {
+    // Fix for https://github.com/facebook/react/issues/7769
+    if (!adornmentRef.current) adornmentRef.current = event.currentTarget;
+
+    handleFocusVisible(event);
+
+    if (isFocusVisibleRef.current === true) setFocusVisible(true);
+    if (onFocus) onFocus(event);
+  });
+
+  const handleBlur = useEventCallback(event => {
+    handleBlurVisible(event);
+
+    if (isFocusVisibleRef.current === false) setFocusVisible(false);
+    if (onBlur) onBlur(event);
+  });
+
+  const keyDownRef = React.useRef(false);
+
+  const handleKeyDown = useEventCallback(event => {
+    if (keyDownRef.current === false && focusVisible && event.key === " ") {
+      keyDownRef.current = true;
     }
 
-    React.useEffect(() => {
-      isFocusVisibleRef.current = focusVisible;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [focusVisible]);
+    if (event.target === event.currentTarget && event.key === " ") {
+      event.preventDefault();
+    }
 
-    const handleFocus = useEventCallback(event => {
-      // Fix for https://github.com/facebook/react/issues/7769
-      if (!adornmentRef.current) adornmentRef.current = event.currentTarget;
+    if (onKeyDown) onKeyDown(event);
 
-      handleFocusVisible(event);
+    // Keyboard accessibility for non interactive elements
+    if (
+      event.target === event.currentTarget &&
+      event.key.toLowerCase() === "enter" &&
+      !disabled
+    ) {
+      event.preventDefault();
+      if (onClick) onClick(event);
+    }
+  });
 
-      if (isFocusVisibleRef.current === true) setFocusVisible(true);
-      if (onFocus) onFocus(event);
-    });
+  const handleKeyUp = useEventCallback(event => {
+    if (!event.defaultPrevented && focusVisible && event.key === " ") {
+      keyDownRef.current = false;
+    }
 
-    const handleBlur = useEventCallback(event => {
-      handleBlurVisible(event);
+    if (onKeyUp) onKeyUp(event);
 
-      if (isFocusVisibleRef.current === false) setFocusVisible(false);
-      if (onBlur) onBlur(event);
-    });
+    // Keyboard accessibility for non interactive elements
+    if (
+      event.target === event.currentTarget &&
+      event.key === " " &&
+      !event.defaultPrevented
+    ) {
+      if (onClick) onClick(event);
+    }
+  });
 
-    const keyDownRef = React.useRef(false);
-
-    const handleKeyDown = useEventCallback(event => {
-      if (keyDownRef.current === false && focusVisible && event.key === " ") {
-        keyDownRef.current = true;
+  const actionProps = isActionable
+    ? {
+        onClick,
+        onKeyDown: handleKeyDown,
+        onKeyUp: handleKeyUp,
+        onFocus: handleFocus,
+        onBlur: handleBlur
       }
+    : {};
 
-      if (event.target === event.currentTarget && event.key === " ") {
-        event.preventDefault();
-      }
-
-      if (onKeyDown) onKeyDown(event);
-
-      // Keyboard accessibility for non interactive elements
-      if (
-        event.target === event.currentTarget &&
-        event.key.toLowerCase() === "enter" &&
-        !disabled
-      ) {
-        event.preventDefault();
-        if (onClick) onClick(event);
-      }
-    });
-
-    const handleKeyUp = useEventCallback(event => {
-      if (!event.defaultPrevented && focusVisible && event.key === " ") {
-        keyDownRef.current = false;
-      }
-
-      if (onKeyUp) onKeyUp(event);
-
-      // Keyboard accessibility for non interactive elements
-      if (
-        event.target === event.currentTarget &&
-        event.key === " " &&
-        !event.defaultPrevented
-      ) {
-        if (onClick) onClick(event);
-      }
-    });
-
-    const actionProps = isActionable
-      ? {
-          onClick,
-          onKeyDown: handleKeyDown,
-          onKeyUp: handleKeyUp,
-          onFocus: handleFocus,
-          onBlur: handleBlur
+  return (
+    <RootNode
+      ref={handleRef}
+      role={isActionable ? "button" : undefined}
+      tabIndex={isActionable ? (disabled ? -1 : 0) : undefined}
+      className={clx(
+        classes.root,
+        className,
+        classes[size],
+        classes[`${variant}Adornment`],
+        {
+          [classes.focusVisible]: focusVisible,
+          [classes.actionable]: isActionable,
+          [classes.disabled]: disabled,
+          [classes.errored]: hasError
         }
-      : {};
-
-    return (
-      <RootNode
-        ref={handleRef}
-        role={isActionable ? "button" : undefined}
-        tabIndex={isActionable ? (disabled ? -1 : 0) : undefined}
-        className={clx(
-          classes.root,
-          className,
-          classes[size],
-          classes[`${variant}Adornment`],
-          {
-            [classes.focusVisible]: focusVisible,
-            [classes.actionable]: isActionable,
-            [classes.disabled]: disabled,
-            [classes.errored]: hasError
-          }
-        )}
-        {...actionProps}
-        {...otherProps}
-      >
-        {children}
-      </RootNode>
-    );
-  })
-);
+      )}
+      {...actionProps}
+      {...otherProps}
+    >
+      {children}
+    </RootNode>
+  );
+});
 
 InputAdornment.propTypes = {
   children: PropTypes.node,

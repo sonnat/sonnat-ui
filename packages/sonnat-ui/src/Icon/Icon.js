@@ -78,83 +78,81 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Icon = React.memo(
-  React.forwardRef(function Icon(props, ref) {
-    const {
-      children,
-      className,
-      color,
-      title,
-      style: otherStyles,
-      viewBox = "0 0 24 24",
-      size = "auto",
-      ...otherProps
-    } = props;
+const Icon = React.forwardRef(function Icon(props, ref) {
+  const {
+    children,
+    className,
+    color,
+    title,
+    style: otherStyles,
+    viewBox = "0 0 24 24",
+    size = "auto",
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
-    const theme = useTheme();
+  const classes = useStyles();
+  const theme = useTheme();
 
-    const hasValidSize =
-      (typeof size === "number" && !isNaN(size)) ||
-      (typeof size === "string" && size === "auto");
+  const hasValidSize =
+    (typeof size === "number" && !isNaN(size)) ||
+    (typeof size === "string" && size === "auto");
 
-    const hasValidColor =
-      color != null
-        ? typeof color === "string" && colorEnum.includes(color)
-        : true;
+  const hasValidColor =
+    color != null
+      ? typeof color === "string" && colorEnum.includes(color)
+      : true;
 
-    if (process.env.NODE_ENV !== "production") {
-      if (!hasValidSize) {
-        // eslint-disable-next-line no-console
-        console.error(
-          `Sonnat: Invalid size provided! (provided size: \`size=${
-            typeof size === "number" ? `{${size}}` : `"${size}"`
-          }\`)`
-        );
-      }
-
-      if (!hasValidColor) {
-        // eslint-disable-next-line no-console
-        console.error(
-          `Sonnat: Invalid color provided! (provided color: \`color={${color}}\`)`
-        );
-      }
+  if (process.env.NODE_ENV !== "production") {
+    if (!hasValidSize) {
+      // eslint-disable-next-line no-console
+      console.error(
+        `Sonnat: Invalid size provided! (provided size: \`size=${
+          typeof size === "number" ? `{${size}}` : `"${size}"`
+        }\`)`
+      );
     }
 
-    const sizeStyles =
-      size === "auto"
-        ? {
-            width: "100%",
-            height: "100%"
-          }
-        : {
-            width: theme.typography.pxToRem(size),
-            height: theme.typography.pxToRem(size),
-            minWidth: theme.typography.pxToRem(size),
-            minHeight: theme.typography.pxToRem(size)
-          };
+    if (!hasValidColor) {
+      // eslint-disable-next-line no-console
+      console.error(
+        `Sonnat: Invalid color provided! (provided color: \`color={${color}}\`)`
+      );
+    }
+  }
 
-    return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox={viewBox}
-        aria-hidden={title ? undefined : true}
-        role={title ? "img" : undefined}
-        focusable="false"
-        style={{ ...otherStyles, ...sizeStyles }}
-        className={clx(classes.root, classes[`${color}Color`], className, {
-          [classes.defaultSize]: size == null || !hasValidSize,
-          [classes[`${color}Color`]]: color != null && hasValidColor
-        })}
-        ref={ref}
-        {...otherProps}
-      >
-        {title && <title>{title}</title>}
-        {children}
-      </svg>
-    );
-  })
-);
+  const sizeStyles =
+    size === "auto"
+      ? {
+          width: "100%",
+          height: "100%"
+        }
+      : {
+          width: theme.typography.pxToRem(size),
+          height: theme.typography.pxToRem(size),
+          minWidth: theme.typography.pxToRem(size),
+          minHeight: theme.typography.pxToRem(size)
+        };
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox={viewBox}
+      aria-hidden={title ? undefined : true}
+      role={title ? "img" : undefined}
+      focusable="false"
+      style={{ ...otherStyles, ...sizeStyles }}
+      className={clx(classes.root, classes[`${color}Color`], className, {
+        [classes.defaultSize]: size == null || !hasValidSize,
+        [classes[`${color}Color`]]: color != null && hasValidColor
+      })}
+      ref={ref}
+      {...otherProps}
+    >
+      {title && <title>{title}</title>}
+      {children}
+    </svg>
+  );
+});
 
 Icon.displayName = componentName;
 

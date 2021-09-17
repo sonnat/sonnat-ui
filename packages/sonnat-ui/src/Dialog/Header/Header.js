@@ -30,33 +30,31 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const DialogHeader = React.memo(
-  React.forwardRef(function DialogHeader(props, ref) {
-    const { className, children, title, ...otherProps } = props;
+const DialogHeader = React.forwardRef(function DialogHeader(props, ref) {
+  const { className, children, title, ...otherProps } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const { id, hasOverflow, registerHeader } = React.useContext(DialogContext);
+  const { id, hasOverflow, registerHeader } = React.useContext(DialogContext);
 
-    return (
-      <div
-        ref={node => {
-          if (ref) setRef(ref, node);
-          registerHeader(node);
-        }}
-        className={clx(classes.root, className, {
-          [classes.withOverflow]: hasOverflow
-        })}
-        {...otherProps}
-      >
-        <Text id={id} variant="subtitle">
-          {title}
-        </Text>
-        {children}
-      </div>
-    );
-  })
-);
+  return (
+    <div
+      ref={node => {
+        if (ref) setRef(ref, node);
+        registerHeader(node);
+      }}
+      className={clx(classes.root, className, {
+        [classes.withOverflow]: hasOverflow
+      })}
+      {...otherProps}
+    >
+      <Text id={id} variant="subtitle">
+        {title}
+      </Text>
+      {children}
+    </div>
+  );
+});
 
 DialogHeader.displayName = componentName;
 

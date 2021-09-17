@@ -153,130 +153,128 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Tab = React.memo(
-  React.forwardRef(function Tab(props, ref) {
-    const {
-      className,
-      label,
-      icon,
-      onClick,
-      onFocus,
-      onBlur,
-      onKeyDown,
-      active,
-      identifier,
-      ...otherProps
-    } = props;
+const Tab = React.forwardRef(function Tab(props, ref) {
+  const {
+    className,
+    label,
+    icon,
+    onClick,
+    onFocus,
+    onBlur,
+    onKeyDown,
+    active,
+    identifier,
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const hasLeadingIcon = icon != null && icon;
-    const isIconTab = label == null || label.length === 0;
+  const hasLeadingIcon = icon != null && icon;
+  const isIconTab = label == null || label.length === 0;
 
-    const {
-      size,
-      onChange,
-      scrollable,
-      fluid,
-      focusLeftAdjacentTab,
-      focusRightAdjacentTab
-    } = React.useContext(TabBarContext);
+  const {
+    size,
+    onChange,
+    scrollable,
+    fluid,
+    focusLeftAdjacentTab,
+    focusRightAdjacentTab
+  } = React.useContext(TabBarContext);
 
-    const {
-      isFocusVisibleRef,
-      onBlur: handleBlurVisible,
-      onFocus: handleFocusVisible,
-      ref: focusVisibleRef
-    } = useIsFocusVisible();
+  const {
+    isFocusVisibleRef,
+    onBlur: handleBlurVisible,
+    onFocus: handleFocusVisible,
+    ref: focusVisibleRef
+  } = useIsFocusVisible();
 
-    const tabRef = React.useRef(null);
+  const tabRef = React.useRef(null);
 
-    const handleOwnRef = useForkRef(focusVisibleRef, tabRef);
-    const handleRef = useForkRef(ref, handleOwnRef);
+  const handleOwnRef = useForkRef(focusVisibleRef, tabRef);
+  const handleRef = useForkRef(ref, handleOwnRef);
 
-    const [focusVisible, setFocusVisible] = React.useState(false);
+  const [focusVisible, setFocusVisible] = React.useState(false);
 
-    if (!active && focusVisible) {
-      setFocusVisible(false);
+  if (!active && focusVisible) {
+    setFocusVisible(false);
+  }
+
+  React.useEffect(() => {
+    isFocusVisibleRef.current = focusVisible;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusVisible]);
+
+  const handleFocus = useEventCallback(event => {
+    // Fix for https://github.com/facebook/react/issues/7769
+    if (!tabRef.current) tabRef.current = event.currentTarget;
+
+    handleFocusVisible(event);
+
+    if (isFocusVisibleRef.current === true) setFocusVisible(true);
+    if (onFocus) onFocus(event);
+  });
+
+  const handleBlur = useEventCallback(event => {
+    handleBlurVisible(event);
+
+    if (isFocusVisibleRef.current === false) setFocusVisible(false);
+    if (onBlur) onBlur(event);
+  });
+
+  const handleKeyDown = useEventCallback(event => {
+    if (onKeyDown) onKeyDown(event);
+
+    if (
+      event.target === event.currentTarget &&
+      (event.key === "Left" || event.key === "ArrowLeft") &&
+      active
+    ) {
+      event.preventDefault();
+      focusLeftAdjacentTab(identifier);
     }
 
-    React.useEffect(() => {
-      isFocusVisibleRef.current = focusVisible;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [focusVisible]);
+    if (
+      event.target === event.currentTarget &&
+      (event.key === "Right" || event.key === "ArrowRight") &&
+      active
+    ) {
+      event.preventDefault();
+      focusRightAdjacentTab(identifier);
+    }
+  });
 
-    const handleFocus = useEventCallback(event => {
-      // Fix for https://github.com/facebook/react/issues/7769
-      if (!tabRef.current) tabRef.current = event.currentTarget;
-
-      handleFocusVisible(event);
-
-      if (isFocusVisibleRef.current === true) setFocusVisible(true);
-      if (onFocus) onFocus(event);
-    });
-
-    const handleBlur = useEventCallback(event => {
-      handleBlurVisible(event);
-
-      if (isFocusVisibleRef.current === false) setFocusVisible(false);
-      if (onBlur) onBlur(event);
-    });
-
-    const handleKeyDown = useEventCallback(event => {
-      if (onKeyDown) onKeyDown(event);
-
-      if (
-        event.target === event.currentTarget &&
-        (event.key === "Left" || event.key === "ArrowLeft") &&
-        active
-      ) {
-        event.preventDefault();
-        focusLeftAdjacentTab(identifier);
-      }
-
-      if (
-        event.target === event.currentTarget &&
-        (event.key === "Right" || event.key === "ArrowRight") &&
-        active
-      ) {
-        event.preventDefault();
-        focusRightAdjacentTab(identifier);
-      }
-    });
-
-    return (
-      <div
-        role="tab"
-        ref={handleRef}
-        aria-selected={active}
-        tabIndex={active ? 0 : -1}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        onKeyDown={handleKeyDown}
-        onClick={e => {
-          if (!active) {
-            if (onChange) onChange(e, identifier);
-            if (onClick) onClick(e, identifier);
-          }
-        }}
-        className={clx(classes.root, className, classes[size], {
-          [classes.active]: active,
-          [classes.fluid]: fluid,
-          [classes.stable]: !scrollable,
-          [classes.leadingIconed]: hasLeadingIcon,
-          [classes.iconTab]: isIconTab,
-          [classes.focusVisible]: focusVisible
-        })}
-        {...otherProps}
-      >
-        <div className={classes.content}>
-          {icon && <i className={classes.icon}>{icon}</i>}
-          {label && <span className={classes.label}>{label}</span>}
-        </div>
+  return (
+    <div
+      role="tab"
+      ref={handleRef}
+      aria-selected={active}
+      tabIndex={active ? 0 : -1}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onKeyDown={handleKeyDown}
+      onClick={e => {
+        if (!active) {
+          if (onChange) onChange(e, identifier);
+          if (onClick) onClick(e, identifier);
+        }
+      }}
+      className={clx(classes.root, className, classes[size], {
+        [classes.active]: active,
+        [classes.fluid]: fluid,
+        [classes.stable]: !scrollable,
+        [classes.leadingIconed]: hasLeadingIcon,
+        [classes.iconTab]: isIconTab,
+        [classes.focusVisible]: focusVisible
+      })}
+      {...otherProps}
+    >
+      <div className={classes.content}>
+        {icon && <i className={classes.icon}>{icon}</i>}
+        {label && <span className={classes.label}>{label}</span>}
       </div>
-    );
-  })
-);
+    </div>
+  );
+});
 
 Tab.displayName = componentName;
 
