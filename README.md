@@ -27,8 +27,3 @@ Visit [https://sonnat.dev/docs](https://www.sonnat.dev/docs) to view the full do
 ### Community
 
 The Sonnat-UI community can be found on [Github Discussions](https://github.com/sonnat/sonnat-ui/discussions), where you can ask questions, voice ideas, and share your projects.
-
-### Authors
-
-- **Mostafa Shamsitabar** - Lead Engineer / Maintainer.<br/>([twitter](https://twitter.com/mimshins))
-- **Mahdi Rahman** - Design System Manager.<br/>([twitter](https://twitter.com/bblndtctv))
