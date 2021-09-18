@@ -16,44 +16,42 @@ function getContainer(container) {
   return ReactDOM.findDOMNode(__container);
 }
 
-const Portal = React.memo(
-  React.forwardRef(function Portal(
-    { children, activate = true, container },
+const Portal = React.forwardRef(function Portal(
+  { children, activate = true, container },
+  ref
+) {
+  const [mountNode, setMountNode] = useState(null);
+  const handleRef = useForkRef(
+    React.isValidElement(children) ? children.ref : null,
     ref
-  ) {
-    const [mountNode, setMountNode] = useState(null);
-    const handleRef = useForkRef(
-      React.isValidElement(children) ? children.ref : null,
-      ref
-    );
+  );
 
-    useEnhancedEffect(() => {
-      if (activate) setMountNode(getContainer(container) || document.body);
-    }, [container, activate]);
+  useEnhancedEffect(() => {
+    if (activate) setMountNode(getContainer(container) || document.body);
+  }, [container, activate]);
 
-    useEnhancedEffect(() => {
-      if (mountNode && activate) {
-        setRef(ref, mountNode);
-        return () => {
-          setRef(ref, null);
-        };
-      }
-
-      return undefined;
-    }, [ref, mountNode, activate]);
-
-    if (!activate) {
-      if (React.isValidElement(children)) {
-        return React.cloneElement(children, {
-          ref: handleRef
-        });
-      }
-      return children;
+  useEnhancedEffect(() => {
+    if (mountNode && activate) {
+      setRef(ref, mountNode);
+      return () => {
+        setRef(ref, null);
+      };
     }
 
-    return mountNode ? ReactDOM.createPortal(children, mountNode) : mountNode;
-  })
-);
+    return undefined;
+  }, [ref, mountNode, activate]);
+
+  if (!activate) {
+    if (React.isValidElement(children)) {
+      return React.cloneElement(children, {
+        ref: handleRef
+      });
+    }
+    return children;
+  }
+
+  return mountNode ? ReactDOM.createPortal(children, mountNode) : mountNode;
+});
 
 Portal.displayName = componentName;
 

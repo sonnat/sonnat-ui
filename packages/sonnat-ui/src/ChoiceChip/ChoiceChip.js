@@ -412,174 +412,166 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const ChoiceChip = React.memo(
-  React.forwardRef(function ChoiceChip(props, ref) {
-    const {
-      className,
-      label,
-      leadingIcon,
-      onClick,
-      onFocus,
-      onBlur,
-      onKeyUp,
-      onKeyDown,
-      onToggle,
-      selected,
-      defaultSelected: defaultSelectedProp,
-      variant: variantProp = "filled",
-      size: sizeProp = "medium",
-      color: colorProp = "default",
-      disabled = false,
-      rounded = false,
-      ...otherProps
-    } = props;
+const ChoiceChip = React.forwardRef(function ChoiceChip(props, ref) {
+  const {
+    className,
+    label,
+    leadingIcon,
+    onClick,
+    onFocus,
+    onBlur,
+    onKeyUp,
+    onKeyDown,
+    onToggle,
+    selected,
+    defaultSelected: defaultSelectedProp,
+    variant: variantProp = "filled",
+    size: sizeProp = "medium",
+    color: colorProp = "default",
+    disabled = false,
+    rounded = false,
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const { current: defaultSelected } = React.useRef(
-      selected != null
-        ? undefined
-        : defaultSelectedProp != null
-        ? defaultSelectedProp
-        : false
-    );
+  const { current: defaultSelected } = React.useRef(
+    selected != null
+      ? undefined
+      : defaultSelectedProp != null
+      ? defaultSelectedProp
+      : false
+  );
 
-    const [isSelected, setSelected] = useControlled(
-      selected,
-      defaultSelected,
-      componentName
-    );
+  const [isSelected, setSelected] = useControlled(
+    selected,
+    defaultSelected,
+    componentName
+  );
 
-    const toggleHandler = e => {
-      if (onToggle) onToggle(e, !isSelected);
-      if (onClick) onClick(e);
-      setSelected(!isSelected);
-    };
+  const toggleHandler = e => {
+    if (onToggle) onToggle(e, !isSelected);
+    if (onClick) onClick(e);
+    setSelected(!isSelected);
+  };
 
-    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+  const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
 
-    const color = getVar(
-      colorProp,
-      "default",
-      !allowedColors.includes(colorProp)
-    );
+  const color = getVar(
+    colorProp,
+    "default",
+    !allowedColors.includes(colorProp)
+  );
 
-    const variant = getVar(
-      variantProp,
-      "filled",
-      !allowedVariants.includes(variantProp)
-    );
+  const variant = getVar(
+    variantProp,
+    "filled",
+    !allowedVariants.includes(variantProp)
+  );
 
-    const {
-      isFocusVisibleRef,
-      onBlur: handleBlurVisible,
-      onFocus: handleFocusVisible,
-      ref: focusVisibleRef
-    } = useIsFocusVisible();
+  const {
+    isFocusVisibleRef,
+    onBlur: handleBlurVisible,
+    onFocus: handleFocusVisible,
+    ref: focusVisibleRef
+  } = useIsFocusVisible();
 
-    const chipRef = React.useRef(null);
+  const chipRef = React.useRef(null);
 
-    const handleOwnRef = useForkRef(focusVisibleRef, chipRef);
-    const handleRef = useForkRef(ref, handleOwnRef);
+  const handleOwnRef = useForkRef(focusVisibleRef, chipRef);
+  const handleRef = useForkRef(ref, handleOwnRef);
 
-    const [focusVisible, setFocusVisible] = React.useState(false);
+  const [focusVisible, setFocusVisible] = React.useState(false);
 
-    if (disabled && focusVisible) {
-      setFocusVisible(false);
+  if (disabled && focusVisible) {
+    setFocusVisible(false);
+  }
+
+  React.useEffect(() => {
+    isFocusVisibleRef.current = focusVisible;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusVisible]);
+
+  const handleFocus = useEventCallback(event => {
+    // Fix for https://github.com/facebook/react/issues/7769
+    if (!chipRef.current) chipRef.current = event.currentTarget;
+
+    handleFocusVisible(event);
+
+    if (isFocusVisibleRef.current === true) setFocusVisible(true);
+    if (onFocus) onFocus(event);
+  });
+
+  const handleBlur = useEventCallback(event => {
+    handleBlurVisible(event);
+
+    if (isFocusVisibleRef.current === false) setFocusVisible(false);
+    if (onBlur) onBlur(event);
+  });
+
+  const keyDownRef = React.useRef(false);
+
+  const handleKeyDown = useEventCallback(event => {
+    if (keyDownRef.current === false && focusVisible && event.key === " ") {
+      keyDownRef.current = true;
     }
 
-    React.useEffect(() => {
-      isFocusVisibleRef.current = focusVisible;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [focusVisible]);
+    if (onKeyDown) onKeyDown(event);
 
-    const handleFocus = useEventCallback(event => {
-      // Fix for https://github.com/facebook/react/issues/7769
-      if (!chipRef.current) chipRef.current = event.currentTarget;
+    // Keyboard accessibility for non interactive elements
+    if (
+      event.target === event.currentTarget &&
+      event.key.toLowerCase() === "enter" &&
+      !disabled
+    ) {
+      event.preventDefault();
+      toggleHandler(event);
+    }
+  });
 
-      handleFocusVisible(event);
+  const handleKeyUp = useEventCallback(event => {
+    if (!event.defaultPrevented && focusVisible && event.key === " ") {
+      keyDownRef.current = false;
+    }
 
-      if (isFocusVisibleRef.current === true) setFocusVisible(true);
-      if (onFocus) onFocus(event);
-    });
+    if (onKeyUp) onKeyUp(event);
 
-    const handleBlur = useEventCallback(event => {
-      handleBlurVisible(event);
+    // Keyboard accessibility for non interactive elements
+    if (
+      event.target === event.currentTarget &&
+      event.key === " " &&
+      !event.defaultPrevented
+    ) {
+      toggleHandler(event);
+    }
+  });
 
-      if (isFocusVisibleRef.current === false) setFocusVisible(false);
-      if (onBlur) onBlur(event);
-    });
-
-    const keyDownRef = React.useRef(false);
-
-    const handleKeyDown = useEventCallback(event => {
-      if (keyDownRef.current === false && focusVisible && event.key === " ") {
-        keyDownRef.current = true;
-      }
-
-      if (onKeyDown) onKeyDown(event);
-
-      // Keyboard accessibility for non interactive elements
-      if (
-        event.target === event.currentTarget &&
-        event.key.toLowerCase() === "enter" &&
-        !disabled
-      ) {
-        event.preventDefault();
-        toggleHandler(event);
-      }
-    });
-
-    const handleKeyUp = useEventCallback(event => {
-      if (!event.defaultPrevented && focusVisible && event.key === " ") {
-        keyDownRef.current = false;
-      }
-
-      if (onKeyUp) onKeyUp(event);
-
-      // Keyboard accessibility for non interactive elements
-      if (
-        event.target === event.currentTarget &&
-        event.key === " " &&
-        !event.defaultPrevented
-      ) {
-        toggleHandler(event);
-      }
-    });
-
-    return label ? (
-      <div
-        ref={handleRef}
-        role="button"
-        aria-disabled={disabled ? "true" : "false"}
-        tabIndex={disabled ? -1 : 0}
-        onClick={toggleHandler}
-        onKeyUp={handleKeyUp}
-        onKeyDown={handleKeyDown}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        className={clx(
-          className,
-          classes.root,
-          classes[size],
-          classes[variant],
-          {
-            [classes.selected]: isSelected,
-            [classes.focusVisible]: focusVisible,
-            [classes[camelCase(`${variant}-unselected`)]]: !isSelected,
-            [classes[camelCase(`${variant}-${color}-selected`)]]: isSelected,
-            [classes.rounded]: rounded,
-            [classes.disabled]: disabled
-          }
-        )}
-        {...otherProps}
-      >
-        {leadingIcon && <i className={clx(classes.icon)}>{leadingIcon}</i>}
-        {label}
-      </div>
-    ) : null;
-  })
-);
+  return label ? (
+    <div
+      ref={handleRef}
+      role="button"
+      aria-disabled={disabled ? "true" : "false"}
+      tabIndex={disabled ? -1 : 0}
+      onClick={toggleHandler}
+      onKeyUp={handleKeyUp}
+      onKeyDown={handleKeyDown}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      className={clx(className, classes.root, classes[size], classes[variant], {
+        [classes.selected]: isSelected,
+        [classes.focusVisible]: focusVisible,
+        [classes[camelCase(`${variant}-unselected`)]]: !isSelected,
+        [classes[camelCase(`${variant}-${color}-selected`)]]: isSelected,
+        [classes.rounded]: rounded,
+        [classes.disabled]: disabled
+      })}
+      {...otherProps}
+    >
+      {leadingIcon && <i className={clx(classes.icon)}>{leadingIcon}</i>}
+      {label}
+    </div>
+  ) : null;
+});
 
 ChoiceChip.displayName = componentName;
 

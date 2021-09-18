@@ -3,7 +3,7 @@ import React from "react";
 
 const componentName = "NoSsr";
 
-const NoSsr = React.memo(function NoSsr({ children, fallback = null }) {
+const NoSsr = function NoSsr({ children, fallback = null }) {
   const [isMounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -11,7 +11,7 @@ const NoSsr = React.memo(function NoSsr({ children, fallback = null }) {
   }, []);
 
   return <React.Fragment>{isMounted ? children : fallback}</React.Fragment>;
-});
+};
 
 NoSsr.displayName = componentName;
 

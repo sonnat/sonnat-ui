@@ -45,117 +45,118 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const CardActionableArea = React.memo(
-  React.forwardRef(function CardActionableArea(props, ref) {
-    const {
-      className,
-      children,
-      onFocus,
-      onBlur,
-      onKeyDown,
-      onKeyUp,
-      onClick,
-      ...otherProps
-    } = props;
+const CardActionableArea = React.forwardRef(function CardActionableArea(
+  props,
+  ref
+) {
+  const {
+    className,
+    children,
+    onFocus,
+    onBlur,
+    onKeyDown,
+    onKeyUp,
+    onClick,
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const {
-      isFocusVisibleRef,
-      onBlur: handleBlurVisible,
-      onFocus: handleFocusVisible,
-      ref: focusVisibleRef
-    } = useIsFocusVisible();
+  const {
+    isFocusVisibleRef,
+    onBlur: handleBlurVisible,
+    onFocus: handleFocusVisible,
+    ref: focusVisibleRef
+  } = useIsFocusVisible();
 
-    const actionRef = React.useRef(null);
+  const actionRef = React.useRef(null);
 
-    const handleOwnRef = useForkRef(focusVisibleRef, actionRef);
-    const handleRef = useForkRef(ref, handleOwnRef);
+  const handleOwnRef = useForkRef(focusVisibleRef, actionRef);
+  const handleRef = useForkRef(ref, handleOwnRef);
 
-    const [focusVisible, setFocusVisible] = React.useState(false);
+  const [focusVisible, setFocusVisible] = React.useState(false);
 
-    React.useEffect(() => {
-      isFocusVisibleRef.current = focusVisible;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [focusVisible]);
+  React.useEffect(() => {
+    isFocusVisibleRef.current = focusVisible;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusVisible]);
 
-    const handleFocus = useEventCallback(event => {
-      // Fix for https://github.com/facebook/react/issues/7769
-      if (!actionRef.current) actionRef.current = event.currentTarget;
+  const handleFocus = useEventCallback(event => {
+    // Fix for https://github.com/facebook/react/issues/7769
+    if (!actionRef.current) actionRef.current = event.currentTarget;
 
-      handleFocusVisible(event);
+    handleFocusVisible(event);
 
-      if (isFocusVisibleRef.current === true) setFocusVisible(true);
-      if (onFocus) onFocus(event);
-    });
+    if (isFocusVisibleRef.current === true) setFocusVisible(true);
+    if (onFocus) onFocus(event);
+  });
 
-    const handleBlur = useEventCallback(event => {
-      handleBlurVisible(event);
+  const handleBlur = useEventCallback(event => {
+    handleBlurVisible(event);
 
-      if (isFocusVisibleRef.current === false) setFocusVisible(false);
-      if (onBlur) onBlur(event);
-    });
+    if (isFocusVisibleRef.current === false) setFocusVisible(false);
+    if (onBlur) onBlur(event);
+  });
 
-    const keyDownRef = React.useRef(false);
+  const keyDownRef = React.useRef(false);
 
-    const handleKeyDown = useEventCallback(event => {
-      if (keyDownRef.current === false && focusVisible && event.key === " ") {
-        keyDownRef.current = true;
-      }
+  const handleKeyDown = useEventCallback(event => {
+    if (keyDownRef.current === false && focusVisible && event.key === " ") {
+      keyDownRef.current = true;
+    }
 
-      if (event.target === event.currentTarget && event.key === " ") {
-        event.preventDefault();
-      }
+    if (event.target === event.currentTarget && event.key === " ") {
+      event.preventDefault();
+    }
 
-      if (onKeyDown) onKeyDown(event);
+    if (onKeyDown) onKeyDown(event);
 
-      // Keyboard accessibility for non interactive elements
-      if (
-        event.target === event.currentTarget &&
-        event.key.toLowerCase() === "enter"
-      ) {
-        event.preventDefault();
-        if (onClick) onClick(event);
-      }
-    });
+    // Keyboard accessibility for non interactive elements
+    if (
+      event.target === event.currentTarget &&
+      event.key.toLowerCase() === "enter"
+    ) {
+      event.preventDefault();
+      if (onClick) onClick(event);
+    }
+  });
 
-    const handleKeyUp = useEventCallback(event => {
-      if (!event.defaultPrevented && focusVisible && event.key === " ") {
-        keyDownRef.current = false;
-      }
+  const handleKeyUp = useEventCallback(event => {
+    if (!event.defaultPrevented && focusVisible && event.key === " ") {
+      keyDownRef.current = false;
+    }
 
-      if (onKeyUp) onKeyUp(event);
+    if (onKeyUp) onKeyUp(event);
 
-      // Keyboard accessibility for non interactive elements
-      if (
-        event.target === event.currentTarget &&
-        event.key === " " &&
-        !event.defaultPrevented
-      ) {
-        if (onClick) onClick(event);
-      }
-    });
+    // Keyboard accessibility for non interactive elements
+    if (
+      event.target === event.currentTarget &&
+      event.key === " " &&
+      !event.defaultPrevented
+    ) {
+      if (onClick) onClick(event);
+    }
+  });
 
-    return (
-      <div
-        role="button"
-        tabIndex={0}
-        ref={handleRef}
-        className={clx(classes.root, className, {
-          [classes.focusVisible]: focusVisible
-        })}
-        onClick={onClick}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
-        {...otherProps}
-      >
-        {children}
-      </div>
-    );
-  })
-);
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      ref={handleRef}
+      className={clx(classes.root, className, {
+        [classes.focusVisible]: focusVisible
+      })}
+      onClick={onClick}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onKeyDown={handleKeyDown}
+      onKeyUp={handleKeyUp}
+      {...otherProps}
+    >
+      {children}
+    </div>
+  );
+});
 
 CardActionableArea.displayName = componentName;
 

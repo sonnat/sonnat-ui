@@ -13,21 +13,19 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const TableBody = React.memo(
-  React.forwardRef((props, ref) => {
-    const { className, children, ...otherProps } = props;
+const TableBody = React.forwardRef((props, ref) => {
+  const { className, children, ...otherProps } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-      <tbody ref={ref} className={clx(className, classes.root)} {...otherProps}>
-        <TableInnerContext.Provider value={{ cellVariant: "body" }}>
-          {children}
-        </TableInnerContext.Provider>
-      </tbody>
-    );
-  })
-);
+  return (
+    <tbody ref={ref} className={clx(className, classes.root)} {...otherProps}>
+      <TableInnerContext.Provider value={{ cellVariant: "body" }}>
+        {children}
+      </TableInnerContext.Provider>
+    </tbody>
+  );
+});
 
 TableBody.displayName = componentName;
 

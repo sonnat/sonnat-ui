@@ -158,65 +158,63 @@ const createResponsiveClass = (prop, classes, prefix = "") => {
   return classes[camelCase(`${prefix ? prefix + "-" : ""}${prop}`)];
 };
 
-const Flex = React.memo(
-  React.forwardRef(function Flex(props, ref) {
-    const {
-      className,
-      children,
-      rootNode: RootNode = "div",
-      variant: variantProp = "block",
-      wrap: wrapProp = "nowrap",
-      direction: directionProp = "row",
-      mainAxisAlignment: mainAxisAlignmentProp = "start",
-      crossAxisAlignment: crossAxisAlignmentProp = "stretch",
-      contentAlignment: contentAlignmentProp = "start",
-      ...otherProps
-    } = props;
+const Flex = React.forwardRef(function Flex(props, ref) {
+  const {
+    className,
+    children,
+    rootNode: RootNode = "div",
+    variant: variantProp = "block",
+    wrap: wrapProp = "nowrap",
+    direction: directionProp = "row",
+    mainAxisAlignment: mainAxisAlignmentProp = "start",
+    crossAxisAlignment: crossAxisAlignmentProp = "stretch",
+    contentAlignment: contentAlignmentProp = "start",
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const variant = getValueOfProp(variantProp, "block", allowedVariants);
-    const wrap = getValueOfProp(wrapProp, "nowrap", allowedWraps);
-    const direction = getValueOfProp(directionProp, "row", allowedDirections);
+  const variant = getValueOfProp(variantProp, "block", allowedVariants);
+  const wrap = getValueOfProp(wrapProp, "nowrap", allowedWraps);
+  const direction = getValueOfProp(directionProp, "row", allowedDirections);
 
-    const contentAlignment = getValueOfProp(
-      contentAlignmentProp,
-      "start",
-      allowedContentAlignments
-    );
+  const contentAlignment = getValueOfProp(
+    contentAlignmentProp,
+    "start",
+    allowedContentAlignments
+  );
 
-    const mainAxisAlignment = getValueOfProp(
-      mainAxisAlignmentProp,
-      "start",
-      allowedMainAxisAlignments
-    );
+  const mainAxisAlignment = getValueOfProp(
+    mainAxisAlignmentProp,
+    "start",
+    allowedMainAxisAlignments
+  );
 
-    const crossAxisAlignment = getValueOfProp(
-      crossAxisAlignmentProp,
-      "stretch",
-      allowedCrossAxisAlignments
-    );
+  const crossAxisAlignment = getValueOfProp(
+    crossAxisAlignmentProp,
+    "stretch",
+    allowedCrossAxisAlignments
+  );
 
-    return (
-      <RootNode
-        ref={ref}
-        className={clx(
-          className,
-          classes.root,
-          createResponsiveClass(variant, classes),
-          createResponsiveClass(wrap, classes),
-          createResponsiveClass(direction, classes),
-          createResponsiveClass(contentAlignment, classes, "content"),
-          createResponsiveClass(mainAxisAlignment, classes, "justify"),
-          createResponsiveClass(crossAxisAlignment, classes, "align")
-        )}
-        {...otherProps}
-      >
-        {children}
-      </RootNode>
-    );
-  })
-);
+  return (
+    <RootNode
+      ref={ref}
+      className={clx(
+        className,
+        classes.root,
+        createResponsiveClass(variant, classes),
+        createResponsiveClass(wrap, classes),
+        createResponsiveClass(direction, classes),
+        createResponsiveClass(contentAlignment, classes, "content"),
+        createResponsiveClass(mainAxisAlignment, classes, "justify"),
+        createResponsiveClass(crossAxisAlignment, classes, "align")
+      )}
+      {...otherProps}
+    >
+      {children}
+    </RootNode>
+  );
+});
 
 const getResponsivePropTypeOf = validValues => {
   return PropTypes.oneOfType([

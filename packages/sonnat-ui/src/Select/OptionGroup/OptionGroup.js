@@ -7,7 +7,7 @@ import generateUniqueString from "../../utils/generateUniqueString";
 
 const componentName = "SelectOptionGroup";
 
-const SelectOptionGroup = React.memo(function SelectOptionGroup({
+const SelectOptionGroup = function SelectOptionGroup({
   children: childrenProp
 }) {
   const children = React.Children.map(childrenProp, (child, index) => {
@@ -37,7 +37,7 @@ const SelectOptionGroup = React.memo(function SelectOptionGroup({
   });
 
   return <React.Fragment>{children}</React.Fragment>;
-});
+};
 
 SelectOptionGroup.displayName = componentName;
 

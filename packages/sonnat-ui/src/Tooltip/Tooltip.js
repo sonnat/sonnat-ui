@@ -394,68 +394,52 @@ const positioning = (placement, tooltipElement, anchorElement) => {
   });
 };
 
-const Tooltip = React.memo(
-  React.forwardRef(function Tooltip(props, ref) {
-    const {
-      children,
-      className,
-      text,
-      defaultOpen,
-      onOpen,
-      onClose,
-      onOutsideClick,
-      open: openProp,
-      style = {},
-      tailed = false,
-      placement = "top",
-      triggersOn = "hover",
-      ...otherProps
-    } = props;
+const Tooltip = React.forwardRef(function Tooltip(props, ref) {
+  const {
+    children,
+    className,
+    text,
+    defaultOpen,
+    onOpen,
+    onClose,
+    onOutsideClick,
+    open: openProp,
+    style = {},
+    tailed = false,
+    placement = "top",
+    triggersOn = "hover",
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const isInitialized = React.useRef(false);
-    const uniqueId = React.useRef(`tooltip${generateUniqueString()}`);
+  const isInitialized = React.useRef(false);
+  const uniqueId = React.useRef(`tooltip${generateUniqueString()}`);
 
-    const tooltipRef = React.useRef();
-    const anchorRef = React.useRef();
-    const tooltipRefHandle = useForkRef(tooltipRef, ref);
+  const tooltipRef = React.useRef();
+  const anchorRef = React.useRef();
+  const tooltipRefHandle = useForkRef(tooltipRef, ref);
 
-    const prevPlacement = usePreviousValue(placement);
+  const prevPlacement = usePreviousValue(placement);
 
-    const [currentPlacement, setCurrentPlacement] = React.useState(placement);
+  const [currentPlacement, setCurrentPlacement] = React.useState(placement);
 
-    const [currentPosition, setCurrentPositon] = React.useState({
-      top: 0,
-      left: 0
-    });
+  const [currentPosition, setCurrentPositon] = React.useState({
+    top: 0,
+    left: 0
+  });
 
-    const [open, setOpen] = useControlled(
-      openProp,
-      openProp == null && defaultOpen == null ? false : defaultOpen,
-      componentName
-    );
+  const [open, setOpen] = useControlled(
+    openProp,
+    openProp == null && defaultOpen == null ? false : defaultOpen,
+    componentName
+  );
 
-    React.useEffect(() => {
-      if (!isInitialized.current && tooltipRef.current && anchorRef.current) {
-        onNextFrame(() => {
-          isInitialized.current = true;
+  React.useEffect(() => {
+    if (!isInitialized.current && tooltipRef.current && anchorRef.current) {
+      onNextFrame(() => {
+        isInitialized.current = true;
 
-          const { newPlacement, newPosition } = positioning(
-            placement,
-            tooltipRef.current,
-            anchorRef.current
-          );
-
-          setCurrentPositon(newPosition);
-          setCurrentPlacement(newPlacement);
-        });
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [placement]);
-
-    React.useEffect(() => {
-      if (isInitialized.current && prevPlacement !== placement) {
         const { newPlacement, newPosition } = positioning(
           placement,
           tooltipRef.current,
@@ -464,148 +448,162 @@ const Tooltip = React.memo(
 
         setCurrentPositon(newPosition);
         setCurrentPlacement(newPlacement);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [placement]);
+
+  React.useEffect(() => {
+    if (isInitialized.current && prevPlacement !== placement) {
+      const { newPlacement, newPosition } = positioning(
+        placement,
+        tooltipRef.current,
+        anchorRef.current
+      );
+
+      setCurrentPositon(newPosition);
+      setCurrentPlacement(newPlacement);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [placement, prevPlacement]);
+
+  const outsideClickHandler = React.useCallback(
+    e => {
+      if (
+        anchorRef.current != null &&
+        anchorRef.current !== e.target &&
+        !anchorRef.current.contains(e.target) &&
+        tooltipRef.current != null &&
+        tooltipRef.current !== e.target &&
+        !tooltipRef.current.contains(e.target)
+      ) {
+        if (onOutsideClick) onOutsideClick(e);
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [placement, prevPlacement]);
+    },
+    [onOutsideClick]
+  );
 
-    const outsideClickHandler = React.useCallback(
-      e => {
-        if (
-          anchorRef.current != null &&
-          anchorRef.current !== e.target &&
-          !anchorRef.current.contains(e.target) &&
-          tooltipRef.current != null &&
-          tooltipRef.current !== e.target &&
-          !tooltipRef.current.contains(e.target)
-        ) {
-          if (onOutsideClick) onOutsideClick(e);
-        }
-      },
-      [onOutsideClick]
-    );
+  const anchorElement = createAnchorElement(
+    children,
+    { triggersOn, reference: anchorRef },
+    {
+      onClick: e => {
+        const { newPlacement, newPosition } = positioning(
+          placement,
+          tooltipRef.current,
+          anchorRef.current
+        );
 
-    const anchorElement = createAnchorElement(
-      children,
-      { triggersOn, reference: anchorRef },
-      {
-        onClick: e => {
-          const { newPlacement, newPosition } = positioning(
-            placement,
-            tooltipRef.current,
-            anchorRef.current
-          );
+        setCurrentPositon(newPosition);
+        setCurrentPlacement(newPlacement);
 
-          setCurrentPositon(newPosition);
-          setCurrentPlacement(newPlacement);
-
-          if (open) {
-            if (onClose) onClose(e);
-            setOpen(false);
-          } else {
-            if (onOpen) onOpen(e);
-            setOpen(true);
-          }
-        },
-        onMouseEnter: e => {
-          const { newPlacement, newPosition } = positioning(
-            placement,
-            tooltipRef.current,
-            anchorRef.current
-          );
-
-          setCurrentPositon(newPosition);
-          setCurrentPlacement(newPlacement);
-
-          if (onOpen) onOpen(e);
-          setOpen(true);
-        },
-        onMouseLeave: e => {
+        if (open) {
           if (onClose) onClose(e);
           setOpen(false);
-        },
-        onMouseMove: e => {
-          const tooltipRect = tooltipRef.current.getBoundingClientRect();
-
-          const tooltipWidth = tooltipRect.width;
-          const tooltipHeight = tooltipRect.height;
-
-          let x = e.pageX - tooltipWidth / 2;
-          let y = e.pageY - tooltipHeight;
-
-          setCurrentPositon({ left: x, top: y });
-
-          const collisionState = checkBoundingCollision(
-            x,
-            y,
-            tooltipWidth,
-            tooltipHeight,
-            currentPlacement,
-            triggersOn
-          );
-
-          if (collisionState.vertical) {
-            y = e.pageY;
-            setCurrentPlacement("bottom");
-          } else if (collisionState.horizontal) {
-            y = e.pageY - tooltipHeight / 2;
-
-            if (collisionState.left) {
-              x = e.pageX;
-              setCurrentPlacement("right");
-            } else if (collisionState.right) {
-              x = e.pageX - tooltipWidth;
-              setCurrentPlacement("left");
-            }
-          } else setCurrentPlacement("top");
+        } else {
+          if (onOpen) onOpen(e);
+          setOpen(true);
         }
+      },
+      onMouseEnter: e => {
+        const { newPlacement, newPosition } = positioning(
+          placement,
+          tooltipRef.current,
+          anchorRef.current
+        );
+
+        setCurrentPositon(newPosition);
+        setCurrentPlacement(newPlacement);
+
+        if (onOpen) onOpen(e);
+        setOpen(true);
+      },
+      onMouseLeave: e => {
+        if (onClose) onClose(e);
+        setOpen(false);
+      },
+      onMouseMove: e => {
+        const tooltipRect = tooltipRef.current.getBoundingClientRect();
+
+        const tooltipWidth = tooltipRect.width;
+        const tooltipHeight = tooltipRect.height;
+
+        let x = e.pageX - tooltipWidth / 2;
+        let y = e.pageY - tooltipHeight;
+
+        setCurrentPositon({ left: x, top: y });
+
+        const collisionState = checkBoundingCollision(
+          x,
+          y,
+          tooltipWidth,
+          tooltipHeight,
+          currentPlacement,
+          triggersOn
+        );
+
+        if (collisionState.vertical) {
+          y = e.pageY;
+          setCurrentPlacement("bottom");
+        } else if (collisionState.horizontal) {
+          y = e.pageY - tooltipHeight / 2;
+
+          if (collisionState.left) {
+            x = e.pageX;
+            setCurrentPlacement("right");
+          } else if (collisionState.right) {
+            x = e.pageX - tooltipWidth;
+            setCurrentPlacement("left");
+          }
+        } else setCurrentPlacement("top");
       }
-    );
-
-    if (!isSSR) {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useEventListener(
-        {
-          element: document,
-          eventName: "mousedown",
-          listener: outsideClickHandler,
-          options: { useCapture: true }
-        },
-        open && onOutsideClick != null
-      );
     }
+  );
 
-    return (
-      <React.Fragment>
-        <PortalDestination aria-hidden={!open}>
-          <div
-            tabIndex={-1}
-            role="tooltip"
-            ref={tooltipRefHandle}
-            id={uniqueId.current}
-            style={{
-              left: currentPosition.left,
-              top: currentPosition.top,
-              ...style
-            }}
-            className={clx(classes.root, className, {
-              [classes[currentPlacement]]: triggersOn !== "mouseMove",
-              [classes.tailed]: triggersOn !== "mouseMove" && tailed,
-              [classes.open]: open,
-              [classes.floated]: triggersOn === "mouseMove"
-            })}
-            {...otherProps}
-          >
-            <div className={classes.container}>
-              <span className={classes.text}>{text}</span>
-            </div>
-            <div className={classes.tail}></div>
-          </div>
-        </PortalDestination>
-        {anchorElement}
-      </React.Fragment>
+  if (!isSSR) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEventListener(
+      {
+        element: document,
+        eventName: "mousedown",
+        listener: outsideClickHandler,
+        options: { useCapture: true }
+      },
+      open && onOutsideClick != null
     );
-  })
-);
+  }
+
+  return (
+    <React.Fragment>
+      <PortalDestination aria-hidden={!open}>
+        <div
+          tabIndex={-1}
+          role="tooltip"
+          ref={tooltipRefHandle}
+          id={uniqueId.current}
+          style={{
+            left: currentPosition.left,
+            top: currentPosition.top,
+            ...style
+          }}
+          className={clx(classes.root, className, {
+            [classes[currentPlacement]]: triggersOn !== "mouseMove",
+            [classes.tailed]: triggersOn !== "mouseMove" && tailed,
+            [classes.open]: open,
+            [classes.floated]: triggersOn === "mouseMove"
+          })}
+          {...otherProps}
+        >
+          <div className={classes.container}>
+            <span className={classes.text}>{text}</span>
+          </div>
+          <div className={classes.tail}></div>
+        </div>
+      </PortalDestination>
+      {anchorElement}
+    </React.Fragment>
+  );
+});
 
 Tooltip.displayName = componentName;
 

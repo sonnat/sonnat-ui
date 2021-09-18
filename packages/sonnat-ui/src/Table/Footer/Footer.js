@@ -13,21 +13,19 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const TableFooter = React.memo(
-  React.forwardRef((props, ref) => {
-    const { className, children, ...otherProps } = props;
+const TableFooter = React.forwardRef((props, ref) => {
+  const { className, children, ...otherProps } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-      <tfoot ref={ref} className={clx(className, classes.root)} {...otherProps}>
-        <TableInnerContext.Provider value={{ cellVariant: "footer" }}>
-          {children}
-        </TableInnerContext.Provider>
-      </tfoot>
-    );
-  })
-);
+  return (
+    <tfoot ref={ref} className={clx(className, classes.root)} {...otherProps}>
+      <TableInnerContext.Provider value={{ cellVariant: "footer" }}>
+        {children}
+      </TableInnerContext.Provider>
+    </tfoot>
+  );
+});
 
 TableFooter.displayName = componentName;
 

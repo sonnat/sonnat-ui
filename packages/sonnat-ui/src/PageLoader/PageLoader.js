@@ -53,7 +53,7 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const PageLoader = React.memo(function PageLoader(props) {
+const PageLoader = function PageLoader(props) {
   const { className, loading = false, top = 0, ...otherProps } = props;
 
   const classes = useStyles();
@@ -124,7 +124,7 @@ const PageLoader = React.memo(function PageLoader(props) {
       <div className={classes.overlay}></div>
     </div>
   );
-});
+};
 
 PageLoader.displayName = componentName;
 

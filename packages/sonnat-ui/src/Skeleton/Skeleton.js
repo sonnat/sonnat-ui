@@ -70,56 +70,54 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Skeleton = React.memo(
-  React.forwardRef(function Skeleton(props, ref) {
-    const {
-      children,
-      className,
-      ratio,
-      width,
-      height,
-      style: styleProp = {},
-      rootNode: HTMLTag = "span",
-      variant = "text",
-      ...otherProps
-    } = props;
+const Skeleton = React.forwardRef(function Skeleton(props, ref) {
+  const {
+    children,
+    className,
+    ratio,
+    width,
+    height,
+    style: styleProp = {},
+    rootNode: HTMLTag = "span",
+    variant = "text",
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    // eslint-disable-next-line no-unused-vars
-    const { width: _w, height: _h, ...otherStyleProps } = styleProp;
-    const style = { width, height, ...otherStyleProps };
+  // eslint-disable-next-line no-unused-vars
+  const { width: _w, height: _h, ...otherStyleProps } = styleProp;
+  const style = { width, height, ...otherStyleProps };
 
-    if (ratio && variant === "rectangular") {
-      style.height = 0;
-      style.paddingTop = `${100 / ratio}%`;
-    } else if (ratio && variant !== "rectangular") {
-      if (process.env.NODE_ENV !== "production") {
-        // eslint-disable-next-line no-console
-        console.error(
-          `Sonnat: You can not use the \`ratio={${ratio}}\` and \`variant="${variant}"\` properties ` +
-            "at the same time on a `Skeleton` component."
-        );
-      }
+  if (ratio && variant === "rectangular") {
+    style.height = 0;
+    style.paddingTop = `${100 / ratio}%`;
+  } else if (ratio && variant !== "rectangular") {
+    if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
+      console.error(
+        `Sonnat: You can not use the \`ratio={${ratio}}\` and \`variant="${variant}"\` properties ` +
+          "at the same time on a `Skeleton` component."
+      );
     }
+  }
 
-    return (
-      <HTMLTag
-        ref={ref}
-        style={style}
-        className={clx(classes.root, className, {
-          [classes[variant]]: allowedVariants.includes(variant),
-          [classes.autoHeight]: !!children && !height,
-          [classes.autoWidth]: !!children && !width,
-          [classes.hasChildren]: !!children
-        })}
-        {...otherProps}
-      >
-        {children}
-      </HTMLTag>
-    );
-  })
-);
+  return (
+    <HTMLTag
+      ref={ref}
+      style={style}
+      className={clx(classes.root, className, {
+        [classes[variant]]: allowedVariants.includes(variant),
+        [classes.autoHeight]: !!children && !height,
+        [classes.autoWidth]: !!children && !width,
+        [classes.hasChildren]: !!children
+      })}
+      {...otherProps}
+    >
+      {children}
+    </HTMLTag>
+  );
+});
 
 Skeleton.displayName = componentName;
 

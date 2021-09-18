@@ -37,29 +37,27 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const DialogActionBar = React.memo(
-  React.forwardRef(function DialogActionBar(props, ref) {
-    const { className, children, ...otherProps } = props;
+const DialogActionBar = React.forwardRef(function DialogActionBar(props, ref) {
+  const { className, children, ...otherProps } = props;
 
-    const classes = useStyles();
-    const { hasOverflow, registerActionBar } = React.useContext(DialogContext);
+  const classes = useStyles();
+  const { hasOverflow, registerActionBar } = React.useContext(DialogContext);
 
-    return (
-      <div
-        ref={node => {
-          if (ref) setRef(ref, node);
-          registerActionBar(node);
-        }}
-        className={clx(classes.root, className, {
-          [classes.withOverflow]: hasOverflow
-        })}
-        {...otherProps}
-      >
-        {children}
-      </div>
-    );
-  })
-);
+  return (
+    <div
+      ref={node => {
+        if (ref) setRef(ref, node);
+        registerActionBar(node);
+      }}
+      className={clx(classes.root, className, {
+        [classes.withOverflow]: hasOverflow
+      })}
+      {...otherProps}
+    >
+      {children}
+    </div>
+  );
+});
 
 DialogActionBar.displayName = componentName;
 

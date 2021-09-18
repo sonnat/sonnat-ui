@@ -27,19 +27,17 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Row = React.memo(
-  React.forwardRef(function Row(props, ref) {
-    const { children, className, ...otherProps } = props;
+const Row = React.forwardRef(function Row(props, ref) {
+  const { children, className, ...otherProps } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-      <div ref={ref} className={clx(classes.root, className)} {...otherProps}>
-        {children}
-      </div>
-    );
-  })
-);
+  return (
+    <div ref={ref} className={clx(classes.root, className)} {...otherProps}>
+      {children}
+    </div>
+  );
+});
 
 Row.displayName = componentName;
 

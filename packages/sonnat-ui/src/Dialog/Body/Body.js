@@ -27,35 +27,33 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const DialogBody = React.memo(
-  React.forwardRef(function DialogBody(props, ref) {
-    const { className, children, style = {}, ...otherProps } = props;
+const DialogBody = React.forwardRef(function DialogBody(props, ref) {
+  const { className, children, style = {}, ...otherProps } = props;
 
-    const { height: heightStyle, ...styles } = style;
+  const { height: heightStyle, ...styles } = style;
 
-    const classes = useStyles();
-    const { hasOverflow, bodyHeight, registerBody } =
-      React.useContext(DialogContext);
+  const classes = useStyles();
+  const { hasOverflow, bodyHeight, registerBody } =
+    React.useContext(DialogContext);
 
-    const height = bodyHeight || heightStyle || "auto";
+  const height = bodyHeight || heightStyle || "auto";
 
-    return (
-      <div
-        ref={node => {
-          if (ref) setRef(ref, node);
-          registerBody(node);
-        }}
-        style={{ ...styles, height }}
-        className={clx(classes.root, className, {
-          [classes.withOverflow]: hasOverflow
-        })}
-        {...otherProps}
-      >
-        {children}
-      </div>
-    );
-  })
-);
+  return (
+    <div
+      ref={node => {
+        if (ref) setRef(ref, node);
+        registerBody(node);
+      }}
+      style={{ ...styles, height }}
+      className={clx(classes.root, className, {
+        [classes.withOverflow]: hasOverflow
+      })}
+      {...otherProps}
+    >
+      {children}
+    </div>
+  );
+});
 
 DialogBody.displayName = componentName;
 

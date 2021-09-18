@@ -341,87 +341,83 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const InputBase = React.memo(
-  React.forwardRef(function InputBase(props, ref) {
-    const {
-      children,
-      controller,
-      className,
-      leadingAdornment,
-      trailingAdornment,
-      variant: variantProp = "outlined",
-      size: sizeProp = "medium",
-      focused = false,
-      readOnly = false,
-      disabled = false,
-      fluid = false,
-      rounded = false,
-      hasError = false,
-      ...otherProps
-    } = props;
+const InputBase = React.forwardRef(function InputBase(props, ref) {
+  const {
+    children,
+    controller,
+    className,
+    leadingAdornment,
+    trailingAdornment,
+    variant: variantProp = "outlined",
+    size: sizeProp = "medium",
+    focused = false,
+    readOnly = false,
+    disabled = false,
+    fluid = false,
+    rounded = false,
+    hasError = false,
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const textFieldContext = React.useContext(TextFieldContext);
-    const selectContext = React.useContext(SelectContext);
+  const textFieldContext = React.useContext(TextFieldContext);
+  const selectContext = React.useContext(SelectContext);
 
-    const hasLeadingAdornment = !!leadingAdornment;
-    const hasTrailingAdornment = !!trailingAdornment;
+  const hasLeadingAdornment = !!leadingAdornment;
+  const hasTrailingAdornment = !!trailingAdornment;
 
-    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+  const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
 
-    const variant = getVar(
-      variantProp,
-      "outlined",
-      !allowedVariants.includes(variantProp)
-    );
+  const variant = getVar(
+    variantProp,
+    "outlined",
+    !allowedVariants.includes(variantProp)
+  );
 
-    return (
-      <InputBaseContext.Provider value={{ size, disabled, hasError }}>
-        <div
-          ref={ref}
-          className={clx(
-            className,
-            classes.root,
-            classes[size],
-            classes[variant],
-            {
-              [classes.empty]: textFieldContext
-                ? textFieldContext.isEmpty
-                : undefined,
-              [classes.multipleSelect]: selectContext
-                ? selectContext.isMultiple
-                : undefined,
-              [classes.fluid]: fluid,
-              [classes.disabled]: disabled,
-              [classes.readOnly]: readOnly,
-              [classes.focused]: focused,
-              [classes.withLeadingAdornment]: hasLeadingAdornment,
-              [classes.withTrailingAdornment]: hasTrailingAdornment,
-              [classes.rounded]: rounded,
-              [classes.errored]: hasError
-            }
+  return (
+    <InputBaseContext.Provider value={{ size, disabled, hasError }}>
+      <div
+        ref={ref}
+        className={clx(
+          className,
+          classes.root,
+          classes[size],
+          classes[variant],
+          {
+            [classes.empty]: textFieldContext
+              ? textFieldContext.isEmpty
+              : undefined,
+            [classes.multipleSelect]: selectContext
+              ? selectContext.isMultiple
+              : undefined,
+            [classes.fluid]: fluid,
+            [classes.disabled]: disabled,
+            [classes.readOnly]: readOnly,
+            [classes.focused]: focused,
+            [classes.withLeadingAdornment]: hasLeadingAdornment,
+            [classes.withTrailingAdornment]: hasTrailingAdornment,
+            [classes.rounded]: rounded,
+            [classes.errored]: hasError
+          }
+        )}
+        {...otherProps}
+      >
+        <div className={classes.wrapper}>
+          {leadingAdornment && (
+            <div className={classes.leadingAdornment}>{leadingAdornment}</div>
           )}
-          {...otherProps}
-        >
-          <div className={classes.wrapper}>
-            {leadingAdornment && (
-              <div className={classes.leadingAdornment}>{leadingAdornment}</div>
-            )}
-            <div className={classes.control}>{controller}</div>
-            {trailingAdornment && (
-              <div className={classes.trailingAdornment}>
-                {trailingAdornment}
-              </div>
-            )}
-            <div aria-hidden={true} className={classes.notchedOutline} />
-          </div>
+          <div className={classes.control}>{controller}</div>
+          {trailingAdornment && (
+            <div className={classes.trailingAdornment}>{trailingAdornment}</div>
+          )}
+          <div aria-hidden={true} className={classes.notchedOutline} />
         </div>
-        {children}
-      </InputBaseContext.Provider>
-    );
-  })
-);
+      </div>
+      {children}
+    </InputBaseContext.Provider>
+  );
+});
 
 InputBase.propTypes = {
   children: PropTypes.node,

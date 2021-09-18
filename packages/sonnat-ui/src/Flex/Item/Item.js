@@ -159,79 +159,71 @@ const createResponsiveClass = (prop, classes, prefix = "") => {
   return classes[camelCase(`${prefix ? prefix + "-" : ""}${prop}`)];
 };
 
-const FlexItem = React.memo(
-  React.forwardRef(function FlexItem(props, ref) {
-    const {
-      className,
-      children,
-      fill = false,
-      autoMarginStart: autoMarginStartProp = false,
-      autoMarginTop: autoMarginTopProp = false,
-      autoMarginEnd: autoMarginEndProp = false,
-      autoMarginBottom: autoMarginBottomProp = false,
-      rootNode: RootNode = "div",
-      mainAxisSelfAlignment: mainAxisAlignmentProp = "start",
-      crossAxisSelfAlignment: crossAxisAlignmentProp = "stretch",
-      ...otherProps
-    } = props;
+const FlexItem = React.forwardRef(function FlexItem(props, ref) {
+  const {
+    className,
+    children,
+    fill = false,
+    autoMarginStart: autoMarginStartProp = false,
+    autoMarginTop: autoMarginTopProp = false,
+    autoMarginEnd: autoMarginEndProp = false,
+    autoMarginBottom: autoMarginBottomProp = false,
+    rootNode: RootNode = "div",
+    mainAxisSelfAlignment: mainAxisAlignmentProp = "start",
+    crossAxisSelfAlignment: crossAxisAlignmentProp = "stretch",
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const autoMarginStart = getValueOfProp(autoMarginStartProp, false, [
-      true,
-      false
-    ]);
+  const autoMarginStart = getValueOfProp(autoMarginStartProp, false, [
+    true,
+    false
+  ]);
 
-    const autoMarginEnd = getValueOfProp(autoMarginEndProp, false, [
-      true,
-      false
-    ]);
+  const autoMarginEnd = getValueOfProp(autoMarginEndProp, false, [true, false]);
 
-    const autoMarginTop = getValueOfProp(autoMarginTopProp, false, [
-      true,
-      false
-    ]);
+  const autoMarginTop = getValueOfProp(autoMarginTopProp, false, [true, false]);
 
-    const autoMarginBottom = getValueOfProp(autoMarginBottomProp, false, [
-      true,
-      false
-    ]);
+  const autoMarginBottom = getValueOfProp(autoMarginBottomProp, false, [
+    true,
+    false
+  ]);
 
-    const mainAxisAlignment = getValueOfProp(
-      mainAxisAlignmentProp,
-      "start",
-      allowedMainAxisAlignments
-    );
+  const mainAxisAlignment = getValueOfProp(
+    mainAxisAlignmentProp,
+    "start",
+    allowedMainAxisAlignments
+  );
 
-    const crossAxisAlignment = getValueOfProp(
-      crossAxisAlignmentProp,
-      "stretch",
-      allowedCrossAxisAlignments
-    );
+  const crossAxisAlignment = getValueOfProp(
+    crossAxisAlignmentProp,
+    "stretch",
+    allowedCrossAxisAlignments
+  );
 
-    return (
-      <RootNode
-        ref={ref}
-        className={clx(
-          className,
-          classes.root,
-          createResponsiveClass(autoMarginStart, classes, "autoMarginStart"),
-          createResponsiveClass(autoMarginEnd, classes, "autoMarginEnd"),
-          createResponsiveClass(autoMarginTop, classes, "autoMarginTop"),
-          createResponsiveClass(autoMarginBottom, classes, "autoMarginBottom"),
-          createResponsiveClass(mainAxisAlignment, classes, "justify"),
-          createResponsiveClass(crossAxisAlignment, classes, "align"),
-          {
-            [classes.fill]: fill
-          }
-        )}
-        {...otherProps}
-      >
-        {children}
-      </RootNode>
-    );
-  })
-);
+  return (
+    <RootNode
+      ref={ref}
+      className={clx(
+        className,
+        classes.root,
+        createResponsiveClass(autoMarginStart, classes, "autoMarginStart"),
+        createResponsiveClass(autoMarginEnd, classes, "autoMarginEnd"),
+        createResponsiveClass(autoMarginTop, classes, "autoMarginTop"),
+        createResponsiveClass(autoMarginBottom, classes, "autoMarginBottom"),
+        createResponsiveClass(mainAxisAlignment, classes, "justify"),
+        createResponsiveClass(crossAxisAlignment, classes, "align"),
+        {
+          [classes.fill]: fill
+        }
+      )}
+      {...otherProps}
+    >
+      {children}
+    </RootNode>
+  );
+});
 
 const getResponsivePropTypeOf = validValues => {
   return PropTypes.oneOfType([

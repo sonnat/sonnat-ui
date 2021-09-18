@@ -259,386 +259,381 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const TextArea = React.memo(
-  React.forwardRef(function TextArea(props, ref) {
-    const {
-      placeholder,
-      onBlur,
-      onFocus,
-      onChange,
-      className,
-      helperText,
-      helperIcon,
-      defaultValue,
-      name: nameProp,
-      value: valueProp,
-      maxRows,
-      minRows,
-      style = {},
-      inputProps = {},
-      autoResize = false,
-      autoFocus = false,
-      focused = false,
-      readOnly = false,
-      fluid = false,
-      hasError = false,
-      disabled = false,
-      resizable = false,
-      required = false,
-      size: sizeProp = "medium",
-      ...otherProps
-    } = props;
+const TextArea = React.forwardRef(function TextArea(props, ref) {
+  const {
+    placeholder,
+    onBlur,
+    onFocus,
+    onChange,
+    className,
+    helperText,
+    helperIcon,
+    defaultValue,
+    name: nameProp,
+    value: valueProp,
+    maxRows,
+    minRows,
+    style = {},
+    inputProps = {},
+    autoResize = false,
+    autoFocus = false,
+    focused = false,
+    readOnly = false,
+    fluid = false,
+    hasError = false,
+    disabled = false,
+    resizable = false,
+    required = false,
+    size: sizeProp = "medium",
+    ...otherProps
+  } = props;
 
-    const {
-      className: inputClassNameProp,
-      id: inputIdProp,
-      ref: inputRefProp,
-      name: inputNameProp,
-      value: inputValueProp,
-      onFocus: inputOnFocusProp,
-      onBlur: inputOnBlurProp,
-      onChange: inputOnChangeProp,
-      style: inputStyleProp = {},
-      readOnly: inputReadOnlyProp = false,
-      autoFocus: inputAutoFocusProp = false,
-      ...otherInputProps
-    } = inputProps;
+  const {
+    className: inputClassNameProp,
+    id: inputIdProp,
+    ref: inputRefProp,
+    name: inputNameProp,
+    value: inputValueProp,
+    onFocus: inputOnFocusProp,
+    onBlur: inputOnBlurProp,
+    onChange: inputOnChangeProp,
+    style: inputStyleProp = {},
+    readOnly: inputReadOnlyProp = false,
+    autoFocus: inputAutoFocusProp = false,
+    ...otherInputProps
+  } = inputProps;
 
-    if (inputNameProp != null && nameProp != null) {
-      // eslint-disable-next-line no-console
-      console.error(
-        [
-          "Sonnat: You are passing the `name` prop twice." +
-            "(one as `name` property and the other one as a property of `inputProps`)",
-          `We are assuming \`name="${inputNameProp}"\`!`
-        ].join("\n")
+  if (inputNameProp != null && nameProp != null) {
+    // eslint-disable-next-line no-console
+    console.error(
+      [
+        "Sonnat: You are passing the `name` prop twice." +
+          "(one as `name` property and the other one as a property of `inputProps`)",
+        `We are assuming \`name="${inputNameProp}"\`!`
+      ].join("\n")
+    );
+  }
+
+  if (inputValueProp != null && valueProp != null) {
+    // eslint-disable-next-line no-console
+    console.error(
+      [
+        "Sonnat: You are passing the `value` prop twice." +
+          "(one as `value` property and the other one as a property of `inputProps`)",
+        `We are assuming \`value="${inputValueProp}"\`!`
+      ].join("\n")
+    );
+  }
+
+  const name = inputNameProp || nameProp;
+
+  const inputRef = React.useRef();
+  const handleRef = useForkRef(ref, inputRef);
+  const shadowRef = React.useRef();
+  const renders = React.useRef(0);
+
+  const [styleState, setStyleState] = React.useState({});
+
+  const classes = useStyles();
+  const formControl = useFormControl();
+
+  const { current: _default_ } = React.useRef(
+    inputValueProp || valueProp != null
+      ? undefined
+      : defaultValue != null
+      ? defaultValue
+      : ""
+  );
+
+  const [value, setValue, isControlled] = useControlled(
+    inputValueProp || valueProp,
+    _default_,
+    componentName
+  );
+
+  const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+
+  const { current: initialValue } = React.useRef(value);
+
+  const formControlFocusState = formControl
+    ? formControl.focusedState
+    : undefined;
+
+  const { current: isAutoFocus } = React.useRef(
+    typeof formControlFocusState === "undefined"
+      ? !!inputAutoFocusProp || autoFocus || focused
+      : formControlFocusState
+  );
+
+  const isReadOnly = !!inputReadOnlyProp || readOnly;
+  const hasLimitedLength = !!otherInputProps.maxLength;
+
+  const isMounted = useIsMounted();
+
+  const [isFocused, setFocused] = React.useState(isAutoFocus);
+
+  const [charCount, setCharCount] = React.useState(
+    clamp(
+      initialValue.length,
+      0,
+      hasLimitedLength ? otherInputProps.maxLength : Infinity
+    )
+  );
+
+  const finalValue = hasLimitedLength
+    ? value.substr(0, otherInputProps.maxLength)
+    : value;
+
+  let focusState =
+    typeof formControlFocusState === "boolean"
+      ? formControlFocusState
+      : isFocused;
+
+  // inherit properties from FormControl
+  const controlProps = {
+    disabled: formControl ? formControl.disabled : disabled,
+    hasError: formControl ? formControl.hasError : hasError,
+    required: formControl ? formControl.required : required,
+    fluid: formControl ? formControl.fluid : fluid,
+    onFocus: e => {
+      if (isMounted() && !(controlProps.disabled || isReadOnly)) {
+        if (onFocus) onFocus(e);
+        if (inputOnFocusProp) inputOnFocusProp(e);
+        if (formControl && formControl.onFocus) formControl.onFocus(e);
+        else setFocused(true);
+      }
+    },
+    onBlur: e => {
+      if (isMounted() && !(controlProps.disabled || isReadOnly)) {
+        if (onBlur) onBlur(e);
+        if (inputOnBlurProp) inputOnBlurProp(e);
+        if (formControl && formControl.onBlur) formControl.onBlur(e);
+        else setFocused(false);
+      }
+    },
+    onChange: e => {
+      if (isMounted() && !(controlProps.disabled || isReadOnly)) {
+        renders.current = 0;
+
+        if (onChange) onChange(e, e.target.value);
+        if (inputOnChangeProp) inputClassNameProp(e, e.target.value);
+        if (!isControlled && autoResize) syncHeight();
+        setValue(e.target.value);
+        setCharCount(e.target.value.length);
+      }
+    }
+  };
+
+  if (process.env.NODE_ENV !== "production") {
+    if (controlProps.disabled && isReadOnly) {
+      throw new Error(
+        "[Sonnat]: You can't use `disabled` and `readOnly` props at the same time!"
       );
     }
+  }
 
-    if (inputValueProp != null && valueProp != null) {
-      // eslint-disable-next-line no-console
-      console.error(
-        [
-          "Sonnat: You are passing the `value` prop twice." +
-            "(one as `value` property and the other one as a property of `inputProps`)",
-          `We are assuming \`value="${inputValueProp}"\`!`
-        ].join("\n")
-      );
-    }
+  if ((controlProps.disabled || isReadOnly) && focusState) {
+    focusState = false;
+  }
 
-    const name = inputNameProp || nameProp;
-
-    const inputRef = React.useRef();
-    const handleRef = useForkRef(ref, inputRef);
-    const shadowRef = React.useRef();
-    const renders = React.useRef(0);
-
-    const [styleState, setStyleState] = React.useState({});
-
-    const classes = useStyles();
-    const formControl = useFormControl();
-
-    const { current: _default_ } = React.useRef(
-      inputValueProp || valueProp != null
-        ? undefined
-        : defaultValue != null
-        ? defaultValue
-        : ""
-    );
-
-    const [value, setValue, isControlled] = useControlled(
-      inputValueProp || valueProp,
-      _default_,
-      componentName
-    );
-
-    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
-
-    const { current: initialValue } = React.useRef(value);
-
-    const formControlFocusState = formControl
-      ? formControl.focusedState
-      : undefined;
-
-    const { current: isAutoFocus } = React.useRef(
-      typeof formControlFocusState === "undefined"
-        ? !!inputAutoFocusProp || autoFocus || focused
-        : formControlFocusState
-    );
-
-    const isReadOnly = !!inputReadOnlyProp || readOnly;
-    const hasLimitedLength = !!otherInputProps.maxLength;
-
-    const isMounted = useIsMounted();
-
-    const [isFocused, setFocused] = React.useState(isAutoFocus);
-
-    const [charCount, setCharCount] = React.useState(
-      clamp(
-        initialValue.length,
-        0,
-        hasLimitedLength ? otherInputProps.maxLength : Infinity
-      )
-    );
-
-    const finalValue = hasLimitedLength
-      ? value.substr(0, otherInputProps.maxLength)
-      : value;
-
-    let focusState =
-      typeof formControlFocusState === "boolean"
-        ? formControlFocusState
-        : isFocused;
-
-    // inherit properties from FormControl
-    const controlProps = {
-      disabled: formControl ? formControl.disabled : disabled,
-      hasError: formControl ? formControl.hasError : hasError,
-      required: formControl ? formControl.required : required,
-      fluid: formControl ? formControl.fluid : fluid,
-      onFocus: e => {
-        if (isMounted() && !(controlProps.disabled || isReadOnly)) {
-          if (onFocus) onFocus(e);
-          if (inputOnFocusProp) inputOnFocusProp(e);
-          if (formControl && formControl.onFocus) formControl.onFocus(e);
-          else setFocused(true);
-        }
-      },
-      onBlur: e => {
-        if (isMounted() && !(controlProps.disabled || isReadOnly)) {
-          if (onBlur) onBlur(e);
-          if (inputOnBlurProp) inputOnBlurProp(e);
-          if (formControl && formControl.onBlur) formControl.onBlur(e);
-          else setFocused(false);
-        }
-      },
-      onChange: e => {
-        if (isMounted() && !(controlProps.disabled || isReadOnly)) {
-          renders.current = 0;
-
-          if (onChange) onChange(e, e.target.value);
-          if (inputOnChangeProp) inputClassNameProp(e, e.target.value);
-          if (!isControlled && autoResize) syncHeight();
-          setValue(e.target.value);
-          setCharCount(e.target.value.length);
-        }
-      }
-    };
-
-    if (process.env.NODE_ENV !== "production") {
-      if (controlProps.disabled && isReadOnly) {
-        throw new Error(
-          "[Sonnat]: You can't use `disabled` and `readOnly` props at the same time!"
-        );
-      }
-    }
-
-    if ((controlProps.disabled || isReadOnly) && focusState) {
-      focusState = false;
-    }
-
-    // initially focus the component
-    useEnhancedEffect(() => {
-      if (!(controlProps.disabled || isReadOnly)) {
-        if (isAutoFocus && inputRef.current) {
-          inputRef.current.focus();
-          setFocused(true);
-        }
-      }
-    }, []);
-
-    React.useImperativeHandle(ref, () => ({
-      focus: () => {
+  // initially focus the component
+  useEnhancedEffect(() => {
+    if (!(controlProps.disabled || isReadOnly)) {
+      if (isAutoFocus && inputRef.current) {
         inputRef.current.focus();
-      },
-      blur: () => {
-        inputRef.current.blur();
-      },
-      clear: () => {
-        if (value !== "") {
-          if (!(controlProps.disabled || isReadOnly)) {
-            if (onChange) onChange(undefined, "");
-            if (inputOnChangeProp) inputOnChangeProp(undefined, "");
-            inputRef.current.value = "";
-            setValue("");
-            setCharCount(0);
-          }
+        setFocused(true);
+      }
+    }
+  }, []);
+
+  React.useImperativeHandle(ref, () => ({
+    focus: () => {
+      inputRef.current.focus();
+    },
+    blur: () => {
+      inputRef.current.blur();
+    },
+    clear: () => {
+      if (value !== "") {
+        if (!(controlProps.disabled || isReadOnly)) {
+          if (onChange) onChange(undefined, "");
+          if (inputOnChangeProp) inputOnChangeProp(undefined, "");
+          inputRef.current.value = "";
+          setValue("");
+          setCharCount(0);
         }
       }
-    }));
+    }
+  }));
 
-    const syncHeight = React.useCallback(() => {
-      const input = inputRef.current;
-      const containerWindow = getOwnerWindow(input);
-      const computedStyle = containerWindow.getComputedStyle(input);
+  const syncHeight = React.useCallback(() => {
+    const input = inputRef.current;
+    const containerWindow = getOwnerWindow(input);
+    const computedStyle = containerWindow.getComputedStyle(input);
 
-      // If input's width is shrunk and it's not visible, don't sync height.
-      if (computedStyle.width === "0px") return;
+    // If input's width is shrunk and it's not visible, don't sync height.
+    if (computedStyle.width === "0px") return;
 
-      const inputShadow = shadowRef.current;
-      inputShadow.style.width = computedStyle.width;
-      inputShadow.value = input.value || placeholder || "x";
-      if (inputShadow.value.slice(-1) === "\n") {
-        // Certain fonts which overflow the line height will cause the textarea
-        // to report a different scrollHeight depending on whether the last line
-        // is empty. Make it non-empty to avoid this issue.
-        inputShadow.value += " ";
-      }
+    const inputShadow = shadowRef.current;
+    inputShadow.style.width = computedStyle.width;
+    inputShadow.value = input.value || placeholder || "x";
+    if (inputShadow.value.slice(-1) === "\n") {
+      // Certain fonts which overflow the line height will cause the textarea
+      // to report a different scrollHeight depending on whether the last line
+      // is empty. Make it non-empty to avoid this issue.
+      inputShadow.value += " ";
+    }
 
-      // The height of the inner content
-      const innerHeight = inputShadow.scrollHeight;
+    // The height of the inner content
+    const innerHeight = inputShadow.scrollHeight;
 
-      // Measure height of a textarea with a single row
-      inputShadow.value = "x";
-      const singleRowHeight = inputShadow.scrollHeight;
+    // Measure height of a textarea with a single row
+    inputShadow.value = "x";
+    const singleRowHeight = inputShadow.scrollHeight;
 
-      // The height of the outer content
-      let outerHeight = innerHeight;
+    // The height of the outer content
+    let outerHeight = innerHeight;
 
-      if (minRows)
-        outerHeight = Math.max(Number(minRows) * singleRowHeight, outerHeight);
-      if (maxRows)
-        outerHeight = Math.min(Number(maxRows) * singleRowHeight, outerHeight);
-      outerHeight = Math.max(outerHeight, singleRowHeight);
+    if (minRows)
+      outerHeight = Math.max(Number(minRows) * singleRowHeight, outerHeight);
+    if (maxRows)
+      outerHeight = Math.min(Number(maxRows) * singleRowHeight, outerHeight);
+    outerHeight = Math.max(outerHeight, singleRowHeight);
 
-      const outerHeightStyle = outerHeight;
-      const overflow = Math.abs(outerHeight - innerHeight) <= 1;
+    const outerHeightStyle = outerHeight;
+    const overflow = Math.abs(outerHeight - innerHeight) <= 1;
 
-      setStyleState(prevState => {
-        // Need a large enough difference to update the height.
-        // This prevents infinite rendering loop.
-        if (
-          renders.current < 20 &&
-          ((outerHeightStyle > 0 &&
-            Math.abs((prevState.outerHeightStyle || 0) - outerHeightStyle) >
-              1) ||
-            prevState.overflow !== overflow)
-        ) {
-          renders.current += 1;
-          return {
-            overflow,
-            outerHeightStyle
-          };
-        }
-
-        if (process.env.NODE_ENV !== "production") {
-          if (renders.current === 20) {
-            // eslint-disable-next-line no-console
-            console.error(
-              [
-                "Sonnat: Too many re-renders. The layout is unstable.",
-                "TextArea with `autoResize` prop, limits the number of renders to prevent an infinite loop."
-              ].join("\n")
-            );
-          }
-        }
-
-        return prevState;
-      });
-    }, [maxRows, minRows, placeholder]);
-
-    React.useEffect(() => {
-      if (autoResize) {
-        const handleResize = debounce(() => {
-          renders.current = 0;
-          syncHeight();
-        }, 200);
-
-        const containerWindow = getOwnerWindow(inputRef.current);
-        containerWindow.addEventListener("resize", handleResize);
-
-        return () => {
-          handleResize.cancel();
-          containerWindow.removeEventListener("resize", handleResize);
+    setStyleState(prevState => {
+      // Need a large enough difference to update the height.
+      // This prevents infinite rendering loop.
+      if (
+        renders.current < 20 &&
+        ((outerHeightStyle > 0 &&
+          Math.abs((prevState.outerHeightStyle || 0) - outerHeightStyle) > 1) ||
+          prevState.overflow !== overflow)
+      ) {
+        renders.current += 1;
+        return {
+          overflow,
+          outerHeightStyle
         };
       }
-    }, [syncHeight, autoResize]);
 
-    useEnhancedEffect(() => {
-      if (autoResize) syncHeight();
+      if (process.env.NODE_ENV !== "production") {
+        if (renders.current === 20) {
+          // eslint-disable-next-line no-console
+          console.error(
+            [
+              "Sonnat: Too many re-renders. The layout is unstable.",
+              "TextArea with `autoResize` prop, limits the number of renders to prevent an infinite loop."
+            ].join("\n")
+          );
+        }
+      }
+
+      return prevState;
     });
+  }, [maxRows, minRows, placeholder]);
 
-    React.useEffect(() => {
-      renders.current = 0;
-    }, [value]);
+  React.useEffect(() => {
+    if (autoResize) {
+      const handleResize = debounce(() => {
+        renders.current = 0;
+        syncHeight();
+      }, 200);
 
-    return (
-      <div
-        className={clx(classes.root, className, classes[size], {
-          [classes.resizable]: resizable,
-          [classes.focused]: focusState,
-          [classes.disabled]: controlProps.disabled,
-          [classes.readOnly]: isReadOnly,
-          [classes.fluid]: controlProps.fluid,
-          [classes.errored]: controlProps.hasError
-        })}
-        ref={ref}
-        {...otherProps}
-      >
-        <div className={classes.wrapper}>
-          <textarea
-            id={inputIdProp}
-            name={name}
-            placeholder={placeholder}
-            value={finalValue}
-            disabled={controlProps.disabled}
-            required={controlProps.required}
-            className={clx(classes.input, inputClassNameProp)}
-            onChange={controlProps.onChange}
-            onFocus={controlProps.onFocus}
-            onBlur={controlProps.onBlur}
-            readOnly={isReadOnly}
-            rows={minRows}
-            tabIndex={controlProps.disabled || isReadOnly ? -1 : 0}
-            style={{
-              height: styleState.outerHeightStyle,
+      const containerWindow = getOwnerWindow(inputRef.current);
+      containerWindow.addEventListener("resize", handleResize);
 
-              // Need a large enough difference to allow scrolling.
-              // This prevents infinite rendering loop.
-              overflow: styleState.overflow ? "hidden" : undefined,
+      return () => {
+        handleResize.cancel();
+        containerWindow.removeEventListener("resize", handleResize);
+      };
+    }
+  }, [syncHeight, autoResize]);
 
-              ...style,
-              ...inputStyleProp
-            }}
-            ref={node => {
-              if (inputRefProp) setRef(inputRefProp, node);
-              handleRef(node);
-            }}
-            {...otherInputProps}
-          />
-          <textarea
-            aria-hidden
-            className={clx(classes.shadow, inputClassNameProp)}
-            readOnly
-            ref={shadowRef}
-            tabIndex={-1}
-            style={{
-              ...style,
-              ...inputStyleProp
-            }}
-          />
-        </div>
-        {(!!helperText || !!otherInputProps.maxLength) && (
-          <div className={classes.helperRow}>
-            {helperText && (
-              <p className={classes.helperContent}>
-                {helperIcon && (
-                  <i className={classes.helperIcon}>{helperIcon}</i>
-                )}
-                <span className={classes.helperText}>{helperText}</span>
-              </p>
-            )}
-            {otherInputProps.maxLength && (
-              <div className={classes.charCount}>
-                {charCount} / {otherInputProps.maxLength}
-              </div>
-            )}
-          </div>
-        )}
+  useEnhancedEffect(() => {
+    if (autoResize) syncHeight();
+  });
+
+  React.useEffect(() => {
+    renders.current = 0;
+  }, [value]);
+
+  return (
+    <div
+      className={clx(classes.root, className, classes[size], {
+        [classes.resizable]: resizable,
+        [classes.focused]: focusState,
+        [classes.disabled]: controlProps.disabled,
+        [classes.readOnly]: isReadOnly,
+        [classes.fluid]: controlProps.fluid,
+        [classes.errored]: controlProps.hasError
+      })}
+      ref={ref}
+      {...otherProps}
+    >
+      <div className={classes.wrapper}>
+        <textarea
+          id={inputIdProp}
+          name={name}
+          placeholder={placeholder}
+          value={finalValue}
+          disabled={controlProps.disabled}
+          required={controlProps.required}
+          className={clx(classes.input, inputClassNameProp)}
+          onChange={controlProps.onChange}
+          onFocus={controlProps.onFocus}
+          onBlur={controlProps.onBlur}
+          readOnly={isReadOnly}
+          rows={minRows}
+          tabIndex={controlProps.disabled || isReadOnly ? -1 : 0}
+          style={{
+            height: styleState.outerHeightStyle,
+
+            // Need a large enough difference to allow scrolling.
+            // This prevents infinite rendering loop.
+            overflow: styleState.overflow ? "hidden" : undefined,
+
+            ...style,
+            ...inputStyleProp
+          }}
+          ref={node => {
+            if (inputRefProp) setRef(inputRefProp, node);
+            handleRef(node);
+          }}
+          {...otherInputProps}
+        />
+        <textarea
+          aria-hidden
+          className={clx(classes.shadow, inputClassNameProp)}
+          readOnly
+          ref={shadowRef}
+          tabIndex={-1}
+          style={{
+            ...style,
+            ...inputStyleProp
+          }}
+        />
       </div>
-    );
-  })
-);
+      {(!!helperText || !!otherInputProps.maxLength) && (
+        <div className={classes.helperRow}>
+          {helperText && (
+            <p className={classes.helperContent}>
+              {helperIcon && <i className={classes.helperIcon}>{helperIcon}</i>}
+              <span className={classes.helperText}>{helperText}</span>
+            </p>
+          )}
+          {otherInputProps.maxLength && (
+            <div className={classes.charCount}>
+              {charCount} / {otherInputProps.maxLength}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+});
 
 TextArea.displayName = componentName;
 

@@ -139,135 +139,133 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Badge = React.memo(
-  React.forwardRef(function Badge(props, ref) {
-    const {
-      className,
-      textContent,
-      parentProps: parentPropsProp = {},
-      childShape: shapeProp = "rectangular",
-      children: childrenProp,
-      horizontalPosition: hPosProp = "right",
-      verticalPosition: vPosProp = "top",
-      color: colorProp = "primary",
-      variant: variantProp = "filled",
-      dotSize: dotSizeProp = "medium",
-      visible = true,
-      ...otherProps
-    } = props;
+const Badge = React.forwardRef(function Badge(props, ref) {
+  const {
+    className,
+    textContent,
+    parentProps: parentPropsProp = {},
+    childShape: shapeProp = "rectangular",
+    children: childrenProp,
+    horizontalPosition: hPosProp = "right",
+    verticalPosition: vPosProp = "top",
+    color: colorProp = "primary",
+    variant: variantProp = "filled",
+    dotSize: dotSizeProp = "medium",
+    visible = true,
+    ...otherProps
+  } = props;
 
-    const { className: parentClassName, ...parentProps } = parentPropsProp;
+  const { className: parentClassName, ...parentProps } = parentPropsProp;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const horizontalPosition = getVar(
-      hPosProp,
-      "right",
-      !allowedHorizontalPositions.includes(hPosProp)
-    );
+  const horizontalPosition = getVar(
+    hPosProp,
+    "right",
+    !allowedHorizontalPositions.includes(hPosProp)
+  );
 
-    const verticalPosition = getVar(
-      vPosProp,
-      "top",
-      !allowedVerticalPositions.includes(vPosProp)
-    );
+  const verticalPosition = getVar(
+    vPosProp,
+    "top",
+    !allowedVerticalPositions.includes(vPosProp)
+  );
 
-    const variant = getVar(
-      variantProp,
-      "filled",
-      !allowedVariants.includes(variantProp)
-    );
+  const variant = getVar(
+    variantProp,
+    "filled",
+    !allowedVariants.includes(variantProp)
+  );
 
-    const color = getVar(
-      colorProp,
-      "primary",
-      !allowedColors.includes(colorProp)
-    );
+  const color = getVar(
+    colorProp,
+    "primary",
+    !allowedColors.includes(colorProp)
+  );
 
-    const dotSize = getVar(
-      dotSizeProp,
-      "medium",
-      !allowedSizes.includes(dotSizeProp)
-    );
+  const dotSize = getVar(
+    dotSizeProp,
+    "medium",
+    !allowedSizes.includes(dotSizeProp)
+  );
 
-    const childShape = getVar(
-      shapeProp,
-      "rectangular",
-      !allowedChildShapes.includes(shapeProp)
-    );
+  const childShape = getVar(
+    shapeProp,
+    "rectangular",
+    !allowedChildShapes.includes(shapeProp)
+  );
 
-    const isDotted = variant === "dotted";
-    const isVisible = visible === true;
+  const isDotted = variant === "dotted";
+  const isVisible = visible === true;
 
-    let children;
+  let children;
 
-    if (childrenProp != null && React.isValidElement(childrenProp)) {
-      try {
-        children = React.Children.only(childrenProp);
-      } catch (err) {
-        throw new Error(
-          `[Sonnat]: The \`children\` prop has to be a single valid element.`
-        );
-      }
+  if (childrenProp != null && React.isValidElement(childrenProp)) {
+    try {
+      children = React.Children.only(childrenProp);
+    } catch (err) {
+      throw new Error(
+        `[Sonnat]: The \`children\` prop has to be a single valid element.`
+      );
     }
+  }
 
-    const positionClass =
-      classes[camelCase(`${verticalPosition}-${horizontalPosition}`)];
+  const positionClass =
+    classes[camelCase(`${verticalPosition}-${horizontalPosition}`)];
 
-    const createRelativeBadge = () => {
-      return (
-        <div
-          ref={ref}
-          className={clx(
-            classes.root,
-            classes.relative,
-            parentClassName,
-            className
-          )}
-          {...parentProps}
-        >
-          {createStandaloneBadge(
-            clx(positionClass, classes[`${childShape}Overlapping`]),
-            true
-          )}
-          {React.cloneElement(children, {
-            className: clx(children.props.className, classes.anchorElement)
-          })}
-        </div>
-      );
-    };
+  const createRelativeBadge = () => {
+    return (
+      <div
+        ref={ref}
+        className={clx(
+          classes.root,
+          classes.relative,
+          parentClassName,
+          className
+        )}
+        {...parentProps}
+      >
+        {createStandaloneBadge(
+          clx(positionClass, classes[`${childShape}Overlapping`]),
+          true
+        )}
+        {React.cloneElement(children, {
+          className: clx(children.props.className, classes.anchorElement)
+        })}
+      </div>
+    );
+  };
 
-    const createStandaloneBadge = (classNames, hasParent = false) => {
-      return (
-        <span
-          ref={ref}
-          className={clx(
-            classes.standalone,
-            classes.root,
-            className,
-            classNames,
-            hasParent ? undefined : parentClassName,
-            classes[camelCase(`${variant}-${color}`)],
-            classes[variant],
-            {
-              [classes.visible]: isVisible,
-              [classes[dotSize]]: isDotted
-            }
-          )}
-          {...(hasParent ? otherProps : { ...otherProps, ...parentProps })}
-        >
-          {!isDotted ? textContent : null}
-        </span>
-      );
-    };
+  const createStandaloneBadge = (classNames, hasParent = false) => {
+    return (
+      <span
+        ref={ref}
+        className={clx(
+          classes.standalone,
+          classes.root,
+          className,
+          classNames,
+          hasParent ? undefined : parentClassName,
+          classes[camelCase(`${variant}-${color}`)],
+          classes[variant],
+          {
+            [classes.visible]: isVisible,
+            [classes[dotSize]]: isDotted
+          }
+        )}
+        {...(hasParent ? otherProps : { ...otherProps, ...parentProps })}
+      >
+        {!isDotted ? textContent : null}
+      </span>
+    );
+  };
 
-    return isDotted || (!isDotted && textContent)
-      ? children
-        ? createRelativeBadge()
-        : createStandaloneBadge()
-      : null;
-  })
-);
+  return isDotted || (!isDotted && textContent)
+    ? children
+      ? createRelativeBadge()
+      : createStandaloneBadge()
+    : null;
+});
 
 Badge.displayName = componentName;
 

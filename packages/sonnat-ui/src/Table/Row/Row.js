@@ -51,37 +51,35 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const TableRow = React.memo(
-  React.forwardRef((props, ref) => {
-    const {
-      className,
-      children,
-      verticalAlign = "middle",
-      selected = false,
-      hoverable = false,
-      ...otherProps
-    } = props;
+const TableRow = React.forwardRef((props, ref) => {
+  const {
+    className,
+    children,
+    verticalAlign = "middle",
+    selected = false,
+    hoverable = false,
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-      <tr
-        ref={ref}
-        className={clx(
-          className,
-          classes.root,
-          classes[camelCase(`vertical-align-${verticalAlign}`)],
-          { [classes.selected]: selected, [classes.hoverable]: hoverable }
-        )}
-        {...otherProps}
-      >
-        <TableRowContext.Provider value={{ isSelected: selected }}>
-          {children}
-        </TableRowContext.Provider>
-      </tr>
-    );
-  })
-);
+  return (
+    <tr
+      ref={ref}
+      className={clx(
+        className,
+        classes.root,
+        classes[camelCase(`vertical-align-${verticalAlign}`)],
+        { [classes.selected]: selected, [classes.hoverable]: hoverable }
+      )}
+      {...otherProps}
+    >
+      <TableRowContext.Provider value={{ isSelected: selected }}>
+        {children}
+      </TableRowContext.Provider>
+    </tr>
+  );
+});
 
 TableRow.displayName = componentName;
 

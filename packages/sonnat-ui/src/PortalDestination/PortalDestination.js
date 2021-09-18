@@ -17,26 +17,27 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const PortalDestination = React.memo(
-  React.forwardRef(function PortalDestination(props, ref) {
-    const { children, ...otherProps } = props;
+const PortalDestination = React.forwardRef(function PortalDestination(
+  props,
+  ref
+) {
+  const { children, ...otherProps } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-      <Portal>
-        <div
-          ref={ref}
-          className={classes.root}
-          role="presentation"
-          {...otherProps}
-        >
-          {children}
-        </div>
-      </Portal>
-    );
-  })
-);
+  return (
+    <Portal>
+      <div
+        ref={ref}
+        className={classes.root}
+        role="presentation"
+        {...otherProps}
+      >
+        {children}
+      </div>
+    </Portal>
+  );
+});
 
 PortalDestination.displayName = componentName;
 

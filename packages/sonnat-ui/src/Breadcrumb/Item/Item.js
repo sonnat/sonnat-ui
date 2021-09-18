@@ -60,25 +60,23 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const BreadcrumbItem = React.memo(
-  React.forwardRef(function BreadcrumbItem(props, ref) {
-    const { className, children, ...otherProps } = props;
+const BreadcrumbItem = React.forwardRef(function BreadcrumbItem(props, ref) {
+  const { className, children, ...otherProps } = props;
 
-    const classes = useStyles();
-    const theme = useTheme();
+  const classes = useStyles();
+  const theme = useTheme();
 
-    const isRtl = theme.direction === "rtl";
+  const isRtl = theme.direction === "rtl";
 
-    return (
-      <li ref={ref} className={clx(classes.root, className)} {...otherProps}>
-        <div className={classes.content}>{children}</div>
-        <i role="separator" className={classes.separator}>
-          {isRtl ? <ChevronLeft /> : <ChevronRight />}
-        </i>
-      </li>
-    );
-  })
-);
+  return (
+    <li ref={ref} className={clx(classes.root, className)} {...otherProps}>
+      <div className={classes.content}>{children}</div>
+      <i role="separator" className={classes.separator}>
+        {isRtl ? <ChevronLeft /> : <ChevronRight />}
+      </i>
+    </li>
+  );
+});
 
 BreadcrumbItem.displayName = componentName;
 

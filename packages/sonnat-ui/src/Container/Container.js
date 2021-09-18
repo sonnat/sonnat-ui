@@ -65,36 +65,34 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Container = React.memo(
-  React.forwardRef(function Container(props, ref) {
-    const {
-      children,
-      className,
-      fluid = false,
-      noPadding = false,
-      ...otherProps
-    } = props;
+const Container = React.forwardRef(function Container(props, ref) {
+  const {
+    children,
+    className,
+    fluid = false,
+    noPadding = false,
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-      <div
-        ref={ref}
-        className={clx(
-          classes.root,
-          typeof fluid === "boolean"
-            ? { [classes.fluid]: fluid }
-            : classes[`${fluid}Fluid`],
-          className,
-          { [classes.noPadding]: noPadding }
-        )}
-        {...otherProps}
-      >
-        {children}
-      </div>
-    );
-  })
-);
+  return (
+    <div
+      ref={ref}
+      className={clx(
+        classes.root,
+        typeof fluid === "boolean"
+          ? { [classes.fluid]: fluid }
+          : classes[`${fluid}Fluid`],
+        className,
+        { [classes.noPadding]: noPadding }
+      )}
+      {...otherProps}
+    >
+      {children}
+    </div>
+  );
+});
 
 Container.displayName = componentName;
 

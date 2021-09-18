@@ -280,316 +280,310 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const Checkbox = React.memo(
-  React.forwardRef(function Checkbox(props, ref) {
-    const {
-      className,
-      onChange,
-      onFocus,
-      onBlur,
-      onKeyDown,
-      onKeyUp,
-      label,
-      id: idProp,
-      defaultChecked: defaultCheckedProp,
-      value: valueProp,
-      name: nameProp,
-      checked: checkedProp,
-      inputProps = {},
-      labelProps = {},
-      readOnly = false,
-      hasError = false,
-      disabled = false,
-      required = false,
-      indeterminated = false,
-      autoFocus: autoFocusProp = false,
-      size: sizeProp = "medium",
-      ...otherProps
-    } = props;
+const Checkbox = React.forwardRef(function Checkbox(props, ref) {
+  const {
+    className,
+    onChange,
+    onFocus,
+    onBlur,
+    onKeyDown,
+    onKeyUp,
+    label,
+    id: idProp,
+    defaultChecked: defaultCheckedProp,
+    value: valueProp,
+    name: nameProp,
+    checked: checkedProp,
+    inputProps = {},
+    labelProps = {},
+    readOnly = false,
+    hasError = false,
+    disabled = false,
+    required = false,
+    indeterminated = false,
+    autoFocus: autoFocusProp = false,
+    size: sizeProp = "medium",
+    ...otherProps
+  } = props;
 
-    const {
-      className: inputClassNameProp,
-      id: inputId,
-      ref: inputRefProp,
-      onChange: inputOnChangeProp,
-      onFocus: inputOnFocusProp,
-      onBlur: inputOnBlurProp,
-      name: inputNameProp,
-      value: inputValueProp,
-      autoFocus: inputAutoFocus = false,
-      readOnly: inputReadOnly = false,
-      checked: inputCheckedProp,
-      defaultChecked: inputDefaultChecked,
-      ...otherInputProps
-    } = inputProps;
+  const {
+    className: inputClassNameProp,
+    id: inputId,
+    ref: inputRefProp,
+    onChange: inputOnChangeProp,
+    onFocus: inputOnFocusProp,
+    onBlur: inputOnBlurProp,
+    name: inputNameProp,
+    value: inputValueProp,
+    autoFocus: inputAutoFocus = false,
+    readOnly: inputReadOnly = false,
+    checked: inputCheckedProp,
+    defaultChecked: inputDefaultChecked,
+    ...otherInputProps
+  } = inputProps;
 
-    const { className: labelClassName, ...otherLabelProps } = labelProps;
+  const { className: labelClassName, ...otherLabelProps } = labelProps;
 
-    const { current: defaultChecked } = React.useRef(
-      checkedProp != null
-        ? undefined
-        : defaultCheckedProp != null
-        ? defaultCheckedProp
-        : false
+  const { current: defaultChecked } = React.useRef(
+    checkedProp != null
+      ? undefined
+      : defaultCheckedProp != null
+      ? defaultCheckedProp
+      : false
+  );
+
+  const inputRef = React.useRef(null);
+  const inputRefHandler = useForkRef(inputRef, inputRefProp);
+
+  const classes = useStyles();
+  const checkGroup = useCheckGroup();
+  const formControl = useFormControl();
+
+  const [checked, setChecked] = useControlled(
+    checkedProp,
+    defaultChecked,
+    componentName
+  );
+
+  const isMounted = useIsMounted();
+
+  const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+
+  const isReadOnly = !!inputReadOnly || !!readOnly;
+
+  if (inputCheckedProp != null) {
+    // eslint-disable-next-line no-console
+    console.error(
+      "Sonnat: do not pass the `checked` prop as a `inputProps` property!"
     );
-
-    const inputRef = React.useRef(null);
-    const inputRefHandler = useForkRef(inputRef, inputRefProp);
-
-    const classes = useStyles();
-    const checkGroup = useCheckGroup();
-    const formControl = useFormControl();
-
-    const [checked, setChecked] = useControlled(
-      checkedProp,
-      defaultChecked,
-      componentName
+  }
+  if (inputDefaultChecked != null) {
+    // eslint-disable-next-line no-console
+    console.error(
+      "Sonnat: do not pass the `defaultChecked` prop as a `inputProps` property!"
     );
+  }
+  if (inputNameProp != null && nameProp != null) {
+    // eslint-disable-next-line no-console
+    console.error(
+      [
+        "Sonnat: You are passing the `name` prop twice." +
+          "(one as `name` prop and the other one as a property of `inputProps`)",
+        `We are assuming \`name="${inputNameProp}"\`!`
+      ].join("\n")
+    );
+  }
+  if (inputValueProp != null && valueProp != null) {
+    // eslint-disable-next-line no-console
+    console.error(
+      [
+        "Sonnat: You are passing the `value` prop twice." +
+          "(one as `value` prop and the other one as a property of `inputProps`)",
+        `We are assuming \`value="${inputValueProp}"\`!`
+      ].join("\n")
+    );
+  }
 
-    const isMounted = useIsMounted();
+  const isFormControlFocused = formControl ? !!formControl.focusedState : false;
 
-    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+  const autoFocus = isFormControlFocused || !!inputAutoFocus || autoFocusProp;
 
-    const isReadOnly = !!inputReadOnly || !!readOnly;
+  const name = inputNameProp || nameProp;
+  const value = inputValueProp || valueProp;
 
-    if (inputCheckedProp != null) {
-      // eslint-disable-next-line no-console
-      console.error(
-        "Sonnat: do not pass the `checked` prop as a `inputProps` property!"
-      );
-    }
-    if (inputDefaultChecked != null) {
-      // eslint-disable-next-line no-console
-      console.error(
-        "Sonnat: do not pass the `defaultChecked` prop as a `inputProps` property!"
-      );
-    }
-    if (inputNameProp != null && nameProp != null) {
-      // eslint-disable-next-line no-console
-      console.error(
-        [
-          "Sonnat: You are passing the `name` prop twice." +
-            "(one as `name` prop and the other one as a property of `inputProps`)",
-          `We are assuming \`name="${inputNameProp}"\`!`
-        ].join("\n")
-      );
-    }
-    if (inputValueProp != null && valueProp != null) {
-      // eslint-disable-next-line no-console
-      console.error(
-        [
-          "Sonnat: You are passing the `value` prop twice." +
-            "(one as `value` prop and the other one as a property of `inputProps`)",
-          `We are assuming \`value="${inputValueProp}"\`!`
-        ].join("\n")
-      );
-    }
+  const checkedState = checkGroup ? checkGroup.value.includes(value) : checked;
 
-    const isFormControlFocused = formControl
-      ? !!formControl.focusedState
-      : false;
-
-    const autoFocus = isFormControlFocused || !!inputAutoFocus || autoFocusProp;
-
-    const name = inputNameProp || nameProp;
-    const value = inputValueProp || valueProp;
-
-    const checkedState = checkGroup
-      ? checkGroup.value.includes(value)
-      : checked;
-
-    const controlProps = {
-      name: checkGroup ? checkGroup.name : name,
-      disabled: formControl ? formControl.disabled : disabled,
-      hasError: formControl ? formControl.hasError : hasError,
-      required: formControl ? formControl.required : required,
-      onFocus: e => {
-        if (isMounted()) {
-          if (!(controlProps.disabled || isReadOnly)) {
-            if (onFocus) onFocus(e);
-            if (inputOnFocusProp) inputOnFocusProp(e);
-            if (formControl && formControl.onFocus) formControl.onFocus(e);
-          }
-        }
-      },
-      onBlur: e => {
-        if (isMounted()) {
-          if (!(controlProps.disabled || isReadOnly)) {
-            if (onBlur) onBlur(e);
-            if (inputOnBlurProp) inputOnBlurProp(e);
-            if (formControl && formControl.onBlur) formControl.onBlur(e);
-          }
-        }
-      },
-      onChange: e => {
-        if (isMounted()) {
-          if (!(controlProps.disabled || isReadOnly)) {
-            if (onChange) onChange(e, !checkedState);
-            if (inputOnChangeProp) inputOnChangeProp(e, !checkedState);
-            if (checkGroup && checkGroup.onChange) checkGroup.onChange(e);
-            setChecked(!checkedState);
-          }
+  const controlProps = {
+    name: checkGroup ? checkGroup.name : name,
+    disabled: formControl ? formControl.disabled : disabled,
+    hasError: formControl ? formControl.hasError : hasError,
+    required: formControl ? formControl.required : required,
+    onFocus: e => {
+      if (isMounted()) {
+        if (!(controlProps.disabled || isReadOnly)) {
+          if (onFocus) onFocus(e);
+          if (inputOnFocusProp) inputOnFocusProp(e);
+          if (formControl && formControl.onFocus) formControl.onFocus(e);
         }
       }
-    };
-
-    const id = inputId
-      ? inputId
-      : controlProps.name && value
-      ? `checkbox-${controlProps.name}-${value}`
-      : idProp
-      ? `checkbox-${idProp}`
-      : undefined;
-
-    const {
-      isFocusVisibleRef,
-      onBlur: handleBlurVisible,
-      onFocus: handleFocusVisible,
-      ref: focusVisibleRef
-    } = useIsFocusVisible();
-
-    const rootRef = React.useRef(null);
-
-    const handleOwnRef = useForkRef(focusVisibleRef, rootRef);
-    const handleRef = useForkRef(ref, handleOwnRef);
-
-    const [isFocused, setFocused] = React.useState(autoFocus);
-
-    // prevent component from being focused if it is disabled
-    React.useEffect(() => {
-      if (controlProps.disabled && isFocused) {
-        setFocused(false);
+    },
+    onBlur: e => {
+      if (isMounted()) {
+        if (!(controlProps.disabled || isReadOnly)) {
+          if (onBlur) onBlur(e);
+          if (inputOnBlurProp) inputOnBlurProp(e);
+          if (formControl && formControl.onBlur) formControl.onBlur(e);
+        }
       }
-    }, [controlProps.disabled, isFocused]);
-
-    // initially focus the component
-    useEnhancedEffect(() => {
-      if (!(controlProps.disabled || isReadOnly)) {
-        if (autoFocus && rootRef.current) rootRef.current.focus();
+    },
+    onChange: e => {
+      if (isMounted()) {
+        if (!(controlProps.disabled || isReadOnly)) {
+          if (onChange) onChange(e, !checkedState);
+          if (inputOnChangeProp) inputOnChangeProp(e, !checkedState);
+          if (checkGroup && checkGroup.onChange) checkGroup.onChange(e);
+          setChecked(!checkedState);
+        }
       }
-    }, [autoFocus]);
+    }
+  };
 
-    React.useEffect(() => {
-      isFocusVisibleRef.current = isFocused;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isFocused]);
+  const id = inputId
+    ? inputId
+    : controlProps.name && value
+    ? `checkbox-${controlProps.name}-${value}`
+    : idProp
+    ? `checkbox-${idProp}`
+    : undefined;
 
-    const handleFocus = useEventCallback(event => {
-      // Fix for https://github.com/facebook/react/issues/7769
-      if (!rootRef.current) rootRef.current = event.currentTarget;
+  const {
+    isFocusVisibleRef,
+    onBlur: handleBlurVisible,
+    onFocus: handleFocusVisible,
+    ref: focusVisibleRef
+  } = useIsFocusVisible();
 
-      handleFocusVisible(event);
+  const rootRef = React.useRef(null);
 
-      if (isFocusVisibleRef.current === true) setFocused(true);
-      controlProps.onFocus(event);
-    });
+  const handleOwnRef = useForkRef(focusVisibleRef, rootRef);
+  const handleRef = useForkRef(ref, handleOwnRef);
 
-    const handleBlur = useEventCallback(event => {
-      handleBlurVisible(event);
+  const [isFocused, setFocused] = React.useState(autoFocus);
 
-      if (isFocusVisibleRef.current === false) setFocused(false);
-      controlProps.onBlur(event);
-    });
+  // prevent component from being focused if it is disabled
+  React.useEffect(() => {
+    if (controlProps.disabled && isFocused) {
+      setFocused(false);
+    }
+  }, [controlProps.disabled, isFocused]);
 
-    const keyDownRef = React.useRef(false);
+  // initially focus the component
+  useEnhancedEffect(() => {
+    if (!(controlProps.disabled || isReadOnly)) {
+      if (autoFocus && rootRef.current) rootRef.current.focus();
+    }
+  }, [autoFocus]);
 
-    const handleKeyDown = useEventCallback(event => {
-      if (keyDownRef.current === false && isFocused && event.key === " ") {
-        keyDownRef.current = true;
-      }
+  React.useEffect(() => {
+    isFocusVisibleRef.current = isFocused;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFocused]);
 
-      if (event.target === event.currentTarget && event.key === " ") {
-        event.preventDefault();
-      }
+  const handleFocus = useEventCallback(event => {
+    // Fix for https://github.com/facebook/react/issues/7769
+    if (!rootRef.current) rootRef.current = event.currentTarget;
 
-      if (onKeyDown) onKeyDown(event);
-    });
+    handleFocusVisible(event);
 
-    const handleKeyUp = useEventCallback(event => {
-      if (!event.defaultPrevented && isFocused && event.key === " ") {
-        keyDownRef.current = false;
-      }
+    if (isFocusVisibleRef.current === true) setFocused(true);
+    controlProps.onFocus(event);
+  });
 
-      if (onKeyUp) onKeyUp(event);
+  const handleBlur = useEventCallback(event => {
+    handleBlurVisible(event);
 
-      // Keyboard accessibility for non interactive elements
-      if (
-        event.target === event.currentTarget &&
-        event.key === " " &&
-        !event.defaultPrevented
-      ) {
-        controlProps.onChange(event);
-      }
-    });
+    if (isFocusVisibleRef.current === false) setFocused(false);
+    controlProps.onBlur(event);
+  });
 
-    return (
-      <div
-        role="button"
-        tabIndex={disabled ? -1 : 0}
-        aria-disabled={controlProps.disabled}
-        ref={handleRef}
-        onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        className={clx(classes.root, className, classes[size], {
-          [classes.disabled]: controlProps.disabled,
-          [classes.focused]: isFocused,
-          [classes.checked]: checkedState,
-          [classes.checkedDisabled]: checkedState && controlProps.disabled,
-          [classes.checkedFocused]: checkedState && isFocused,
-          [classes.indeterminated]: indeterminated
-        })}
-        {...otherProps}
-      >
-        <div className={classes.cell}>
-          <input
-            id={id}
-            tabIndex={-1}
-            name={controlProps.name}
-            value={value}
-            disabled={controlProps.disabled}
-            required={controlProps.required}
-            className={clx(classes.input, inputClassNameProp)}
-            onChange={controlProps.onChange}
-            type="checkbox"
-            checked={checkedState}
-            ref={inputRefHandler}
-            {...otherInputProps}
-          />
-          <div className={classes.button}></div>
-          <div className={classes.checkIcon}>
-            <svg aria-hidden="true" focusable="false">
-              <polyline
-                transform="translate(5.974874, 2.353553) rotate(-45.000000) translate(-5.974874, -2.353553) "
-                points="2 0.292893219 2 4.29289322 9.94974747 4.41421356"
-              ></polyline>
-              <line
-                x1="1.03268998"
-                y1="4"
-                x2="11.0000728"
-                y2="4"
-                stroke="#FFFFFF"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></line>
-            </svg>
-          </div>
+  const keyDownRef = React.useRef(false);
+
+  const handleKeyDown = useEventCallback(event => {
+    if (keyDownRef.current === false && isFocused && event.key === " ") {
+      keyDownRef.current = true;
+    }
+
+    if (event.target === event.currentTarget && event.key === " ") {
+      event.preventDefault();
+    }
+
+    if (onKeyDown) onKeyDown(event);
+  });
+
+  const handleKeyUp = useEventCallback(event => {
+    if (!event.defaultPrevented && isFocused && event.key === " ") {
+      keyDownRef.current = false;
+    }
+
+    if (onKeyUp) onKeyUp(event);
+
+    // Keyboard accessibility for non interactive elements
+    if (
+      event.target === event.currentTarget &&
+      event.key === " " &&
+      !event.defaultPrevented
+    ) {
+      controlProps.onChange(event);
+    }
+  });
+
+  return (
+    <div
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      aria-disabled={controlProps.disabled}
+      ref={handleRef}
+      onKeyDown={handleKeyDown}
+      onKeyUp={handleKeyUp}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      className={clx(classes.root, className, classes[size], {
+        [classes.disabled]: controlProps.disabled,
+        [classes.focused]: isFocused,
+        [classes.checked]: checkedState,
+        [classes.checkedDisabled]: checkedState && controlProps.disabled,
+        [classes.checkedFocused]: checkedState && isFocused,
+        [classes.indeterminated]: indeterminated
+      })}
+      {...otherProps}
+    >
+      <div className={classes.cell}>
+        <input
+          id={id}
+          tabIndex={-1}
+          name={controlProps.name}
+          value={value}
+          disabled={controlProps.disabled}
+          required={controlProps.required}
+          className={clx(classes.input, inputClassNameProp)}
+          onChange={controlProps.onChange}
+          type="checkbox"
+          checked={checkedState}
+          ref={inputRefHandler}
+          {...otherInputProps}
+        />
+        <div className={classes.button}></div>
+        <div className={classes.checkIcon}>
+          <svg aria-hidden="true" focusable="false">
+            <polyline
+              transform="translate(5.974874, 2.353553) rotate(-45.000000) translate(-5.974874, -2.353553) "
+              points="2 0.292893219 2 4.29289322 9.94974747 4.41421356"
+            ></polyline>
+            <line
+              x1="1.03268998"
+              y1="4"
+              x2="11.0000728"
+              y2="4"
+              stroke="#FFFFFF"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            ></line>
+          </svg>
         </div>
-        {label && (
-          <label
-            className={clx(classes.label, labelClassName)}
-            htmlFor={id}
-            {...otherLabelProps}
-          >
-            {label}
-          </label>
-        )}
       </div>
-    );
-  })
-);
+      {label && (
+        <label
+          className={clx(classes.label, labelClassName)}
+          htmlFor={id}
+          {...otherLabelProps}
+        >
+          {label}
+        </label>
+      )}
+    </div>
+  );
+});
 
 Checkbox.displayName = componentName;
 

@@ -309,117 +309,115 @@ const useStyles = makeStyles(
   { name: `Sonnat${componentName}` }
 );
 
-const RemovableChip = React.memo(
-  React.forwardRef(function RemovableChip(props, ref) {
-    const {
-      className,
-      label,
-      leadingIcon,
-      onRemove,
-      rounded = false,
-      disabled = false,
-      variant: variantProp = "filled",
-      color: colorProp = "default",
-      size: sizeProp = "medium",
-      ...otherProps
-    } = props;
+const RemovableChip = React.forwardRef(function RemovableChip(props, ref) {
+  const {
+    className,
+    label,
+    leadingIcon,
+    onRemove,
+    rounded = false,
+    disabled = false,
+    variant: variantProp = "filled",
+    color: colorProp = "default",
+    size: sizeProp = "medium",
+    ...otherProps
+  } = props;
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
+  const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
 
-    const color = getVar(
-      colorProp,
-      "default",
-      !allowedColors.includes(colorProp)
-    );
+  const color = getVar(
+    colorProp,
+    "default",
+    !allowedColors.includes(colorProp)
+  );
 
-    const variant = getVar(
-      variantProp,
-      "filled",
-      !allowedVariants.includes(variantProp)
-    );
+  const variant = getVar(
+    variantProp,
+    "filled",
+    !allowedVariants.includes(variantProp)
+  );
 
-    const removeHandler = e => {
-      if (!disabled && onRemove) onRemove(e);
-    };
+  const removeHandler = e => {
+    if (!disabled && onRemove) onRemove(e);
+  };
 
-    const {
-      isFocusVisibleRef,
-      onBlur: handleBlurVisible,
-      onFocus: handleFocusVisible,
-      ref: focusVisibleRef
-    } = useIsFocusVisible();
+  const {
+    isFocusVisibleRef,
+    onBlur: handleBlurVisible,
+    onFocus: handleFocusVisible,
+    ref: focusVisibleRef
+  } = useIsFocusVisible();
 
-    const removeRef = React.useRef(null);
+  const removeRef = React.useRef(null);
 
-    const handleRemoveRef = useForkRef(focusVisibleRef, removeRef);
+  const handleRemoveRef = useForkRef(focusVisibleRef, removeRef);
 
-    const [focusVisible, setFocusVisible] = React.useState(false);
+  const [focusVisible, setFocusVisible] = React.useState(false);
 
-    if (disabled && focusVisible) {
-      setFocusVisible(false);
-    }
+  if (disabled && focusVisible) {
+    setFocusVisible(false);
+  }
 
-    React.useEffect(() => {
-      isFocusVisibleRef.current = focusVisible;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [focusVisible]);
+  React.useEffect(() => {
+    isFocusVisibleRef.current = focusVisible;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusVisible]);
 
-    const handleFocus = useEventCallback(event => {
-      // Fix for https://github.com/facebook/react/issues/7769
-      if (!removeRef.current) removeRef.current = event.currentTarget;
+  const handleFocus = useEventCallback(event => {
+    // Fix for https://github.com/facebook/react/issues/7769
+    if (!removeRef.current) removeRef.current = event.currentTarget;
 
-      handleFocusVisible(event);
+    handleFocusVisible(event);
 
-      if (isFocusVisibleRef.current === true) setFocusVisible(true);
-    });
+    if (isFocusVisibleRef.current === true) setFocusVisible(true);
+  });
 
-    const handleBlur = useEventCallback(event => {
-      handleBlurVisible(event);
+  const handleBlur = useEventCallback(event => {
+    handleBlurVisible(event);
 
-      if (isFocusVisibleRef.current === false) setFocusVisible(false);
-    });
+    if (isFocusVisibleRef.current === false) setFocusVisible(false);
+  });
 
-    return label ? (
-      <div
-        aria-disabled={disabled ? "true" : "false"}
-        ref={ref}
-        className={clx(
-          className,
-          classes.root,
-          classes[size],
-          classes[variant],
-          classes[camelCase(`${variant}-${color}`)],
-          {
-            [classes.rounded]: rounded,
-            [classes.disabled]: disabled
-          }
-        )}
-        {...otherProps}
+  return label ? (
+    <div
+      aria-disabled={disabled ? "true" : "false"}
+      ref={ref}
+      className={clx(
+        className,
+        classes.root,
+        classes[size],
+        classes[variant],
+        classes[camelCase(`${variant}-${color}`)],
+        {
+          [classes.rounded]: rounded,
+          [classes.disabled]: disabled
+        }
+      )}
+      {...otherProps}
+    >
+      {leadingIcon && <i className={clx(classes.icon)}>{leadingIcon}</i>}
+      {label}
+      <button
+        aria-label={`Remove the chip with ${label} text`}
+        ref={handleRemoveRef}
+        className={clx(classes.removeButton, {
+          [classes.focusVisible]: focusVisible
+        })}
+        onClick={removeHandler}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        disabled={disabled}
+        tabIndex={disabled ? -1 : 0}
       >
-        {leadingIcon && <i className={clx(classes.icon)}>{leadingIcon}</i>}
-        {label}
-        <button
-          aria-label={`Remove the chip with ${label} text`}
-          ref={handleRemoveRef}
-          className={clx(classes.removeButton, {
-            [classes.focusVisible]: focusVisible
-          })}
-          onClick={removeHandler}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          disabled={disabled}
-          tabIndex={disabled ? -1 : 0}
-        >
-          <i className={clx(classes.removeButtonIcon)}>
-            <Close />
-          </i>
-        </button>
-      </div>
-    ) : null;
-  })
-);
+        <i className={clx(classes.removeButtonIcon)}>
+          <Close />
+        </i>
+      </button>
+    </div>
+  ) : null;
+});
 
 RemovableChip.displayName = componentName;
 
