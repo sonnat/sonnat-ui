@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://www.sonnat.dev">
-    <img src="https://sonnat.design/static/media/sonnat-logo-fill.svg" height="128">
+    <img src="./sonnat-logo.svg" height="128">
     <h1 align="center">Sonnat-UI</h1>
   </a>
 </div>
