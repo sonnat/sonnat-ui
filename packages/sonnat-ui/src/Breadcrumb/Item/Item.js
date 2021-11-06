@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
 import clx from "classnames";
+import PropTypes from "prop-types";
+import React from "react";
 import { ChevronLeft, ChevronRight } from "../../internals/icons";
 import makeStyles from "../../styles/makeStyles";
 import useTheme from "../../styles/useTheme";
@@ -33,7 +33,6 @@ const useStyles = makeStyles(
         ...(direction === "rtl"
           ? { marginLeft: pxToRem(4) }
           : { marginRight: pxToRem(4) }),
-        "& > a": { textDecoration: "none", color: "inherit" },
         "&:hover": {
           color: colors.text.primary,
           "& > $separator": {
@@ -46,7 +45,8 @@ const useStyles = makeStyles(
       content: {
         whiteSpace: "nowrap",
         textOverflow: "ellipsis",
-        overflow: "hidden"
+        overflow: "hidden",
+        "& > a": { textDecoration: "none", color: "inherit" }
       },
       separator: {
         ...useIconWrapper(16),
