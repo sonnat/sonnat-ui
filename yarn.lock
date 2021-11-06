@@ -1807,6 +1807,30 @@
   dependencies:
     "@babel/runtime" "^7.13.6"
 
+"@sonnat/ui@^1.2.0":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@sonnat/ui/-/ui-1.3.2.tgz#0e0707bb50d83edc6ccb2652254bb3710a99e06e"
+  integrity sha512-m7oYcEejb7XiBcDhrzKhfWLkHzn7U/s3wFIKGJzzba84ZDDIRuq3eiHijqbURL1CqPuNuJoXgtn5/D5BCxMHGw==
+  dependencies:
+    "@babel/runtime" "^7.13.6"
+    classnames "^2.2.6"
+    color "^3.1.3"
+    jss "^10.7.1"
+    jss-plugin-camel-case "^10.7.1"
+    jss-plugin-default-unit "^10.7.1"
+    jss-plugin-extend "^10.7.1"
+    jss-plugin-global "^10.7.1"
+    jss-plugin-nested "^10.7.1"
+    jss-plugin-props-sort "^10.7.1"
+    jss-plugin-rule-value-function "^10.7.1"
+    jss-plugin-vendor-prefixer "^10.7.1"
+    lodash.debounce "^4.0.8"
+    lodash.throttle "^4.1.1"
+    prop-types "^15.7.2"
+    react-is "^17.0.1"
+    react-jss "^10.7.1"
+    react-resize-detector "^5.2.0"
+
 "@sonnat/ui@latest":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@sonnat/ui/-/ui-1.1.2.tgz#f50b4ef7ab67cf845da1622868063862ab0ec3cd"
@@ -2148,14 +2172,7 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.5.tgz#75a2a8e7d8ab4b230414505d92335d1dcb53a6df"
   integrity sha512-L28j2FcJfSZOnL1WBjDYp2vUHCeIFlyYI/53EwD/rKUBQ7MtUUfbQWiyKJGpcnv4/WgrhWsFKrcPstcAt/J0tQ==
 
-"@types/react-resize-detector@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@types/react-resize-detector/-/react-resize-detector-5.0.0.tgz#18ac4e6d518581bec6345845b7f08232f4cca8a5"
-  integrity sha512-JTqR0G+RcC6Guqi/JXQBq3jewflumUGd4fDUucmZN9L1d8TZuRHzDTtrmgYWrgLvRTBTV6FjegmLeV1UnrIuzw==
-  dependencies:
-    "@types/react" "*"
-
-"@types/react@*", "@types/react@^17.0.0":
+"@types/react@^17.0.0":
   version "17.0.14"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.14.tgz#f0629761ca02945c4e8fea99b8177f4c5c61fb0f"
   integrity sha512-0WwKHUbWuQWOce61UexYuWTGuGY/8JvtUe/dtQ6lR4sZ3UiylHotJeWpf3ArP9+DSGUoLY3wbU59VyMrJps5VQ==

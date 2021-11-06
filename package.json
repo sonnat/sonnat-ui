@@ -63,7 +63,6 @@
     "@types/node": "^14.14.19",
     "@types/prettier": "^2.1.6",
     "@types/react": "^17.0.0",
-    "@types/react-resize-detector": "^5.0.0",
     "@types/rimraf": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^4.11.1",
     "@typescript-eslint/parser": "^4.11.1",
