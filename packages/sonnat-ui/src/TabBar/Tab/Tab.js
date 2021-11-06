@@ -174,9 +174,10 @@ const Tab = React.forwardRef(function Tab(props, ref) {
 
   const {
     size,
-    onChange,
     scrollable,
     fluid,
+    isRtl,
+    onChange,
     focusLeftAdjacentTab,
     focusRightAdjacentTab
   } = React.useContext(TabBarContext);
@@ -230,7 +231,10 @@ const Tab = React.forwardRef(function Tab(props, ref) {
       active
     ) {
       event.preventDefault();
-      focusLeftAdjacentTab(identifier);
+
+      isRtl
+        ? focusRightAdjacentTab(identifier)
+        : focusLeftAdjacentTab(identifier);
     }
 
     if (
@@ -239,7 +243,10 @@ const Tab = React.forwardRef(function Tab(props, ref) {
       active
     ) {
       event.preventDefault();
-      focusRightAdjacentTab(identifier);
+
+      isRtl
+        ? focusLeftAdjacentTab(identifier)
+        : focusRightAdjacentTab(identifier);
     }
   });
 

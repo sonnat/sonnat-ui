@@ -544,6 +544,7 @@ const TabBar = React.forwardRef(function TabBar(props, ref) {
       onChange: changeListener,
       focusLeftAdjacentTab,
       focusRightAdjacentTab,
+      isRtl,
       size
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps

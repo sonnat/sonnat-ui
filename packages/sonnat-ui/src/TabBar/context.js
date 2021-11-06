@@ -3,6 +3,7 @@ import { createContext } from "react";
 const TabBarContext = createContext({
   fluid: false,
   scrollable: false,
+  isRtl: false,
   size: "medium",
   focusLeftAdjacentTab: () => {},
   focusRightAdjacentTab: () => {},
