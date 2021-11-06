@@ -3,7 +3,6 @@ import throttle from "lodash.throttle";
 import PropTypes from "prop-types";
 import * as React from "react";
 import { isFragment } from "react-is";
-import { withResizeDetector } from "react-resize-detector";
 import { ChevronLeftLarge, ChevronRightLarge } from "../internals/icons";
 import { makeStyles, useTheme } from "../styles";
 import {
@@ -13,7 +12,8 @@ import {
   getVar,
   setRef,
   useConstantProp,
-  useControlled
+  useControlled,
+  useResizeSensor
 } from "../utils";
 import TabBarContext from "./context";
 import Tab from "./Tab";
@@ -172,18 +172,11 @@ const getIndexOfIdentifier = (value, map) => {
 
 const TabBar = React.forwardRef(function TabBar(props, ref) {
   const {
-    // These properties are passed from `react-resize-detector`.
-    // We are trying to exclude them from the `otherProps` property.
-    /* eslint-disable */
-    targetRef,
-    height: rootHeight,
-    /* eslint-enable */
     className,
     activeTab,
     defaultActiveTab,
     onChange,
     children: childrenProp,
-    width: parentWidth,
     scrollHandleVisibility: hVisProp = "auto",
     variant: variantProp = "scrollable",
     size: sizeProp = "medium",
@@ -225,6 +218,9 @@ const TabBar = React.forwardRef(function TabBar(props, ref) {
   const parentRef = React.useRef();
   const scrollerRef = React.useRef();
   const listRef = React.useRef();
+
+  const { width: parentWidth, registerNode: registerResizeSensor } =
+    useResizeSensor({ mode: "debounce" });
 
   const identifierToIndex = new Map();
 
@@ -562,6 +558,7 @@ const TabBar = React.forwardRef(function TabBar(props, ref) {
       })}
       ref={node => {
         if (ref) setRef(ref, node);
+        registerResizeSensor(node);
         parentRef.current = node;
       }}
       {...otherProps}
@@ -626,9 +623,4 @@ TabBar.propTypes = {
   onChange: PropTypes.func
 };
 
-export default withResizeDetector(TabBar, {
-  handleWidth: true,
-  skipOnMount: true,
-  refreshMode: "debounce",
-  refreshRate: 250
-});
+export default TabBar;

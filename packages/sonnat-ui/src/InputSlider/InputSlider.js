@@ -1,7 +1,6 @@
 import clx from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
-import { withResizeDetector } from "react-resize-detector";
 import { ChevronLeft, ChevronRight } from "../internals/icons";
 import { changeColor } from "../styles/colorUtils";
 import makeStyles from "../styles/makeStyles";
@@ -12,12 +11,12 @@ import {
   map,
   useConstantProp,
   useControlled,
+  useEventCallback,
   useEventListener,
   useForkRef,
-  useIsMounted,
+  useIsFocusVisible,
   usePreviousValue,
-  useEventCallback,
-  useIsFocusVisible
+  useResizeSensor
 } from "../utils";
 
 const componentName = "InputSlider";
@@ -283,25 +282,19 @@ const getClosestHandle = (xFromLeft, supOffset, infOffset) => {
 const InputSlider = React.forwardRef(function InputSlider(props, ref) {
   const {
     className,
-    // Exclude from the `otherProps` property.
-    /* eslint-disable */
-    targetRef,
-    height: rootHeight,
-    onClick: onClickProp,
-    /* eslint-enable */
     onChange,
     onMount,
     onDismount,
     step: stepProp,
     max: maxProp,
     min: minProp,
-    width: rootWidth = 0,
     value: valueProp,
     defaultValue: defaultValueProp,
     onDragEnd: onDragEndProp,
     onDragStart: onDragStartProp,
     onDragging: onDraggingProp,
     variant: variantProp,
+    onClick: onClickProp,
     fractionDigits = 4,
     disabled = false,
     ...otherProps
@@ -433,13 +426,15 @@ const InputSlider = React.forwardRef(function InputSlider(props, ref) {
   const isInitialRender = React.useRef(true);
   const isInitiated = React.useRef(false);
 
-  const isMounted = useIsMounted();
+  const { width: parentWidth, registerNode: registerResizeSensor } =
+    useResizeSensor({
+      mode: "debounce"
+    });
 
   const [transitions, setTransitions] = React.useState(undefined);
   const [isDragStarted, setDragStarted] = React.useState(false);
   const [isClickAllowed, setClickAllowed] = React.useState(true);
   const [currentHandle, setCurrentHandle] = React.useState("sup");
-  const [parentWidth, setParentWidth] = React.useState(rootWidth);
 
   const [infState, setInfState] = React.useState({
     active: false,
@@ -473,18 +468,6 @@ const InputSlider = React.forwardRef(function InputSlider(props, ref) {
       if (onDismount) onDismount();
     };
   }, [onMount, onDismount]);
-
-  // update parentWidth when resizeDetector detects any changes in width of the parent
-  React.useEffect(() => {
-    let newWidth = 0;
-
-    if (isMounted() && parentRef.current) {
-      newWidth = parentRef.current.getBoundingClientRect().width;
-    } else if (rootWidth) newWidth = rootWidth - 36;
-
-    setParentWidth(newWidth);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMounted, rootWidth]);
 
   const prevParentWidth = usePreviousValue(parentWidth);
   const widthPerStep = parentWidth / (stepsCount - 1);
@@ -741,8 +724,10 @@ const InputSlider = React.forwardRef(function InputSlider(props, ref) {
     const otherHandleState = currentHandle === "sup" ? infState : supState;
 
     if (handleState.active) {
-      if (e.preventDefault) e.preventDefault();
-      else e.returnValue = false;
+      if (e.cancelable) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
 
       let clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
 
@@ -1030,7 +1015,10 @@ const InputSlider = React.forwardRef(function InputSlider(props, ref) {
   return (
     <div
       tabIndex={-1}
-      ref={rootRefHandler}
+      ref={node => {
+        rootRefHandler(node);
+        registerResizeSensor(node);
+      }}
       onClick={e => {
         if (isClickAllowed) {
           clickListener(e);
@@ -1140,14 +1128,9 @@ InputSlider.propTypes = {
   onDragStart: PropTypes.func,
   onDragEnd: PropTypes.func,
   onMount: PropTypes.func,
+  onClick: PropTypes.func,
   onDismount: PropTypes.func,
   variant: PropTypes.oneOf(allowedVariants)
 };
 
-export default withResizeDetector(InputSlider, {
-  handleWidth: true,
-  skipOnMount: true,
-  handleHeight: false,
-  refreshMode: "debounce",
-  refreshRate: 250
-});
+export default InputSlider;
