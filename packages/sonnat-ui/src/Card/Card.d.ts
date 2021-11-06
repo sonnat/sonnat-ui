@@ -10,6 +10,11 @@ type BaseProps<P extends Record<string, unknown> = EmptyIntersectionObject> =
      * extend the styles.
      */
     className?: string;
+    /**
+     * The variant of the card.
+     * @default "elevated"
+     */
+    variant?: "outlined" | "elevated";
   };
 
 export type CardProps<
