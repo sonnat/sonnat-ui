@@ -32,6 +32,11 @@ type BaseProps<P extends Record<string, unknown> = EmptyIntersectionObject> =
      */
     variant?: "scrollable" | "fluid";
     /**
+     * The size of the tabbar.
+     * @default "medium"
+     */
+    size?: "large" | "medium" | "small";
+    /**
      * The Callback fires when the state has changed.
      *
      * @param {React.SyntheticEvent | Event} event The event source of the callback.
