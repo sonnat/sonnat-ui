@@ -71,6 +71,9 @@ export * from "./useOnChange";
 export { default as detectScrollBarWidth } from "./detectScrollBarWidth";
 export * from "./detectScrollBarWidth";
 
+export { default as useResizeSensor } from "./useResizeSensor";
+export * from "./useResizeSensor";
+
 export { default as scrollLeft } from "./scrollLeft";
 export * from "./scrollLeft";
 
