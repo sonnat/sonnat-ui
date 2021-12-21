@@ -1,4 +1,4 @@
-export * as ColorUtils from "./colorUtils";
+export * from "./colorUtils";
 export * from "./createBreakpoints";
 export { default as createBreakpoints } from "./createBreakpoints";
 export * from "./createColors";
