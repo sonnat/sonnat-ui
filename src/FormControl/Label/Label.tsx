@@ -25,16 +25,19 @@ interface FormControlBaseProps {
   required?: boolean;
 }
 
-export type FormControlProps = MergeElementProps<"label", FormControlBaseProps>;
+export type FormControlLabelProps = MergeElementProps<
+  "label",
+  FormControlBaseProps
+>;
 
 type Component = {
-  (props: FormControlProps): React.ReactElement | null;
-  propTypes?: React.WeakValidationMap<FormControlProps> | undefined;
+  (props: FormControlLabelProps): React.ReactElement | null;
+  propTypes?: React.WeakValidationMap<FormControlLabelProps> | undefined;
   displayName?: string | undefined;
 };
 
 const FormControlLabelBase = (
-  props: FormControlProps,
+  props: FormControlLabelProps,
   ref: React.Ref<HTMLLabelElement>
 ) => {
   const {

@@ -1,6 +1,7 @@
 import * as React from "react";
-import InputBaseContext from "./context";
+import InputBaseContext, { IContext } from "./context";
 
-const useInputBase = () => React.useContext(InputBaseContext);
+const useInputBase = (): IContext | undefined =>
+  React.useContext(InputBaseContext);
 
 export default useInputBase;

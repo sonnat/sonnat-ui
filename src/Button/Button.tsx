@@ -303,7 +303,7 @@ const ButtonBase = <T extends React.ElementType = "button">(
           primary: createPrimaryColor({ alpha: 0.12 }),
           secondary: createSecondaryColor({ alpha: 0.12 })
         }[color]
-      }[variant] || (darkMode ? null : createBlackColor({ alpha: 0.12 })),
+      }[variant] || (darkMode ? undefined : createBlackColor({ alpha: 0.12 })),
     foreground:
       {
         filled: undefined,
@@ -313,7 +313,7 @@ const ButtonBase = <T extends React.ElementType = "button">(
           primary: createPrimaryColor({ alpha: 0.48 }),
           secondary: createSecondaryColor({ alpha: 0.48 })
         }[color]
-      }[variant] || (darkMode ? null : createBlackColor({ alpha: 0.48 }))
+      }[variant] || (darkMode ? undefined : createBlackColor({ alpha: 0.48 }))
   };
 
   return isInvalid ? null : (

@@ -1,6 +1,6 @@
 import * as React from "react";
 
-interface IContext {
+export interface IContext {
   size: "large" | "medium" | "small";
   disabled: boolean;
   hasError: boolean;
