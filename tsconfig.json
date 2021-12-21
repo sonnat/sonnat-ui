@@ -1,29 +1,25 @@
 {
   "compilerOptions": {
     "module": "ESNext",
-    "target": "ES6",
-    "lib": ["ES2017", "DOM"],
+    "target": "ES5",
+    "outDir": "./dist/esm",
+    "lib": ["DOM.Iterable", "DOM", "ES2017"],
     "jsx": "preserve",
     "strictNullChecks": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "noEmit": true,
+    "declaration": true,
     "skipLibCheck": true,
-    "experimentalDecorators": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "allowJs": true,
-    // Otherwise we get react-native typings which conflict with dom.lib.
-    "types": ["node", "react"],
-    "paths": {
-      "@sonnat/ui": ["./packages/sonnat-ui/src"],
-      "@sonnat/ui/*": ["./packages/sonnat-ui/src/*"]
-    }
+    "types": ["node", "react"]
   },
-  "exclude": ["**/dist", "**/node_modules", "examples", "develop"]
+  "exclude": ["dist", "node_modules", "examples", "develop"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
