@@ -43,8 +43,6 @@
     "react-jss": "^10.9.0"
   },
   "devDependencies": {
-    "@size-limit/file": "^7.0.4",
-    "@size-limit/webpack": "^7.0.4",
     "@types/color": "^3.0.2",
     "@types/fs-extra": "^9.0.13",
     "@types/lodash.debounce": "^4.0.6",
@@ -53,6 +51,7 @@
     "@types/prettier": "^2.4.2",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
+    "@types/react-is": "^17.0.3",
     "@types/rimraf": "^3.0.2",
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/parser": "^5.8.0",
@@ -66,32 +65,20 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
-    "size-limit": "^7.0.4",
     "typescript": "^4.5.4",
     "yargs": "^17.3.0"
   },
   "scripts": {
     "prebuild": "rimraf ./dist",
     "postbuild": "yarn size:check",
-    "build": "npm-run-all build:cjs build:esm build:minify build:packages",
+    "build": "npm-run-all build:cjs build:copy-typings:cjs build:esm build:copy-typings:esm build:minify build:packages",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.json",
+    "build:copy-typings:cjs": "cp -r src/typings dist/cjs/typings",
+    "build:copy-typings:esm": "cp -r src/typings dist/esm/typings",
     "build:packages": "",
-    "build:minify": "",
-    "size:check": "node ./scripts/size-check.js",
-    "size:core": "size-limit",
-    "size:core:why": "size-limit --why"
+    "build:minify": ""
   },
-  "size-limit": [
-    {
-      "path": "dist/esm/index.js",
-      "ignore": [
-        "react",
-        "react-dom",
-        "prop-types"
-      ]
-    }
-  ],
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
