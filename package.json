@@ -65,19 +65,19 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
+    "terser": "^5.10.0",
     "typescript": "^4.5.4",
     "yargs": "^17.3.0"
   },
   "scripts": {
-    "prebuild": "rimraf ./dist",
-    "postbuild": "yarn size:check",
+    "prebuild": "rimraf dist",
     "build": "npm-run-all build:cjs build:copy-typings:cjs build:esm build:copy-typings:esm build:minify build:packages",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.json",
     "build:copy-typings:cjs": "cp -r src/typings dist/cjs/typings",
     "build:copy-typings:esm": "cp -r src/typings dist/esm/typings",
-    "build:packages": "",
-    "build:minify": ""
+    "build:packages": "node scripts/build-packages.js",
+    "build:minify": "node scripts/minify.js"
   },
   "husky": {
     "hooks": {
