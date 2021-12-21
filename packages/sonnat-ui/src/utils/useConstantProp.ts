@@ -8,11 +8,13 @@ interface Options {
   errorHandler?: () => string;
 }
 
-const useConstantProp = <T>(
-  initialValue: T | undefined,
-  defaultValue: NotUndefined<T>,
+type R<T1, T2> = T2 extends undefined ? T1 | undefined : NotUndefined<T1 | T2>;
+
+const useConstantProp = <T1, T2>(
+  initialValue: T1,
+  defaultValue: T2,
   options: Options
-): T => {
+): R<T1, T2> => {
   const { componentName, propName, errorHandler } = options;
 
   const { current: value } = React.useRef(
@@ -33,7 +35,7 @@ const useConstantProp = <T>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialValue]);
 
-  return value;
+  return value as R<T1, T2>;
 };
 
 export default useConstantProp;

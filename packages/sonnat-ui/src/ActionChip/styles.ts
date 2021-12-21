@@ -1,5 +1,5 @@
-import { makeStyles, pallete } from "../styles";
-import { adjustColor, changeColor } from "../styles/colorUtils";
+import { adjustColorHsla, changeColorHsla } from "../styles/colorUtils";
+import makeStyles from "../styles/makeStyles";
 
 export type VariantColorCombo =
   | "filledDefault"
@@ -13,10 +13,11 @@ const useStyles = makeStyles(
   theme => {
     const {
       colors,
+      palette,
       direction,
       darkMode,
-      mixins: { useIconWrapper, useDisableUserSelect },
-      typography: { pxToRem, useText, fontFamily }
+      mixins: { asIconWrapper, disableUserSelect },
+      typography: { pxToRem, setText, fontFamily }
     } = theme;
 
     const filledPrimaryMainBg = !darkMode
@@ -29,15 +30,15 @@ const useStyles = makeStyles(
     const filledPrimary = {
       background: {
         main: filledPrimaryMainBg,
-        hover: adjustColor(filledPrimaryMainBg, {
+        hover: adjustColorHsla(filledPrimaryMainBg, {
           saturation: -8,
           lightness: +8
         }),
-        active: adjustColor(filledPrimaryMainBg, {
+        active: adjustColorHsla(filledPrimaryMainBg, {
           saturation: +8,
           lightness: -4
         }),
-        disabled: changeColor(filledPrimaryMainBg, { alpha: 0.12 })
+        disabled: changeColorHsla(filledPrimaryMainBg, { alpha: 0.12 })
       },
       text: colors.getContrastColorOf(filledPrimaryMainBg)
     };
@@ -45,23 +46,23 @@ const useStyles = makeStyles(
     const filledSecondary = {
       background: {
         main: filledSecondaryMainBg,
-        hover: adjustColor(filledSecondaryMainBg, {
+        hover: adjustColorHsla(filledSecondaryMainBg, {
           saturation: -8,
           lightness: +8
         }),
-        active: adjustColor(filledSecondaryMainBg, {
+        active: adjustColorHsla(filledSecondaryMainBg, {
           saturation: +8,
           lightness: -4
         }),
-        disabled: changeColor(filledSecondaryMainBg, { alpha: 0.12 })
+        disabled: changeColorHsla(filledSecondaryMainBg, { alpha: 0.12 })
       },
       text: colors.getContrastColorOf(filledSecondaryMainBg)
     };
 
     return {
       root: {
-        ...useText(),
-        ...useDisableUserSelect(),
+        ...setText(),
+        ...disableUserSelect(),
         direction,
         fontFamily: fontFamily[direction],
         padding: `0 ${pxToRem(12)}`,
@@ -80,7 +81,7 @@ const useStyles = makeStyles(
           "color 360ms ease, background-color 360ms ease, border 360ms ease"
       },
       icon: {
-        ...useIconWrapper(16),
+        ...asIconWrapper(16),
         flexShrink: "0",
         transition: "color 360ms ease"
       },
@@ -90,7 +91,7 @@ const useStyles = makeStyles(
         padding: `0 ${pxToRem(8)}`,
         lineHeight: 1.8,
         "& $icon": {
-          ...useIconWrapper(14),
+          ...asIconWrapper(14),
           ...(direction === "rtl"
             ? { marginRight: pxToRem(-2), marginLeft: pxToRem(4) }
             : { marginLeft: pxToRem(-2), marginRight: pxToRem(4) })
@@ -152,9 +153,7 @@ const useStyles = makeStyles(
         color: colors.text.secondary,
         "& $icon": { color: colors.text.secondary },
         "&$disabled": {
-          backgroundColor: !darkMode
-            ? colors.pallete.grey[100]
-            : colors.pallete.grey[900]
+          backgroundColor: !darkMode ? palette.grey[100] : palette.grey[900]
         },
         "&:hover": {
           backgroundColor: !darkMode
@@ -233,56 +232,64 @@ const useStyles = makeStyles(
         }
       },
       outlinedPrimary: {
-        backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.04 }),
+        backgroundColor: changeColorHsla(filledPrimaryMainBg, { alpha: 0.04 }),
         border: `${pxToRem(1)} solid ${filledPrimaryMainBg}`,
         color: filledPrimaryMainBg,
         "& $icon": { color: filledPrimaryMainBg },
         "&:hover": {
-          backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.12 }),
+          backgroundColor: changeColorHsla(filledPrimaryMainBg, {
+            alpha: 0.12
+          }),
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": {
             backgroundColor: colors.transparent
           }
         },
         "&:active": {
-          backgroundColor: changeColor(filledPrimaryMainBg, { alpha: 0.24 })
+          backgroundColor: changeColorHsla(filledPrimaryMainBg, { alpha: 0.24 })
         },
         "&$disabled": {
-          color: changeColor(filledPrimaryMainBg, { alpha: 0.32 }),
+          color: changeColorHsla(filledPrimaryMainBg, { alpha: 0.32 }),
           "& $icon": {
-            color: changeColor(filledPrimaryMainBg, { alpha: 0.32 })
+            color: changeColorHsla(filledPrimaryMainBg, { alpha: 0.32 })
           },
-          borderColor: changeColor(filledPrimaryMainBg, { alpha: 0.12 })
+          borderColor: changeColorHsla(filledPrimaryMainBg, { alpha: 0.12 })
         }
       },
       outlinedSecondary: {
-        backgroundColor: changeColor(filledSecondaryMainBg, { alpha: 0.04 }),
+        backgroundColor: changeColorHsla(filledSecondaryMainBg, {
+          alpha: 0.04
+        }),
         border: `${pxToRem(1)} solid ${filledSecondaryMainBg}`,
         color: filledSecondaryMainBg,
         "& $icon": {
           color: filledSecondaryMainBg
         },
         "&:hover": {
-          backgroundColor: changeColor(filledSecondaryMainBg, { alpha: 0.12 }),
+          backgroundColor: changeColorHsla(filledSecondaryMainBg, {
+            alpha: 0.12
+          }),
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": {
             backgroundColor: colors.transparent
           }
         },
         "&:active": {
-          backgroundColor: changeColor(filledSecondaryMainBg, { alpha: 0.24 })
+          backgroundColor: changeColorHsla(filledSecondaryMainBg, {
+            alpha: 0.24
+          })
         },
         "&$disabled": {
-          color: changeColor(filledSecondaryMainBg, { alpha: 0.32 }),
+          color: changeColorHsla(filledSecondaryMainBg, { alpha: 0.32 }),
           "& $icon": {
-            color: changeColor(filledSecondaryMainBg, { alpha: 0.32 })
+            color: changeColorHsla(filledSecondaryMainBg, { alpha: 0.32 })
           },
-          borderColor: changeColor(filledSecondaryMainBg, { alpha: 0.12 })
+          borderColor: changeColorHsla(filledSecondaryMainBg, { alpha: 0.12 })
         }
       },
       focusVisible: {
         outline: `2px solid ${
-          darkMode ? pallete.blue[300] : pallete.blue[500]
+          darkMode ? palette.blue[300] : palette.blue[500]
         }`,
         outlineOffset: 1
       }

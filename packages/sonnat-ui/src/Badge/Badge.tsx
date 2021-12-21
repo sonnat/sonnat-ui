@@ -1,7 +1,7 @@
 import c from "classnames";
 import PropTypes from "prop-types";
 import * as React from "react";
-import type { NotUndefined } from "../typings";
+import type { MergeElementProps, NotUndefined } from "../typings";
 import { camelCase, getVar } from "../utils";
 import useStyles, { PositionCombo, VariantColorCombo } from "./styles";
 
@@ -66,11 +66,13 @@ interface BadgeBaseProps {
   visible?: boolean;
 }
 
-type BadgeProps = Omit<
-  React.ComponentPropsWithRef<"div">,
-  keyof BadgeBaseProps
-> &
-  BadgeBaseProps;
+export type BadgeProps = MergeElementProps<"div", BadgeBaseProps>;
+
+type Component = {
+  (props: BadgeProps): React.ReactElement | null;
+  propTypes?: React.WeakValidationMap<BadgeProps> | undefined;
+  displayName?: string | undefined;
+};
 
 const allowedVariants = ["filled", "dotted"] as const;
 const allowedSizes = ["large", "medium", "small"] as const;
@@ -212,7 +214,7 @@ const BadgeBase = (props: BadgeProps, ref: React.Ref<HTMLDivElement>) => {
     : null;
 };
 
-const Badge = React.forwardRef(BadgeBase) as React.FC<BadgeProps>;
+const Badge = React.forwardRef(BadgeBase) as Component;
 
 Badge.propTypes = {
   children: PropTypes.element,

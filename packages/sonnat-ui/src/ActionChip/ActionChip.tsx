@@ -1,6 +1,7 @@
 import c from "classnames";
 import PropTypes from "prop-types";
 import * as React from "react";
+import type { MergeElementProps } from "../typings";
 import {
   camelCase,
   getVar,
@@ -50,11 +51,13 @@ interface ActionChipBaseProps {
   disabled?: boolean;
 }
 
-type ActionChipProps = Omit<
-  React.ComponentPropsWithRef<"div">,
-  keyof ActionChipBaseProps
-> &
-  ActionChipBaseProps;
+export type ActionChipProps = MergeElementProps<"div", ActionChipBaseProps>;
+
+type Component = {
+  (props: ActionChipProps): React.ReactElement | null;
+  propTypes?: React.WeakValidationMap<ActionChipProps> | undefined;
+  displayName?: string | undefined;
+};
 
 const allowedVariants = ["filled", "outlined"] as const;
 const allowedSizes = ["large", "medium", "small"] as const;
@@ -102,7 +105,7 @@ const ActionChipBase = (
     onBlur: handleBlurVisible,
     onFocus: handleFocusVisible,
     ref: focusVisibleRef
-  } = useIsFocusVisible();
+  } = useIsFocusVisible<HTMLDivElement>();
 
   const chipRef = React.useRef<HTMLDivElement>();
   const handleRef = useForkedRefs(chipRef, focusVisibleRef, ref);
@@ -219,9 +222,7 @@ const ActionChipBase = (
   );
 };
 
-const ActionChip = React.forwardRef(
-  ActionChipBase
-) as React.FC<ActionChipProps>;
+const ActionChip = React.forwardRef(ActionChipBase) as Component;
 
 ActionChip.propTypes = {
   label: PropTypes.string.isRequired,

@@ -19,7 +19,7 @@ const useStyles = makeStyles(
       darkMode,
       direction,
       hacks,
-      typography: { pxToRem, fontWeight, useText, fontFamily }
+      typography: { pxToRem, fontWeight, setText, fontFamily }
     } = theme;
 
     return {
@@ -51,7 +51,7 @@ const useStyles = makeStyles(
       },
       notDottedBadge: {
         // eslint-disable-next-line react-hooks/rules-of-hooks
-        ...useText({
+        ...setText({
           fontSize: pxToRem(10),
           fontWeight: fontWeight.medium,
           lineHeight: 1

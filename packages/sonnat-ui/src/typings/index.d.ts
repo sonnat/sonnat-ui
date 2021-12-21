@@ -16,9 +16,6 @@ type GenerateStringUnion<T> = Extract<
   string
 >;
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type EmptyIntersectionObject = {};
-
 /** Removes types from T that are assignable to U */
 export type Diff<T, U> = T extends U ? never : T;
 
@@ -27,6 +24,8 @@ export type Filter<T, U> = T extends U ? T : never;
 
 /** Constructs a type by including null and undefined to Type. */
 export type Nullable<T> = { [P in keyof T]: T[P] | null | undefined };
+
+export type NotUndefined<T> = T extends undefined ? never : T;
 
 /**
  * Like `T & U`, but using the value types from `U` where their properties overlap.
@@ -54,17 +53,19 @@ export interface MakeStylesOptions extends StyleSheetFactoryOptions {
   name?: string;
 }
 
-export type Styles<
-  Theme = DefaultTheme,
-  Props = unknown,
-  Name extends string = string
-> =
-  | JssStyles<Name, Props, Theme>
-  | ((theme: Theme) => JssStyles<Name, Props, undefined>);
+export type Styles<T = DefaultTheme, P = unknown, N extends string = string> =
+  | JssStyles<N, P, T>
+  | ((theme: T) => JssStyles<N, P, undefined>);
 
 export type Classes<Name extends string = string> = JssClasses<Name>;
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type EmptyIntersectionObject = {};
+
+export type AnyObject = Record<string | number | symbol, unknown>;
+export type EmptyObject = Record<string | number | symbol, never>;
+
 export type MergeElementProps<
   T extends React.ElementType,
-  P extends Record<string, unknown> = Record<string, never>
-> = Omit<React.ComponentPropsWithRef<T>, keyof P> & P;
+  P = EmptyIntersectionObject
+> = Overwrite<React.ComponentPropsWithRef<T>, P>;
