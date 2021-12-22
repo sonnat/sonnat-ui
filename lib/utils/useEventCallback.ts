@@ -10,12 +10,15 @@ import useIsomorphicLayoutEffect from "./useIsomorphicLayoutEffect";
  */
 const useEventCallback = <T extends (...args: any) => any>(
   fn: T
-): ((...args: any) => void) => {
+): ((...args: unknown[]) => void) => {
   const ref = React.useRef<T>(fn);
 
   useIsomorphicLayoutEffect(() => void (ref.current = fn));
 
-  return React.useCallback((...args: any) => void ref.current(...args), []);
+  return React.useCallback(
+    (...args: unknown[]) => void ref.current(...args),
+    []
+  );
 };
 
 export default useEventCallback;

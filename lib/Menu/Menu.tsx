@@ -504,7 +504,7 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
                     placeholder={searchPlaceholder}
                     value={searchValue}
                     size={dense ? "medium" : "large"}
-                    onChange={throttle(v => {
+                    onChange={throttle((v: string) => {
                       searchChangeListener(v);
                     }, 250)}
                     leadingAdornment={

@@ -6,5 +6,3 @@ export * from "./FormControl";
 export { default } from "./FormControl";
 export * from "./Label";
 export { default as FormControlLabel } from "./Label";
-export * from "./useFormControl";
-export { default as useFormControl } from "./useFormControl";

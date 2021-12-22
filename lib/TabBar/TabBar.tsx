@@ -18,7 +18,7 @@ import {
 } from "../utils";
 import TabBarContext from "./context";
 import useStyles from "./styles";
-import Tab from "./Tab";
+import Tab, { TabProps } from "./Tab";
 
 interface TabBarBaseProps {
   /** The content of the component. */
@@ -185,10 +185,10 @@ const TabBarBase = (props: TabBarProps, ref: React.Ref<HTMLDivElement>) => {
       );
     }
 
+    const childProps = (child as React.ReactElement<TabProps>).props;
+
     const childIdentifier =
-      child.props.identifier === undefined
-        ? childIndex
-        : child.props.identifier;
+      childProps.identifier === undefined ? childIndex : childProps.identifier;
 
     mapIdentifierToIndex(childIdentifier, childIndex, identifierToIndex);
 

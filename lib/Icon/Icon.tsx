@@ -102,7 +102,7 @@ const IconBase = (props: IconProps, ref: React.Ref<SVGSVGElement>) => {
       // eslint-disable-next-line no-console
       console.error(
         `Sonnat: Invalid size provided! (provided size: \`size=${
-          typeof size === "number" ? `{${size}}` : `"${size}"`
+          typeof size === "number" ? `{${size}}` : `"${String(size)}"`
         }\`)`
       );
     }

@@ -14,30 +14,10 @@ interface FormControlFeedbackBaseProps {
    */
   className?: string;
   /**
-   * If `true`, the form controller will be disabled.
-   * @default false
-   */
-  disabled?: boolean;
-  /**
-   * If `true`, the form controller will be required.
-   * @default false
-   */
-  required?: boolean;
-  /**
-   * If `true`, the form controller will indicate invalid input.
+   * If `true`, the feedback will indicate invalid input.
    * @default false
    */
   hasError?: boolean;
-  /**
-   * If `true`, the form controller will be fluid (max-width: 100%).
-   * @default false
-   */
-  fluid?: boolean;
-  /**
-   * If `true`, the form controller will be focused.
-   * @default false
-   */
-  focused?: boolean;
 }
 
 export type FormControlFeedbackProps = MergeElementProps<

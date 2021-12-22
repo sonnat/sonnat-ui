@@ -244,7 +244,7 @@ const createResponsiveClass = (
     return prop ? classes[camelCase(`${prefix ? prefix : ""}`)] : undefined;
   }
 
-  return classes[camelCase(`${prefix ? prefix + "-" : ""}${prop as string}`)];
+  return classes[camelCase(`${prefix ? prefix + "-" : ""}${prop }`)];
 };
 
 const FlexItemBase = <T extends React.ElementType = "div">(
