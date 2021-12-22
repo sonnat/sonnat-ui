@@ -304,17 +304,19 @@ const InputStepperBase = (
     }
   );
 
-  const handleBlur = useEventCallback((event, handleType = "increase") => {
-    if (handleType === "increase") {
-      handleIncBlurVisible(event);
+  const handleBlur = useEventCallback(
+    (event: React.FocusEvent<HTMLDivElement>, handleType = "increase") => {
+      if (handleType === "increase") {
+        handleIncBlurVisible(event);
 
-      if (isIncFocusVisibleRef.current === false) setIncFocusVisible(false);
-    } else if (handleType === "decrease") {
-      handleDecBlurVisible(event);
+        if (isIncFocusVisibleRef.current === false) setIncFocusVisible(false);
+      } else if (handleType === "decrease") {
+        handleDecBlurVisible(event);
 
-      if (isDecFocusVisibleRef.current === false) setDecFocusVisible(false);
+        if (isDecFocusVisibleRef.current === false) setDecFocusVisible(false);
+      }
     }
-  });
+  );
 
   return (
     <div

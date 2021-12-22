@@ -136,11 +136,13 @@ const RemovableChipBase = (
     }
   );
 
-  const handleBlur = useEventCallback(event => {
-    handleBlurVisible(event);
+  const handleBlur = useEventCallback(
+    (event: React.FocusEvent<HTMLDivElement>) => {
+      handleBlurVisible(event);
 
-    if (isFocusVisibleRef.current === false) setFocusVisible(false);
-  });
+      if (isFocusVisibleRef.current === false) setFocusVisible(false);
+    }
+  );
 
   return label ? (
     <div

@@ -86,7 +86,7 @@ const MoonSpinnerBase = (props: MoonSpinnerProps) => {
   );
 };
 
-const MoonSpinner = React.forwardRef(MoonSpinnerBase) as Component;
+const MoonSpinner = MoonSpinnerBase as Component;
 
 MoonSpinner.propTypes = {
   className: PropTypes.string,

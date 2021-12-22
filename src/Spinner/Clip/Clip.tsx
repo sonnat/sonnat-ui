@@ -95,7 +95,7 @@ const ClipSpinnerBase = (props: ClipSpinnerProps) => {
   );
 };
 
-const ClipSpinner = React.forwardRef(ClipSpinnerBase) as Component;
+const ClipSpinner = ClipSpinnerBase as Component;
 
 ClipSpinner.propTypes = {
   className: PropTypes.string,

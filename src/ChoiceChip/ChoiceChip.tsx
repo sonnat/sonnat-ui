@@ -168,12 +168,14 @@ const ChoiceChipBase = (
     }
   );
 
-  const handleBlur = useEventCallback(event => {
-    handleBlurVisible(event);
+  const handleBlur = useEventCallback(
+    (event: React.FocusEvent<HTMLDivElement>) => {
+      handleBlurVisible(event);
 
-    if (isFocusVisibleRef.current === false) setFocusVisible(false);
-    if (onBlur) onBlur(event);
-  });
+      if (isFocusVisibleRef.current === false) setFocusVisible(false);
+      if (onBlur) onBlur(event);
+    }
+  );
 
   const keyDownRef = React.useRef(false);
 

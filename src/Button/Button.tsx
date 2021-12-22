@@ -199,12 +199,14 @@ const ButtonBase = <T extends React.ElementType = "button">(
     }
   );
 
-  const handleBlur = useEventCallback(event => {
-    handleBlurVisible(event);
+  const handleBlur = useEventCallback(
+    (event: React.FocusEvent<HTMLButtonElement>) => {
+      handleBlurVisible(event);
 
-    if (isFocusVisibleRef.current === false) setFocusVisible(false);
-    if (onBlur) (onBlur as React.FocusEventHandler)(event);
-  });
+      if (isFocusVisibleRef.current === false) setFocusVisible(false);
+      if (onBlur) (onBlur as React.FocusEventHandler)(event);
+    }
+  );
 
   const keyDownRef = React.useRef(false);
 

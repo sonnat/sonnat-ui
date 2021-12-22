@@ -841,21 +841,23 @@ const InputSliderBase = (
     }
   );
 
-  const handleBlur = useEventCallback((event, handleType = "inf") => {
-    if (handleType === "inf") {
-      handleInfBlurVisible(event);
+  const handleBlur = useEventCallback(
+    (event: React.FocusEvent<HTMLDivElement>, handleType = "inf") => {
+      if (handleType === "inf") {
+        handleInfBlurVisible(event);
 
-      if (isInfFocusVisibleRef.current === false) {
-        setInfFocusVisible(false);
-      }
-    } else if (handleType === "sup") {
-      handleSupBlurVisible(event);
+        if (isInfFocusVisibleRef.current === false) {
+          setInfFocusVisible(false);
+        }
+      } else if (handleType === "sup") {
+        handleSupBlurVisible(event);
 
-      if (isSupFocusVisibleRef.current === false) {
-        setSupFocusVisible(false);
+        if (isSupFocusVisibleRef.current === false) {
+          setSupFocusVisible(false);
+        }
       }
     }
-  });
+  );
 
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLDivElement>,

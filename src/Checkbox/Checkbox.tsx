@@ -272,12 +272,14 @@ const CheckboxBase = (props: CheckboxProps, ref: React.Ref<HTMLDivElement>) => {
     }
   );
 
-  const handleBlur = useEventCallback(event => {
-    handleBlurVisible(event);
+  const handleBlur = useEventCallback(
+    (event: React.FocusEvent<HTMLDivElement>) => {
+      handleBlurVisible(event);
 
-    if (isFocusVisibleRef.current === false) setFocused(false);
-    controlProps.onBlur(event);
-  });
+      if (isFocusVisibleRef.current === false) setFocused(false);
+      controlProps.onBlur(event);
+    }
+  );
 
   const keyDownRef = React.useRef(false);
 

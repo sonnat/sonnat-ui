@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import c from "classnames";
 import PropTypes from "prop-types";
 import * as React from "react";
@@ -102,42 +103,46 @@ const TabBase = (props: TabProps, ref: React.Ref<HTMLDivElement>) => {
     }
   );
 
-  const handleBlur = useEventCallback(event => {
-    handleBlurVisible(event);
+  const handleBlur = useEventCallback(
+    (event: React.FocusEvent<HTMLDivElement>) => {
+      handleBlurVisible(event);
 
-    if (isFocusVisibleRef.current === false) setFocusVisible(false);
-    if (onBlur) onBlur(event);
-  });
-
-  const handleKeyDown = useEventCallback(event => {
-    if (onKeyDown) onKeyDown(event);
-
-    if (
-      event.target === event.currentTarget &&
-      (event.key === "Left" || event.key === "ArrowLeft") &&
-      active
-    ) {
-      event.preventDefault();
-
-      context &&
-        (context.isRtl
-          ? context.focusRightAdjacentTab(identifier!)
-          : context.focusLeftAdjacentTab(identifier!));
+      if (isFocusVisibleRef.current === false) setFocusVisible(false);
+      if (onBlur) onBlur(event);
     }
+  );
 
-    if (
-      event.target === event.currentTarget &&
-      (event.key === "Right" || event.key === "ArrowRight") &&
-      active
-    ) {
-      event.preventDefault();
+  const handleKeyDown = useEventCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (onKeyDown) onKeyDown(event);
 
-      context &&
-        (context.isRtl
-          ? context.focusLeftAdjacentTab(identifier!)
-          : context.focusRightAdjacentTab(identifier!));
+      if (
+        event.target === event.currentTarget &&
+        (event.key === "Left" || event.key === "ArrowLeft") &&
+        active
+      ) {
+        event.preventDefault();
+
+        context &&
+          (context.isRtl
+            ? context.focusRightAdjacentTab(identifier!)
+            : context.focusLeftAdjacentTab(identifier!));
+      }
+
+      if (
+        event.target === event.currentTarget &&
+        (event.key === "Right" || event.key === "ArrowRight") &&
+        active
+      ) {
+        event.preventDefault();
+
+        context &&
+          (context.isRtl
+            ? context.focusLeftAdjacentTab(identifier!)
+            : context.focusRightAdjacentTab(identifier!));
+      }
     }
-  });
+  );
 
   return (
     <div
