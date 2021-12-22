@@ -4,11 +4,11 @@ const glob = require("fast-glob");
 
 const packagePath = process.cwd();
 
-const buildPath = path.join(packagePath, "./dist/cjs");
+const buildPath = path.join(packagePath, "./dist");
 
 void (async () => {
   const moduleDirectories = (
-    await glob(path.join(buildPath, "**/*/index.js"))
+    await glob(path.join(buildPath, "**/*/index.js"), { ignore: ["**/esm/**"] })
   ).map(path.dirname);
 
   for (const moduleDirectory of moduleDirectories) {
@@ -21,7 +21,7 @@ void (async () => {
       sideEffects: false,
       module: path.join(
         (depth => {
-          let path = "../";
+          let path = "";
           for (let i = 0; i < depth; i++) path += i < depth - 1 ? "../" : "..";
           return path;
         })(relativePath.split("/").length),

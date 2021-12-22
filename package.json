@@ -1,8 +1,5 @@
 {
   "name": "@sonnat/ui",
-  "main": "./dist/cjs/index.js",
-  "types": "./dist/cjs/index.d.ts",
-  "module": "./dist/esm/index.js",
   "version": "2.0.0-canary.1",
   "description": "React component library using Sonnat Design System to build faster, elegant, and accessible web applications.",
   "license": "MIT",
@@ -78,12 +75,13 @@
     "lint": "tsc --project tsconfig.lint.json && eslint \"lib/**/*.{ts,tsx}\" --config .eslintrc --quiet --fix",
     "clear": "rimraf dist",
     "prebuild": "npm-run-all clear lint",
-    "build": "npm-run-all build:cjs build:copy-typings:cjs build:esm build:copy-typings:esm build:minify build:packages",
+    "build": "npm-run-all build:cjs build:copy-typings:cjs build:esm build:copy-typings:esm build:minify build:packages build:npm-files",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
-    "build:copy-typings:cjs": "cp -r lib/typings dist/cjs/typings",
+    "build:copy-typings:cjs": "cp -r lib/typings dist/typings",
     "build:copy-typings:esm": "cp -r lib/typings dist/esm/typings",
     "build:packages": "node scripts/build-packages.js",
+    "build:npm-files": "node scripts/build-npm-files.js",
     "build:minify": "node scripts/minify.js"
   },
   "husky": {
