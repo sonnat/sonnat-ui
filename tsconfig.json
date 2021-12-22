@@ -1,25 +1,33 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "target": "ES5",
-    "outDir": "./dist/esm",
-    "lib": ["DOM.Iterable", "DOM", "ES2017"],
-    "jsx": "preserve",
+    "allowJs": true,
+    "alwaysStrict": true,
     "strictNullChecks": true,
     "esModuleInterop": true,
-    "moduleResolution": "Node",
-    "noUnusedParameters": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "lib": ["dom", "es2017"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "incremental": true,
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "declaration": true,
-    "skipLibCheck": true,
+    "noUnusedParameters": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "esnext",
     "types": ["node", "react"]
   },
-  "exclude": ["dist", "node_modules", "examples", "develop"],
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+  "include": [
+    "next-env.d.ts",
+    "pages/**/*.ts",
+    "pages/**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": ["node_modules", "dist", "examples"]
 }
