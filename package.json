@@ -75,7 +75,7 @@
   "scripts": {
     "dev": "next dev",
     "prod": "next build && next start",
-    "lint": "tsc --project tsconfig.json --noEmit && eslint \"lib/**/*.{ts,tsx}\" --config .eslintrc --quiet --fix",
+    "lint": "tsc --project tsconfig.lint.json && eslint \"lib/**/*.{ts,tsx}\" --config .eslintrc --quiet --fix",
     "clear": "rimraf dist",
     "prebuild": "npm-run-all clear lint",
     "build": "npm-run-all build:cjs build:copy-typings:cjs build:esm build:copy-typings:esm build:minify build:packages",
