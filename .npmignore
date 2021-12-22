@@ -21,6 +21,7 @@ next-env.d.ts
 tsconfig.json
 tsconfig.esm.json
 tsconfig.cjs.json
+tsconfig.lint.json
 yarn.lock
 package-lock.json
 sonnat-logo.svg
