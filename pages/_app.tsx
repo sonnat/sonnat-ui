@@ -1,9 +1,9 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
 import * as React from "react";
-import CssBaseline from "../src/CssBaseline";
-import makeStyles from "../src/styles/makeStyles";
-import SonnatInitializer from "../src/styles/SonnatInitializer";
+import CssBaseline from "../lib/CssBaseline";
+import makeStyles from "../lib/styles/makeStyles";
+import SonnatInitializer from "../lib/styles/SonnatInitializer";
 
 const googleFontFamily =
   "https://fonts.googleapis.com/css2?" +

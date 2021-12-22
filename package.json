@@ -75,12 +75,14 @@
   "scripts": {
     "dev": "next dev",
     "prod": "next build && next start",
+    "lint": "tsc --project tsconfig.json --noEmit && eslint \"lib/**/*.{ts,tsx}\" --config .eslintrc --quiet --fix",
     "prebuild": "rimraf dist",
     "build": "npm-run-all build:cjs build:copy-typings:cjs build:esm build:copy-typings:esm build:minify build:packages",
+    "postbuild": "yarn lint",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
-    "build:copy-typings:cjs": "cp -r src/typings dist/cjs/typings",
-    "build:copy-typings:esm": "cp -r src/typings dist/esm/typings",
+    "build:copy-typings:cjs": "cp -r lib/typings dist/cjs/typings",
+    "build:copy-typings:esm": "cp -r lib/typings dist/esm/typings",
     "build:packages": "node scripts/build-packages.js",
     "build:minify": "node scripts/minify.js"
   },

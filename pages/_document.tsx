@@ -5,7 +5,7 @@ import Document, {
   NextScript,
   DocumentContext
 } from "next/document";
-import ServerStyleSheets from "../src/styles/ServerStyleSheets";
+import ServerStyleSheets from "../lib/styles/ServerStyleSheets";
 import * as React from "react";
 
 export default class MyDocument extends Document {

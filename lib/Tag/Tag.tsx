@@ -130,7 +130,7 @@ const TagBase = (props: TagProps, ref: React.Ref<HTMLDivElement>) => {
   );
 
   const handleBlur = useEventCallback(
-    (event: React.FocusEvent<HTMLDivElement>) => {
+    (event: React.FocusEvent<HTMLButtonElement>) => {
       handleBlurVisible(event);
 
       if (isFocusVisibleRef.current === false) setFocusVisible(false);

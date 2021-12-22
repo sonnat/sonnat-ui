@@ -26,8 +26,8 @@
     "next-env.d.ts",
     "pages/**/*.ts",
     "pages/**/*.tsx",
-    "src/**/*.ts",
-    "src/**/*.tsx"
+    "lib/**/*.ts",
+    "lib/**/*.tsx"
   ],
   "exclude": ["node_modules", "dist", "examples"]
 }
