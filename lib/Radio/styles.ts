@@ -185,7 +185,8 @@ const useStyles = makeStyles(
           height: pxToRem(14),
           "&:after": { width: pxToRem(6), height: pxToRem(6) }
         }
-      }
+      },
+      fluid: { width: "100%", justifyContent: "space-between" }
     };
   },
   { name: "SonnatRadio" }

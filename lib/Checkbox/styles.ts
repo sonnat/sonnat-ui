@@ -252,7 +252,8 @@ const useStyles = makeStyles(
           width: pxToRem(14),
           height: pxToRem(14)
         }
-      }
+      },
+      fluid: { width: "100%", justifyContent: "space-between" }
     };
   },
   { name: "SonnatCheckbox" }

@@ -47,6 +47,11 @@ interface CheckboxBaseProps {
    */
   autoFocus?: boolean;
   /**
+   * If `true`, the checkbox will fill the entire width of the parent.
+   * @default false
+   */
+  fluid?: boolean;
+  /**
    * If `true`, the checkbox will be read-only.
    * @default false
    */
@@ -139,6 +144,7 @@ const CheckboxBase = (props: CheckboxProps, ref: React.Ref<HTMLDivElement>) => {
     hasError = false,
     disabled = false,
     required = false,
+    fluid = false,
     indeterminated = false,
     autoFocus: autoFocusProp = false,
     size: sizeProp = "medium",
@@ -198,6 +204,7 @@ const CheckboxBase = (props: CheckboxProps, ref: React.Ref<HTMLDivElement>) => {
       : checked;
 
   const controlProps = {
+    fluid: formControl ? formControl.fluid : fluid,
     disabled: formControl ? formControl.disabled : disabled,
     hasError: formControl ? formControl.hasError : hasError,
     required: formControl ? formControl.required : required,
@@ -333,6 +340,7 @@ const CheckboxBase = (props: CheckboxProps, ref: React.Ref<HTMLDivElement>) => {
       className={c(classes.root, className, classes[size], {
         [classes.disabled]: controlProps.disabled,
         [classes.focused]: isFocused,
+        [classes.fluid]: controlProps.fluid,
         [classes.checked]: checkedState,
         [classes.checkedDisabled]: checkedState && controlProps.disabled,
         [classes.checkedFocused]: checkedState && isFocused,
@@ -406,6 +414,7 @@ Checkbox.propTypes = {
   defaultChecked: PropTypes.bool,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
+  fluid: PropTypes.bool,
   hasError: PropTypes.bool,
   onChange: PropTypes.func,
   onFocus: PropTypes.func,

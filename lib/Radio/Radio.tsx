@@ -40,6 +40,11 @@ interface RadioBaseProps {
    */
   autoFocus?: boolean;
   /**
+   * If `true`, the radio will fill the entire width of the parent.
+   * @default false
+   */
+  fluid?: boolean;
+  /**
    * If `true`, the radio will be readOnly.
    * @default false
    */
@@ -132,6 +137,7 @@ const RadioBase = (props: RadioProps, ref: React.Ref<HTMLDivElement>) => {
     hasError = false,
     disabled = false,
     required = false,
+    fluid = false,
     autoFocus: autoFocusProp = false,
     size: sizeProp = "medium",
     ...otherProps
@@ -187,6 +193,7 @@ const RadioBase = (props: RadioProps, ref: React.Ref<HTMLDivElement>) => {
   const checkedState = radioGroup ? radioGroup.value === value : checked;
 
   const controlProps = {
+    fluid: formControl ? formControl.fluid : fluid,
     disabled: formControl ? formControl.disabled : disabled,
     hasError: formControl ? formControl.hasError : hasError,
     required: formControl ? formControl.required : required,
@@ -313,6 +320,7 @@ const RadioBase = (props: RadioProps, ref: React.Ref<HTMLDivElement>) => {
       className={c(classes.root, className, classes[size], {
         [classes.disabled]: controlProps.disabled,
         [classes.focused]: isFocused,
+        [classes.fluid]: controlProps.fluid,
         [classes.checked]: checkedState,
         [classes.checkedDisabled]: checkedState && controlProps.disabled,
         [classes.checkedFocused]: checkedState && isFocused
@@ -366,6 +374,7 @@ Radio.propTypes = {
   defaultChecked: PropTypes.bool,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
+  fluid: PropTypes.bool,
   hasError: PropTypes.bool,
   onChange: PropTypes.func,
   onFocus: PropTypes.func,

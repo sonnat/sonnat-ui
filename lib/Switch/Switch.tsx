@@ -44,6 +44,11 @@ interface SwitchBaseProps {
    */
   autoFocus?: boolean;
   /**
+   * If `true`, the switch will fill the entire width of the parent.
+   * @default false
+   */
+  fluid?: boolean;
+  /**
    * If `true`, the switch will be readOnly.
    * @default false
    */
@@ -133,6 +138,7 @@ const SwitchBase = (props: SwitchProps, ref: React.Ref<HTMLDivElement>) => {
     hasError = false,
     disabled = false,
     required = false,
+    fluid = false,
     autoFocus: autoFocusProp = false,
     size: sizeProp = "medium",
     ...otherProps
@@ -186,6 +192,7 @@ const SwitchBase = (props: SwitchProps, ref: React.Ref<HTMLDivElement>) => {
 
   const controlProps = {
     name: name,
+    fluid: formControl ? formControl.fluid : fluid,
     disabled: formControl ? formControl.disabled : disabled,
     hasError: formControl ? formControl.hasError : hasError,
     required: formControl ? formControl.required : required,
@@ -308,6 +315,7 @@ const SwitchBase = (props: SwitchProps, ref: React.Ref<HTMLDivElement>) => {
       onFocus={handleFocus}
       onBlur={handleBlur}
       className={c(classes.root, className, classes[size], {
+        [classes.fluid]: controlProps.fluid,
         [classes.disabled]: controlProps.disabled,
         [classes.focused]: isFocused,
         [classes.checked]: checked,
@@ -368,6 +376,7 @@ Switch.propTypes = {
   defaultChecked: PropTypes.bool,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
+  fluid: PropTypes.bool,
   hasError: PropTypes.bool,
   onChange: PropTypes.func,
   onFocus: PropTypes.func,

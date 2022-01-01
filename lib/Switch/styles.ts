@@ -246,7 +246,8 @@ const useStyles = makeStyles(
             ? { transform: `translateX(${pxToRem(-10)})` }
             : { transform: `translateX(${pxToRem(10)})` })
         }
-      }
+      },
+      fluid: { width: "100%", justifyContent: "space-between" }
     };
   },
   { name: "SonnatSwitch" }
