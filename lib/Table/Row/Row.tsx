@@ -4,7 +4,7 @@ import * as React from "react";
 import type { MergeElementProps } from "../../typings";
 import camelCase from "../../utils/camelCase";
 import TableRowContext from "./context";
-import useStyles, { AlignCombo } from "./styles";
+import useStyles, { type AlignCombo } from "./styles";
 
 interface TableRowBaseProps {
   /** The content of the component. */

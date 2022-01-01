@@ -1,4 +1,3 @@
-import { changeColorHsla } from "../styles/colorUtils";
 import makeStyles from "../styles/makeStyles";
 
 const useStyles = makeStyles(
@@ -94,8 +93,8 @@ const useStyles = makeStyles(
         boxSizing: "border-box",
         transition: "240ms ease",
         backgroundColor: !darkMode
-          ? colors.createBlackColor({ alpha: 0.24 })
-          : colors.createWhiteColor({ alpha: 0.24 }),
+          ? colors.createBlackColor({ alpha: 0.24 }, true)
+          : colors.createWhiteColor({ alpha: 0.24 }, true),
         pointerEvents: "none"
       },
       handle: {
@@ -162,8 +161,8 @@ const useStyles = makeStyles(
         },
         "& $track": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.08 })
-            : colors.createWhiteColor({ alpha: 0.08 })
+            ? colors.createBlackColor({ alpha: 0.08 }, true)
+            : colors.createWhiteColor({ alpha: 0.08 }, true)
         },
         "& $handle": {
           boxShadow: "none",
@@ -176,21 +175,15 @@ const useStyles = makeStyles(
           transform: "scale(1.25)"
         },
         "& $cell:active $button:before": {
-          backgroundColor: !darkMode
-            ? colors.createPrimaryColor({ alpha: 0.08 })
-            : changeColorHsla(colors.primary.light, { alpha: 0.08 })
+          backgroundColor: colors.createPrimaryColor({ alpha: 0.08 })
         },
         "& $button:before": {
-          backgroundColor: !darkMode
-            ? colors.createPrimaryColor({ alpha: 0.04 })
-            : changeColorHsla(colors.primary.light, { alpha: 0.04 })
+          backgroundColor: colors.createPrimaryColor({ alpha: 0.04 })
         }
       },
       checkedFocused: {
         "& $button:before": {
-          backgroundColor: !darkMode
-            ? colors.createPrimaryColor({ alpha: 0.12 })
-            : changeColorHsla(colors.primary.light, { alpha: 0.12 })
+          backgroundColor: colors.createPrimaryColor({ alpha: 0.12 })
         }
       },
       checkedDisabled: {

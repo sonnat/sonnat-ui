@@ -6,8 +6,8 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      palette: { blue },
-      typography: { pxToRem, setText, fontFamily }
+      swatches: { blue },
+      typography: { pxToRem, fontFamily }
     } = theme;
 
     return {
@@ -28,8 +28,8 @@ const useStyles = makeStyles(
           },
           "&$outlined:hover $notchedOutline": {
             borderColor: !darkMode
-              ? colors.createBlackColor({ alpha: 0.48 })
-              : colors.createWhiteColor({ alpha: 0.48 })
+              ? colors.createBlackColor({ alpha: 0.48 }, true)
+              : colors.createWhiteColor({ alpha: 0.48 }, true)
           }
         }
       },
@@ -40,17 +40,6 @@ const useStyles = makeStyles(
         height: "100%",
         position: "relative",
         overflow: "hidden"
-      },
-      label: {
-        ...setText({ color: colors.text.secondary }),
-        ...(direction === "rtl"
-          ? { transformOrigin: "top right" }
-          : { transformOrigin: "top left" }),
-        zIndex: "1",
-        pointerEvents: "none",
-        transition:
-          "color 180ms ease, transform 180ms ease, font-size 180ms ease",
-        position: "absolute"
       },
       wrapper: {
         display: "flex",
@@ -72,8 +61,8 @@ const useStyles = makeStyles(
         borderStyle: "solid",
         borderWidth: 1,
         borderColor: !darkMode
-          ? colors.createBlackColor({ alpha: 0.24 })
-          : colors.createWhiteColor({ alpha: 0.24 }),
+          ? colors.createBlackColor({ alpha: 0.24 }, true)
+          : colors.createWhiteColor({ alpha: 0.24 }, true),
         borderRadius: "inherit",
         pointerEvents: "none",
         transition: "background-color 240ms ease, border-color 240ms ease"
@@ -95,23 +84,19 @@ const useStyles = makeStyles(
         pointerEvents: "none",
         "& $wrapper": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 })
-            : colors.createWhiteColor({ alpha: 0.04 })
+            ? colors.createBlackColor({ alpha: 0.04 }, true)
+            : colors.createWhiteColor({ alpha: 0.04 }, true)
         }
       },
       disabled: {
         pointerEvents: "none",
-        "& $notchedOutline": { borderColor: colors.divider },
-        "& $label": { color: colors.text.hint }
+        "& $notchedOutline": { borderColor: colors.divider }
       },
       focused: {
         "&:not($errored) $notchedOutline": {
-          borderColor: !darkMode ? blue[500] : blue[300]
+          borderColor: !darkMode ? blue[500] : blue[600]
         },
-        "& $notchedOutline": { borderWidth: `${pxToRem(2)} !important` },
-        "&:not($errored) $label": {
-          color: !darkMode ? colors.primary.origin : colors.primary.light
-        }
+        "& $notchedOutline": { borderWidth: `${pxToRem(2)} !important` }
       },
       small: {
         "& $wrapper": { minHeight: pxToRem(24) },
@@ -159,20 +144,6 @@ const useStyles = makeStyles(
       },
       medium: {
         "& $wrapper": { minHeight: pxToRem(32) },
-        "& $label": { fontSize: pxToRem(12), lineHeight: 1.6666666667 },
-        "&:not($empty) $label, &$focused $label": {
-          ...(direction === "rtl"
-            ? {
-                transform: `translate(${pxToRem(-5)}, ${pxToRem(
-                  -13
-                )}) scale(0.8333333333)`
-              }
-            : {
-                transform: `translate(${pxToRem(5)}, ${pxToRem(
-                  -13
-                )}) scale(0.8333333333)`
-              })
-        },
         "&$rounded": {
           "& $wrapper": {
             borderRadius: pxToRem(16),
@@ -217,19 +188,6 @@ const useStyles = makeStyles(
       },
       large: {
         "& $wrapper": { minHeight: pxToRem(40) },
-        "&:not($empty) $label, &$focused $label": {
-          ...(direction === "rtl"
-            ? {
-                transform: `translate(${pxToRem(-1)}, ${pxToRem(
-                  -16
-                )}) scale(0.75)`
-              }
-            : {
-                transform: `translate(${pxToRem(1)}, ${pxToRem(
-                  -16
-                )}) scale(0.75)`
-              })
-        },
         "&$rounded": {
           "& $wrapper": {
             borderRadius: pxToRem(20),
@@ -277,9 +235,6 @@ const useStyles = makeStyles(
         "&:not($disabled) $notchedOutline": {
           borderColor: !darkMode ? colors.error.origin : colors.error.light
         },
-        "&:not($disabled) $label": {
-          color: !darkMode ? colors.error.origin : colors.error.light
-        },
         "&$filled:not($disabled) $notchedOutline": {
           borderWidth: 1
         }
@@ -294,34 +249,7 @@ const useStyles = makeStyles(
         }
       },
       empty: {},
-      withLeadingAdornment: {
-        "&$large $label": {
-          ...(direction === "rtl"
-            ? {
-                transform: `translate(${pxToRem(-1)}, ${pxToRem(
-                  -16
-                )}) scale(0.75)`
-              }
-            : {
-                transform: `translate(${pxToRem(1)}, ${pxToRem(
-                  -16
-                )}) scale(0.75)`
-              })
-        },
-        "&$medium $label": {
-          ...(direction === "rtl"
-            ? {
-                transform: `translate(${pxToRem(-5)}, ${pxToRem(
-                  -13
-                )}) scale(0.8333333333)`
-              }
-            : {
-                transform: `translate(${pxToRem(5)}, ${pxToRem(
-                  -13
-                )}) scale(0.8333333333)`
-              })
-        }
-      },
+      withLeadingAdornment: {},
       withTrailingAdornment: {},
       multipleSelect: { "& $control": { overflow: "visible" } }
     };

@@ -132,7 +132,10 @@ interface TextFieldBaseProps {
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-export type TextFieldProps = MergeElementProps<"div", TextFieldBaseProps>;
+export type TextFieldProps = Omit<
+  MergeElementProps<"div", TextFieldBaseProps>,
+  "defaultChecked"
+>;
 
 type Component = {
   (props: TextFieldProps): React.ReactElement | null;

@@ -121,7 +121,10 @@ interface TextAreaBaseProps {
   onBlur?: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
 }
 
-export type TextAreaProps = MergeElementProps<"div", TextAreaBaseProps>;
+export type TextAreaProps = Omit<
+  MergeElementProps<"div", TextAreaBaseProps>,
+  "defaultChecked"
+>;
 
 type Component = {
   (props: TextAreaProps): React.ReactElement | null;

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import * as React from "react";
 import { isFragment } from "react-is";
 import type { MergeElementProps } from "../typings";
-import Item, { BreadcrumbItemProps } from "./Item";
+import Item, { type BreadcrumbItemProps } from "./Item";
 import useStyles from "./styles";
 
 interface BreadcrumbBaseProps {

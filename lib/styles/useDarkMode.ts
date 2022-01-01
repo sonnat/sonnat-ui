@@ -1,7 +1,7 @@
-import React from "react";
+import * as React from "react";
 import usePreviousValue from "../utils/usePreviousValue";
-import { dark, light } from "./createColors";
-import defaultTheme, { DefaultTheme } from "./defaultTheme";
+import createColors from "./createColors";
+import defaultTheme, { type DefaultTheme } from "./defaultTheme";
 
 const useDarkMode = <T = DefaultTheme>(
   isDarkMode = false,
@@ -12,13 +12,31 @@ const useDarkMode = <T = DefaultTheme>(
 
   const newTheme = React.useMemo(() => {
     if (isDarkMode !== prevState) {
+      const {
+        primary,
+        secondary,
+        error,
+        warning,
+        info,
+        success,
+        contrastThreshold
+      } = cachedTheme.current.colors;
+
       return {
         ...cachedTheme.current,
-        colors: {
-          ...cachedTheme.current.colors,
-          ...(isDarkMode ? dark : light)
-        },
-        darkMode: isDarkMode
+        darkMode: isDarkMode,
+        colors: createColors(
+          {
+            primary,
+            secondary,
+            error,
+            warning,
+            info,
+            success,
+            contrastThreshold
+          },
+          isDarkMode
+        )
       };
     } else return cachedTheme.current;
   }, [prevState, isDarkMode]);

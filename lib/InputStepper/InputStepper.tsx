@@ -89,7 +89,10 @@ interface InputStepperBaseProps {
   onSubtract?: (value: number) => void;
 }
 
-export type InputStepperProps = MergeElementProps<"div", InputStepperBaseProps>;
+export type InputStepperProps = Omit<
+  MergeElementProps<"div", InputStepperBaseProps>,
+  "defaultChecked"
+>;
 
 type Component = {
   (props: InputStepperProps): React.ReactElement | null;

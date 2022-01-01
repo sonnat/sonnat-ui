@@ -1,5 +1,5 @@
+import { darken, lighten } from "../styles/colorUtils";
 import type { DefaultTheme } from "../styles/defaultTheme";
-import { adjustColorHsla, changeColorHsla } from "../styles/colorUtils";
 
 interface BorderColorVariants {
   main: string;
@@ -56,7 +56,7 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
   const {
     colors,
     darkMode,
-    palette: { grey }
+    swatches: { grey }
   } = theme;
 
   const filledDefaultMainBg = colors.text.secondary;
@@ -71,12 +71,12 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
     background: {
       main: filledDefaultMainBg,
       hover: !darkMode
-        ? adjustColorHsla(filledDefaultMainBg, { lightness: 12 })
-        : colors.createWhiteColor({ alpha: 0.98 }),
+        ? colors.createBlackColor({ alpha: 0.48 }, true)
+        : colors.createWhiteColor({ alpha: 0.87 }, true),
       active: !darkMode
-        ? colors.createBlackColor({ alpha: 0.6 })
-        : colors.createWhiteColor({ alpha: 0.5 }),
-      disabled: !darkMode ? grey[100] : grey[900]
+        ? colors.createBlackColor({ alpha: 0.64 }, true)
+        : colors.createWhiteColor({ alpha: 0.56 }, true),
+      disabled: !darkMode ? grey[50] : grey[900]
     },
     text: colors.getContrastColorOf(filledDefaultMainBg)
   };
@@ -84,15 +84,9 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
   const filledPrimary = {
     background: {
       main: filledPrimaryMainBg,
-      hover: adjustColorHsla(filledPrimaryMainBg, {
-        saturation: -8,
-        lightness: +8
-      }),
-      active: adjustColorHsla(filledPrimaryMainBg, {
-        saturation: +8,
-        lightness: -4
-      }),
-      disabled: changeColorHsla(filledPrimaryMainBg, { alpha: 0.12 })
+      hover: lighten(filledPrimaryMainBg, 0.15),
+      active: darken(filledPrimaryMainBg, 0.15),
+      disabled: colors.createPrimaryColor({ alpha: 0.12 }, true)
     },
     text: colors.getContrastColorOf(filledPrimaryMainBg)
   };
@@ -100,15 +94,9 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
   const filledSecondary = {
     background: {
       main: filledSecondaryMainBg,
-      hover: adjustColorHsla(filledSecondaryMainBg, {
-        saturation: -8,
-        lightness: +8
-      }),
-      active: adjustColorHsla(filledSecondaryMainBg, {
-        saturation: +8,
-        lightness: -4
-      }),
-      disabled: changeColorHsla(filledSecondaryMainBg, { alpha: 0.12 })
+      hover: lighten(filledSecondaryMainBg, 0.15),
+      active: darken(filledSecondaryMainBg, 0.15),
+      disabled: colors.createSecondaryColor({ alpha: 0.12 }, true)
     },
     text: colors.getContrastColorOf(filledSecondaryMainBg)
   };
@@ -116,23 +104,23 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
   const outlinedDefault = {
     border: {
       main: !darkMode
-        ? colors.createBlackColor({ alpha: 0.48 })
-        : colors.createWhiteColor({ alpha: 0.48 }),
+        ? colors.createBlackColor({ alpha: 0.48 }, true)
+        : colors.createWhiteColor({ alpha: 0.48 }, true),
       hover: !darkMode
-        ? colors.createBlackColor({ alpha: 0.48 })
-        : colors.createWhiteColor({ alpha: 0.48 }),
+        ? colors.createBlackColor({ alpha: 0.64 }, true)
+        : colors.createWhiteColor({ alpha: 0.64 }, true),
       active: !darkMode
-        ? colors.createBlackColor({ alpha: 0.48 })
-        : colors.createWhiteColor({ alpha: 0.48 }),
+        ? colors.createBlackColor({ alpha: 0.64 }, true)
+        : colors.createWhiteColor({ alpha: 0.64 }, true),
       disabled: colors.divider
     },
     background: {
       hover: !darkMode
-        ? colors.createBlackColor({ alpha: 0.04 })
-        : colors.createWhiteColor({ alpha: 0.04 }),
+        ? colors.createBlackColor({ alpha: 0.04 }, true)
+        : colors.createWhiteColor({ alpha: 0.04 }, true),
       active: !darkMode
-        ? colors.createBlackColor({ alpha: 0.12 })
-        : colors.createWhiteColor({ alpha: 0.12 })
+        ? colors.createBlackColor({ alpha: 0.12 }, true)
+        : colors.createWhiteColor({ alpha: 0.12 }, true)
     },
     text: {
       main: colors.text.secondary,
@@ -144,50 +132,50 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
 
   const outlinedPrimary = {
     border: {
-      main: changeColorHsla(filledPrimaryMainBg, { alpha: 0.56 }),
+      main: colors.createPrimaryColor({ alpha: 0.56 }, true),
       hover: filledPrimaryMainBg,
       active: filledPrimaryMainBg,
-      disabled: changeColorHsla(filledPrimaryMainBg, { alpha: 0.12 })
+      disabled: colors.createPrimaryColor({ alpha: 0.12 }, true)
     },
     background: {
-      hover: changeColorHsla(filledPrimaryMainBg, { alpha: 0.04 }),
-      active: changeColorHsla(filledPrimaryMainBg, { alpha: 0.12 })
+      hover: colors.createPrimaryColor({ alpha: 0.04 }, true),
+      active: colors.createPrimaryColor({ alpha: 0.12 }, true)
     },
     text: {
       main: filledPrimaryMainBg,
       hover: filledPrimaryMainBg,
       active: filledPrimaryMainBg,
-      disabled: changeColorHsla(filledPrimaryMainBg, { alpha: 0.32 })
+      disabled: colors.createPrimaryColor({ alpha: 0.32 }, true)
     }
   };
 
   const outlinedSecondary = {
     border: {
-      main: changeColorHsla(filledSecondaryMainBg, { alpha: 0.56 }),
+      main: colors.createSecondaryColor({ alpha: 0.56 }, true),
       hover: filledSecondaryMainBg,
       active: filledSecondaryMainBg,
-      disabled: changeColorHsla(filledSecondaryMainBg, { alpha: 0.12 })
+      disabled: colors.createSecondaryColor({ alpha: 0.12 }, true)
     },
     background: {
-      hover: changeColorHsla(filledSecondaryMainBg, { alpha: 0.04 }),
-      active: changeColorHsla(filledSecondaryMainBg, { alpha: 0.12 })
+      hover: colors.createSecondaryColor({ alpha: 0.04 }, true),
+      active: colors.createSecondaryColor({ alpha: 0.12 }, true)
     },
     text: {
       main: filledSecondaryMainBg,
       hover: filledSecondaryMainBg,
       active: filledSecondaryMainBg,
-      disabled: changeColorHsla(filledSecondaryMainBg, { alpha: 0.32 })
+      disabled: colors.createSecondaryColor({ alpha: 0.32 }, true)
     }
   };
 
   const inlinedDefault = {
     background: {
       hover: !darkMode
-        ? colors.createBlackColor({ alpha: 0.04 })
-        : colors.createWhiteColor({ alpha: 0.04 }),
+        ? colors.createBlackColor({ alpha: 0.04 }, true)
+        : colors.createWhiteColor({ alpha: 0.04 }, true),
       active: !darkMode
-        ? colors.createBlackColor({ alpha: 0.12 })
-        : colors.createWhiteColor({ alpha: 0.12 })
+        ? colors.createBlackColor({ alpha: 0.12 }, true)
+        : colors.createWhiteColor({ alpha: 0.12 }, true)
     },
     text: {
       main: colors.text.secondary,
@@ -199,27 +187,27 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
 
   const inlinedPrimary = {
     background: {
-      hover: changeColorHsla(filledPrimaryMainBg, { alpha: 0.04 }),
-      active: changeColorHsla(filledPrimaryMainBg, { alpha: 0.12 })
+      hover: colors.createPrimaryColor({ alpha: 0.04 }, true),
+      active: colors.createPrimaryColor({ alpha: 0.12 }, true)
     },
     text: {
       main: filledPrimaryMainBg,
       hover: filledPrimaryMainBg,
       active: filledPrimaryMainBg,
-      disabled: changeColorHsla(filledPrimaryMainBg, { alpha: 0.32 })
+      disabled: colors.createPrimaryColor({ alpha: 0.32 }, true)
     }
   };
 
   const inlinedSecondary = {
     background: {
-      hover: changeColorHsla(filledSecondaryMainBg, { alpha: 0.04 }),
-      active: changeColorHsla(filledSecondaryMainBg, { alpha: 0.12 })
+      hover: colors.createSecondaryColor({ alpha: 0.04 }, true),
+      active: colors.createSecondaryColor({ alpha: 0.12 }, true)
     },
     text: {
       main: filledSecondaryMainBg,
       hover: filledSecondaryMainBg,
       active: filledSecondaryMainBg,
-      disabled: changeColorHsla(filledSecondaryMainBg, { alpha: 0.32 })
+      disabled: colors.createSecondaryColor({ alpha: 0.32 }, true)
     }
   };
 

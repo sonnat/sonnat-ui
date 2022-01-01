@@ -6,7 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      palette: { grey },
+      swatches: { grey },
       typography: { pxToRem, fontWeight, setText, fontFamily }
     } = theme;
 
@@ -22,7 +22,7 @@ const useStyles = makeStyles(
         direction,
         fontFamily: fontFamily.monospace,
         borderRadius: pxToRem(2),
-        backgroundColor: !darkMode ? grey[100] : grey[900],
+        backgroundColor: !darkMode ? grey[50] : grey[900],
         display: "inline-block",
         padding: `0 ${pxToRem(4)}`
       },

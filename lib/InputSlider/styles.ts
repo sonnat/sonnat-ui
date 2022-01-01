@@ -7,7 +7,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       hacks,
-      palette: { blue, grey },
+      swatches: { blue, grey },
       mixins: { asIconWrapper },
       typography: { pxToRem }
     } = theme;
@@ -98,9 +98,7 @@ const useStyles = makeStyles(
             "transform 240ms ease, opacity 240ms ease, background-color 240ms ease"
         },
         "&:not($focusVisible):hover:after": {
-          backgroundColor: !darkMode
-            ? colors.createPrimaryColor({ alpha: 0.04 })
-            : changeColorHsla(colors.primary.light, { alpha: 0.04 }),
+          backgroundColor: colors.createPrimaryColor({ alpha: 0.04 }),
           opacity: 1,
           transform: "scale(1)"
         }
@@ -136,7 +134,7 @@ const useStyles = makeStyles(
       },
       handleIcon: {
         ...asIconWrapper(16),
-        color: colors.createBlackColor({ alpha: 0.56 }),
+        color: colors.createBlackColor({ alpha: 0.56 }, true),
         transition: "color 360ms ease"
       },
       track: {
@@ -171,14 +169,14 @@ const useStyles = makeStyles(
         "& $handleIcon": { color: !darkMode ? colors.white : colors.black },
         "& $wrapper:after": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.08 })
-            : colors.createWhiteColor({ alpha: 0.08 })
+            ? colors.createBlackColor({ alpha: 0.08 }, true)
+            : colors.createWhiteColor({ alpha: 0.08 }, true)
         }
       },
       focusVisible: {
         outline: "none",
         "&:after": {
-          backgroundColor: darkMode ? blue[300] : blue[500],
+          backgroundColor: darkMode ? blue[500] : blue[600],
           opacity: darkMode ? 0.32 : 0.12,
           transform: "scale(1)"
         }

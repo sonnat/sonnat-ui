@@ -30,7 +30,7 @@ const useStyles = makeStyles(
     },
     focusVisible: {
       outline: `2px solid ${
-        theme.darkMode ? theme.palette.blue[300] : theme.palette.blue[500]
+        theme.darkMode ? theme.swatches.blue[500] : theme.swatches.blue[600]
       }`,
       outlineOffset: 1
     }

@@ -7,7 +7,7 @@ const useStyles = makeStyles(
       darkMode,
       zIndexes,
       direction,
-      palette: { grey },
+      swatches: { grey },
       typography: { pxToRem, setText, fontFamily }
     } = theme;
 
@@ -84,7 +84,7 @@ const useStyles = makeStyles(
         }
       },
       open: {
-        opacity: 0.96,
+        opacity: 1,
         "&$tailed": {
           "&$top": { transform: `translate(0, ${pxToRem(-16)}) scale(1)` },
           "&$bottom": { transform: `translate(0, ${pxToRem(16)}) scale(1)` },
@@ -93,9 +93,7 @@ const useStyles = makeStyles(
         }
       },
       tailed: {
-        "& $container:after, & $container:before": {
-          content: '""'
-        },
+        "& $container:after, & $container:before": { content: '""' },
         "& $tail": {
           opacity: 1,
           visibility: "visible",

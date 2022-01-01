@@ -1,4 +1,3 @@
-import { adjustColorHsla } from "../styles/colorUtils";
 import makeStyles from "../styles/makeStyles";
 
 const useStyles = makeStyles(
@@ -7,7 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      palette: { blue },
+      swatches: { blue },
       mixins: { asIconWrapper },
       typography: { pxToRem, setText, fontWeight, fontFamily }
     } = theme;
@@ -41,8 +40,8 @@ const useStyles = makeStyles(
         cursor: "pointer",
         "&:hover": {
           color: !darkMode
-            ? adjustColorHsla(colors.text.secondary, { lightness: 12 })
-            : colors.createWhiteColor({ alpha: 0.98 }),
+            ? colors.createBlackColor({ alpha: 0.48 }, true)
+            : colors.createWhiteColor({ alpha: 0.87 }, true),
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": {
             backgroundColor: colors.transparent
@@ -50,8 +49,8 @@ const useStyles = makeStyles(
         },
         "&:active": {
           color: !darkMode
-            ? colors.createBlackColor({ alpha: 0.6 })
-            : colors.createWhiteColor({ alpha: 0.5 })
+            ? colors.createBlackColor({ alpha: 0.64 }, true)
+            : colors.createWhiteColor({ alpha: 0.56 }, true)
         }
       },
       disabled: {
@@ -108,7 +107,7 @@ const useStyles = makeStyles(
         }
       },
       focusVisible: {
-        outline: `2px solid ${darkMode ? blue[300] : blue[500]}`,
+        outline: `2px solid ${darkMode ? blue[500] : blue[600]}`,
         outlineOffset: 1
       }
     };

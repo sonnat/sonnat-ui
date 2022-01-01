@@ -10,7 +10,7 @@ import {
   useForkedRefs,
   useIsFocusVisible
 } from "../utils";
-import useStyles, { VariantColorCombo } from "./styles";
+import useStyles, { type VariantColorCombo } from "./styles";
 
 interface ActionChipBaseProps {
   /**

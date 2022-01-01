@@ -94,17 +94,13 @@ const useStyles = makeStyles(
         pointerEvents: "none",
         "& $placeholder, & $displaySingle": { color: colors.text.disabled }
       },
-      open: {
-        "& $caretIcon": { transform: "rotate(180deg)" }
-      },
+      open: { "& $caretIcon": { transform: "rotate(180deg)" } },
       small: {
         "& $helperText": {
           fontSize: pxToRem(10),
           lineHeight: 1.8
         },
-        "& $helperIcon": {
-          ...asIconWrapper(14)
-        },
+        "& $helperIcon": asIconWrapper(14),
         "& $optionIcon": asIconWrapper(14),
         "& $placeholder, & $displaySingle": {
           fontSize: pxToRem(12),

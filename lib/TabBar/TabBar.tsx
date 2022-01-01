@@ -18,7 +18,7 @@ import {
 } from "../utils";
 import TabBarContext from "./context";
 import useStyles from "./styles";
-import Tab, { TabProps } from "./Tab";
+import Tab, { type TabProps } from "./Tab";
 
 interface TabBarBaseProps {
   /** The content of the component. */

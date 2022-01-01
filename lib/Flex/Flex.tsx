@@ -1,7 +1,7 @@
 import c from "classnames";
 import PropTypes from "prop-types";
 import * as React from "react";
-import { Breakpoints, makeStyles } from "../styles";
+import { makeStyles, type Breakpoints } from "../styles";
 import type { MergeElementProps } from "../typings";
 import { camelCase, getVar } from "../utils";
 
@@ -244,7 +244,7 @@ const createResponsiveClass = (
     });
   }
 
-  return classes[camelCase(`${prefix ? prefix + "-" : ""}${prop }`)];
+  return classes[camelCase(`${prefix ? prefix + "-" : ""}${prop}`)];
 };
 
 const FlexBase = <T extends React.ElementType = "div">(

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import * as React from "react";
 import useTheme from "../styles/useTheme";
 import type { MergeElementProps } from "../typings";
-import useStyles, { gridNumbers, GridNumbers } from "./styles";
+import useStyles, { gridNumbers, type GridNumbers } from "./styles";
 
 type BreakpointPropertyValue =
   | GridNumbers

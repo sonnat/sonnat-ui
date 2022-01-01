@@ -135,8 +135,8 @@ const createTypography = (typographyInput?: TypographyInput): Typography => {
 
   const buildVariant = (
     fontSize?: React.CSSProperties["fontSize"],
-    fontWeight?: React.CSSProperties["fontWeight"],
-    lineHeight?: React.CSSProperties["lineHeight"]
+    lineHeight?: React.CSSProperties["lineHeight"],
+    fontWeight?: React.CSSProperties["fontWeight"]
   ): React.CSSProperties =>
     setText({ fontSize: pxToRem(fontSize as number), fontWeight, lineHeight });
 

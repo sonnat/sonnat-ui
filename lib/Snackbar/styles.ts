@@ -6,7 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      palette: { grey },
+      swatches: { grey },
       zIndexes: { popover },
       mixins: { asIconWrapper },
       typography: { pxToRem, setText, fontFamily }
@@ -43,7 +43,7 @@ const useStyles = makeStyles(
       },
       icon: {
         ...asIconWrapper(16),
-        color: !darkMode ? colors.white : "rgba(0, 0, 0, 0.87)",
+        color: !darkMode ? colors.white : "#212121",
         flexShrink: 0,
         position: "relative",
         top: pxToRem(16),
@@ -58,7 +58,7 @@ const useStyles = makeStyles(
         ...setText({
           fontSize: pxToRem(14),
           lineHeight: 1.5714285714,
-          color: !darkMode ? colors.white : "rgba(0, 0, 0, 0.87)"
+          color: !darkMode ? colors.white : "#212121"
         }),
         padding: `${pxToRem(10)} 0`,
         "& + $divider": { display: "none" },
@@ -87,8 +87,8 @@ const useStyles = makeStyles(
       divider: {
         width: pxToRem(1),
         backgroundColor: !darkMode
-          ? colors.createWhiteColor({ alpha: 0.12 })
-          : colors.createBlackColor({ alpha: 0.12 }),
+          ? colors.createWhiteColor({ alpha: 0.12 }, true)
+          : colors.createBlackColor({ alpha: 0.12 }, true),
         margin: `0 ${pxToRem(8)}`,
         alignSelf: "flex-start",
         height: pxToRem(24),
@@ -135,13 +135,8 @@ const useStyles = makeStyles(
       },
       autoHidable: {
         borderRadius: `${pxToRem(4)} ${pxToRem(4)} 0 0`,
-        "&$open $hideDurationWrapper": {
-          opacity: 1,
-          visibility: "visible"
-        },
-        "&$open $hideDurationIndicator": {
-          width: "100%"
-        }
+        "&$open $hideDurationWrapper": { opacity: 1, visibility: "visible" },
+        "&$open $hideDurationIndicator": { width: "100%" }
       }
     };
   },

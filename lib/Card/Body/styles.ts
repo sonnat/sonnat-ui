@@ -6,9 +6,7 @@ const useStyles = makeStyles(
       typography: { pxToRem }
     } = theme;
 
-    return {
-      root: { padding: pxToRem(16) }
-    };
+    return { root: { padding: pxToRem(16) } };
   },
   { name: "SonnatCardBody" }
 );

@@ -1,13 +1,13 @@
 import {
-  DefaultTheme,
   makeStyles,
-  Palette,
-  Breakpoints,
-  Colors,
-  Typography,
-  ZIndexes
+  type Breakpoints,
+  type Colors,
+  type ColorSwatch,
+  type DefaultTheme,
+  type Swatches,
+  type Typography,
+  type ZIndexes
 } from "../styles";
-import { ColorSet } from "../styles/colorUtils";
 
 const reset = (theme: DefaultTheme) => ({
   html: {
@@ -197,7 +197,7 @@ const reset = (theme: DefaultTheme) => ({
 });
 
 const cssVariables = (theme: DefaultTheme) => {
-  const { colors, palette, breakpoints, zIndexes, typography } = theme;
+  const { colors, swatches, breakpoints, zIndexes, typography } = theme;
 
   const colorVariables = (colors: Colors) => {
     const whiteListProps = [
@@ -253,9 +253,9 @@ const cssVariables = (theme: DefaultTheme) => {
     }, {});
   };
 
-  const paletteVariables = (palette: Palette) => {
-    return Object.keys(palette).reduce((rules, key) => {
-      const children = Object.keys(palette[key as keyof Palette]);
+  const swatchesVariables = (swatches: Swatches) => {
+    return Object.keys(swatches).reduce((rules, key) => {
+      const children = Object.keys(swatches[key as keyof Swatches]);
 
       return {
         ...rules,
@@ -263,7 +263,9 @@ const cssVariables = (theme: DefaultTheme) => {
           (variants, vkey) => ({
             ...variants,
             [`--snt-${key}-${vkey}`]:
-              palette[key as keyof Palette][vkey as unknown as keyof ColorSet]
+              swatches[key as keyof Swatches][
+                vkey as unknown as keyof ColorSwatch
+              ]
           }),
           {}
         )
@@ -302,7 +304,7 @@ const cssVariables = (theme: DefaultTheme) => {
   return {
     ":root": {
       ...colorVariables(colors),
-      ...paletteVariables(palette),
+      ...swatchesVariables(swatches),
       ...breakpointVariables(breakpoints),
       ...zIndexVariables(zIndexes),
       ...typographyVariables(typography)

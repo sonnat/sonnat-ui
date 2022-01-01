@@ -58,15 +58,9 @@ const useStyles = makeStyles(
       },
       group: {
         borderBottom: `1px solid ${colors.divider}`,
-        "&:last-child": {
-          borderBottom: "none"
-        }
+        "&:last-child": { borderBottom: "none" }
       },
-      option: {
-        "& + $group": {
-          borderTop: `1px solid ${colors.divider}`
-        }
-      },
+      option: { "& + $group": { borderTop: `1px solid ${colors.divider}` } },
       emptyStatement: {
         ...setText({
           fontSize: pxToRem(14),
@@ -80,18 +74,10 @@ const useStyles = makeStyles(
         textAlign: "center"
       },
       searchable: {
-        "&$dense $list": {
-          height: `calc(100% - ${pxToRem(40)})`
-        },
-        "&:not($dense) $list": {
-          height: `calc(100% - ${pxToRem(48)})`
-        }
+        "&$dense $list": { height: `calc(100% - ${pxToRem(40)})` },
+        "&:not($dense) $list": { height: `calc(100% - ${pxToRem(48)})` }
       },
-      dense: {
-        "& $list": {
-          maxHeight: pxToRem(256)
-        }
-      }
+      dense: { "& $list": { maxHeight: pxToRem(256) } }
     };
   },
   { name: "SonnatMenu" }

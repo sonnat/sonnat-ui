@@ -30,8 +30,8 @@ const useStyles = makeStyles(
         transition: "color 240ms ease, background-color 240ms ease",
         "&:hover": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 })
-            : colors.createWhiteColor({ alpha: 0.04 })
+            ? colors.createBlackColor({ alpha: 0.04 }, true)
+            : colors.createWhiteColor({ alpha: 0.04 }, true)
         },
         "&:active": {
           color: !darkMode ? colors.primary.origin : colors.primary.light,
@@ -40,8 +40,8 @@ const useStyles = makeStyles(
       },
       focused: {
         backgroundColor: !darkMode
-          ? colors.createBlackColor({ alpha: 0.04 })
-          : colors.createWhiteColor({ alpha: 0.04 })
+          ? colors.createBlackColor({ alpha: 0.04 }, true)
+          : colors.createWhiteColor({ alpha: 0.04 }, true)
       },
       disabled: {
         pointerEvents: "none",

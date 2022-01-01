@@ -11,8 +11,8 @@ import {
   useIsFocusVisible
 } from "../utils";
 import useStyles, {
-  VariantColorSelectionCombo,
-  VariantUnselectionCombo
+  type VariantColorSelectionCombo,
+  type VariantUnselectionCombo
 } from "./styles";
 
 interface ChoiceChipBaseProps {

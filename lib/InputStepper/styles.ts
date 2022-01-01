@@ -6,7 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      palette: { blue },
+      swatches: { blue },
       mixins: { asIconWrapper },
       typography: { pxToRem, setText, fontFamily }
     } = theme;
@@ -18,24 +18,21 @@ const useStyles = makeStyles(
         position: "relative",
         display: "inline-flex",
         alignItems: "center",
-        height: pxToRem(40),
         borderRadius: pxToRem(4),
         border: `${pxToRem(1)} solid ${
           !darkMode
-            ? colors.createBlackColor({ alpha: 0.24 })
-            : colors.createWhiteColor({ alpha: 0.24 })
+            ? colors.createBlackColor({ alpha: 0.24 }, true)
+            : colors.createWhiteColor({ alpha: 0.24 }, true)
         }`,
         transition: "border-color 360ms ease",
         "&:not($disabled):hover": {
           borderColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.48 })
-            : colors.createWhiteColor({ alpha: 0.48 }),
+            ? colors.createBlackColor({ alpha: 0.48 }, true)
+            : colors.createWhiteColor({ alpha: 0.48 }, true),
           "& $input": { color: colors.text.primary }
         }
       },
       action: {
-        width: pxToRem(40),
-        height: pxToRem(40),
         position: "relative",
         display: "inline-flex",
         alignItems: "center",
@@ -61,7 +58,6 @@ const useStyles = makeStyles(
         },
         "&:after, &:before": {
           width: pxToRem(1),
-          height: pxToRem(24),
           backgroundColor: colors.divider,
           opacity: "1",
           transition: "opacity 360ms ease"
@@ -80,7 +76,6 @@ const useStyles = makeStyles(
         "& $actionIcon": { marginLeft: "auto" }
       },
       actionIcon: {
-        ...asIconWrapper(20),
         color: colors.text.secondary,
         transition: "color 360ms ease"
       },
@@ -122,7 +117,7 @@ const useStyles = makeStyles(
         height: pxToRem(24),
         "& $action": {
           width: pxToRem(24),
-          height: pxToRem(24),
+          height: pxToRem(22),
           "&:after,&:before": { height: pxToRem(16) }
         },
         "& $actionIcon": asIconWrapper(14),
@@ -132,7 +127,7 @@ const useStyles = makeStyles(
         height: pxToRem(32),
         "& $action": {
           width: pxToRem(32),
-          height: pxToRem(32),
+          height: pxToRem(30),
           "&:after,&:before": { height: pxToRem(16) }
         },
         "& $actionIcon": asIconWrapper(16),
@@ -142,13 +137,13 @@ const useStyles = makeStyles(
         height: pxToRem(40),
         "& $action": {
           width: pxToRem(40),
-          height: pxToRem(40),
+          height: pxToRem(38),
           "&:after,&:before": { height: pxToRem(24) }
         },
         "& $actionIcon": asIconWrapper(20)
       },
       focusVisible: {
-        outline: `2px solid ${darkMode ? blue[300] : blue[500]}`,
+        outline: `2px solid ${darkMode ? blue[500] : blue[600]}`,
         outlineOffset: 1
       }
     };

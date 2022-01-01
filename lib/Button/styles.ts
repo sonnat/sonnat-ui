@@ -18,7 +18,7 @@ const useStyles = makeStyles(
       colors,
       direction,
       darkMode,
-      palette: { blue },
+      swatches: { blue },
       hacks,
       mixins: { asIconWrapper },
       typography: { pxToRem, setText, fontWeight, fontFamily }
@@ -120,8 +120,8 @@ const useStyles = makeStyles(
         },
         "& $trailingIcon": {
           ...(direction === "rtl"
-            ? { marginLeft: pxToRem(-4), marginRight: pxToRem(4) }
-            : { marginRight: pxToRem(-4), marginLeft: pxToRem(4) })
+            ? { marginLeft: pxToRem(-4), marginRight: pxToRem(8) }
+            : { marginRight: pxToRem(-4), marginLeft: pxToRem(8) })
         }
       },
       small: {
@@ -144,8 +144,8 @@ const useStyles = makeStyles(
         },
         "& $trailingIcon": {
           ...(direction === "rtl"
-            ? { marginLeft: pxToRem(-4), marginRight: pxToRem(4) }
-            : { marginRight: pxToRem(-4), marginLeft: pxToRem(4) })
+            ? { marginLeft: pxToRem(-4), marginRight: pxToRem(8) }
+            : { marginRight: pxToRem(-4), marginLeft: pxToRem(8) })
         }
       },
       /* if (variant="filled") */
@@ -153,22 +153,20 @@ const useStyles = makeStyles(
         "&$disabled, &[disabled]": {
           "& $label": {
             color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 })
-              : colors.createWhiteColor({ alpha: 0.12 })
+              ? colors.createBlackColor({ alpha: 0.32 }, true)
+              : colors.createWhiteColor({ alpha: 0.24 }, true)
           },
           "& $icon": {
             color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 })
-              : colors.createWhiteColor({ alpha: 0.12 })
+              ? colors.createBlackColor({ alpha: 0.32 }, true)
+              : colors.createWhiteColor({ alpha: 0.24 }, true)
           },
           boxShadow: "none !important",
           transform: "none !important",
           pointerEvents: "none",
           "&:hover": {
             // Reset on touch devices, it doesn't add specificity
-            "@media (hover: none)": {
-              backgroundColor: colors.transparent
-            }
+            "@media (hover: none)": { backgroundColor: colors.transparent }
           }
         }
       },
@@ -182,9 +180,7 @@ const useStyles = makeStyles(
         },
         "&:hover": {
           // Reset on touch devices, it doesn't add specificity
-          "@media (hover: none)": {
-            backgroundColor: colors.transparent
-          }
+          "@media (hover: none)": { backgroundColor: colors.transparent }
         },
         "&:not($disabled):active": {
           backgroundColor: filledDefault.background.active
@@ -209,6 +205,16 @@ const useStyles = makeStyles(
           }
         },
         "&$disabled": {
+          "& $label": {
+            color: !darkMode
+              ? colors.createBlackColor({ alpha: 0.32 }, true)
+              : colors.createWhiteColor({ alpha: 0.32 }, true)
+          },
+          "& $icon": {
+            color: !darkMode
+              ? colors.createBlackColor({ alpha: 0.32 }, true)
+              : colors.createWhiteColor({ alpha: 0.32 }, true)
+          },
           backgroundColor: filledDefault.background.disabled
         }
       },
@@ -384,6 +390,7 @@ const useStyles = makeStyles(
         "&:not($disabled):hover": {
           "& $label": { color: outlinedDefault.text.hover },
           "& $icon": { color: outlinedDefault.text.hover },
+          borderColor: outlinedDefault.border.hover,
           backgroundColor: outlinedDefault.background.hover
         },
         "&:hover": {
@@ -395,6 +402,7 @@ const useStyles = makeStyles(
         "&:not($disabled):active": {
           "& $label": { color: outlinedDefault.text.active },
           "& $icon": { color: outlinedDefault.text.active },
+          borderColor: outlinedDefault.border.active,
           backgroundColor: outlinedDefault.background.active
         },
         "&$disabled, &[disabled]": {
@@ -568,7 +576,7 @@ const useStyles = makeStyles(
       leadingIcon: {},
       trailingIcon: {},
       focusVisible: {
-        outline: `2px solid ${darkMode ? blue[300] : blue[500]}`,
+        outline: `2px solid ${darkMode ? blue[500] : blue[600]}`,
         outlineOffset: 1
       }
     };

@@ -1,18 +1,18 @@
 import * as React from "react";
 import type { AnyObject, EmptyIntersectionObject } from "../typings";
 import createBreakpoints, {
-  Breakpoints,
-  BreakpointsInput
+  type Breakpoints,
+  type BreakpointsInput
 } from "./createBreakpoints";
-import createColors, { Colors, ColorsInput } from "./createColors";
-import createMixins, { Mixins } from "./createMixins";
-import createSpacings, { Spacings } from "./createSpacings";
+import createColors, { type Colors, type ColorsInput } from "./createColors";
+import createMixins, { type Mixins } from "./createMixins";
+import createSpacings, { type Spacings } from "./createSpacings";
 import createTypography, {
-  Typography,
-  TypographyInput
+  type Typography,
+  type TypographyInput
 } from "./createTypography";
-import createZIndexes, { ZIndexes } from "./createZIndexes";
-import palette, { Palette } from "./palette";
+import createZIndexes, { type ZIndexes } from "./createZIndexes";
+import swatches, { type Swatches } from "./swatches";
 
 export type Direction = "ltr" | "rtl";
 
@@ -36,7 +36,7 @@ export interface Theme {
   colors: Colors;
   typography: Typography;
   darkMode: boolean;
-  palette: Palette;
+  swatches: Swatches;
   hacks: {
     safariTransitionRadiusOverflowCombinationFix: React.CSSProperties;
     backfaceVisibilityFix: React.CSSProperties;
@@ -61,7 +61,7 @@ const createTheme = <CustomProps extends AnyObject = EmptyIntersectionObject>(
   } = themeInput || {};
 
   const breakpoints = createBreakpoints(breakpointsInput);
-  const colors = createColors({ ...colorsInput }, isDarkMode);
+  const colors = createColors(colorsInput, isDarkMode);
   const typography = createTypography(typographyInput);
   const spacings = createSpacings(spacingsInput);
   const mixins = createMixins(mixinsInput, {
@@ -96,7 +96,7 @@ const createTheme = <CustomProps extends AnyObject = EmptyIntersectionObject>(
     mixins,
     zIndexes,
     direction,
-    palette,
+    swatches,
     hacks,
     darkMode: isDarkMode
   };

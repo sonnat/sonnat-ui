@@ -29,7 +29,10 @@ interface CheckGroupBaseProps {
   onChange?: (selectedValues: string[]) => void;
 }
 
-export type CheckGroupProps = MergeElementProps<"div", CheckGroupBaseProps>;
+export type CheckGroupProps = Omit<
+  MergeElementProps<"div", CheckGroupBaseProps>,
+  "defaultChecked"
+>;
 
 type Component = {
   (props: CheckGroupProps): React.ReactElement | null;

@@ -33,7 +33,10 @@ interface RadioGroupBaseProps {
   onChange?: (selectedValue: string) => void;
 }
 
-export type RadioGroupProps = MergeElementProps<"div", RadioGroupBaseProps>;
+export type RadioGroupProps = Omit<
+  MergeElementProps<"div", RadioGroupBaseProps>,
+  "defaultChecked"
+>;
 
 type Component = {
   (props: RadioGroupProps): React.ReactElement | null;

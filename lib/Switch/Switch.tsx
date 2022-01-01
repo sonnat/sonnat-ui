@@ -100,7 +100,10 @@ interface SwitchBaseProps {
   labelProps?: React.ComponentPropsWithRef<"label">;
 }
 
-export type SwitchProps = MergeElementProps<"div", SwitchBaseProps>;
+export type SwitchProps = Omit<
+  MergeElementProps<"div", SwitchBaseProps>,
+  "defaultValue"
+>;
 
 type Component = {
   (props: SwitchProps): React.ReactElement | null;

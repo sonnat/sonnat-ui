@@ -1,4 +1,3 @@
-import { changeColorHsla } from "../styles/colorUtils";
 import makeStyles from "../styles/makeStyles";
 
 const useStyles = makeStyles(
@@ -40,8 +39,8 @@ const useStyles = makeStyles(
           borderRadius: "50%",
           position: "absolute",
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 })
-            : colors.createWhiteColor({ alpha: 0.04 }),
+            ? colors.createBlackColor({ alpha: 0.04 }, true)
+            : colors.createWhiteColor({ alpha: 0.04 }, true),
           transform: "scale(0)",
           opacity: "0",
           transformOrigin: "center",
@@ -69,8 +68,8 @@ const useStyles = makeStyles(
       button: {
         border: `1px solid ${
           !darkMode
-            ? colors.createBlackColor({ alpha: 0.24 })
-            : colors.createWhiteColor({ alpha: 0.24 })
+            ? colors.createBlackColor({ alpha: 0.24 }, true)
+            : colors.createWhiteColor({ alpha: 0.24 }, true)
         }`,
         position: "absolute",
         pointerEvents: "none",
@@ -152,8 +151,8 @@ const useStyles = makeStyles(
           transform: "scale(1)",
           opacity: "1",
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.12 })
-            : colors.createWhiteColor({ alpha: 0.12 })
+            ? colors.createBlackColor({ alpha: 0.12 }, true)
+            : colors.createWhiteColor({ alpha: 0.12 }, true)
         }
       },
       disabled: {
@@ -162,18 +161,12 @@ const useStyles = makeStyles(
           pointerEvents: "none",
           color: colors.text.disabled
         },
-        "& $cell, & $input, & $button": {
-          pointerEvents: "none"
-        },
-        "& $button": {
-          borderColor: colors.divider
-        }
+        "& $cell, & $input, & $button": { pointerEvents: "none" },
+        "& $button": { borderColor: colors.divider }
       },
       checked: {
         "& $cell:before": {
-          backgroundColor: !darkMode
-            ? colors.createPrimaryColor({ alpha: 0.04 })
-            : changeColorHsla(colors.primary.light, { alpha: 0.04 })
+          backgroundColor: colors.createPrimaryColor({ alpha: 0.04 }, true)
         },
         "& $button": {
           borderColor: !darkMode ? colors.primary.origin : colors.primary.light,
@@ -192,13 +185,14 @@ const useStyles = makeStyles(
           pointerEvents: "none",
           borderColor: colors.transparent,
           backgroundColor: colors.divider
+        },
+        "& $checkIcon polyline": {
+          stroke: !darkMode ? colors.white : colors.black
         }
       },
       checkedFocused: {
         "& $cell:before": {
-          backgroundColor: !darkMode
-            ? colors.createPrimaryColor({ alpha: 0.12 })
-            : changeColorHsla(colors.primary.light, { alpha: 0.12 })
+          backgroundColor: colors.createPrimaryColor({ alpha: 0.12 }, true)
         }
       },
       "@keyframes checkAnimation": {

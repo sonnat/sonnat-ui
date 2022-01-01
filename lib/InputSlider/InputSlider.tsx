@@ -110,7 +110,10 @@ interface InputSliderBaseProps {
   onDismount?: () => void;
 }
 
-export type InputSliderProps = MergeElementProps<"div", InputSliderBaseProps>;
+export type InputSliderProps = Omit<
+  MergeElementProps<"div", InputSliderBaseProps>,
+  "defaultChecked"
+>;
 
 type Component = {
   (props: InputSliderProps): React.ReactElement | null;
@@ -273,20 +276,8 @@ const InputSliderBase = (
     Math.floor(isDiscrete ? (max - min) / step! + 1 : 0)
   );
 
-  const bidirectionalCandidate =
-    (Array.isArray(valueProp) && valueProp.length === 2) ||
-    (Array.isArray(defaultValue) && defaultValue.length === 2);
-
-  const [value, setValue] = useControlledProp(
-    valueProp,
-    defaultValue,
-    bidirectionalCandidate
-      ? [
-          clamp((defaultValue as number[])[0], min, max),
-          clamp((defaultValue as number[])[1], min, max)
-        ]
-      : clamp(defaultValue as number, min, max)
-  );
+  const [value, setValue] = useControlledProp(valueProp, defaultValue, min);
+  const bidirectionalCandidate = Array.isArray(value) && value.length === 2;
 
   const isBidirectional: boolean = useConstantProp(
     bidirectionalCandidate,

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import * as React from "react";
 import useTheme from "../styles/useTheme";
 import type { MergeElementProps } from "../typings";
-import useStyles, { ColorCombo } from "./styles";
+import useStyles, { type ColorCombo } from "./styles";
 
 interface IconBaseProps {
   /**

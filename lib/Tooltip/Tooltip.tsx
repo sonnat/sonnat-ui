@@ -67,7 +67,10 @@ interface TooltipBaseProps {
   onOpen?: (event: React.SyntheticEvent | Event) => void;
 }
 
-export type TooltipProps = MergeElementProps<"div", TooltipBaseProps>;
+export type TooltipProps = Omit<
+  MergeElementProps<"div", TooltipBaseProps>,
+  "defaultValue" | "defaultChecked"
+>;
 
 type Component = {
   (props: TooltipProps): React.ReactElement | null;

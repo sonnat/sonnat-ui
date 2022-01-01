@@ -35,23 +35,12 @@ const useStyles = makeStyles(
         transformOrigin: "center"
       },
       "@keyframes clipAnimation": {
-        "0%": {
-          strokeDasharray: "1, 100",
-          strokeDashoffset: "0"
-        },
-        "50%": {
-          strokeDasharray: "80, 100",
-          strokeDashoffset: "46"
-        },
-        "100%": {
-          strokeDasharray: "1, 100",
-          strokeDashoffset: "0"
-        }
+        "0%": { strokeDasharray: "1, 100", strokeDashoffset: "0" },
+        "50%": { strokeDasharray: "80, 100", strokeDashoffset: "46" },
+        "100%": { strokeDasharray: "1, 100", strokeDashoffset: "0" }
       },
       "@keyframes rotateAnimation": {
-        "100%": {
-          transform: "rotate(360deg)"
-        }
+        "100%": { transform: "rotate(360deg)" }
       }
     };
   },

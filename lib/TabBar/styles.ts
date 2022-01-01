@@ -123,11 +123,7 @@ const useStyles = makeStyles(
         color: colors.text.hint,
         transition: "color 360ms ease"
       },
-      scrollable: {
-        "& $listWrapper": {
-          overflowX: "auto"
-        }
-      },
+      scrollable: { "& $listWrapper": { overflowX: "auto" } },
       fluid: {
         width: "100%",
         "& $listContainer": { flex: [[1, 0]] }

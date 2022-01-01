@@ -1,4 +1,3 @@
-import { changeColorHsla } from "../../styles/colorUtils";
 import makeStyles from "../../styles/makeStyles";
 
 const useStyles = makeStyles(
@@ -7,7 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      palette: { blue },
+      swatches: { blue },
       mixins: { asIconWrapper },
       typography: { pxToRem, setText }
     } = theme;
@@ -24,20 +23,20 @@ const useStyles = makeStyles(
         transition: "250ms ease",
         "&:hover": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 })
-            : colors.createWhiteColor({ alpha: 0.04 })
+            ? colors.createBlackColor({ alpha: 0.04 }, true)
+            : colors.createWhiteColor({ alpha: 0.04 }, true)
         },
         "&:active": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.08 })
-            : colors.createWhiteColor({ alpha: 0.08 })
+            ? colors.createBlackColor({ alpha: 0.08 }, true)
+            : colors.createWhiteColor({ alpha: 0.08 }, true)
         },
         "&:after": {
           content: "''",
           position: "absolute",
           width: "100%",
           height: `calc(100% - ${pxToRem(8)})`,
-          border: `2px solid ${darkMode ? blue[300] : blue[500]}`,
+          border: `2px solid ${darkMode ? blue[500] : blue[600]}`,
           opacity: 0,
           visibility: "hidden"
         }
@@ -121,24 +120,15 @@ const useStyles = makeStyles(
           color: !darkMode ? colors.primary.origin : colors.primary.light
         },
         "&:hover": {
-          backgroundColor: !darkMode
-            ? colors.createPrimaryColor({ alpha: 0.04 })
-            : changeColorHsla(colors.primary.light, { alpha: 0.04 })
+          backgroundColor: colors.createPrimaryColor({ alpha: 0.04 }, true)
         },
         "&:active": {
-          backgroundColor: !darkMode
-            ? colors.createPrimaryColor({ alpha: 0.08 })
-            : changeColorHsla(colors.primary.light, { alpha: 0.08 })
+          backgroundColor: colors.createPrimaryColor({ alpha: 0.08 }, true)
         }
       },
       leadingIconed: {},
       iconTab: { "& $content": { justifyContent: "center" } },
-      focusVisible: {
-        "&:after": {
-          opacity: 1,
-          visibility: "visible"
-        }
-      }
+      focusVisible: { "&:after": { opacity: 1, visibility: "visible" } }
     };
   },
   { name: "SonnatTab" }

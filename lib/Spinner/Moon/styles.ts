@@ -38,12 +38,8 @@ const useStyles = makeStyles(
         borderRadius: "50%"
       },
       "@keyframes rotateAnimation": {
-        "0%": {
-          transform: "rotate(0)"
-        },
-        "100%": {
-          transform: "rotate(360deg)"
-        }
+        "0%": { transform: "rotate(0)" },
+        "100%": { transform: "rotate(360deg)" }
       }
     };
   },

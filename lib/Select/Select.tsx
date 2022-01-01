@@ -22,8 +22,8 @@ import {
   useIsomorphicLayoutEffect
 } from "../utils";
 import SelectContext from "./context";
-import Option, { SelectOptionProps } from "./Option";
-import OptionGroup, { SelectOptionGroupProps } from "./OptionGroup";
+import Option, { type SelectOptionProps } from "./Option";
+import OptionGroup, { type SelectOptionGroupProps } from "./OptionGroup";
 import useStyles from "./styles";
 
 interface SelectBaseProps {
@@ -153,7 +153,10 @@ interface SelectBaseProps {
   onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
 }
 
-export type SelectProps = MergeElementProps<"div", SelectBaseProps>;
+export type SelectProps = Omit<
+  MergeElementProps<"div", SelectBaseProps>,
+  "defaultChecked"
+>;
 
 type Component = {
   (props: SelectProps): React.ReactElement | null;

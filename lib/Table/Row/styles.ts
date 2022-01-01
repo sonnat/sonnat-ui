@@ -1,4 +1,4 @@
-import { adjustColorHsla } from "../../styles/colorUtils";
+import { lighten } from "../../styles/colorUtils";
 import makeStyles from "../../styles/makeStyles";
 
 export type AlignCombo =
@@ -28,17 +28,14 @@ const useStyles = makeStyles(
         color: colors.getContrastColorOf(selectedBgColor),
         backgroundColor: selectedBgColor,
         "&$hoverable:hover": {
-          backgroundColor: adjustColorHsla(selectedBgColor, {
-            saturation: -8,
-            lightness: +8
-          })
+          backgroundColor: lighten(selectedBgColor, 0.15)
         }
       },
       hoverable: {
         "&:hover": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 })
-            : colors.createWhiteColor({ alpha: 0.04 })
+            ? colors.createBlackColor({ alpha: 0.04 }, true)
+            : colors.createWhiteColor({ alpha: 0.04 }, true)
         }
       }
     };

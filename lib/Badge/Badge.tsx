@@ -3,7 +3,10 @@ import PropTypes from "prop-types";
 import * as React from "react";
 import type { MergeElementProps, NotUndefined } from "../typings";
 import { camelCase, getVar } from "../utils";
-import useStyles, { PositionCombo, VariantColorCombo } from "./styles";
+import useStyles, {
+  type PositionCombo,
+  type VariantColorCombo
+} from "./styles";
 
 interface BadgeBaseProps {
   /**

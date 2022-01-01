@@ -99,7 +99,10 @@ interface RadioBaseProps {
   labelProps?: React.ComponentPropsWithRef<"label">;
 }
 
-export type RadioProps = MergeElementProps<"div", RadioBaseProps>;
+export type RadioProps = Omit<
+  MergeElementProps<"div", RadioBaseProps>,
+  "defaultValue"
+>;
 
 type Component = {
   (props: RadioProps): React.ReactElement | null;

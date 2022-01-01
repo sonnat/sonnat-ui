@@ -6,7 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      palette: { blue },
+      swatches: { blue },
       mixins: { asIconWrapper },
       typography: { pxToRem, setText, fontFamily }
     } = theme;
@@ -14,11 +14,12 @@ const useStyles = makeStyles(
     return {
       root: {
         direction,
+        display: "inline-flex",
         fontFamily: fontFamily[direction],
         "&:not($errored):not($focused):hover $wrapper:after": {
           borderColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.48 })
-            : colors.createWhiteColor({ alpha: 0.48 })
+            ? colors.createBlackColor({ alpha: 0.48 }, true)
+            : colors.createWhiteColor({ alpha: 0.48 }, true)
         }
       },
       wrapper: {
@@ -40,10 +41,11 @@ const useStyles = makeStyles(
           borderStyle: "solid",
           borderWidth: 1,
           borderColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.24 })
-            : colors.createWhiteColor({ alpha: 0.24 }),
+            ? colors.createBlackColor({ alpha: 0.24 }, true)
+            : colors.createWhiteColor({ alpha: 0.24 }, true),
           borderRadius: pxToRem(4),
-          pointerEvents: "none"
+          pointerEvents: "none",
+          transition: "border-color 240ms ease"
         }
       },
       shadow: {
@@ -146,8 +148,8 @@ const useStyles = makeStyles(
         pointerEvents: "none",
         "& $input": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 })
-            : colors.createWhiteColor({ alpha: 0.04 })
+            ? colors.createBlackColor({ alpha: 0.04 }, true)
+            : colors.createWhiteColor({ alpha: 0.04 }, true)
         }
       },
       disabled: {
@@ -164,7 +166,7 @@ const useStyles = makeStyles(
       focused: {
         "&:not($errored) $wrapper:after": {
           borderWidth: 2,
-          borderColor: !darkMode ? blue[500] : blue[300]
+          borderColor: !darkMode ? blue[500] : blue[600]
         },
         "&$errored $wrapper:after": {
           borderWidth: 2,

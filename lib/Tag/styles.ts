@@ -1,4 +1,3 @@
-import { changeColorHsla } from "../styles/colorUtils";
 import makeStyles from "../styles/makeStyles";
 
 const useStyles = makeStyles(
@@ -7,7 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      palette: { blue },
+      swatches: { blue },
       mixins: { asIconWrapper },
       typography: { pxToRem, setText, fontFamily }
     } = theme;
@@ -15,44 +14,50 @@ const useStyles = makeStyles(
     const primaryColor = !darkMode
       ? colors.primary.origin
       : colors.primary.light;
-    const primaryBgColor = changeColorHsla(primaryColor, { alpha: 0.08 });
-    const primaryMiddleColor = changeColorHsla(primaryColor, { alpha: 0.12 });
-    const primaryBorderColor = changeColorHsla(primaryColor, { alpha: 0.24 });
+
+    const primaryBgColor = colors.createPrimaryColor({ alpha: 0.08 }, true);
+    const primaryMiddleColor = colors.createPrimaryColor({ alpha: 0.12 }, true);
+    const primaryBorderColor = colors.createPrimaryColor({ alpha: 0.24 }, true);
 
     const secondaryColor = !darkMode
       ? colors.secondary.origin
       : colors.secondary.light;
-    const secondaryBgColor = changeColorHsla(secondaryColor, { alpha: 0.08 });
-    const secondaryMiddleColor = changeColorHsla(secondaryColor, {
-      alpha: 0.12
-    });
-    const secondaryBorderColor = changeColorHsla(secondaryColor, {
-      alpha: 0.24
-    });
+
+    const secondaryBgColor = colors.createSecondaryColor({ alpha: 0.08 }, true);
+    const secondaryMiddleColor = colors.createSecondaryColor(
+      { alpha: 0.12 },
+      true
+    );
+    const secondaryBorderColor = colors.createSecondaryColor(
+      { alpha: 0.24 },
+      true
+    );
 
     const successColor = !darkMode
       ? colors.success.origin
       : colors.success.light;
-    const successBgColor = changeColorHsla(successColor, { alpha: 0.08 });
-    const successMiddleColor = changeColorHsla(successColor, { alpha: 0.12 });
-    const successBorderColor = changeColorHsla(successColor, { alpha: 0.24 });
+
+    const successBgColor = colors.createSuccessColor({ alpha: 0.08 }, true);
+    const successMiddleColor = colors.createSuccessColor({ alpha: 0.12 }, true);
+    const successBorderColor = colors.createSuccessColor({ alpha: 0.24 }, true);
 
     const errorColor = !darkMode ? colors.error.origin : colors.error.light;
-    const errorBgColor = changeColorHsla(errorColor, { alpha: 0.08 });
-    const errorMiddleColor = changeColorHsla(errorColor, { alpha: 0.12 });
-    const errorBorderColor = changeColorHsla(errorColor, { alpha: 0.24 });
+    const errorBgColor = colors.createErrorColor({ alpha: 0.08 }, true);
+    const errorMiddleColor = colors.createErrorColor({ alpha: 0.12 }, true);
+    const errorBorderColor = colors.createErrorColor({ alpha: 0.24 }, true);
 
     const warningColor = !darkMode
       ? colors.warning.origin
       : colors.warning.light;
-    const warningBgColor = changeColorHsla(warningColor, { alpha: 0.08 });
-    const warningMiddleColor = changeColorHsla(warningColor, { alpha: 0.12 });
-    const warningBorderColor = changeColorHsla(warningColor, { alpha: 0.24 });
+
+    const warningBgColor = colors.createWarningColor({ alpha: 0.08 }, true);
+    const warningMiddleColor = colors.createWarningColor({ alpha: 0.12 }, true);
+    const warningBorderColor = colors.createWarningColor({ alpha: 0.24 }, true);
 
     const infoColor = !darkMode ? colors.info.origin : colors.info.light;
-    const infoBgColor = changeColorHsla(infoColor, { alpha: 0.08 });
-    const infoMiddleColor = changeColorHsla(infoColor, { alpha: 0.12 });
-    const infoBorderColor = changeColorHsla(infoColor, { alpha: 0.24 });
+    const infoBgColor = colors.createInfoColor({ alpha: 0.08 }, true);
+    const infoMiddleColor = colors.createInfoColor({ alpha: 0.12 }, true);
+    const infoBorderColor = colors.createInfoColor({ alpha: 0.24 }, true);
 
     return {
       root: {
@@ -110,10 +115,7 @@ const useStyles = makeStyles(
       outlined: {},
       filled: {},
       removable: {},
-      dense: {
-        height: pxToRem(24),
-        "& $label": { fontSize: pxToRem(12) }
-      },
+      dense: { height: pxToRem(24), "& $label": { fontSize: pxToRem(12) } },
       default: {
         backgroundColor: !darkMode
           ? colors.createBlackColor({ alpha: 0.04 })
@@ -149,12 +151,8 @@ const useStyles = makeStyles(
         },
         "& $removeBtn": {
           color: primaryColor,
-          "&:hover > $removeBtnIcon": {
-            backgroundColor: primaryMiddleColor
-          },
-          "&:active > $removeBtnIcon": {
-            backgroundColor: primaryBorderColor
-          }
+          "&:hover > $removeBtnIcon": { backgroundColor: primaryMiddleColor },
+          "&:active > $removeBtnIcon": { backgroundColor: primaryBorderColor }
         }
       },
       secondary: {
@@ -168,12 +166,8 @@ const useStyles = makeStyles(
         },
         "& $removeBtn": {
           color: secondaryColor,
-          "&:hover > $removeBtnIcon": {
-            backgroundColor: secondaryMiddleColor
-          },
-          "&:active > $removeBtnIcon": {
-            backgroundColor: secondaryBorderColor
-          }
+          "&:hover > $removeBtnIcon": { backgroundColor: secondaryMiddleColor },
+          "&:active > $removeBtnIcon": { backgroundColor: secondaryBorderColor }
         }
       },
       success: {
@@ -187,12 +181,8 @@ const useStyles = makeStyles(
         },
         "& $removeBtn": {
           color: successColor,
-          "&:hover > $removeBtnIcon": {
-            backgroundColor: successMiddleColor
-          },
-          "&:active > $removeBtnIcon": {
-            backgroundColor: successBorderColor
-          }
+          "&:hover > $removeBtnIcon": { backgroundColor: successMiddleColor },
+          "&:active > $removeBtnIcon": { backgroundColor: successBorderColor }
         }
       },
       error: {
@@ -206,12 +196,8 @@ const useStyles = makeStyles(
         },
         "& $removeBtn": {
           color: errorColor,
-          "&:hover > $removeBtnIcon": {
-            backgroundColor: errorMiddleColor
-          },
-          "&:active > $removeBtnIcon": {
-            backgroundColor: errorBorderColor
-          }
+          "&:hover > $removeBtnIcon": { backgroundColor: errorMiddleColor },
+          "&:active > $removeBtnIcon": { backgroundColor: errorBorderColor }
         }
       },
       warning: {
@@ -225,12 +211,8 @@ const useStyles = makeStyles(
         },
         "& $removeBtn": {
           color: warningColor,
-          "&:hover > $removeBtnIcon": {
-            backgroundColor: warningMiddleColor
-          },
-          "&:active > $removeBtnIcon": {
-            backgroundColor: warningBorderColor
-          }
+          "&:hover > $removeBtnIcon": { backgroundColor: warningMiddleColor },
+          "&:active > $removeBtnIcon": { backgroundColor: warningBorderColor }
         }
       },
       info: {
@@ -244,16 +226,12 @@ const useStyles = makeStyles(
         },
         "& $removeBtn": {
           color: infoColor,
-          "&:hover > $removeBtnIcon": {
-            backgroundColor: infoMiddleColor
-          },
-          "&:active > $removeBtnIcon": {
-            backgroundColor: infoBorderColor
-          }
+          "&:hover > $removeBtnIcon": { backgroundColor: infoMiddleColor },
+          "&:active > $removeBtnIcon": { backgroundColor: infoBorderColor }
         }
       },
       focusVisible: {
-        outline: `2px solid ${darkMode ? blue[300] : blue[500]}`,
+        outline: `2px solid ${darkMode ? blue[500] : blue[600]}`,
         outlineOffset: 1
       }
     };

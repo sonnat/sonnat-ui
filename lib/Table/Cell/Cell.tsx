@@ -6,7 +6,7 @@ import camelCase from "../../utils/camelCase";
 import TableContext from "../context";
 import TableInnerContext from "../innerContext";
 import TableRowContext from "../Row/context";
-import useStyles, { AlignCombo } from "./styles";
+import useStyles, { type AlignCombo } from "./styles";
 
 interface TableCellBaseProps {
   /** The content of the component. */

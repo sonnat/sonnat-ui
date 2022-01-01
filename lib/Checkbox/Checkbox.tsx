@@ -106,7 +106,10 @@ interface CheckboxBaseProps {
   labelProps?: React.ComponentPropsWithRef<"label">;
 }
 
-export type CheckboxProps = MergeElementProps<"div", CheckboxBaseProps>;
+export type CheckboxProps = Omit<
+  MergeElementProps<"div", CheckboxBaseProps>,
+  "defaultValue"
+>;
 
 type Component = {
   (props: CheckboxProps): React.ReactElement | null;

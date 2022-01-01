@@ -31,11 +31,7 @@ const useStyles = makeStyles(
         padding: pxToRem(16),
         color: colors.text.secondary
       },
-      dense: {
-        "& $caption": {
-          padding: pxToRem(8)
-        }
-      },
+      dense: { "& $caption": { padding: pxToRem(8) } },
       borderLess: { border: "none" }
     };
   },
