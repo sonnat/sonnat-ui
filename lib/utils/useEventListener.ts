@@ -1,5 +1,5 @@
 import * as React from "react";
-import useGetLatest from "./useGetLatest";
+import useLatest from "./useLatest";
 
 type ElementEventListener<K extends keyof HTMLElementEventMap> = (
   this: HTMLElement,
@@ -89,33 +89,32 @@ const useEventListener: UseEventListener = (
 ): void => {
   const { target = null, eventType, handler, options } = config;
 
-  const getHandler = useGetLatest(handler);
-  const getOptions = useGetLatest(options);
+  const cachedOptions = useLatest(options);
+  const cachedHandler = useLatest(handler);
 
   React.useEffect(() => {
-    const _handler_ = getHandler();
-    const _options_ = getOptions();
-
     const element = target && "current" in target ? target.current : target;
 
-    const listener = (event: Event) =>
-      (_handler_ as (ev: Event) => void)(event);
+    if (!element) return;
 
-    let thirdParam = _options_;
+    let unsubscribed = false;
+    const listener = (event: Event) => {
+      if (unsubscribed) return;
+      (cachedHandler.current as (ev: Event) => void)(event);
+    };
 
-    if (typeof _options_ !== "boolean") {
-      if (isOptionParamSupported()) thirdParam = _options_;
+    let thirdParam = cachedOptions.current;
+
+    if (typeof cachedOptions.current !== "boolean") {
+      if (isOptionParamSupported()) thirdParam = cachedOptions.current;
       else thirdParam = undefined;
     }
 
-    if (element != null && shouldAttach) {
-      element.addEventListener(eventType, listener, thirdParam);
-    }
+    shouldAttach && element.addEventListener(eventType, listener, thirdParam);
 
     return () => {
-      if (element != null) {
-        element.removeEventListener(eventType, listener, thirdParam);
-      }
+      unsubscribed = true;
+      element.removeEventListener(eventType, listener, thirdParam);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [target, eventType, shouldAttach]);

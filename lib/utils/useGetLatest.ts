@@ -1,10 +1,10 @@
 import * as React from "react";
+import useLatest from "./useLatest";
 
 const useGetLatest = <T>(value: T): (() => T) => {
-  const ref = React.useRef<T>(value);
+  const ref = useLatest(value);
 
-  React.useEffect(() => void (ref.current = value));
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   return React.useCallback(() => ref.current, []);
 };
 
