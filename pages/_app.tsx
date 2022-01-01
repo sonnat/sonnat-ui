@@ -2,8 +2,15 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import * as React from "react";
 import CssBaseline from "../lib/CssBaseline";
-import makeStyles from "../lib/styles/makeStyles";
-import SonnatInitializer from "../lib/styles/SonnatInitializer";
+import { useDarkMode, makeStyles, SonnatInitializer } from "../lib/styles";
+
+interface IAppContext {
+  setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const AppContext = React.createContext<IAppContext | undefined>(
+  undefined
+);
 
 const googleFontFamily =
   "https://fonts.googleapis.com/css2?" +
@@ -34,8 +41,12 @@ const App = (props: AppProps) => {
       sonnatServerStyles.parentElement?.removeChild(sonnatServerStyles);
   }, []);
 
+  const [isDarkMode, setIsDarkMode] = React.useState(false);
+
+  const theme = useDarkMode(isDarkMode);
+
   return (
-    <SonnatInitializer injectFirst>
+    <SonnatInitializer theme={theme} injectFirst>
       <Head>
         <meta
           name="viewport"
@@ -47,7 +58,9 @@ const App = (props: AppProps) => {
       </Head>
       <div id="main-wrapper">
         <CssBaseline />
-        <Page {...pageProps} />
+        <AppContext.Provider value={{ setIsDarkMode }}>
+          <Page {...pageProps} />
+        </AppContext.Provider>
       </div>
     </SonnatInitializer>
   );
