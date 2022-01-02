@@ -124,8 +124,8 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
     },
     text: {
       main: colors.text.secondary,
-      hover: colors.text.primary,
-      active: colors.text.primary,
+      hover: colors.text.secondary,
+      active: colors.text.secondary,
       disabled: colors.text.disabled
     }
   };
@@ -179,8 +179,8 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
     },
     text: {
       main: colors.text.secondary,
-      hover: colors.text.primary,
-      active: colors.text.primary,
+      hover: colors.text.secondary,
+      active: colors.text.secondary,
       disabled: colors.text.disabled
     }
   };
