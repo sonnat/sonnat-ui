@@ -1,9 +1,7 @@
 import c from "classnames";
 import PropTypes from "prop-types";
 import * as React from "react";
-import Button from "../Button";
 import CloseLarge from "../internals/icons/CloseLarge";
-import { ThemeProvider, useDarkMode, useTheme } from "../styles";
 import type { MergeElementProps } from "../typings";
 import onNextFrame from "../utils/onNextFrame";
 import useStyles from "./styles";
@@ -17,9 +15,9 @@ interface SnackbarBaseProps {
    */
   className?: string;
   /**
-   * The text to display on the undo button.
+   * The text to display on the action button.
    */
-  undoButtonLabel?: string;
+  actionLabel?: string;
   /**
    * The leading icon element placed before the text.
    */
@@ -48,25 +46,28 @@ interface SnackbarBaseProps {
    */
   closable?: boolean;
   /**
-   * If `true`, the snackbar will have undo button.
-   * @default false
-   */
-  undoable?: boolean;
-  /**
    * The Callback fires when the close button is clicked.
    */
   onClose?: () => void;
   /**
-   * The Callback fires when the item has received focus.
+   * The Callback fires when the action button is clicked.
    */
-  onUndo?: () => void;
+  actionCallback?: () => void;
   /**
    * The Callback fires when the transition has ended.
    */
   onTransitionEnd?: (event: React.TransitionEvent<HTMLDivElement>) => void;
+  /**
+   * The color of the snackbar.
+   * @default "default"
+   */
+  color?: "default" | "success" | "error" | "warning" | "info";
 }
 
-export type SnackbarProps = MergeElementProps<"div", SnackbarBaseProps>;
+export type SnackbarProps = Omit<
+  MergeElementProps<"div", SnackbarBaseProps>,
+  "defaultChecked" | "defaultValue"
+>;
 
 type Component = {
   (props: SnackbarProps): React.ReactElement | null;
@@ -75,34 +76,39 @@ type Component = {
 };
 
 const allowedPlacements = ["left", "center", "right"] as const;
+const allowedColors = [
+  "default",
+  "success",
+  "error",
+  "warning",
+  "info"
+] as const;
 
 const SnackbarBase = (props: SnackbarProps, ref: React.Ref<HTMLDivElement>) => {
   const {
     text,
     className,
     icon,
-    onUndo,
     onClose,
     onTransitionEnd,
+    actionLabel,
+    actionCallback,
     autoHide = false,
     open = false,
-    undoable = false,
     closable = false,
-    undoButtonLabel = "Undo",
     placement = "center",
+    color = "default",
     ...otherProps
   } = props;
 
   const classes = useStyles();
-  const theme = useTheme();
-
-  const isDarkMode = theme.darkMode;
-  const newTheme = useDarkMode(!isDarkMode, theme);
 
   const timeout = React.useRef<number>(-1);
 
   const [isHidden, setHidden] = React.useState(open);
   const [isOpen, setOpen] = React.useState(false);
+
+  const isActionable = typeof actionLabel !== "undefined";
 
   const isAutoHidable = !!autoHide;
   const hasNumericAutoCloseInput = typeof autoHide === "number";
@@ -130,60 +136,56 @@ const SnackbarBase = (props: SnackbarProps, ref: React.Ref<HTMLDivElement>) => {
   }, [open]);
 
   const transitionEndHandler = (e: React.TransitionEvent<HTMLDivElement>) => {
-    if (onTransitionEnd) onTransitionEnd(e);
+    onTransitionEnd?.(e);
     if (!isOpen) setHidden(true);
   };
 
   return !isHidden ? (
-    <ThemeProvider theme={newTheme}>
-      <div
-        ref={ref}
-        role="alert"
-        onTransitionEnd={transitionEndHandler}
-        className={c(classes.root, classes[placement], className, {
-          [classes.open]: isOpen,
-          [classes.autoHidable]: hasNumericAutoCloseInput && isAutoHidable
-        })}
-        {...otherProps}
-      >
-        {hasNumericAutoCloseInput && (
-          <div className={classes.hideDurationWrapper}>
-            <div
-              className={classes.hideDurationIndicator}
-              style={{ transition: `width ${autoHideValue.toString()}ms ease` }}
-            ></div>
-          </div>
-        )}
-        {icon && <i className={classes.icon}>{icon}</i>}
-        <span className={classes.text}>{text}</span>
-        {undoable && (
-          <React.Fragment>
-            <Button
-              size="small"
-              variant="inlined"
-              color="secondary"
-              label={undoButtonLabel}
-              className={classes.undoButton}
-              onClick={onUndo}
-            />
-            {closable && <div className={classes.divider}></div>}
-          </React.Fragment>
-        )}
-        {closable && (
-          <Button
-            aria-label="Close Button"
-            size="small"
-            variant="inlined"
-            className={classes.closeButton}
-            leadingIcon={<CloseLarge className={classes.closeButtonIcon} />}
-            onClick={() => {
-              if (timeout.current != null) clearTimeout(timeout.current);
-              if (onClose) onClose();
-            }}
-          />
-        )}
-      </div>
-    </ThemeProvider>
+    <div
+      ref={ref}
+      role="alert"
+      onTransitionEnd={transitionEndHandler}
+      className={c(classes.root, classes[placement], className, {
+        [classes[color]]: allowedColors.includes(color),
+        [classes.open]: isOpen,
+        [classes.autoHidable]: hasNumericAutoCloseInput && isAutoHidable
+      })}
+      {...otherProps}
+    >
+      {hasNumericAutoCloseInput && (
+        <div className={classes.hideDurationWrapper}>
+          <div
+            className={classes.hideDurationIndicator}
+            style={{ transition: `width ${autoHideValue.toString()}ms ease` }}
+          ></div>
+        </div>
+      )}
+      {icon && <i className={classes.icon}>{icon}</i>}
+      <span className={classes.text}>{text}</span>
+      {isActionable && (
+        <div
+          role="button"
+          className={classes.actionButton}
+          onClick={() => void actionCallback?.()}
+        >
+          <span className={classes.actionLabel}>{actionLabel}</span>
+        </div>
+      )}
+      {isActionable && closable && <div className={classes.divider}></div>}
+      {closable && (
+        <div
+          role="button"
+          aria-label="Close Button"
+          className={classes.closeButton}
+          onClick={() => {
+            if (timeout.current != null) clearTimeout(timeout.current);
+            onClose?.();
+          }}
+        >
+          <CloseLarge size={16} className={classes.closeButtonIcon} />
+        </div>
+      )}
+    </div>
   ) : null;
 };
 
@@ -193,14 +195,14 @@ Snackbar.propTypes = {
   text: PropTypes.string.isRequired,
   className: PropTypes.string,
   icon: PropTypes.node,
-  undoButtonLabel: PropTypes.string,
+  actionLabel: PropTypes.string,
   placement: PropTypes.oneOf(allowedPlacements),
   autoHide: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  color: PropTypes.oneOf(allowedColors),
   open: PropTypes.bool,
   closable: PropTypes.bool,
-  undoable: PropTypes.bool,
   onClose: PropTypes.func,
-  onUndo: PropTypes.func,
+  actionCallback: PropTypes.func,
   onTransitionEnd: PropTypes.func
 };
 
