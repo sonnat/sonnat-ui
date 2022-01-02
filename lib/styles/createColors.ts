@@ -75,7 +75,7 @@ export const dark = {
     hint: "#525252",
     disabled: "#3d3d3d"
   },
-  divider: "#292929",
+  divider: "rgba(255, 255, 255, 0.16)",
   background: {
     origin: "#121212",
     level: { 1: "#242424", 2: "#1B1B1B" }
@@ -89,7 +89,7 @@ export const light = {
     hint: "#adadad",
     disabled: "#c2c2c2"
   },
-  divider: "#e0e0e0",
+  divider: "rgba(0, 0, 0, 0.12)",
   background: {
     origin: "#ffffff",
     level: { 1: grey[50], 2: grey[100] }
