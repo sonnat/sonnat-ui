@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import c from "classnames";
 import PropTypes from "prop-types";
 import * as React from "react";
@@ -22,7 +23,9 @@ const allowedCrossAxisAlignments = [
   "stretch"
 ] as const;
 
-type ResponsivePropType<T> = T | Record<Breakpoints["keys"][number], T>;
+type ResponsivePropType<T> =
+  | T
+  | Partial<Record<Breakpoints["keys"][number] | "fallback", T>>;
 
 interface FlexItemBaseProps {
   /**
@@ -144,27 +147,45 @@ const generateResponsiveStyles = (
       rtl: { marginRight: "auto" }
     }[direction];
 
+    const autoMarginStartNoneValue = {
+      ltr: { marginLeft: "initial" },
+      rtl: { marginRight: "initial" }
+    }[direction];
+
     const autoMarginEndValue = {
       ltr: { marginRight: "auto" },
       rtl: { marginLeft: "auto" }
+    }[direction];
+
+    const autoMarginEndNoneValue = {
+      ltr: { marginRight: "initial" },
+      rtl: { marginLeft: "initial" }
     }[direction];
 
     const style = {
       ...justify.classStyles,
       ...align.classStyles,
       [`${key}AutoMarginStart`]: autoMarginStartValue,
+      [`${key}AutoMarginStartNone`]: autoMarginStartNoneValue,
       [`${key}AutoMarginEnd`]: autoMarginEndValue,
+      [`${key}AutoMarginEndNone`]: autoMarginEndNoneValue,
       [`${key}AutoMarginTop`]: { marginTop: "auto" },
-      [`${key}AutoMarginBottom`]: { marginBottom: "auto" }
+      [`${key}AutoMarginTopNone`]: { marginTop: "initial" },
+      [`${key}AutoMarginBottom`]: { marginBottom: "auto" },
+      [`${key}AutoMarginBottomNone`]: { marginBottom: "initial" }
     };
 
     const classes = {
       ...justify.classNames,
       ...align.classNames,
       [`${key}AutoMarginStart`]: {},
+      [`${key}AutoMarginStartNone`]: {},
       [`${key}AutoMarginEnd`]: {},
+      [`${key}AutoMarginEndNone`]: {},
       [`${key}AutoMarginTop`]: {},
-      [`${key}AutoMarginBottom`]: {}
+      [`${key}AutoMarginTopNone`]: {},
+      [`${key}AutoMarginBottom`]: {},
+      [`${key}AutoMarginBottomNone`]: {}
     };
 
     const media = breakpoints.up(key);
@@ -204,16 +225,10 @@ const getValueOfProp = (
   defaultValue: string | boolean,
   validValues: readonly (string | boolean)[]
 ) => {
-  const isShape = typeof prop === "object";
+  if (typeof prop !== "object")
+    return getVar(prop, defaultValue, !validValues.includes(prop));
 
-  if (!isShape) return getVar(prop, defaultValue, !validValues.includes(prop));
-
-  return [
-    ...Object.keys(prop).map(key => ({
-      [key]: prop[key as keyof typeof prop]
-    })),
-    { default: defaultValue }
-  ];
+  return { fallback: defaultValue, ...prop };
 };
 
 const createResponsiveClass = (
@@ -221,27 +236,26 @@ const createResponsiveClass = (
   classes: Record<string, string>,
   prefix = ""
 ) => {
-  if (typeof prop === "object" && Array.isArray(prop)) {
-    return prop.map(breakValue => {
-      const key = Object.keys(breakValue)[0];
-      const value = breakValue[key as keyof typeof breakValue];
+  if (typeof prop === "object") {
+    return Object.keys(prop).map(key => {
+      const value = prop[key as keyof typeof prop];
 
       if (typeof value === "boolean") {
-        if (value === false) return undefined;
+        if (value === false) return classes[camelCase(`${key}-${prefix}-none`)];
 
-        return key === "default"
-          ? classes[camelCase(`${prefix ? prefix : ""}`)]
-          : classes[camelCase(`${key}-${prefix ? prefix : ""}`)];
+        return key === "fallback"
+          ? classes[camelCase(`${prefix}`)]
+          : classes[camelCase(`${key}-${prefix}`)];
       }
 
-      return key === "default"
-        ? classes[camelCase(`${prefix ? prefix + "-" : ""}${value}`)]
-        : classes[camelCase(`${key}-${prefix ? prefix + "-" : ""}${value}`)];
+      return key === "fallback"
+        ? classes[camelCase(`${prefix ? prefix + "-" : ""}${value!}`)]
+        : classes[camelCase(`${key}-${prefix ? prefix + "-" : ""}${value!}`)];
     });
   }
 
   if (typeof prop === "boolean") {
-    return prop ? classes[camelCase(`${prefix ? prefix : ""}`)] : undefined;
+    return prop ? classes[camelCase(`${prefix}`)] : undefined;
   }
 
   return classes[camelCase(`${prefix ? prefix + "-" : ""}${prop}`)];
@@ -325,7 +339,8 @@ const getResponsivePropTypeOf = (validValues: readonly string[]) => {
       sm: PropTypes.oneOf(validValues),
       md: PropTypes.oneOf(validValues),
       lg: PropTypes.oneOf(validValues),
-      xlg: PropTypes.oneOf(validValues)
+      xlg: PropTypes.oneOf(validValues),
+      fallback: PropTypes.oneOf(validValues)
     })
   ]);
 };

@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import c from "classnames";
 import PropTypes from "prop-types";
 import * as React from "react";
-import { makeStyles, type Breakpoints } from "../styles";
+import { makeStyles, type Breakpoints, type DefaultTheme } from "../styles";
 import type { MergeElementProps } from "../typings";
 import { camelCase, getVar } from "../utils";
 
@@ -41,7 +42,11 @@ const allowedCrossAxisAlignments = [
   "stretch"
 ] as const;
 
-type ResponsivePropType<T> = T | Record<Breakpoints["keys"][number], T>;
+const allowedGaps = ["xxs", "xs", "sm", "md", "lg", "xlg"] as const;
+
+type ResponsivePropType<T> =
+  | T
+  | Partial<Record<Breakpoints["keys"][number] | "fallback", T>>;
 
 interface FlexBaseProps {
   /**
@@ -63,6 +68,10 @@ interface FlexBaseProps {
    * @default "nowrap"
    */
   wrap?: ResponsivePropType<"nowrap" | "wrap" | "wrap-reverse">;
+  /**
+   * Sets the gap between flex items in the flexbox.
+   */
+  gap?: ResponsivePropType<"xxs" | "xs" | "sm" | "md" | "lg" | "xlg">;
   /**
    * Sets the direction of flex items in the flexbox.
    * @default "row"
@@ -111,7 +120,9 @@ type Component = {
   displayName?: string | undefined;
 };
 
-const baseStyles: Record<string, React.CSSProperties> = {
+const createBaseStyles = (
+  theme: DefaultTheme
+): Record<string, React.CSSProperties> => ({
   block: { display: "flex" },
   inline: { display: "inline-flex" },
   row: { flexDirection: "row" },
@@ -138,15 +149,23 @@ const baseStyles: Record<string, React.CSSProperties> = {
   alignStretch: { alignItems: "stretch" },
   nowrap: { flexWrap: "nowrap" },
   wrap: { flexWrap: "wrap" },
-  wrapReverse: { flexWrap: "wrap-reverse" }
-};
+  wrapReverse: { flexWrap: "wrap-reverse" },
+  gapXxs: { gap: theme.typography.pxToRem(4) },
+  gapXs: { gap: theme.typography.pxToRem(8) },
+  gapSm: { gap: theme.typography.pxToRem(16) },
+  gapMd: { gap: theme.typography.pxToRem(24) },
+  gapLg: { gap: theme.typography.pxToRem(32) },
+  gapXlg: { gap: theme.typography.pxToRem(64) }
+});
 
 const createClassStyle = (
+  theme: DefaultTheme,
   validValues: readonly string[],
   key: Breakpoints["keys"][number],
   prefix = ""
 ) => {
   let classNames: Record<string, React.CSSProperties> = {};
+  const baseStyles = createBaseStyles(theme);
 
   const classStyles = validValues.reduce((style, value) => {
     const hash = camelCase(`${key}-${prefix ? prefix + "-" : ""}${value}`);
@@ -163,18 +182,35 @@ const createClassStyle = (
   return { classStyles, classNames };
 };
 
-const generateResponsiveStyles = (breakpoints: Breakpoints) => {
-  const styles = breakpoints.keys.reduce((result, key) => {
-    const variants = createClassStyle(allowedVariants, key);
-    const wraps = createClassStyle(allowedWraps, key);
-    const dirs = createClassStyle(allowedDirections, key);
-    const content = createClassStyle(allowedContentAlignments, key, "content");
-    const justify = createClassStyle(allowedMainAxisAlignments, key, "justify");
-    const align = createClassStyle(allowedCrossAxisAlignments, key, "align");
+const generateResponsiveStyles = (theme: DefaultTheme) => {
+  const styles = theme.breakpoints.keys.reduce((result, key) => {
+    const variants = createClassStyle(theme, allowedVariants, key);
+    const wraps = createClassStyle(theme, allowedWraps, key);
+    const gaps = createClassStyle(theme, allowedGaps, key, "gap");
+    const dirs = createClassStyle(theme, allowedDirections, key);
+    const content = createClassStyle(
+      theme,
+      allowedContentAlignments,
+      key,
+      "content"
+    );
+    const justify = createClassStyle(
+      theme,
+      allowedMainAxisAlignments,
+      key,
+      "justify"
+    );
+    const align = createClassStyle(
+      theme,
+      allowedCrossAxisAlignments,
+      key,
+      "align"
+    );
 
     const style = {
       ...variants.classStyles,
       ...wraps.classStyles,
+      ...gaps.classStyles,
       ...dirs.classStyles,
       ...content.classStyles,
       ...justify.classStyles,
@@ -184,13 +220,14 @@ const generateResponsiveStyles = (breakpoints: Breakpoints) => {
     const classes = {
       ...variants.classNames,
       ...wraps.classNames,
+      ...gaps.classNames,
       ...dirs.classNames,
       ...content.classNames,
       ...justify.classNames,
       ...align.classNames
     };
 
-    const media = breakpoints.up(key);
+    const media = theme.breakpoints.up(key);
 
     return {
       ...result,
@@ -205,46 +242,46 @@ const generateResponsiveStyles = (breakpoints: Breakpoints) => {
 const useStyles = makeStyles(
   theme => ({
     root: {},
-    ...baseStyles,
-    ...generateResponsiveStyles(theme.breakpoints)
+    ...createBaseStyles(theme),
+    ...generateResponsiveStyles(theme)
   }),
   { name: "SonnatFlex" }
 );
-
-const getValueOfProp = (
-  prop: ResponsivePropType<string>,
-  defaultValue: string,
-  validValues: readonly string[]
-) => {
-  const isShape = typeof prop === "object";
-
-  if (!isShape) return getVar(prop, defaultValue, !validValues.includes(prop));
-
-  return [
-    ...Object.keys(prop).map(key => ({
-      [key]: prop[key as keyof typeof prop]
-    })),
-    { default: defaultValue }
-  ];
-};
 
 const createResponsiveClass = (
   prop: ReturnType<typeof getValueOfProp>,
   classes: Record<string, string>,
   prefix = ""
 ) => {
-  if (typeof prop === "object" && Array.isArray(prop)) {
-    return prop.map(breakValue => {
-      const key = Object.keys(breakValue)[0];
-      const value = breakValue[key as keyof typeof breakValue];
+  if (prop == null) return undefined;
+  if (typeof prop === "object") {
+    return Object.keys(prop).map(key => {
+      const value = prop[key as keyof typeof prop];
 
-      return key === "default"
-        ? classes[camelCase(`${prefix ? prefix + "-" : ""}${value}`)]
-        : classes[camelCase(`${key}-${prefix ? prefix + "-" : ""}${value}`)];
+      return key === "fallback"
+        ? classes[camelCase(`${prefix ? prefix + "-" : ""}${value!}`)]
+        : classes[camelCase(`${key}-${prefix ? prefix + "-" : ""}${value!}`)];
     });
   }
 
   return classes[camelCase(`${prefix ? prefix + "-" : ""}${prop}`)];
+};
+
+const getValueOfProp = (
+  prop: ResponsivePropType<string> | undefined,
+  defaultValue: string | undefined,
+  validValues: readonly string[]
+) => {
+  if (prop == null) return;
+
+  if (typeof prop !== "object")
+    return defaultValue == null
+      ? validValues.includes(prop)
+        ? prop
+        : undefined
+      : getVar(prop, defaultValue, !validValues.includes(prop));
+
+  return { fallback: defaultValue, ...prop };
 };
 
 const FlexBase = <T extends React.ElementType = "div">(
@@ -254,6 +291,7 @@ const FlexBase = <T extends React.ElementType = "div">(
   const {
     className,
     children,
+    gap: gapProp,
     as: RootNode = "div",
     variant: variantProp = "block",
     wrap: wrapProp = "nowrap",
@@ -267,6 +305,7 @@ const FlexBase = <T extends React.ElementType = "div">(
   const classes = useStyles();
 
   const variant = getValueOfProp(variantProp, "block", allowedVariants);
+  const gap = getValueOfProp(gapProp, undefined, allowedGaps);
   const wrap = getValueOfProp(wrapProp, "nowrap", allowedWraps);
   const direction = getValueOfProp(directionProp, "row", allowedDirections);
 
@@ -295,6 +334,7 @@ const FlexBase = <T extends React.ElementType = "div">(
         className,
         classes.root,
         createResponsiveClass(variant, classes),
+        createResponsiveClass(gap, classes, "gap"),
         createResponsiveClass(wrap, classes),
         createResponsiveClass(direction, classes),
         createResponsiveClass(contentAlignment, classes, "content"),
@@ -317,7 +357,8 @@ const getResponsivePropTypeOf = (validValues: readonly string[]) => {
       sm: PropTypes.oneOf(validValues),
       md: PropTypes.oneOf(validValues),
       lg: PropTypes.oneOf(validValues),
-      xlg: PropTypes.oneOf(validValues)
+      xlg: PropTypes.oneOf(validValues),
+      fallback: PropTypes.oneOf(validValues)
     })
   ]);
 };
@@ -331,6 +372,8 @@ Flex.propTypes = {
   as: PropTypes.elementType,
   className: PropTypes.string,
   variant: PropTypes.oneOf(allowedVariants),
+  // @ts-ignore
+  gap: getResponsivePropTypeOf(allowedGaps),
   // @ts-ignore
   wrap: getResponsivePropTypeOf(allowedWraps),
   // @ts-ignore
