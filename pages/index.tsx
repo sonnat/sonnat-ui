@@ -9,6 +9,7 @@ const Page = () => {
   return (
     <div style={{ maxWidth: 500, margin: "100px auto" }}>
       <Switch
+        fluid
         label="Toggle Darkmode"
         onChange={isChecked => void context?.setIsDarkMode(isChecked)}
       />
