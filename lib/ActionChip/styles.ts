@@ -248,7 +248,7 @@ const useStyles = makeStyles(
       },
       outlinedDefault: {
         backgroundColor: outlinedDefault.background.main,
-        border: `${pxToRem(1)} solid ${outlinedDefault.border.main}`,
+        border: `1px solid ${outlinedDefault.border.main}`,
         color: outlinedDefault.text.main,
         "& $icon": { color: colors.text.secondary },
         "&:hover": {
@@ -265,7 +265,7 @@ const useStyles = makeStyles(
       },
       outlinedPrimary: {
         backgroundColor: outlinedPrimary.background.main,
-        border: `${pxToRem(1)} solid ${outlinedPrimary.border.main}`,
+        border: `1px solid ${outlinedPrimary.border.main}`,
         color: outlinedPrimary.text.main,
         "& $icon": { color: outlinedPrimary.text.main },
         "&:hover": {
@@ -282,7 +282,7 @@ const useStyles = makeStyles(
       },
       outlinedSecondary: {
         backgroundColor: outlinedSecondary.background.main,
-        border: `${pxToRem(1)} solid ${outlinedSecondary.border.main}`,
+        border: `1px solid ${outlinedSecondary.border.main}`,
         color: outlinedSecondary.text.main,
         "& $icon": { color: outlinedSecondary.text.main },
         "&:hover": {

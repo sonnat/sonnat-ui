@@ -195,7 +195,7 @@ const useStyles = makeStyles(
         backgroundColor: !darkMode
           ? colors.createBlackColor({ alpha: 0.04 })
           : colors.createWhiteColor({ alpha: 0.04 }),
-        border: `${pxToRem(1)} solid ${
+        border: `1px solid ${
           !darkMode
             ? colors.createBlackColor({ alpha: 0.24 }, true)
             : colors.createWhiteColor({ alpha: 0.24 }, true)
@@ -278,7 +278,7 @@ const useStyles = makeStyles(
         backgroundColor: !darkMode
           ? colors.createBlackColor({ alpha: 0.12 }, true)
           : colors.createWhiteColor({ alpha: 0.12 }, true),
-        border: `${pxToRem(1)} solid ${
+        border: `1px solid ${
           !darkMode
             ? colors.createBlackColor({ alpha: 0.48 }, true)
             : colors.createWhiteColor({ alpha: 0.48 }, true)
@@ -316,7 +316,7 @@ const useStyles = makeStyles(
       },
       outlinedPrimarySelected: {
         backgroundColor: colors.createPrimaryColor({ alpha: 0.08 }, true),
-        border: `${pxToRem(1)} solid ${filledPrimarySelectedMainBg}`,
+        border: `1px solid ${filledPrimarySelectedMainBg}`,
         color: filledPrimarySelectedMainBg,
         "& $icon": { color: filledPrimarySelectedMainBg },
         "&:hover": {
@@ -334,7 +334,7 @@ const useStyles = makeStyles(
       },
       outlinedSecondarySelected: {
         backgroundColor: colors.createSecondaryColor({ alpha: 0.08 }, true),
-        border: `${pxToRem(1)} solid ${filledSecondarySelectedMainBg}`,
+        border: `1px solid ${filledSecondarySelectedMainBg}`,
         color: filledSecondarySelectedMainBg,
         "& $icon": { color: filledSecondarySelectedMainBg },
         "&:hover": {

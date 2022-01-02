@@ -231,7 +231,7 @@ const useStyles = makeStyles(
         backgroundColor: !darkMode
           ? colors.createBlackColor({ alpha: 0.04 }, true)
           : colors.createWhiteColor({ alpha: 0.04 }, true),
-        border: `${pxToRem(1)} solid ${
+        border: `1px solid ${
           !darkMode
             ? colors.createBlackColor({ alpha: 0.64 }, true)
             : colors.createWhiteColor({ alpha: 0.64 }, true)
@@ -260,7 +260,7 @@ const useStyles = makeStyles(
       },
       outlinedPrimary: {
         backgroundColor: colors.createPrimaryColor({ alpha: 0.08 }, true),
-        border: `${pxToRem(1)} solid ${filledPrimaryMainBg}`,
+        border: `1px solid ${filledPrimaryMainBg}`,
         color: filledPrimaryMainBg,
         "& $icon, & $removeButtonIcon": { color: filledPrimaryMainBg },
         "& $removeButton": {
@@ -283,7 +283,7 @@ const useStyles = makeStyles(
       },
       outlinedSecondary: {
         backgroundColor: colors.createSecondaryColor({ alpha: 0.04 }, true),
-        border: `${pxToRem(1)} solid ${filledSecondaryMainBg}`,
+        border: `1px solid ${filledSecondaryMainBg}`,
         color: filledSecondaryMainBg,
         "& $icon, & $removeButtonIcon": { color: filledSecondaryMainBg },
         "& $removeButton": {

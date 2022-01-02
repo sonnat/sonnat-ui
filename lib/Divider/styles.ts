@@ -18,7 +18,7 @@ const useStyles = makeStyles(
         flexShrink: "0",
         "&:not($vertical):not($dotted)": {
           width: "100%",
-          height: pxToRem(1),
+          height: 1,
           backgroundColor: colors.divider
         }
       },
@@ -54,7 +54,7 @@ const useStyles = makeStyles(
       },
       vertical: {
         height: "auto",
-        width: pxToRem(1),
+        width: 1,
         backgroundColor: colors.divider,
         alignSelf: "stretch"
       }

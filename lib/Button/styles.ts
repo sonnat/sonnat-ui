@@ -56,7 +56,7 @@ const useStyles = makeStyles(
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
-        border: `${pxToRem(1)} solid ${colors.transparent}`,
+        border: `1px solid ${colors.transparent}`,
         outline: "none",
         verticalAlign: "middle",
         whiteSpace: "nowrap",
@@ -73,9 +73,7 @@ const useStyles = makeStyles(
         overflow: "hidden",
         transition: "color 360ms ease"
       },
-      rounded: {
-        borderRadius: pxToRem(24)
-      },
+      rounded: { borderRadius: pxToRem(24) },
       large: {
         minWidth: pxToRem(96),
         height: pxToRem(40),

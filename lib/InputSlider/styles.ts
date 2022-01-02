@@ -58,7 +58,7 @@ const useStyles = makeStyles(
           width: pxToRem(2),
           height: pxToRem(2),
           borderRadius: "50%",
-          transform: `translateX(${pxToRem(1)})`
+          transform: `translateX(1px)`
         }
       },
       interval: {

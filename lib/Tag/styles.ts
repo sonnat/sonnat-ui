@@ -123,7 +123,7 @@ const useStyles = makeStyles(
         "& $label": { color: colors.text.secondary },
         "& $icon": { color: colors.text.secondary },
         "&$outlined": {
-          border: `${pxToRem(1)} solid ${colors.divider}`,
+          border: `1px solid ${colors.divider}`,
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
@@ -146,7 +146,7 @@ const useStyles = makeStyles(
         "& $label": { color: primaryColor },
         "& $icon": { color: primaryColor },
         "&$outlined": {
-          border: `${pxToRem(1)} solid ${primaryBorderColor}`,
+          border: `1px solid ${primaryBorderColor}`,
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
@@ -161,7 +161,7 @@ const useStyles = makeStyles(
         "& $label": { color: secondaryColor },
         "& $icon": { color: secondaryColor },
         "&$outlined": {
-          border: `${pxToRem(1)} solid ${secondaryBorderColor}`,
+          border: `1px solid ${secondaryBorderColor}`,
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
@@ -176,7 +176,7 @@ const useStyles = makeStyles(
         "& $label": { color: successColor },
         "& $icon": { color: successColor },
         "&$outlined": {
-          border: `${pxToRem(1)} solid ${successBorderColor}`,
+          border: `1px solid ${successBorderColor}`,
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
@@ -191,7 +191,7 @@ const useStyles = makeStyles(
         "& $label": { color: errorColor },
         "& $icon": { color: errorColor },
         "&$outlined": {
-          border: `${pxToRem(1)} solid ${errorBorderColor}`,
+          border: `1px solid ${errorBorderColor}`,
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
@@ -206,7 +206,7 @@ const useStyles = makeStyles(
         "& $label": { color: warningColor },
         "& $icon": { color: warningColor },
         "&$outlined": {
-          border: `${pxToRem(1)} solid ${warningBorderColor}`,
+          border: `1px solid ${warningBorderColor}`,
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
@@ -221,7 +221,7 @@ const useStyles = makeStyles(
         "& $label": { color: infoColor },
         "& $icon": { color: infoColor },
         "&$outlined": {
-          border: `${pxToRem(1)} solid ${infoBorderColor}`,
+          border: `1px solid ${infoBorderColor}`,
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {

@@ -19,7 +19,7 @@ const useStyles = makeStyles(
         display: "inline-flex",
         alignItems: "center",
         borderRadius: pxToRem(4),
-        border: `${pxToRem(1)} solid ${
+        border: `1px solid ${
           !darkMode
             ? colors.createBlackColor({ alpha: 0.24 }, true)
             : colors.createWhiteColor({ alpha: 0.24 }, true)
@@ -57,7 +57,7 @@ const useStyles = makeStyles(
           "&:after, &:before": { opacity: 0 }
         },
         "&:after, &:before": {
-          width: pxToRem(1),
+          width: 1,
           backgroundColor: colors.divider,
           opacity: "1",
           transition: "opacity 360ms ease"

@@ -153,7 +153,7 @@ const useStyles = makeStyles(
       },
       closeButtonIcon: {},
       divider: {
-        width: pxToRem(1),
+        width: 1,
         backgroundColor: colors.divider,
         margin: `0 ${pxToRem(8)}`,
         alignSelf: "flex-start",
