@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      radius,
       spacings: { spaces },
       swatches: { grey, blue },
       mixins: { asIconWrapper, disableUserSelect },
@@ -56,7 +57,7 @@ const useStyles = makeStyles(
         display: "inline-flex",
         alignItems: "center",
         alignSelf: "center",
-        borderRadius: pxToRem(2),
+        borderRadius: radius.xSmall,
         verticalAlign: "middle",
         position: "relative",
         zIndex: "1",
@@ -94,7 +95,7 @@ const useStyles = makeStyles(
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: colors.transparent,
-        borderRadius: "50%",
+        borderRadius: radius.rounded,
         cursor: "pointer",
         width: pxToRem(16),
         height: pxToRem(16),
@@ -161,7 +162,7 @@ const useStyles = makeStyles(
               })
         }
       },
-      rounded: { borderRadius: pxToRem(16) },
+      rounded: { borderRadius: radius.rounded },
       disabled: {
         pointerEvents: "none",
         "& $removeButton": { pointerEvents: "none" },

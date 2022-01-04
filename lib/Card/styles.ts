@@ -6,14 +6,15 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      typography: { pxToRem, fontFamily }
+      radius,
+      typography: { fontFamily }
     } = theme;
 
     return {
       root: {
         direction,
         fontFamily: fontFamily[direction],
-        borderRadius: pxToRem(4),
+        borderRadius: radius.small,
         backgroundColor: !darkMode
           ? colors.background.origin
           : colors.background.level[1]

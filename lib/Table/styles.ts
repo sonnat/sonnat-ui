@@ -5,8 +5,9 @@ const useStyles = makeStyles(
     const {
       colors,
       direction,
+      radius,
       spacings: { spaces },
-      typography: { variants, pxToRem, fontFamily, fontWeight }
+      typography: { variants, fontFamily, fontWeight }
     } = theme;
 
     return {
@@ -15,7 +16,7 @@ const useStyles = makeStyles(
         fontFamily: fontFamily[direction],
         width: "100%",
         overflowX: "auto",
-        borderRadius: pxToRem(4),
+        borderRadius: radius.small,
         border: `1px solid ${colors.divider}`
       },
       table: {

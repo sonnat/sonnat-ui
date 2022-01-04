@@ -6,9 +6,10 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      radius,
       spacings: { spaces },
       swatches: { grey },
-      typography: { pxToRem, fontWeight, setText, fontFamily }
+      typography: { fontWeight, setText, fontFamily }
     } = theme;
 
     return {
@@ -22,7 +23,7 @@ const useStyles = makeStyles(
         }),
         direction,
         fontFamily: fontFamily.monospace,
-        borderRadius: pxToRem(2),
+        borderRadius: radius.xSmall,
         backgroundColor: !darkMode ? grey[50] : grey[900],
         display: "inline-block",
         padding: `0 ${spaces[1].rem}`
@@ -36,7 +37,7 @@ const useStyles = makeStyles(
         padding: spaces[7].rem,
         backgroundColor: colors.transparent,
         border: `1px solid ${colors.divider}`,
-        borderRadius: pxToRem(4)
+        borderRadius: radius.small
       }
     };
   },

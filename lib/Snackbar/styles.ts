@@ -7,6 +7,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      radius,
       spacings: { spaces },
       swatches: { grey },
       zIndexes: { popover },
@@ -57,7 +58,7 @@ const useStyles = makeStyles(
         display: "inline-flex",
         alignItems: "center",
         padding: `0 ${spaces[7].rem}`,
-        borderRadius: pxToRem(4),
+        borderRadius: radius.small,
         boxShadow: `0 1px 32px 0 rgba(0, 0, 0, 0.08),
         0 12px 16px 0 rgba(0, 0, 0, 0.12),
         0 8px 12px -6px rgba(0, 0, 0, 0.16)`,
@@ -108,7 +109,7 @@ const useStyles = makeStyles(
         padding: `0 ${spaces[5].rem}`,
         flexShrink: 0,
         appearance: "none !important",
-        borderRadius: pxToRem(4),
+        borderRadius: radius.small,
         cursor: "pointer",
         display: "inline-flex",
         alignItems: "center",
@@ -150,7 +151,7 @@ const useStyles = makeStyles(
         height: pxToRem(24),
         padding: "0",
         minWidth: "auto",
-        borderRadius: "50%",
+        borderRadius: radius.rounded,
         top: pxToRem(12)
       },
       closeButtonIcon: {},
@@ -202,7 +203,7 @@ const useStyles = makeStyles(
           : colors.secondary.light
       },
       autoHidable: {
-        borderRadius: `${pxToRem(4)} ${pxToRem(4)} 0 0`,
+        borderRadius: `${radius.small} ${radius.small} 0 0`,
         "&$open $hideDurationWrapper": { opacity: 1, visibility: "visible" },
         "&$open $hideDurationIndicator": { width: "100%" }
       },

@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      radius,
       spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
@@ -44,7 +45,7 @@ const useStyles = makeStyles(
           borderColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.24 }, true)
             : colors.createWhiteColor({ alpha: 0.24 }, true),
-          borderRadius: pxToRem(4),
+          borderRadius: radius.small,
           pointerEvents: "none",
           transition: "border-color 240ms ease"
         }
@@ -76,7 +77,7 @@ const useStyles = makeStyles(
         backgroundColor: colors.transparent,
         resize: "none",
         padding: [[spaces[3].rem, spaces[7].rem]],
-        borderRadius: pxToRem(4),
+        borderRadius: radius.small,
         boxShadow: `0 0 0 0 ${colors.transparent}`,
         appearance: "none !important",
         "&::-webkit-input-placeholder": { color: colors.text.hint },

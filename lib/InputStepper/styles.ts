@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      radius,
       spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
@@ -19,7 +20,7 @@ const useStyles = makeStyles(
         position: "relative",
         display: "inline-flex",
         alignItems: "center",
-        borderRadius: pxToRem(4),
+        borderRadius: radius.small,
         border: `1px solid ${
           !darkMode
             ? colors.createBlackColor({ alpha: 0.24 }, true)
@@ -67,12 +68,12 @@ const useStyles = makeStyles(
         "&:before": { marginRight: "auto" }
       },
       addAction: {
-        borderRadius: `0 ${pxToRem(4)} ${pxToRem(4)} 0`,
+        borderRadius: `0 ${radius.small} ${radius.small} 0`,
         "&:before": { content: '""' },
         "& $actionIcon": { marginRight: "auto" }
       },
       subtractAction: {
-        borderRadius: `${pxToRem(4)} 0 0 ${pxToRem(4)}`,
+        borderRadius: `${radius.small} 0 0 ${radius.small}`,
         "&:after": { content: '""' },
         "& $actionIcon": { marginLeft: "auto" }
       },

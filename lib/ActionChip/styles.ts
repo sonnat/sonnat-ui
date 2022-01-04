@@ -14,6 +14,7 @@ const useStyles = makeStyles(
       colors,
       direction,
       darkMode,
+      radius,
       spacings: { spaces },
       swatches: { blue, grey },
       mixins: { asIconWrapper, disableUserSelect },
@@ -133,7 +134,7 @@ const useStyles = makeStyles(
         display: "inline-flex",
         alignItems: "center",
         alignSelf: "center",
-        borderRadius: pxToRem(2),
+        borderRadius: radius.xSmall,
         verticalAlign: "middle",
         overflow: "hidden",
         position: "relative",
@@ -198,7 +199,7 @@ const useStyles = makeStyles(
               })
         }
       },
-      rounded: { borderRadius: pxToRem(16) },
+      rounded: { borderRadius: radius.rounded },
       disabled: {
         pointerEvents: "none",
         "&:hover": {

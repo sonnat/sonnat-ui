@@ -19,6 +19,7 @@ const useStyles = makeStyles(
       direction,
       darkMode,
       hacks,
+      radius,
       spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
@@ -51,7 +52,7 @@ const useStyles = makeStyles(
         flexShrink: 0,
         appearance: "none !important",
         textDecoration: "none",
-        borderRadius: pxToRem(4),
+        borderRadius: radius.small,
         cursor: "pointer",
         display: "inline-flex",
         alignItems: "center",
@@ -74,7 +75,7 @@ const useStyles = makeStyles(
         overflow: "hidden",
         transition: "color 360ms ease"
       },
-      rounded: { borderRadius: pxToRem(24) },
+      rounded: { borderRadius: radius.rounded },
       large: {
         minWidth: pxToRem(96),
         height: pxToRem(40),
@@ -588,7 +589,7 @@ const useStyles = makeStyles(
       iconButton: {
         padding: "0",
         minWidth: "auto",
-        borderRadius: "50%",
+        borderRadius: radius.rounded,
         "& > $icon": { margin: "0 !important" }
       },
       spinner: {

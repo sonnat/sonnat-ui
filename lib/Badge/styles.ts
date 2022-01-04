@@ -19,6 +19,7 @@ const useStyles = makeStyles(
       darkMode,
       direction,
       hacks,
+      radius,
       spacings: { spaces },
       typography: { pxToRem, fontWeight, setText, fontFamily }
     } = theme;
@@ -61,14 +62,14 @@ const useStyles = makeStyles(
         fontFamily: fontFamily[direction],
         minWidth: pxToRem(16),
         height: pxToRem(16),
-        borderRadius: pxToRem(8),
+        borderRadius: radius.medium,
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
         padding: `0 ${spaces[1].rem}`
       },
       filled: { extend: "notDottedBadge" },
-      dotted: { borderRadius: "50%", display: "inline-block" },
+      dotted: { borderRadius: radius.rounded, display: "inline-block" },
       filledPrimary: {
         backgroundColor: !darkMode
           ? colors.primary.origin

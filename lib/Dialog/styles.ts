@@ -7,6 +7,7 @@ const useStyles = makeStyles(
       direction,
       darkMode,
       zIndexes,
+      radius,
       typography: { pxToRem, fontFamily }
     } = theme;
 
@@ -58,7 +59,7 @@ const useStyles = makeStyles(
         maxHeight: "70vh",
         margin: pxToRem(32),
         position: "relative",
-        borderRadius: pxToRem(4),
+        borderRadius: radius.small,
         boxShadow: !darkMode ? boxShadow.lightMode : boxShadow.darkMode,
         backgroundColor: !darkMode
           ? colors.background.origin

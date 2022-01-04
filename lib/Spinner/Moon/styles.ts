@@ -4,6 +4,7 @@ const useStyles = makeStyles(
   theme => {
     const {
       direction,
+      radius,
       typography: { pxToRem, fontFamily }
     } = theme;
 
@@ -23,7 +24,7 @@ const useStyles = makeStyles(
         position: "relative",
         width: "100%",
         height: "100%",
-        borderRadius: "50%",
+        borderRadius: radius.rounded,
         animationName: "$rotateAnimation",
         animationDuration: "600ms",
         animationTimingFunction: "linear",
@@ -35,7 +36,7 @@ const useStyles = makeStyles(
         width: pxToRem(4),
         height: pxToRem(4),
         transform: "translateY(-100%)",
-        borderRadius: "50%"
+        borderRadius: radius.rounded
       },
       "@keyframes rotateAnimation": {
         "0%": { transform: "rotate(0)" },

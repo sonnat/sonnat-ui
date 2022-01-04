@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      radius,
       spacings: { spaces },
       typography: { pxToRem, setText, fontFamily }
     } = theme;
@@ -27,7 +28,7 @@ const useStyles = makeStyles(
         ...(direction === "rtl"
           ? { marginLeft: spaces[1].rem }
           : { marginRight: spaces[1].rem }),
-        borderRadius: "50%",
+        borderRadius: radius.rounded,
         position: "relative",
         display: "flex",
         alignItems: "center",
@@ -41,7 +42,7 @@ const useStyles = makeStyles(
           content: '""',
           width: "100%",
           height: "100%",
-          borderRadius: "50%",
+          borderRadius: radius.rounded,
           position: "absolute",
           backgroundColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.04 }, true)
@@ -78,13 +79,13 @@ const useStyles = makeStyles(
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        borderRadius: "50%",
+        borderRadius: radius.rounded,
         overflow: "hidden",
         transition:
           "border-color 90ms cubic-bezier(0, 0, 0.2, 1), background-color 90ms cubic-bezier(0, 0, 0.2, 1)",
         "&:after": {
           content: '""',
-          borderRadius: "50%",
+          borderRadius: radius.rounded,
           backgroundColor: !darkMode
             ? colors.primary.origin
             : colors.primary.light,

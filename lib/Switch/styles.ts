@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      radius,
       spacings: { spaces },
       mixins: { disableUserSelect },
       typography: { pxToRem, setText, fontFamily }
@@ -57,7 +58,7 @@ const useStyles = makeStyles(
         WebkitTapHighlightColor: "rgba(0, 0, 0, 0) !important"
       },
       button: {
-        borderRadius: "50%",
+        borderRadius: radius.rounded,
         position: "absolute",
         display: "flex",
         alignItems: "center",
@@ -69,7 +70,7 @@ const useStyles = makeStyles(
           content: '""',
           width: "100%",
           height: "100%",
-          borderRadius: "50%",
+          borderRadius: radius.rounded,
           position: "absolute",
           backgroundColor: !darkMode
             ? colors.createBlackColor({ alpha: 0.04 })
@@ -84,7 +85,7 @@ const useStyles = makeStyles(
       track: {
         width: "100%",
         height: "100%",
-        borderRadius: pxToRem(12),
+        borderRadius: radius.rounded,
         position: "absolute",
         display: "flex",
         flexDirection: "row",
@@ -99,7 +100,7 @@ const useStyles = makeStyles(
         pointerEvents: "none"
       },
       handle: {
-        borderRadius: "50%",
+        borderRadius: radius.rounded,
         backgroundColor: colors.white,
         boxShadow: `0px 2px 4px ${colors.createBlackColor({ alpha: 0.24 })}`,
         zIndex: "2",
@@ -108,7 +109,7 @@ const useStyles = makeStyles(
       indicator: {
         width: "100%",
         height: "100%",
-        borderRadius: pxToRem(12),
+        borderRadius: radius.rounded,
         top: "0",
         right: "0",
         position: "absolute",
@@ -128,7 +129,7 @@ const useStyles = makeStyles(
           content: '""',
           width: pxToRem(48),
           height: pxToRem(48),
-          borderRadius: "50%",
+          borderRadius: radius.rounded,
           backgroundColor: !darkMode
             ? colors.primary.origin
             : colors.primary.light,

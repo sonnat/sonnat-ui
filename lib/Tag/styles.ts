@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      radius,
       spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
@@ -68,7 +69,7 @@ const useStyles = makeStyles(
         alignItems: "center",
         verticalAlign: "middle",
         height: pxToRem(30),
-        borderRadius: pxToRem(2),
+        borderRadius: radius.xSmall,
         paddingRight: spaces[3].rem,
         paddingLeft: spaces[3].rem
       },
@@ -122,7 +123,7 @@ const useStyles = makeStyles(
       removeBtnIcon: {
         ...asIconWrapper(16),
         backgroundColor: colors.transparent,
-        borderRadius: "50%",
+        borderRadius: radius.rounded,
         transition: "background-color 360ms ease, color 360ms ease"
       },
       outlined: {},

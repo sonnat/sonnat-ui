@@ -6,7 +6,8 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      typography: { pxToRem, fontFamily }
+      radius,
+      typography: { fontFamily }
     } = theme;
 
     return {
@@ -26,11 +27,11 @@ const useStyles = makeStyles(
         height: "auto",
         transformOrigin: "0 55%",
         transform: "scale(1, 0.60)",
-        borderRadius: pxToRem(4),
+        borderRadius: radius.small,
         "&:empty:before": { content: '"\\00a0"' }
       },
-      circular: { borderRadius: "50%" },
-      rectangular: { borderRadius: pxToRem(4) },
+      circular: { borderRadius: radius.rounded },
+      rectangular: { borderRadius: radius.small },
       autoHeight: { height: "auto" },
       autoWidth: { maxWidth: "fit-content" },
       hasChildren: { "& > *": { visibility: "hidden" } },

@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      radius,
       spacings: { spaces },
       swatches: { blue },
       typography: { pxToRem, fontFamily }
@@ -48,7 +49,7 @@ const useStyles = makeStyles(
         minWidth: 0,
         position: "relative",
         alignItems: "center",
-        borderRadius: pxToRem(4)
+        borderRadius: radius.small
       },
       notchedOutline: {
         top: 0,
@@ -103,7 +104,7 @@ const useStyles = makeStyles(
         "& $wrapper": { minHeight: pxToRem(24) },
         "&$rounded": {
           "& $wrapper": {
-            borderRadius: pxToRem(12),
+            borderRadius: radius.rounded,
             padding: [[0, spaces[4].rem]]
           },
           "& $notchedOutline": { padding: [[0, spaces[4].rem]] },
@@ -143,7 +144,7 @@ const useStyles = makeStyles(
         "& $wrapper": { minHeight: pxToRem(32) },
         "&$rounded": {
           "& $wrapper": {
-            borderRadius: pxToRem(16),
+            borderRadius: radius.rounded,
             padding: [[0, spaces[7].rem]]
           },
           "& $notchedOutline": { padding: [[0, spaces[7].rem]] },
@@ -183,7 +184,7 @@ const useStyles = makeStyles(
         "& $wrapper": { minHeight: pxToRem(40) },
         "&$rounded": {
           "& $wrapper": {
-            borderRadius: pxToRem(20),
+            borderRadius: radius.rounded,
             padding: [[0, spaces[10].rem]]
           },
           "& $notchedOutline": { padding: [[0, spaces[10].rem]] },

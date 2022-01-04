@@ -7,6 +7,7 @@ const useStyles = makeStyles(
       darkMode,
       zIndexes,
       direction,
+      radius,
       spacings: { spaces },
       swatches: { grey },
       typography: { pxToRem, setText, fontFamily }
@@ -33,7 +34,7 @@ const useStyles = makeStyles(
       },
       container: {
         padding: [[spaces[3].rem, spaces[5].rem]],
-        borderRadius: pxToRem(4),
+        borderRadius: radius.small,
         position: "relative",
         zIndex: 2,
         display: "flex",
@@ -48,7 +49,7 @@ const useStyles = makeStyles(
           position: "absolute",
           top: "0",
           left: "0",
-          borderRadius: pxToRem(4),
+          borderRadius: radius.small,
           boxShadow: `0 2px 8px 0 rgba(0, 0, 0, 0.12)`,
           zIndex: -1
         },

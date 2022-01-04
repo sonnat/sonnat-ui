@@ -7,6 +7,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       hacks,
+      radius,
       swatches: { blue, grey },
       mixins: { asIconWrapper },
       typography: { pxToRem }
@@ -32,7 +33,7 @@ const useStyles = makeStyles(
           content: '""',
           zIndex: 0,
           height: pxToRem(2),
-          borderRadius: pxToRem(2),
+          borderRadius: radius.xSmall,
           backgroundColor: colors.divider,
           width: "100%",
           position: "absolute"
@@ -57,7 +58,7 @@ const useStyles = makeStyles(
           backgroundColor: colors.text.hint,
           width: pxToRem(2),
           height: pxToRem(2),
-          borderRadius: "50%",
+          borderRadius: radius.rounded,
           transform: `translateX(1px)`
         }
       },
@@ -91,7 +92,7 @@ const useStyles = makeStyles(
           top: "0",
           width: "100%",
           height: "100%",
-          borderRadius: "50%",
+          borderRadius: radius.rounded,
           opacity: "0",
           transform: "scale(0)",
           transition:
@@ -110,7 +111,7 @@ const useStyles = makeStyles(
         height: pxToRem(20),
         boxShadow: `0 0 0 1px rgba(0, 0, 0, 0.12)`,
         backgroundColor: colors.white,
-        borderRadius: "50%",
+        borderRadius: radius.rounded,
         zIndex: 1,
         position: "relative",
         cursor: "pointer",
@@ -142,7 +143,7 @@ const useStyles = makeStyles(
         left: 0,
         right: 0,
         height: pxToRem(2),
-        borderRadius: pxToRem(2),
+        borderRadius: radius.xSmall,
         backgroundColor: !darkMode
           ? colors.primary.origin
           : colors.primary.light,
