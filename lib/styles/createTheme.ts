@@ -6,12 +6,16 @@ import createBreakpoints, {
 } from "./createBreakpoints";
 import createColors, { type Colors, type ColorsInput } from "./createColors";
 import createMixins, { type Mixins } from "./createMixins";
-import createSpacings, { type Spacings } from "./createSpacings";
+import createSpacings, {
+  type Spacings,
+  type SpacingsInput
+} from "./createSpacings";
 import createTypography, {
   type Typography,
   type TypographyInput
 } from "./createTypography";
 import createZIndexes, { type ZIndexes } from "./createZIndexes";
+import createRadius, { type Radius } from "./createRadius";
 import swatches, { type Swatches } from "./swatches";
 
 export type Direction = "ltr" | "rtl";
@@ -21,7 +25,7 @@ export interface ThemeInput {
   colors: ColorsInput;
   typography: TypographyInput;
   mixins: Partial<Mixins>;
-  spacings: Partial<Spacings>;
+  spacings: SpacingsInput;
   zIndexes: Partial<ZIndexes>;
   direction: Direction;
   darkMode: boolean;
@@ -29,8 +33,9 @@ export interface ThemeInput {
 
 export interface Theme {
   mixins: ThemeInput["mixins"] & Mixins;
-  spacings: ThemeInput["spacings"] & Spacings;
   zIndexes: ThemeInput["zIndexes"] & ZIndexes;
+  spacings: Spacings;
+  radius: Radius;
   breakpoints: Breakpoints;
   direction: Direction;
   colors: Colors;
@@ -63,10 +68,13 @@ const createTheme = <CustomProps extends AnyObject = EmptyIntersectionObject>(
   const breakpoints = createBreakpoints(breakpointsInput);
   const colors = createColors(colorsInput, isDarkMode);
   const typography = createTypography(typographyInput);
-  const spacings = createSpacings(spacingsInput);
+  const spacings = createSpacings(spacingsInput, {
+    pxToRem: typography.pxToRem
+  });
   const mixins = createMixins(mixinsInput, {
     pxToRem: typography.pxToRem
   });
+  const radius = createRadius({ pxToRem: typography.pxToRem });
   const zIndexes = createZIndexes(zIndexesInput);
 
   const backfaceVisibilityFix: React.CSSProperties = {
@@ -91,6 +99,7 @@ const createTheme = <CustomProps extends AnyObject = EmptyIntersectionObject>(
   const thisTheme = {
     colors,
     typography,
+    radius,
     spacings,
     breakpoints,
     mixins,
