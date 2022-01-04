@@ -19,6 +19,7 @@ const createSpacings = (
 
   return {
     gutter: pxToRem(spacer),
+    spacer: { rem: pxToRem(spacer), px: spacer },
     spaces: {
       /** Equivalent to `2px`. */
       0: { rem: pxToRem(spacer * 0.125), px: spacer * 0.125 },
