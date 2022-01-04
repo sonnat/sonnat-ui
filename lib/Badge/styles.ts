@@ -19,6 +19,7 @@ const useStyles = makeStyles(
       darkMode,
       direction,
       hacks,
+      spacings: { spaces },
       typography: { pxToRem, fontWeight, setText, fontFamily }
     } = theme;
 
@@ -64,7 +65,7 @@ const useStyles = makeStyles(
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: `0 ${pxToRem(4)}`
+        padding: `0 ${spaces[1].rem}`
       },
       filled: { extend: "notDottedBadge" },
       dotted: { borderRadius: "50%", display: "inline-block" },

@@ -3,7 +3,7 @@ import makeStyles from "../../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      typography: { pxToRem }
+      spacings: { spaces }
     } = theme;
 
     return {
@@ -11,7 +11,7 @@ const useStyles = makeStyles(
         position: "relative",
         flex: [[1, 1, "auto"]],
         display: "flex",
-        padding: pxToRem(16),
+        padding: spaces[7].rem,
         alignItems: "center"
       },
       withOverflow: {

@@ -4,18 +4,18 @@ const useStyles = makeStyles(
   theme => {
     const {
       direction,
-      typography: { pxToRem }
+      spacings: { spaces }
     } = theme;
 
     return {
       root: {
         display: "flex",
         alignItems: "center",
-        padding: pxToRem(8),
+        padding: spaces[3].rem,
         "& > * + *": {
           ...{
-            ltr: { marginLeft: pxToRem(8) },
-            rtl: { marginRight: pxToRem(8) }
+            ltr: { marginLeft: spaces[3].rem },
+            rtl: { marginRight: spaces[3].rem }
           }[direction]
         }
       }

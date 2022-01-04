@@ -6,7 +6,7 @@ const useStyles = makeStyles(
       breakpoints,
       direction,
       spacings: { gutter },
-      typography: { pxToRem, fontFamily }
+      typography: { fontFamily }
     } = theme;
 
     return {
@@ -14,8 +14,8 @@ const useStyles = makeStyles(
         direction,
         fontFamily: fontFamily[direction],
         width: "100%",
-        paddingRight: pxToRem(gutter),
-        paddingLeft: pxToRem(gutter),
+        paddingRight: gutter,
+        paddingLeft: gutter,
         marginRight: "auto",
         marginLeft: "auto",
         [breakpoints.up("xxs")]: {
@@ -41,13 +41,8 @@ const useStyles = makeStyles(
           "&$xlgFluid": { extend: "fluid" }
         }
       },
-      fluid: {
-        maxWidth: "100%"
-      },
-      noPadding: {
-        paddingRight: 0,
-        paddingLeft: 0
-      },
+      fluid: { maxWidth: "100%" },
+      noPadding: { paddingRight: 0, paddingLeft: 0 },
       xxsFluid: {},
       xsFluid: {},
       smFluid: {},

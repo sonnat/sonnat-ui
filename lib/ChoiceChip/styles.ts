@@ -17,6 +17,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      spacings: { spaces },
       swatches: { blue, grey },
       mixins: { asIconWrapper, disableUserSelect },
       typography: { pxToRem, setText, fontFamily }
@@ -71,7 +72,7 @@ const useStyles = makeStyles(
         ...disableUserSelect(),
         direction,
         fontFamily: fontFamily[direction],
-        padding: `0 ${pxToRem(12)}`,
+        padding: `0 ${spaces[5].rem}`,
         outline: "none",
         display: "inline-flex",
         alignItems: "center",
@@ -94,13 +95,19 @@ const useStyles = makeStyles(
       small: {
         height: pxToRem(20),
         fontSize: pxToRem(10),
-        padding: `0 ${pxToRem(8)}`,
+        padding: `0 ${spaces[3].rem}`,
         lineHeight: 1.8,
         "& $icon": {
           ...asIconWrapper(14),
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(-2), marginLeft: pxToRem(4) }
-            : { marginLeft: pxToRem(-2), marginRight: pxToRem(4) })
+            ? {
+                marginRight: pxToRem(spaces[2].px - spaces[3].px),
+                marginLeft: spaces[1].rem
+              }
+            : {
+                marginLeft: pxToRem(spaces[2].px - spaces[3].px),
+                marginRight: spaces[1].rem
+              })
         }
       },
       medium: {
@@ -109,8 +116,14 @@ const useStyles = makeStyles(
         lineHeight: 1.6666666667,
         "& $icon": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(-6), marginLeft: pxToRem(4) }
-            : { marginLeft: pxToRem(-6), marginRight: pxToRem(4) })
+            ? {
+                marginRight: pxToRem(spaces[2].px - spaces[5].px),
+                marginLeft: spaces[1].rem
+              }
+            : {
+                marginLeft: pxToRem(spaces[2].px - spaces[5].px),
+                marginRight: spaces[1].rem
+              })
         }
       },
       large: {
@@ -119,8 +132,14 @@ const useStyles = makeStyles(
         lineHeight: 1.5714285714,
         "& $icon": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(-4), marginLeft: pxToRem(4) }
-            : { marginLeft: pxToRem(-4), marginRight: pxToRem(4) })
+            ? {
+                marginRight: pxToRem(spaces[3].px - spaces[5].px),
+                marginLeft: spaces[1].rem
+              }
+            : {
+                marginLeft: pxToRem(spaces[3].px - spaces[5].px),
+                marginRight: spaces[1].rem
+              })
         }
       },
       rounded: { borderRadius: pxToRem(16) },

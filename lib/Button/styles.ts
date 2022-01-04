@@ -18,8 +18,9 @@ const useStyles = makeStyles(
       colors,
       direction,
       darkMode,
-      swatches: { blue },
       hacks,
+      spacings: { spaces },
+      swatches: { blue },
       mixins: { asIconWrapper },
       typography: { pxToRem, setText, fontWeight, fontFamily }
     } = theme;
@@ -77,7 +78,7 @@ const useStyles = makeStyles(
       large: {
         minWidth: pxToRem(96),
         height: pxToRem(40),
-        padding: `0 ${pxToRem(16)}`,
+        padding: `0 ${spaces[7].rem}`,
         "&$iconButton": {
           height: pxToRem(40),
           width: pxToRem(40),
@@ -89,19 +90,31 @@ const useStyles = makeStyles(
         "& $spinner": { width: pxToRem(20), height: pxToRem(20) },
         "& $leadingIcon": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(-4), marginLeft: pxToRem(8) }
-            : { marginLeft: pxToRem(-4), marginRight: pxToRem(8) })
+            ? {
+                marginRight: pxToRem(spaces[5].px - spaces[7].px),
+                marginLeft: spaces[3].rem
+              }
+            : {
+                marginLeft: pxToRem(spaces[5].px - spaces[7].px),
+                marginRight: spaces[3].rem
+              })
         },
         "& $trailingIcon": {
           ...(direction === "rtl"
-            ? { marginLeft: pxToRem(-4), marginRight: pxToRem(12) }
-            : { marginRight: pxToRem(-4), marginLeft: pxToRem(12) })
+            ? {
+                marginLeft: pxToRem(spaces[5].px - spaces[7].px),
+                marginRight: spaces[5].rem
+              }
+            : {
+                marginRight: pxToRem(spaces[5].px - spaces[7].px),
+                marginLeft: spaces[5].rem
+              })
         }
       },
       medium: {
         minWidth: pxToRem(64),
         height: pxToRem(32),
-        padding: `0 ${pxToRem(12)}`,
+        padding: `0 ${spaces[5].rem}`,
         "&$iconButton": {
           height: pxToRem(32),
           width: pxToRem(32),
@@ -113,19 +126,31 @@ const useStyles = makeStyles(
         "& $spinner": { width: pxToRem(16), height: pxToRem(16) },
         "& $leadingIcon": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(-4), marginLeft: pxToRem(4) }
-            : { marginLeft: pxToRem(-4), marginRight: pxToRem(4) })
+            ? {
+                marginRight: pxToRem(spaces[3].px - spaces[5].px),
+                marginLeft: spaces[1].rem
+              }
+            : {
+                marginLeft: pxToRem(spaces[3].px - spaces[5].px),
+                marginRight: spaces[1].rem
+              })
         },
         "& $trailingIcon": {
           ...(direction === "rtl"
-            ? { marginLeft: pxToRem(-4), marginRight: pxToRem(8) }
-            : { marginRight: pxToRem(-4), marginLeft: pxToRem(8) })
+            ? {
+                marginLeft: pxToRem(spaces[3].px - spaces[5].px),
+                marginRight: spaces[3].rem
+              }
+            : {
+                marginRight: pxToRem(spaces[3].px - spaces[5].px),
+                marginLeft: spaces[3].rem
+              })
         }
       },
       small: {
         minWidth: pxToRem(32),
         height: pxToRem(24),
-        padding: `0 ${pxToRem(12)}`,
+        padding: `0 ${spaces[5].rem}`,
         "&$iconButton": {
           height: pxToRem(24),
           width: pxToRem(24),
@@ -137,13 +162,25 @@ const useStyles = makeStyles(
         "& $spinner": { width: pxToRem(14), height: pxToRem(14) },
         "& $leadingIcon": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(-4), marginLeft: pxToRem(4) }
-            : { marginLeft: pxToRem(-4), marginRight: pxToRem(4) })
+            ? {
+                marginRight: pxToRem(spaces[3].px - spaces[5].px),
+                marginLeft: spaces[1].rem
+              }
+            : {
+                marginLeft: pxToRem(spaces[3].px - spaces[5].px),
+                marginRight: spaces[1].rem
+              })
         },
         "& $trailingIcon": {
           ...(direction === "rtl"
-            ? { marginLeft: pxToRem(-4), marginRight: pxToRem(8) }
-            : { marginRight: pxToRem(-4), marginLeft: pxToRem(8) })
+            ? {
+                marginLeft: pxToRem(spaces[3].px - spaces[5].px),
+                marginRight: spaces[3].rem
+              }
+            : {
+                marginRight: pxToRem(spaces[3].px - spaces[5].px),
+                marginLeft: spaces[3].rem
+              })
         }
       },
       /* if (variant="filled") */

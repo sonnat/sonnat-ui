@@ -5,6 +5,7 @@ const useStyles = makeStyles(
     const {
       colors,
       direction,
+      spacings: { spaces },
       typography: { variants, pxToRem, fontFamily, fontWeight }
     } = theme;
 
@@ -28,10 +29,10 @@ const useStyles = makeStyles(
         ...variants.caption,
         fontWeight: fontWeight.medium,
         textAlign: "inherit",
-        padding: pxToRem(16),
+        padding: spaces[7].rem,
         color: colors.text.secondary
       },
-      dense: { "& $caption": { padding: pxToRem(8) } },
+      dense: { "& $caption": { padding: spaces[3].rem } },
       borderLess: { border: "none" }
     };
   },

@@ -4,7 +4,7 @@ const useStyles = makeStyles(
   theme => {
     const {
       direction,
-      typography: { pxToRem }
+      spacings: { spaces }
     } = theme;
 
     return {
@@ -13,16 +13,16 @@ const useStyles = makeStyles(
         display: "flex",
         alignItems: "center",
         justifyContent: "flex-end",
-        padding: pxToRem(16),
+        padding: spaces[7].rem,
         "& > * + *": {
           ...{
-            ltr: { marginLeft: pxToRem(8) },
-            rtl: { marginRight: pxToRem(8) }
+            ltr: { marginLeft: spaces[3].rem },
+            rtl: { marginRight: spaces[3].rem }
           }[direction]
         }
       },
       withOverflow: {
-        padding: [[pxToRem(12), pxToRem(16)]],
+        padding: [[spaces[5].rem, spaces[7].rem]],
         boxShadow: "0 -1px 2px 0 rgba(0, 0, 0, 0.12)"
       }
     };

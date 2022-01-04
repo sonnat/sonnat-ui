@@ -4,7 +4,7 @@ const useStyles = makeStyles(
   theme => {
     const {
       direction,
-      spacings: { gutter },
+      spacings: { spaces },
       typography: { pxToRem, fontFamily }
     } = theme;
 
@@ -14,8 +14,8 @@ const useStyles = makeStyles(
         fontFamily: fontFamily[direction],
         display: "flex",
         flexWrap: "wrap",
-        marginRight: pxToRem(-gutter / 2),
-        marginLeft: pxToRem(-gutter / 2)
+        marginRight: pxToRem(-spaces[3].px),
+        marginLeft: pxToRem(-spaces[3].px)
       }
     };
   },

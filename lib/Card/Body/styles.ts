@@ -3,10 +3,10 @@ import makeStyles from "../../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      typography: { pxToRem }
+      spacings: { spaces }
     } = theme;
 
-    return { root: { padding: pxToRem(16) } };
+    return { root: { padding: spaces[7].rem } };
   },
   { name: "SonnatCardBody" }
 );

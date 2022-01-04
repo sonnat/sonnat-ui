@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      spacings: { spaces },
       mixins: { asIconWrapper },
       typography: { pxToRem, setText, fontFamily }
     } = theme;
@@ -34,8 +35,8 @@ const useStyles = makeStyles(
       },
       helperRow: {
         display: "flex",
-        marginTop: pxToRem(4),
-        padding: [[0, pxToRem(8)]]
+        marginTop: spaces[1].rem,
+        padding: [[0, spaces[3].rem]]
       },
       helperContent: {
         display: "flex",
@@ -51,11 +52,11 @@ const useStyles = makeStyles(
       },
       helperIcon: {
         ...asIconWrapper(16),
-        marginTop: pxToRem(2),
+        marginTop: spaces[0].rem,
         color: colors.text.secondary,
         ...(direction === "rtl"
-          ? { marginLeft: pxToRem(4) }
-          : { marginRight: pxToRem(4) })
+          ? { marginLeft: spaces[1].rem }
+          : { marginRight: spaces[1].rem })
       },
       placeholder: {
         ...setText({ color: colors.text.hint }),
@@ -77,10 +78,10 @@ const useStyles = makeStyles(
       },
       chip: {
         ...(direction === "rtl"
-          ? { marginLeft: pxToRem(4) }
-          : { marginRight: pxToRem(4) }),
-        marginBottom: pxToRem(2),
-        marginTop: pxToRem(2)
+          ? { marginLeft: spaces[1].rem }
+          : { marginRight: spaces[1].rem }),
+        marginBottom: spaces[0].rem,
+        marginTop: spaces[0].rem
       },
       menu: {},
       option: {},

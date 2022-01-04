@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      spacings: { spaces },
       swatches: { grey },
       typography: { pxToRem, fontWeight, setText, fontFamily }
     } = theme;
@@ -24,7 +25,7 @@ const useStyles = makeStyles(
         borderRadius: pxToRem(2),
         backgroundColor: !darkMode ? grey[50] : grey[900],
         display: "inline-block",
-        padding: `0 ${pxToRem(4)}`
+        padding: `0 ${spaces[1].rem}`
       },
       codeBlock: {
         overflow: "auto",
@@ -32,7 +33,7 @@ const useStyles = makeStyles(
         textAlign: "left",
         direction: "ltr",
         fontSize: "0.875em",
-        padding: pxToRem(16),
+        padding: spaces[7].rem,
         backgroundColor: colors.transparent,
         border: `1px solid ${colors.divider}`,
         borderRadius: pxToRem(4)

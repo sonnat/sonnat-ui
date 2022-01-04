@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
       typography: { pxToRem, setText }
@@ -60,8 +61,8 @@ const useStyles = makeStyles(
         transition: "color 360ms ease",
         "& + $label": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(4) }
-            : { marginLeft: pxToRem(4) })
+            ? { marginRight: spaces[1].rem }
+            : { marginLeft: spaces[1].rem })
         }
       },
       fluid: {
@@ -76,7 +77,7 @@ const useStyles = makeStyles(
       },
       small: {
         minHeight: pxToRem(32),
-        padding: [[0, pxToRem(16)]],
+        padding: [[0, spaces[7].rem]],
         "& $label": {
           fontSize: pxToRem(12),
           fontWeight: 500,
@@ -84,11 +85,11 @@ const useStyles = makeStyles(
         },
         "& $icon": asIconWrapper(14),
         "&$iconTab $icon": asIconWrapper(16),
-        "&$leadingIconed": { padding: [[0, pxToRem(12)]] }
+        "&$leadingIconed": { padding: [[0, spaces[5].rem]] }
       },
       medium: {
         minHeight: pxToRem(40),
-        padding: [[0, pxToRem(20)]],
+        padding: [[0, spaces[9].rem]],
         "& $label": {
           fontSize: pxToRem(14),
           fontWeight: 500,
@@ -96,21 +97,21 @@ const useStyles = makeStyles(
         },
         "& $icon": asIconWrapper(16),
         "&$iconTab $icon": asIconWrapper(18),
-        "&$leadingIconed": { padding: [[0, pxToRem(12)]] }
+        "&$leadingIconed": { padding: [[0, spaces[5].rem]] }
       },
       large: {
         minHeight: pxToRem(48),
-        padding: [[0, pxToRem(24)]],
+        padding: [[0, spaces[10].rem]],
         "& $icon": {
           ...asIconWrapper(20),
           "& + $label": {
             ...(direction === "rtl"
-              ? { marginRight: pxToRem(8) }
-              : { marginLeft: pxToRem(8) })
+              ? { marginRight: spaces[3].rem }
+              : { marginLeft: spaces[3].rem })
           }
         },
         "&$iconTab $icon": asIconWrapper(24),
-        "&$leadingIconed": { padding: [[0, pxToRem(16)]] }
+        "&$leadingIconed": { padding: [[0, spaces[7].rem]] }
       },
       active: {
         "& $label": {

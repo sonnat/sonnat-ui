@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      spacings: { spaces },
       swatches: { blue },
       typography: { pxToRem, fontFamily }
     } = theme;
@@ -103,43 +104,39 @@ const useStyles = makeStyles(
         "&$rounded": {
           "& $wrapper": {
             borderRadius: pxToRem(12),
-            padding: [[0, pxToRem(10)]]
+            padding: [[0, spaces[4].rem]]
           },
-          "& $notchedOutline": { padding: [[0, pxToRem(10)]] },
+          "& $notchedOutline": { padding: [[0, spaces[4].rem]] },
           "& $leadingAdornment": {
             ...(direction === "rtl"
-              ? { marginRight: pxToRem(-4) }
-              : { marginLeft: pxToRem(-4) })
+              ? { marginRight: pxToRem(spaces[2].px - spaces[4].px) }
+              : { marginLeft: pxToRem(spaces[2].px - spaces[4].px) })
           },
           "& $trailingAdornment": {
             ...(direction === "rtl"
-              ? { marginLeft: pxToRem(-4) }
-              : { marginRight: pxToRem(-4) })
+              ? { marginLeft: pxToRem(spaces[2].px - spaces[4].px) }
+              : { marginRight: pxToRem(spaces[2].px - spaces[4].px) })
           }
         },
         "&:not($rounded)": {
-          "& $wrapper": { padding: [[0, pxToRem(8)]] },
-          "& $notchedOutline": { padding: [[0, pxToRem(8)]] },
+          "& $wrapper": { padding: [[0, spaces[3].rem]] },
+          "& $notchedOutline": { padding: [[0, spaces[3].rem]] },
           "& $leadingAdornment": {
-            ...(direction === "rtl"
-              ? { marginRight: pxToRem(0) }
-              : { marginLeft: pxToRem(0) })
+            ...(direction === "rtl" ? { marginRight: 0 } : { marginLeft: 0 })
           },
           "& $trailingAdornment": {
-            ...(direction === "rtl"
-              ? { marginLeft: pxToRem(0) }
-              : { marginRight: pxToRem(0) })
+            ...(direction === "rtl" ? { marginLeft: 0 } : { marginRight: 0 })
           }
         },
         "& $leadingAdornment + $control": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(4) }
-            : { marginLeft: pxToRem(4) })
+            ? { marginRight: spaces[1].rem }
+            : { marginLeft: spaces[1].rem })
         },
         "& $control + $trailingAdornment": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(4) }
-            : { marginLeft: pxToRem(4) })
+            ? { marginRight: spaces[1].rem }
+            : { marginLeft: spaces[1].rem })
         }
       },
       medium: {
@@ -147,43 +144,39 @@ const useStyles = makeStyles(
         "&$rounded": {
           "& $wrapper": {
             borderRadius: pxToRem(16),
-            padding: [[0, pxToRem(16)]]
+            padding: [[0, spaces[7].rem]]
           },
-          "& $notchedOutline": { padding: [[0, pxToRem(16)]] },
+          "& $notchedOutline": { padding: [[0, spaces[7].rem]] },
           "& $leadingAdornment": {
             ...(direction === "rtl"
-              ? { marginRight: pxToRem(-4) }
-              : { marginLeft: pxToRem(-4) })
+              ? { marginRight: pxToRem(spaces[5].px - spaces[7].px) }
+              : { marginLeft: pxToRem(spaces[5].px - spaces[7].px) })
           },
           "& $trailingAdornment": {
             ...(direction === "rtl"
-              ? { marginLeft: pxToRem(-4) }
-              : { marginRight: pxToRem(-4) })
+              ? { marginLeft: pxToRem(spaces[5].px - spaces[7].px) }
+              : { marginRight: pxToRem(spaces[5].px - spaces[7].px) })
           }
         },
         "&:not($rounded)": {
-          "& $wrapper": { padding: [[0, pxToRem(8)]] },
-          "& $notchedOutline": { padding: [[0, pxToRem(8)]] },
+          "& $wrapper": { padding: [[0, spaces[3].rem]] },
+          "& $notchedOutline": { padding: [[0, spaces[3].rem]] },
           "& $leadingAdornment": {
-            ...(direction === "rtl"
-              ? { marginRight: pxToRem(0) }
-              : { marginLeft: pxToRem(0) })
+            ...(direction === "rtl" ? { marginRight: 0 } : { marginLeft: 0 })
           },
           "& $trailingAdornment": {
-            ...(direction === "rtl"
-              ? { marginLeft: pxToRem(0) }
-              : { marginRight: pxToRem(0) })
+            ...(direction === "rtl" ? { marginLeft: 0 } : { marginRight: 0 })
           }
         },
         "& $leadingAdornment + $control": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(4) }
-            : { marginLeft: pxToRem(4) })
+            ? { marginRight: spaces[1].rem }
+            : { marginLeft: spaces[1].rem })
         },
         "& $control + $trailingAdornment": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(4) }
-            : { marginLeft: pxToRem(4) })
+            ? { marginRight: spaces[1].rem }
+            : { marginLeft: spaces[1].rem })
         }
       },
       large: {
@@ -191,43 +184,43 @@ const useStyles = makeStyles(
         "&$rounded": {
           "& $wrapper": {
             borderRadius: pxToRem(20),
-            padding: [[0, pxToRem(24)]]
+            padding: [[0, spaces[10].rem]]
           },
-          "& $notchedOutline": { padding: [[0, pxToRem(20)]] },
+          "& $notchedOutline": { padding: [[0, spaces[10].rem]] },
           "& $leadingAdornment": {
             ...(direction === "rtl"
-              ? { marginRight: pxToRem(-12) }
-              : { marginLeft: pxToRem(-12) })
+              ? { marginRight: pxToRem(spaces[5].px - spaces[10].px) }
+              : { marginLeft: pxToRem(spaces[5].px - spaces[10].px) })
           },
           "& $trailingAdornment": {
             ...(direction === "rtl"
-              ? { marginLeft: pxToRem(-12) }
-              : { marginRight: pxToRem(-12) })
+              ? { marginLeft: pxToRem(spaces[5].px - spaces[10].px) }
+              : { marginRight: pxToRem(spaces[5].px - spaces[10].px) })
           }
         },
         "&:not($rounded)": {
-          "& $wrapper": { padding: [[0, pxToRem(16)]] },
-          "& $notchedOutline": { padding: [[0, pxToRem(12)]] },
+          "& $wrapper": { padding: [[0, spaces[7].rem]] },
+          "& $notchedOutline": { padding: [[0, spaces[7].rem]] },
           "& $leadingAdornment": {
             ...(direction === "rtl"
-              ? { marginRight: pxToRem(-8) }
-              : { marginLeft: pxToRem(-8) })
+              ? { marginRight: pxToRem(spaces[3].px - spaces[7].px) }
+              : { marginLeft: pxToRem(spaces[3].px - spaces[7].px) })
           },
           "& $trailingAdornment": {
             ...(direction === "rtl"
-              ? { marginLeft: pxToRem(-8) }
-              : { marginRight: pxToRem(-8) })
+              ? { marginLeft: pxToRem(spaces[3].px - spaces[7].px) }
+              : { marginRight: pxToRem(spaces[3].px - spaces[7].px) })
           }
         },
         "& $leadingAdornment + $control": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(8) }
-            : { marginLeft: pxToRem(8) })
+            ? { marginRight: spaces[3].rem }
+            : { marginLeft: spaces[3].rem })
         },
         "& $control + $trailingAdornment": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(8) }
-            : { marginLeft: pxToRem(8) })
+            ? { marginRight: spaces[3].rem }
+            : { marginLeft: spaces[3].rem })
         }
       },
       rounded: {},

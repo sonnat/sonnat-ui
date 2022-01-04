@@ -12,7 +12,8 @@ const useStyles = makeStyles(
     const {
       colors,
       darkMode,
-      typography: { pxToRem, variants }
+      spacings: { spaces },
+      typography: { variants }
     } = theme;
 
     return {
@@ -20,7 +21,7 @@ const useStyles = makeStyles(
         display: "table-cell",
         verticalAlign: "inherit",
         borderBottom: `1px solid ${colors.divider}`,
-        padding: pxToRem(16)
+        padding: spaces[7].rem
       },
       bodyCell: {
         ...variants.body,
@@ -42,7 +43,7 @@ const useStyles = makeStyles(
       textAlignJustify: { textAlign: "justify" },
       textAlignLeft: { textAlign: "left" },
       textAlignRight: { textAlign: "right" },
-      dense: { padding: pxToRem(8) },
+      dense: { padding: spaces[3].rem },
       selected: { color: "inherit" }
     };
   },

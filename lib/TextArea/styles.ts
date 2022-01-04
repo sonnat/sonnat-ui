@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
       typography: { pxToRem, setText, fontFamily }
@@ -62,7 +63,7 @@ const useStyles = makeStyles(
         top: 0,
         left: 0,
         height: 0,
-        padding: [[pxToRem(8), pxToRem(16)]],
+        padding: [[spaces[3].rem, spaces[7].rem]],
 
         // Create a new layer, increase the isolation of the computed values
         transform: "translateZ(0)"
@@ -74,7 +75,7 @@ const useStyles = makeStyles(
         border: "none",
         backgroundColor: colors.transparent,
         resize: "none",
-        padding: [[pxToRem(8), pxToRem(16)]],
+        padding: [[spaces[3].rem, spaces[7].rem]],
         borderRadius: pxToRem(4),
         boxShadow: `0 0 0 0 ${colors.transparent}`,
         appearance: "none !important",
@@ -85,8 +86,8 @@ const useStyles = makeStyles(
       },
       helperRow: {
         display: "flex",
-        marginTop: pxToRem(4),
-        padding: [[0, pxToRem(8)]]
+        marginTop: spaces[1].rem,
+        padding: [[0, spaces[3].rem]]
       },
       helperContent: {
         display: "flex",
@@ -94,8 +95,8 @@ const useStyles = makeStyles(
         flex: [[1, 0]],
         "& + $charCount": {
           ...(direction === "rtl"
-            ? { paddingRight: pxToRem(8) }
-            : { paddingLeft: pxToRem(8) })
+            ? { paddingRight: spaces[3].rem }
+            : { paddingLeft: spaces[3].rem })
         }
       },
       helperText: {
@@ -107,11 +108,11 @@ const useStyles = makeStyles(
       },
       helperIcon: {
         ...asIconWrapper(16),
-        marginTop: pxToRem(2),
+        marginTop: spaces[0].rem,
         color: colors.text.secondary,
         ...(direction === "rtl"
-          ? { marginLeft: pxToRem(4) }
-          : { marginRight: pxToRem(4) })
+          ? { marginLeft: spaces[1].rem }
+          : { marginRight: spaces[1].rem })
       },
       charCount: {
         ...setText({
@@ -182,7 +183,7 @@ const useStyles = makeStyles(
           ...asIconWrapper(14)
         },
         "& $input, & $shadow": {
-          padding: [[pxToRem(2), pxToRem(8)]],
+          padding: [[spaces[0].rem, spaces[3].rem]],
           fontSize: pxToRem(12),
           lineHeight: 1.6666666667,
           "&::-webkit-input-placeholder": {
@@ -205,7 +206,7 @@ const useStyles = makeStyles(
       },
       medium: {
         "& $input, & $shadow": {
-          padding: [[pxToRem(6), pxToRem(8)]],
+          padding: [[spaces[2].rem, spaces[3].rem]],
           fontSize: pxToRem(12),
           lineHeight: 1.6666666667,
           "&::-webkit-input-placeholder": {

@@ -5,6 +5,7 @@ const useStyles = makeStyles(
     const {
       colors,
       direction,
+      spacings: { spaces },
       typography: { pxToRem, fontFamily }
     } = theme;
 
@@ -47,8 +48,8 @@ const useStyles = makeStyles(
             order: "-1",
             transform: "rotate(180deg)",
             ...(direction === "rtl"
-              ? { marginLeft: pxToRem(4) }
-              : { marginRight: pxToRem(4) })
+              ? { marginLeft: spaces[1].rem }
+              : { marginRight: spaces[1].rem })
           }
         }
       },

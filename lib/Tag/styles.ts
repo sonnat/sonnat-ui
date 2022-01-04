@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
       typography: { pxToRem, setText, fontFamily }
@@ -68,8 +69,8 @@ const useStyles = makeStyles(
         verticalAlign: "middle",
         height: pxToRem(30),
         borderRadius: pxToRem(2),
-        paddingRight: pxToRem(8),
-        paddingLeft: pxToRem(8)
+        paddingRight: spaces[3].rem,
+        paddingLeft: spaces[3].rem
       },
       label: {
         ...setText({ fontSize: pxToRem(14), lineHeight: 1.5714285714 })
@@ -77,8 +78,14 @@ const useStyles = makeStyles(
       icon: {
         ...asIconWrapper(16),
         ...(direction === "rtl"
-          ? { marginRight: pxToRem(-4), marginLeft: pxToRem(4) }
-          : { marginLeft: pxToRem(-4), marginRight: pxToRem(4) })
+          ? {
+              marginRight: pxToRem(spaces[1].px - spaces[3].px),
+              marginLeft: spaces[1].rem
+            }
+          : {
+              marginLeft: pxToRem(spaces[1].px - spaces[3].px),
+              marginRight: spaces[1].rem
+            })
       },
       removeBtn: {
         padding: "0",
@@ -97,8 +104,14 @@ const useStyles = makeStyles(
         alignItems: "center",
         flexShrink: "0",
         ...(direction === "rtl"
-          ? { marginLeft: pxToRem(-4), marginRight: pxToRem(4) }
-          : { marginRight: pxToRem(-4), marginLeft: pxToRem(4) }),
+          ? {
+              marginLeft: pxToRem(spaces[1].px - spaces[3].px),
+              marginRight: spaces[1].rem
+            }
+          : {
+              marginRight: pxToRem(spaces[1].px - spaces[3].px),
+              marginLeft: spaces[1].rem
+            }),
         "&:hover > $removeBtnIcon": {
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": {

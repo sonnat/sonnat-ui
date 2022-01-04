@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
       typography: { pxToRem, setText, fontFamily }
@@ -102,7 +103,7 @@ const useStyles = makeStyles(
         justifyContent: "center",
         flex: "1 0",
         height: "100%",
-        padding: `0 ${pxToRem(8)}`
+        padding: `0 ${spaces[3].rem}`
       },
       fluid: {
         display: "flex",

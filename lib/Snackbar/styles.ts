@@ -7,9 +7,10 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
-      hacks,
+      spacings: { spaces },
       swatches: { grey },
       zIndexes: { popover },
+      hacks: { backfaceVisibilityFix },
       mixins: { asIconWrapper, disableUserSelect },
       typography: { pxToRem, setText, fontFamily, fontWeight }
     } = theme;
@@ -55,7 +56,7 @@ const useStyles = makeStyles(
         maxWidth: pxToRem(560),
         display: "inline-flex",
         alignItems: "center",
-        padding: `0 ${pxToRem(16)}`,
+        padding: `0 ${spaces[7].rem}`,
         borderRadius: pxToRem(4),
         boxShadow: `0 1px 32px 0 rgba(0, 0, 0, 0.08),
         0 12px 16px 0 rgba(0, 0, 0, 0.12),
@@ -66,8 +67,8 @@ const useStyles = makeStyles(
         "& > :last-child$divider": { display: "none" },
         "& > :last-child$actionButton": {
           ...(direction === "rtl"
-            ? { marginLeft: pxToRem(-8) }
-            : { marginRight: pxToRem(-8) })
+            ? { marginLeft: pxToRem(spaces[3].px - spaces[7].px) }
+            : { marginRight: pxToRem(spaces[3].px - spaces[7].px) })
         },
         visibility: "hidden",
         opacity: 0,
@@ -83,8 +84,8 @@ const useStyles = makeStyles(
         alignSelf: "flex-start",
         "& + $text": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(8) }
-            : { marginLeft: pxToRem(8) })
+            ? { marginRight: spaces[3].rem }
+            : { marginLeft: spaces[3].rem })
         }
       },
       text: {
@@ -92,18 +93,19 @@ const useStyles = makeStyles(
           fontSize: pxToRem(14),
           lineHeight: 1.5714285714
         }),
-        padding: `${pxToRem(10)} 0`,
+        padding: `${spaces[4].rem} 0`,
         "& + $divider": { display: "none" },
         "& + *": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(16) }
-            : { marginLeft: pxToRem(16) })
+            ? { marginRight: spaces[7].rem }
+            : { marginLeft: spaces[7].rem })
         }
       },
       buttonBase: {
+        ...backfaceVisibilityFix,
         minWidth: pxToRem(32),
         height: pxToRem(24),
-        padding: `0 ${pxToRem(12)}`,
+        padding: `0 ${spaces[5].rem}`,
         flexShrink: 0,
         appearance: "none !important",
         borderRadius: pxToRem(4),
@@ -132,7 +134,7 @@ const useStyles = makeStyles(
           fontWeight: fontWeight.medium
         }),
         ...disableUserSelect(),
-        ...hacks.backfaceVisibilityFix,
+        ...backfaceVisibilityFix,
         flexShrink: 0,
         whiteSpace: "nowrap",
         textOverflow: "ellipsis",
@@ -142,8 +144,8 @@ const useStyles = makeStyles(
       closeButton: {
         extend: "buttonBase",
         ...(direction === "rtl"
-          ? { marginLeft: pxToRem(-8) }
-          : { marginRight: pxToRem(-8) }),
+          ? { marginLeft: pxToRem(spaces[3].px - spaces[7].px) }
+          : { marginRight: pxToRem(spaces[3].px - spaces[7].px) }),
         width: pxToRem(24),
         height: pxToRem(24),
         padding: "0",
@@ -155,7 +157,7 @@ const useStyles = makeStyles(
       divider: {
         width: 1,
         backgroundColor: colors.divider,
-        margin: `0 ${pxToRem(8)}`,
+        margin: `0 ${spaces[3].rem}`,
         alignSelf: "flex-start",
         height: pxToRem(24),
         position: "relative",

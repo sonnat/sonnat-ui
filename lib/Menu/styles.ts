@@ -7,6 +7,7 @@ const useStyles = makeStyles(
       darkMode,
       zIndexes,
       direction,
+      spacings: { spaces },
       typography: { pxToRem, setText, fontFamily }
     } = theme;
 
@@ -29,7 +30,7 @@ const useStyles = makeStyles(
         outline: "none"
       },
       container: {
-        marginTop: pxToRem(4),
+        marginTop: spaces[1].rem,
         width: "100%",
         height: "100%",
         borderRadius: pxToRem(4),
@@ -44,7 +45,7 @@ const useStyles = makeStyles(
         alignItems: "center",
         justifyContent: "center",
         borderRadius: `${pxToRem(4)} ${pxToRem(4)} 0 0`,
-        padding: pxToRem(4)
+        padding: spaces[1].rem
       },
       list: {
         width: "100%",

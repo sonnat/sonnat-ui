@@ -5,6 +5,7 @@ const useStyles = makeStyles(
     const {
       colors,
       darkMode,
+      spacings: { spaces },
       mixins: { disableUserSelect },
       typography: { pxToRem, setText }
     } = theme;
@@ -19,8 +20,8 @@ const useStyles = makeStyles(
         ...disableUserSelect(),
         width: "100%",
         flexShrink: "0",
-        paddingRight: pxToRem(16),
-        paddingLeft: pxToRem(16),
+        paddingRight: spaces[7].rem,
+        paddingLeft: spaces[7].rem,
         display: "flex",
         alignItems: "center",
         minHeight: pxToRem(40),

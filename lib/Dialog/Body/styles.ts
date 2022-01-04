@@ -5,11 +5,11 @@ const useStyles = makeStyles(
     const {
       colors,
       darkMode,
-      typography: { pxToRem }
+      spacings: { spaces }
     } = theme;
 
     return {
-      root: { padding: pxToRem(16) },
+      root: { padding: spaces[7].rem },
       withOverflow: {
         overflowX: "hidden",
         overflowY: "scroll",

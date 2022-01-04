@@ -5,6 +5,7 @@ const useStyles = makeStyles(
     const {
       colors,
       direction,
+      spacings: { spaces },
       mixins: { asIconWrapper },
       hacks: { backfaceVisibilityFix },
       typography: { pxToRem, setText }
@@ -24,8 +25,8 @@ const useStyles = makeStyles(
         cursor: "pointer",
         transition: "color 360ms ease",
         ...(direction === "rtl"
-          ? { marginLeft: pxToRem(4) }
-          : { marginRight: pxToRem(4) }),
+          ? { marginLeft: spaces[1].rem }
+          : { marginRight: spaces[1].rem }),
         "&:hover": {
           color: colors.text.primary,
           "& > $separator": {

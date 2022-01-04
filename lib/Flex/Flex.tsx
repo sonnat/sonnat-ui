@@ -155,7 +155,7 @@ const createBaseStyles = (
   gapSm: { gap: theme.typography.pxToRem(16) },
   gapMd: { gap: theme.typography.pxToRem(24) },
   gapLg: { gap: theme.typography.pxToRem(32) },
-  gapXlg: { gap: theme.typography.pxToRem(64) }
+  gapXlg: { gap: theme.typography.pxToRem(48) }
 });
 
 const createClassStyle = (

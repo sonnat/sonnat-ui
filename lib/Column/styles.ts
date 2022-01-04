@@ -9,8 +9,8 @@ const useStyles = makeStyles(
     const {
       breakpoints,
       direction,
-      spacings: { gutter },
-      typography: { pxToRem, fontFamily }
+      spacings: { spaces },
+      typography: { fontFamily }
     } = theme;
 
     const generatedClasses = breakpoints.keys.reduce((style, key) => {
@@ -59,8 +59,8 @@ const useStyles = makeStyles(
         direction,
         fontFamily: fontFamily[direction],
         width: "100%",
-        paddingRight: pxToRem(gutter / 2),
-        paddingLeft: pxToRem(gutter / 2),
+        paddingRight: spaces[3].rem,
+        paddingLeft: spaces[3].rem,
         maxWidth: "100%",
         flexBasis: "0",
         flexGrow: "1"

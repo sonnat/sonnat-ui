@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      spacings: { spaces },
       typography: { pxToRem, setText, fontFamily }
     } = theme;
 
@@ -52,8 +53,8 @@ const useStyles = makeStyles(
           opacity: "1"
         },
         ...(direction === "rtl"
-          ? { marginLeft: pxToRem(4) }
-          : { marginRight: pxToRem(4) })
+          ? { marginLeft: spaces[1].rem }
+          : { marginRight: spaces[1].rem })
       },
       input: {
         width: "100%",

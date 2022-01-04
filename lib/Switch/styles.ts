@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      spacings: { spaces },
       mixins: { disableUserSelect },
       typography: { pxToRem, setText, fontFamily }
     } = theme;
@@ -23,12 +24,12 @@ const useStyles = makeStyles(
       label: {
         ...setText({ color: colors.text.primary }),
         ...(direction === "rtl"
-          ? { marginLeft: pxToRem(4) }
-          : { marginRight: pxToRem(4) })
+          ? { marginLeft: spaces[1].rem }
+          : { marginRight: spaces[1].rem })
       },
       cell: {
-        marginRight: pxToRem(9),
-        marginLeft: pxToRem(9),
+        marginRight: spaces[3].rem,
+        marginLeft: spaces[3].rem,
         position: "relative",
         display: "flex",
         alignItems: "center",
@@ -89,7 +90,7 @@ const useStyles = makeStyles(
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "flex-end",
-        padding: pxToRem(2),
+        padding: spaces[0].rem,
         boxSizing: "border-box",
         transition: "240ms ease",
         backgroundColor: !darkMode

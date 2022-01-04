@@ -7,6 +7,7 @@ const useStyles = makeStyles(
       darkMode,
       zIndexes,
       direction,
+      spacings: { spaces },
       swatches: { grey },
       typography: { pxToRem, setText, fontFamily }
     } = theme;
@@ -31,7 +32,7 @@ const useStyles = makeStyles(
           "transform 360ms cubic-bezier(0, 0, 0.2, 1) 100ms, opacity 200ms ease 100ms"
       },
       container: {
-        padding: [[pxToRem(8), pxToRem(12)]],
+        padding: [[spaces[3].rem, spaces[5].rem]],
         borderRadius: pxToRem(4),
         position: "relative",
         zIndex: 2,

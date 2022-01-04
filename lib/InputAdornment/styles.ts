@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
       typography: { pxToRem, setText, fontWeight, fontFamily }
@@ -66,8 +67,8 @@ const useStyles = makeStyles(
         "&$iconAdornment": asIconWrapper(24),
         "& + *": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(8) }
-            : { marginLeft: pxToRem(8) })
+            ? { marginRight: spaces[3].rem }
+            : { marginLeft: spaces[3].rem })
         }
       },
       medium: {
@@ -80,8 +81,8 @@ const useStyles = makeStyles(
         "&$iconAdornment": asIconWrapper(16),
         "& + *": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(4) }
-            : { marginLeft: pxToRem(4) })
+            ? { marginRight: spaces[1].rem }
+            : { marginLeft: spaces[1].rem })
         }
       },
       small: {
@@ -94,8 +95,8 @@ const useStyles = makeStyles(
         "&$iconAdornment": asIconWrapper(14),
         "& + *": {
           ...(direction === "rtl"
-            ? { marginRight: pxToRem(4) }
-            : { marginLeft: pxToRem(4) })
+            ? { marginRight: spaces[1].rem }
+            : { marginLeft: spaces[1].rem })
         }
       },
       errored: {

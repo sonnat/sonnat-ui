@@ -5,6 +5,7 @@ const useStyles = makeStyles(
     const {
       colors,
       direction,
+      spacings: { spaces },
       typography: { pxToRem, fontWeight, fontFamily }
     } = theme;
 
@@ -24,12 +25,12 @@ const useStyles = makeStyles(
       },
       spaced: {
         "&:not($vertical)": {
-          marginTop: pxToRem(16),
-          marginBottom: pxToRem(16)
+          marginTop: spaces[7].rem,
+          marginBottom: spaces[7].rem
         },
         "&$vertical": {
-          marginLeft: pxToRem(16),
-          marginRight: pxToRem(16)
+          marginLeft: spaces[7].rem,
+          marginRight: spaces[7].rem
         }
       },
       dotted: {
@@ -39,8 +40,8 @@ const useStyles = makeStyles(
         fontSize: pxToRem(28),
         lineHeight: "1.14285714",
         fontWeight: fontWeight.regular,
-        marginTop: pxToRem(24),
-        marginBottom: pxToRem(8),
+        marginTop: spaces[10].rem,
+        marginBottom: spaces[3].rem,
         border: "none",
         "&:after": {
           content: '"..."',
@@ -48,7 +49,7 @@ const useStyles = makeStyles(
           marginLeft: "0.6em",
           position: "relative",
           color: colors.text.primary,
-          top: pxToRem(-24),
+          top: pxToRem(-spaces[10].px),
           letterSpacing: "0.6em"
         }
       },

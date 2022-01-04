@@ -9,15 +9,15 @@ const useStyles = makeStyles(
       }),
       direction: theme.direction,
       fontFamily: theme.typography.fontFamily[theme.direction],
-      paddingBottom: theme.typography.pxToRem(8)
+      paddingBottom: theme.spacings.spaces[3].rem
     },
     requiredIndicator: {
       color: theme.darkMode
         ? theme.colors.error.origin
         : theme.colors.error.light,
       ...(theme.direction === "rtl"
-        ? { marginRight: theme.typography.pxToRem(4) }
-        : { marginLeft: theme.typography.pxToRem(4) })
+        ? { marginRight: theme.spacings.spaces[1].rem }
+        : { marginLeft: theme.spacings.spaces[1].rem })
     },
     disabled: {}
   }),

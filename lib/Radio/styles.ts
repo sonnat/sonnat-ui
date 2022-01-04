@@ -6,6 +6,7 @@ const useStyles = makeStyles(
       colors,
       darkMode,
       direction,
+      spacings: { spaces },
       typography: { pxToRem, setText, fontFamily }
     } = theme;
 
@@ -24,8 +25,8 @@ const useStyles = makeStyles(
       label: setText({ color: colors.text.primary }),
       cell: {
         ...(direction === "rtl"
-          ? { marginLeft: pxToRem(4) }
-          : { marginRight: pxToRem(4) }),
+          ? { marginLeft: spaces[1].rem }
+          : { marginRight: spaces[1].rem }),
         borderRadius: "50%",
         position: "relative",
         display: "flex",

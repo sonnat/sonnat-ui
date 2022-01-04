@@ -10,7 +10,7 @@ const useStyles = makeStyles(
       }),
       direction: theme.direction,
       fontFamily: theme.typography.fontFamily[theme.direction],
-      marginBottom: theme.typography.pxToRem(8)
+      marginBottom: theme.spacings.spaces[3].rem
     },
     disabled: {}
   }),
