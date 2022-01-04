@@ -7,6 +7,8 @@ export * from "./createGenerateClassName";
 export { default as createGenerateClassName } from "./createGenerateClassName";
 export * from "./createMixins";
 export { default as createMixins } from "./createMixins";
+export * from "./createRadius";
+export { default as createRadius } from "./createRadius";
 export * from "./createSpacings";
 export { default as createSpacings } from "./createSpacings";
 export * from "./createTheme";
