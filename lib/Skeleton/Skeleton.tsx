@@ -50,7 +50,7 @@ export type SkeletonProps<T extends React.ElementType = "div"> =
   >;
 
 type Component = {
-  <T extends React.ElementType>(props: SkeletonProps<T>): JSX.Element;
+  <T extends React.ElementType = "div">(props: SkeletonProps<T>): JSX.Element;
   propTypes?: React.WeakValidationMap<SkeletonProps> | undefined;
   displayName?: string | undefined;
 };

@@ -93,7 +93,7 @@ export type FlexItemProps<T extends React.ElementType = "div"> =
   >;
 
 type Component = {
-  <T extends React.ElementType>(props: FlexItemProps<T>): JSX.Element;
+  <T extends React.ElementType = "div">(props: FlexItemProps<T>): JSX.Element;
   propTypes?: React.WeakValidationMap<FlexItemProps> | undefined;
   displayName?: string | undefined;
 };

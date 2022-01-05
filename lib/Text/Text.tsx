@@ -96,7 +96,7 @@ export type TextProps<T extends React.ElementType = "span"> = MergeElementProps<
 >;
 
 type Component = {
-  <T extends React.ElementType>(props: TextProps<T>): JSX.Element;
+  <T extends React.ElementType = "span">(props: TextProps<T>): JSX.Element;
   propTypes?: React.WeakValidationMap<TextProps> | undefined;
   displayName?: string | undefined;
 };

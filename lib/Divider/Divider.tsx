@@ -45,7 +45,7 @@ export type DividerProps<T extends React.ElementType = "hr"> =
   >;
 
 type Component = {
-  <T extends React.ElementType>(props: DividerProps<T>): JSX.Element;
+  <T extends React.ElementType = "hr">(props: DividerProps<T>): JSX.Element;
   propTypes?: React.WeakValidationMap<DividerProps> | undefined;
   displayName?: string | undefined;
 };

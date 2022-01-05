@@ -115,7 +115,7 @@ export type FlexProps<T extends React.ElementType = "div"> = MergeElementProps<
 >;
 
 type Component = {
-  <T extends React.ElementType>(props: FlexProps<T>): JSX.Element;
+  <T extends React.ElementType = "div">(props: FlexProps<T>): JSX.Element;
   propTypes?: React.WeakValidationMap<FlexProps> | undefined;
   displayName?: string | undefined;
 };
