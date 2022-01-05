@@ -8,10 +8,10 @@
     "start": "next start"
   },
   "dependencies": {
-    "@sonnat/ui": "latest",
+    "@sonnat/ui": "2.0.0-canary.6",
     "@sonnat/icons": "latest",
-    "next": "10.2.2",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
   }
 }

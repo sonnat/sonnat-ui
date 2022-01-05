@@ -1,4 +1,4 @@
-import CssBaseline from "@sonnat/ui/dist/CssBaseline";
+import CssBaseline from "@sonnat/ui/CssBaseline";
 import ServerStyleSheets from "@sonnat/ui/styles/ServerStyleSheets";
 import SonnatInitializer from "@sonnat/ui/styles/SonnatInitializer";
 import express from "express";

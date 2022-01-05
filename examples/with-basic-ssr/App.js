@@ -14,7 +14,8 @@ const useStyles = makeStyles(
     const {
       colors,
       breakpoints,
-      typography: { pxToRem }
+      radius,
+      spacings: { spaces }
     } = theme;
 
     return {
@@ -30,8 +31,8 @@ const useStyles = makeStyles(
         justifyContent: "center"
       },
       container: {
-        paddingLeft: pxToRem(16),
-        marginLeft: pxToRem(16),
+        paddingLeft: spaces[7].rem,
+        marginLeft: spaces[7].rem,
         borderLeft: `1px solid ${colors.divider}`
       },
       link: {
@@ -39,27 +40,23 @@ const useStyles = makeStyles(
       },
       card: {
         textAlign: "left",
-        marginTop: pxToRem(16),
+        marginTop: spaces[7].rem,
         border: `1px solid ${colors.divider}`,
-        padding: pxToRem(16),
-        borderRadius: pxToRem(4),
+        padding: spaces[7].rem,
+        borderRadius: radius.small,
         cursor: "pointer",
         transition: "border-color 360ms ease",
         "&:hover": {
           borderColor: colors.primary.origin,
-          "& > $cardTitle": {
-            color: colors.primary.origin
-          },
-          "& > $cardDescription": {
-            color: colors.primary.origin
-          }
+          "& > $cardTitle": { color: colors.primary.origin },
+          "& > $cardDescription": { color: colors.primary.origin }
         }
       },
       cardTitle: {
         display: "flex",
         alignItems: "center",
         color: colors.text.primary,
-        marginBottom: pxToRem(8),
+        marginBottom: spaces[3].rem,
         transition: "color 360ms ease"
       },
       cardDescription: {
@@ -69,13 +66,13 @@ const useStyles = makeStyles(
       mit: {
         display: "flex",
         alignItems: "center",
-        marginTop: pxToRem(16)
+        marginTop: spaces[7].rem
       },
       divider: {
-        marginLeft: pxToRem(8),
-        marginRight: pxToRem(8),
-        marginTop: pxToRem(4),
-        marginBottom: pxToRem(4)
+        marginLeft: spaces[3].rem,
+        marginRight: spaces[3].rem,
+        marginTop: spaces[1].rem,
+        marginBottom: spaces[1].rem
       },
       [breakpoints.down("sm")]: {
         wrapper: {
@@ -85,13 +82,11 @@ const useStyles = makeStyles(
         container: {
           paddingLeft: 0,
           marginLeft: 0,
-          marginTop: pxToRem(16),
+          marginTop: spaces[7].rem,
           borderLeft: "none",
           textAlign: "center"
         },
-        mit: {
-          justifyContent: "center"
-        }
+        mit: { justifyContent: "center" }
       }
     };
   },
@@ -119,7 +114,7 @@ export default function App() {
                 <SonnatSvgLogo size={64} />
                 <div className={classes.container}>
                   <header>
-                    <Text rootNode="h1" variant="h3">
+                    <Text as="h1" variant="h3">
                       Welcome to Sonnat!
                     </Text>
                   </header>
@@ -137,14 +132,14 @@ export default function App() {
                     <div className={classes.card}>
                       <Text
                         className={classes.cardTitle}
-                        rootNode="strong"
+                        as="strong"
                         variant="subtitle"
                       >
                         Documentation <ArrowRight size={20} />
                       </Text>
                       <Text
                         className={classes.cardDescription}
-                        rootNode="p"
+                        as="p"
                         variant="bodySmall"
                       >
                         Find in-depth information about{" "}
@@ -158,7 +153,7 @@ export default function App() {
                     </Text>
                     <Divider className={classes.divider} vertical />
                     <Text
-                      rootNode="a"
+                      as="a"
                       color="primary"
                       title="Sonnat-UI's Github"
                       href="https://github.com/sonnat/sonnat-ui"
