@@ -1,4 +1,3 @@
-import * as React from "react";
 import createSvgIcon from "../../utils/createSvgIcon";
 
 const Close = createSvgIcon(
