@@ -9,7 +9,7 @@ const useStyles = makeStyles(
       spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
-      typography: { pxToRem, setText }
+      typography: { pxToRem, variants, fontWeight }
     } = theme;
 
     return {
@@ -52,7 +52,8 @@ const useStyles = makeStyles(
         alignItems: "center"
       },
       label: {
-        ...setText({ color: colors.text.secondary }),
+        ...variants.body,
+        color: colors.text.secondary,
         transition: "color 360ms ease"
       },
       icon: {
@@ -79,9 +80,9 @@ const useStyles = makeStyles(
         minHeight: pxToRem(32),
         padding: [[0, spaces[7].rem]],
         "& $label": {
-          fontSize: pxToRem(12),
-          fontWeight: 500,
-          lineHeight: 1.6666666667
+          fontSize: variants.caption.fontSize,
+          lineHeight: variants.caption.lineHeight,
+          fontWeight: fontWeight.medium
         },
         "& $icon": asIconWrapper(14),
         "&$iconTab $icon": asIconWrapper(16),
@@ -91,9 +92,9 @@ const useStyles = makeStyles(
         minHeight: pxToRem(40),
         padding: [[0, spaces[9].rem]],
         "& $label": {
-          fontSize: pxToRem(14),
-          fontWeight: 500,
-          lineHeight: 1.5714285714
+          fontSize: variants.bodySmall.fontSize,
+          lineHeight: variants.bodySmall.lineHeight,
+          fontWeight: fontWeight.medium
         },
         "& $icon": asIconWrapper(16),
         "&$iconTab $icon": asIconWrapper(18),

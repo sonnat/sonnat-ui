@@ -3,10 +3,8 @@ import makeStyles from "../../styles/makeStyles";
 const useStyles = makeStyles(
   theme => ({
     root: {
-      ...theme.typography.setText({
-        fontWeight: theme.typography.fontWeight.medium,
-        color: theme.colors.text.primary
-      }),
+      ...theme.typography.variants.subtitle,
+      color: theme.colors.text.primary,
       direction: theme.direction,
       fontFamily: theme.typography.fontFamily[theme.direction],
       paddingBottom: theme.spacings.spaces[3].rem

@@ -23,7 +23,7 @@ const useStyles = makeStyles(
       spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
-      typography: { pxToRem, setText, fontWeight, fontFamily }
+      typography: { pxToRem, variants, fontWeight, fontFamily }
     } = theme;
 
     const defaultTransitionList = [
@@ -67,8 +67,9 @@ const useStyles = makeStyles(
         transition: defaultTransitionList.join(",")
       },
       label: {
-        ...setText({ fontWeight: fontWeight.medium }),
+        ...variants.body,
         ...hacks.backfaceVisibilityFix,
+        fontWeight: fontWeight.medium,
         flexShrink: 0,
         whiteSpace: "nowrap",
         textOverflow: "ellipsis",
@@ -86,7 +87,10 @@ const useStyles = makeStyles(
           "& > $icon": asIconWrapper(20),
           "& > $spinner": { width: pxToRem(20), height: pxToRem(20) }
         },
-        "& $label": { fontSize: pxToRem(16), lineHeight: 1.625 },
+        "& $label": {
+          fontSize: variants.body.fontSize,
+          lineHeight: variants.body.lineHeight
+        },
         "& $icon": asIconWrapper(20),
         "& $spinner": { width: pxToRem(20), height: pxToRem(20) },
         "& $leadingIcon": {
@@ -122,7 +126,10 @@ const useStyles = makeStyles(
           "& > $icon": asIconWrapper(16),
           "& > $spinner": { width: pxToRem(16), height: pxToRem(16) }
         },
-        "& $label": { fontSize: pxToRem(14), lineHeight: 1.5714285714 },
+        "& $label": {
+          fontSize: variants.bodySmall.fontSize,
+          lineHeight: variants.bodySmall.lineHeight
+        },
         "& $icon": asIconWrapper(16),
         "& $spinner": { width: pxToRem(16), height: pxToRem(16) },
         "& $leadingIcon": {
@@ -158,7 +165,10 @@ const useStyles = makeStyles(
           "& > $icon": asIconWrapper(16),
           "& > $spinner": { width: pxToRem(16), height: pxToRem(16) }
         },
-        "& $label": { fontSize: pxToRem(12), lineHeight: 1.6666666667 },
+        "& $label": {
+          fontSize: variants.caption.fontSize,
+          lineHeight: variants.caption.lineHeight
+        },
         "& $icon": asIconWrapper(14),
         "& $spinner": { width: pxToRem(14), height: pxToRem(14) },
         "& $leadingIcon": {

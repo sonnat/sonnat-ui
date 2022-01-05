@@ -14,7 +14,6 @@ const useStyles = makeStyles(
 
     return {
       root: {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
         ...setText({
           fontSize: "0.875em",
           fontWeight: fontWeight.regular,

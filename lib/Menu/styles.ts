@@ -9,7 +9,7 @@ const useStyles = makeStyles(
       direction,
       radius,
       spacings: { spaces },
-      typography: { pxToRem, setText, fontFamily }
+      typography: { pxToRem, variants, fontFamily }
     } = theme;
 
     const boxShadow = {
@@ -64,11 +64,8 @@ const useStyles = makeStyles(
       },
       option: { "& + $group": { borderTop: `1px solid ${colors.divider}` } },
       emptyStatement: {
-        ...setText({
-          fontSize: pxToRem(14),
-          lineHeight: 1.5714285714,
-          color: colors.text.hint
-        }),
+        ...variants.bodySmall,
+        color: colors.text.hint,
         display: "flex",
         alignItems: "center",
         height: pxToRem(40),

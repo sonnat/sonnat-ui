@@ -8,7 +8,7 @@ const useStyles = makeStyles(
       direction,
       spacings: { spaces },
       mixins: { asIconWrapper },
-      typography: { pxToRem, setText, fontFamily }
+      typography: { variants, fontFamily }
     } = theme;
 
     return {
@@ -22,7 +22,8 @@ const useStyles = makeStyles(
       },
       base: { cursor: "pointer" },
       input: {
-        ...setText({ color: colors.text.primary }),
+        ...variants.body,
+        color: colors.text.primary,
         border: "none",
         outline: "none",
         padding: 0,
@@ -44,11 +45,8 @@ const useStyles = makeStyles(
         flex: [[1, 0]]
       },
       helperText: {
-        ...setText({
-          fontSize: pxToRem(12),
-          lineHeight: 1.6666666667,
-          color: colors.text.secondary
-        })
+        ...variants.caption,
+        color: colors.text.secondary
       },
       helperIcon: {
         ...asIconWrapper(16),
@@ -59,7 +57,8 @@ const useStyles = makeStyles(
           : { marginRight: spaces[1].rem })
       },
       placeholder: {
-        ...setText({ color: colors.text.hint }),
+        ...variants.body,
+        color: colors.text.hint,
         flexGrow: "1",
         overflow: "hidden",
         alignSelf: "center",
@@ -98,21 +97,21 @@ const useStyles = makeStyles(
       open: { "& $caretIcon": { transform: "rotate(180deg)" } },
       small: {
         "& $helperText": {
-          fontSize: pxToRem(10),
-          lineHeight: 1.8
+          fontSize: variants.captionSmall.fontSize,
+          lineHeight: variants.captionSmall.lineHeight
         },
         "& $helperIcon": asIconWrapper(14),
         "& $optionIcon": asIconWrapper(14),
         "& $placeholder, & $displaySingle": {
-          fontSize: pxToRem(12),
-          lineHeight: 1.6666666667
+          fontSize: variants.caption.fontSize,
+          lineHeight: variants.caption.lineHeight
         }
       },
       medium: {
         "& $optionIcon": asIconWrapper(14),
         "& $placeholder, & $displaySingle": {
-          fontSize: pxToRem(12),
-          lineHeight: 1.6666666667
+          fontSize: variants.caption.fontSize,
+          lineHeight: variants.caption.lineHeight
         }
       },
       large: {},

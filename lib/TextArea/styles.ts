@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import makeStyles from "../styles/makeStyles";
 
 const useStyles = makeStyles(
@@ -10,7 +11,7 @@ const useStyles = makeStyles(
       spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
-      typography: { pxToRem, setText, fontFamily }
+      typography: { variants, fontFamily }
     } = theme;
 
     return {
@@ -51,7 +52,8 @@ const useStyles = makeStyles(
         }
       },
       shadow: {
-        ...setText({ color: colors.text.primary }),
+        ...variants.body,
+        color: colors.text.primary,
         visibility: "hidden",
 
         // Remove from the content flow
@@ -70,7 +72,8 @@ const useStyles = makeStyles(
         transform: "translateZ(0)"
       },
       input: {
-        ...setText({ color: colors.text.primary }),
+        ...variants.body,
+        color: colors.text.primary,
         minWidth: 0,
         outline: "none",
         border: "none",
@@ -101,11 +104,8 @@ const useStyles = makeStyles(
         }
       },
       helperText: {
-        ...setText({
-          fontSize: pxToRem(12),
-          lineHeight: 1.6666666667,
-          color: colors.text.secondary
-        })
+        ...variants.caption,
+        color: colors.text.secondary
       },
       helperIcon: {
         ...asIconWrapper(16),
@@ -116,14 +116,11 @@ const useStyles = makeStyles(
           : { marginRight: spaces[1].rem })
       },
       charCount: {
-        ...setText({
-          fontSize: pxToRem(12),
-          lineHeight: 1.6666666667,
-          color: colors.text.secondary
-        }),
+        ...variants.caption,
         ...(direction === "rtl"
           ? { marginRight: "auto" }
           : { marginLeft: "auto" }),
+        color: colors.text.secondary,
         minWidth: "7.7ch",
         display: "flex",
         justifyContent: "flex-end",
@@ -177,54 +174,54 @@ const useStyles = makeStyles(
       },
       small: {
         "& $helperText": {
-          fontSize: pxToRem(10),
-          lineHeight: 1.8
+          fontSize: variants.captionSmall.fontSize,
+          lineHeight: variants.captionSmall.lineHeight
         },
         "& $helperIcon": {
           ...asIconWrapper(14)
         },
         "& $input, & $shadow": {
           padding: [[spaces[0].rem, spaces[3].rem]],
-          fontSize: pxToRem(12),
-          lineHeight: 1.6666666667,
+          fontSize: variants.caption.fontSize!,
+          lineHeight: variants.caption.lineHeight!,
           "&::-webkit-input-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           },
           "&::-moz-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           },
           "&:-ms-input-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           },
           "&:-moz-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           }
         }
       },
       medium: {
         "& $input, & $shadow": {
           padding: [[spaces[2].rem, spaces[3].rem]],
-          fontSize: pxToRem(12),
-          lineHeight: 1.6666666667,
+          fontSize: variants.caption.fontSize!,
+          lineHeight: variants.caption.lineHeight!,
           "&::-webkit-input-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           },
           "&::-moz-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           },
           "&:-ms-input-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           },
           "&:-moz-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           }
         }
       },

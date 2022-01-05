@@ -10,7 +10,7 @@ const useStyles = makeStyles(
       spacings: { spaces },
       swatches: { grey, blue },
       mixins: { asIconWrapper, disableUserSelect },
-      typography: { pxToRem, setText, fontFamily }
+      typography: { pxToRem, variants, fontFamily }
     } = theme;
 
     const filledPrimaryMainBg = !darkMode
@@ -48,7 +48,7 @@ const useStyles = makeStyles(
 
     return {
       root: {
-        ...setText(),
+        ...variants.body,
         ...disableUserSelect(),
         direction,
         fontFamily: fontFamily[direction],
@@ -99,16 +99,13 @@ const useStyles = makeStyles(
         cursor: "pointer",
         width: pxToRem(16),
         height: pxToRem(16),
-        minWidth: pxToRem(16),
-        minHeight: pxToRem(16),
-        fontSize: pxToRem(16),
         transition: "background-color 360ms ease, color 360ms ease"
       },
       small: {
         height: pxToRem(20),
-        fontSize: pxToRem(10),
+        fontSize: variants.captionSmall.fontSize,
+        lineHeight: variants.captionSmall.lineHeight,
         padding: `0 ${spaces[3].rem}`,
-        lineHeight: 1.8,
         "& $removeButton": {
           width: pxToRem(20),
           ...(direction === "rtl"
@@ -130,8 +127,8 @@ const useStyles = makeStyles(
       },
       medium: {
         height: pxToRem(28),
-        fontSize: pxToRem(12),
-        lineHeight: 1.6666666667,
+        fontSize: variants.caption.fontSize,
+        lineHeight: variants.caption.lineHeight,
         "& $removeButton": { width: pxToRem(28) },
         "& $icon": {
           ...(direction === "rtl"
@@ -147,8 +144,8 @@ const useStyles = makeStyles(
       },
       large: {
         height: pxToRem(32),
-        fontSize: pxToRem(14),
-        lineHeight: 1.5714285714,
+        fontSize: variants.bodySmall.fontSize,
+        lineHeight: variants.bodySmall.lineHeight,
         "& $removeButton": { width: pxToRem(32) },
         "& $icon": {
           ...(direction === "rtl"

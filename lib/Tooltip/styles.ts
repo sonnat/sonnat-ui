@@ -10,7 +10,7 @@ const useStyles = makeStyles(
       radius,
       spacings: { spaces },
       swatches: { grey },
-      typography: { pxToRem, setText, fontFamily }
+      typography: { pxToRem, variants, fontFamily }
     } = theme;
 
     return {
@@ -61,11 +61,7 @@ const useStyles = makeStyles(
           zIndex: -1
         }
       },
-      text: setText({
-        fontSize: pxToRem(12),
-        lineHeight: 1.6666666667,
-        color: colors.white
-      }),
+      text: { ...variants.caption, color: colors.white },
       tail: {
         width: pxToRem(12),
         height: pxToRem(12),

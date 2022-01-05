@@ -13,7 +13,7 @@ const useStyles = makeStyles(
       zIndexes: { popover },
       hacks: { backfaceVisibilityFix },
       mixins: { asIconWrapper, disableUserSelect },
-      typography: { pxToRem, setText, fontFamily, fontWeight }
+      typography: { pxToRem, variants, fontFamily, fontWeight }
     } = theme;
 
     const createColorStyles = (
@@ -90,10 +90,7 @@ const useStyles = makeStyles(
         }
       },
       text: {
-        ...setText({
-          fontSize: pxToRem(14),
-          lineHeight: 1.5714285714
-        }),
+        ...variants.bodySmall,
         padding: `${spaces[4].rem} 0`,
         "& + $divider": { display: "none" },
         "& + *": {
@@ -129,13 +126,10 @@ const useStyles = makeStyles(
         top: pxToRem(12)
       },
       actionLabel: {
-        ...setText({
-          fontSize: pxToRem(12),
-          lineHeight: 1.6666666667,
-          fontWeight: fontWeight.medium
-        }),
+        ...variants.caption,
         ...disableUserSelect(),
         ...backfaceVisibilityFix,
+        fontWeight: fontWeight.medium,
         flexShrink: 0,
         whiteSpace: "nowrap",
         textOverflow: "ellipsis",

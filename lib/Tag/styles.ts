@@ -10,7 +10,7 @@ const useStyles = makeStyles(
       spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
-      typography: { pxToRem, setText, fontFamily }
+      typography: { pxToRem, variants, fontFamily }
     } = theme;
 
     const primaryColor = !darkMode
@@ -73,9 +73,7 @@ const useStyles = makeStyles(
         paddingRight: spaces[3].rem,
         paddingLeft: spaces[3].rem
       },
-      label: {
-        ...setText({ fontSize: pxToRem(14), lineHeight: 1.5714285714 })
-      },
+      label: variants.bodySmall,
       icon: {
         ...asIconWrapper(16),
         ...(direction === "rtl"
@@ -129,7 +127,13 @@ const useStyles = makeStyles(
       outlined: {},
       filled: {},
       removable: {},
-      dense: { height: pxToRem(24), "& $label": { fontSize: pxToRem(12) } },
+      dense: {
+        height: pxToRem(24),
+        "& $label": {
+          fontSize: variants.caption.fontSize,
+          lineHeight: variants.caption.lineHeight
+        }
+      },
       default: {
         backgroundColor: !darkMode
           ? colors.createBlackColor({ alpha: 0.04 })

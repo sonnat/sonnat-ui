@@ -5,17 +5,14 @@ const useStyles = makeStyles(
     const {
       colors,
       spacings: { spaces },
-      typography: { pxToRem, setText }
+      typography: { pxToRem, variants }
     } = theme;
 
     return {
       root: {},
       title: {
-        ...setText({
-          fontSize: pxToRem(14),
-          lineHeight: 1.5714285714,
-          color: colors.text.primary
-        }),
+        ...variants.bodySmall,
+        color: colors.text.primary,
         paddingRight: spaces[7].rem,
         paddingLeft: spaces[7].rem,
         height: pxToRem(40),
@@ -23,7 +20,13 @@ const useStyles = makeStyles(
         display: "flex",
         alignItems: "center"
       },
-      dense: { "& $title": { height: pxToRem(32), fontSize: pxToRem(12) } },
+      dense: {
+        "& $title": {
+          height: pxToRem(32),
+          fontSize: variants.caption.fontSize,
+          lineHeight: variants.caption.lineHeight
+        }
+      },
       hide: { display: "none" }
     };
   },

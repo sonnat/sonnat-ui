@@ -18,7 +18,7 @@ const useStyles = makeStyles(
       spacings: { spaces },
       swatches: { blue, grey },
       mixins: { asIconWrapper, disableUserSelect },
-      typography: { pxToRem, setText, fontFamily }
+      typography: { pxToRem, fontFamily, variants }
     } = theme;
 
     const filledPrimaryMainBg = !darkMode
@@ -125,7 +125,6 @@ const useStyles = makeStyles(
 
     return {
       root: {
-        ...setText(),
         ...disableUserSelect(),
         direction,
         fontFamily: fontFamily[direction],
@@ -150,10 +149,9 @@ const useStyles = makeStyles(
         transition: "color 360ms ease"
       },
       small: {
+        ...variants.captionSmall,
         height: pxToRem(20),
-        fontSize: pxToRem(10),
         padding: `0 ${spaces[3].rem}`,
-        lineHeight: 1.8,
         "& $icon": {
           ...asIconWrapper(14),
           ...(direction === "rtl"
@@ -168,9 +166,8 @@ const useStyles = makeStyles(
         }
       },
       medium: {
+        ...variants.caption,
         height: pxToRem(28),
-        fontSize: pxToRem(12),
-        lineHeight: 1.6666666667,
         "& $icon": {
           ...(direction === "rtl"
             ? {
@@ -184,9 +181,8 @@ const useStyles = makeStyles(
         }
       },
       large: {
+        ...variants.bodySmall,
         height: pxToRem(32),
-        fontSize: pxToRem(14),
-        lineHeight: 1.5714285714,
         "& $icon": {
           ...(direction === "rtl"
             ? {

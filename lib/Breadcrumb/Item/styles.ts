@@ -8,16 +8,13 @@ const useStyles = makeStyles(
       spacings: { spaces },
       mixins: { asIconWrapper },
       hacks: { backfaceVisibilityFix },
-      typography: { pxToRem, setText }
+      typography: { pxToRem, variants }
     } = theme;
 
     return {
       root: {
-        ...setText({
-          fontSize: pxToRem(12),
-          color: colors.text.secondary,
-          lineHeight: 1.6666666667
-        }),
+        ...variants.caption,
+        color: colors.text.secondary,
         maxWidth: pxToRem(120),
         display: "inline-flex",
         alignItems: "center",

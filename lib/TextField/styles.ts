@@ -8,7 +8,7 @@ const useStyles = makeStyles(
       direction,
       spacings: { spaces },
       mixins: { asIconWrapper },
-      typography: { pxToRem, setText, fontFamily }
+      typography: { pxToRem, variants, fontFamily }
     } = theme;
 
     return {
@@ -21,7 +21,8 @@ const useStyles = makeStyles(
       },
       base: { cursor: "text" },
       input: {
-        ...setText({ color: colors.text.primary }),
+        ...variants.body,
+        color: colors.text.primary,
         border: "none",
         outline: "none",
         padding: 0,
@@ -31,12 +32,22 @@ const useStyles = makeStyles(
         height: pxToRem(40),
         appearance: "none !important",
         backgroundColor: colors.transparent,
-        "&::-webkit-input-placeholder": setText({
+        "&::-webkit-input-placeholder": {
+          ...variants.body,
           color: colors.text.hint
-        }),
-        "&::-moz-placeholder": setText({ color: colors.text.hint }),
-        "&:-ms-input-placeholder": setText({ color: colors.text.hint }),
-        "&:-moz-placeholder": setText({ color: colors.text.hint })
+        },
+        "&::-moz-placeholder": {
+          ...variants.body,
+          color: colors.text.hint
+        },
+        "&:-ms-input-placeholder": {
+          ...variants.body,
+          color: colors.text.hint
+        },
+        "&:-moz-placeholder": {
+          ...variants.body,
+          color: colors.text.hint
+        }
       },
       helperRow: {
         display: "flex",
@@ -54,11 +65,8 @@ const useStyles = makeStyles(
         }
       },
       helperText: {
-        ...setText({
-          fontSize: pxToRem(12),
-          lineHeight: 1.6666666667,
-          color: colors.text.secondary
-        })
+        ...variants.caption,
+        color: colors.text.secondary
       },
       helperIcon: {
         ...asIconWrapper(16),
@@ -69,14 +77,11 @@ const useStyles = makeStyles(
           : { marginRight: spaces[1].rem })
       },
       charCount: {
-        ...setText({
-          fontSize: pxToRem(12),
-          lineHeight: 1.6666666667,
-          color: colors.text.secondary
-        }),
+        ...variants.caption,
         ...(direction === "rtl"
           ? { marginRight: "auto" }
           : { marginLeft: "auto" }),
+        color: colors.text.secondary,
         minWidth: "7.7ch",
         display: "flex",
         justifyContent: "flex-end",
@@ -94,54 +99,54 @@ const useStyles = makeStyles(
       },
       small: {
         "& $helperText": {
-          fontSize: pxToRem(10),
-          lineHeight: 1.8
+          fontSize: variants.captionSmall.fontSize,
+          lineHeight: variants.captionSmall.lineHeight
         },
         "& $helperIcon": {
           ...asIconWrapper(14)
         },
         "& $input": {
           height: pxToRem(24),
-          fontSize: pxToRem(12),
-          lineHeight: 1.6666666667,
+          fontSize: variants.caption.fontSize,
+          lineHeight: variants.caption.lineHeight,
           "&::-webkit-input-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           },
           "&::-moz-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           },
           "&:-ms-input-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           },
           "&:-moz-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           }
         }
       },
       medium: {
         "& $input": {
           height: pxToRem(32),
-          fontSize: pxToRem(12),
-          lineHeight: 1.6666666667,
+          fontSize: variants.caption.fontSize,
+          lineHeight: variants.caption.lineHeight,
           "&::-webkit-input-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           },
           "&::-moz-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           },
           "&:-ms-input-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           },
           "&:-moz-placeholder": {
-            fontSize: pxToRem(12),
-            lineHeight: 1.6666666667
+            fontSize: variants.caption.fontSize,
+            lineHeight: variants.caption.lineHeight
           }
         }
       },

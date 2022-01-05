@@ -8,7 +8,7 @@ const useStyles = makeStyles(
       direction,
       radius,
       spacings: { spaces },
-      typography: { pxToRem, setText, fontFamily }
+      typography: { pxToRem, variants, fontFamily }
     } = theme;
 
     return {
@@ -22,7 +22,10 @@ const useStyles = makeStyles(
         verticalAlign: "middle",
         outline: "none"
       },
-      label: setText({ color: colors.text.primary }),
+      label: {
+        ...variants.body,
+        color: colors.text.primary
+      },
       cell: {
         borderRadius: radius.rounded,
         position: "relative",
@@ -220,7 +223,10 @@ const useStyles = makeStyles(
           minWidth: pxToRem(36),
           minHeight: pxToRem(36)
         },
-        "& $label": { fontSize: pxToRem(16), lineHeight: 1.625 },
+        "& $label": {
+          fontSize: variants.body.fontSize,
+          lineHeight: variants.body.lineHeight
+        },
         "& $button": { width: pxToRem(18), height: pxToRem(18) },
         "& $checkIcon": {
           width: pxToRem(18),
@@ -234,7 +240,10 @@ const useStyles = makeStyles(
           minWidth: pxToRem(32),
           minHeight: pxToRem(32)
         },
-        "& $label": { fontSize: pxToRem(14), lineHeight: 1.5714285714 },
+        "& $label": {
+          fontSize: variants.bodySmall.fontSize,
+          lineHeight: variants.bodySmall.lineHeight
+        },
         "& $button": { width: pxToRem(16), height: pxToRem(16) },
         "& $checkIcon": {
           width: pxToRem(16),
@@ -248,7 +257,10 @@ const useStyles = makeStyles(
           minWidth: pxToRem(28),
           minHeight: pxToRem(28)
         },
-        "& $label": { fontSize: pxToRem(12), lineHeight: 1.6666666667 },
+        "& $label": {
+          fontSize: variants.caption.fontSize,
+          lineHeight: variants.caption.lineHeight
+        },
         "& $button": { width: pxToRem(14), height: pxToRem(14) },
         "& $checkIcon": {
           width: pxToRem(14),

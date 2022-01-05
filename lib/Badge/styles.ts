@@ -21,7 +21,7 @@ const useStyles = makeStyles(
       hacks,
       radius,
       spacings: { spaces },
-      typography: { pxToRem, fontWeight, setText, fontFamily }
+      typography: { pxToRem, fontWeight, variants, fontFamily }
     } = theme;
 
     return {
@@ -42,9 +42,7 @@ const useStyles = makeStyles(
       },
       relative: {
         display: "inline-flex",
-        "& > $standalone": {
-          position: "absolute"
-        }
+        "& > $standalone": { position: "absolute" }
       },
       visible: {
         visibility: "visible",
@@ -52,12 +50,9 @@ const useStyles = makeStyles(
         transform: "scale(1)"
       },
       notDottedBadge: {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        ...setText({
-          fontSize: pxToRem(10),
-          fontWeight: fontWeight.medium,
-          lineHeight: 1
-        }),
+        ...variants.captionSmall,
+        fontWeight: fontWeight.medium,
+        lineHeight: 1,
         direction,
         fontFamily: fontFamily[direction],
         minWidth: pxToRem(16),

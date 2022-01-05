@@ -3,14 +3,11 @@ import makeStyles from "../../styles/makeStyles";
 const useStyles = makeStyles(
   theme => ({
     root: {
+      ...theme.typography.variants.caption,
+      color: theme.colors.text.secondary,
       direction: theme.direction,
       fontFamily: theme.typography.fontFamily[theme.direction],
-      marginTop: theme.spacings.spaces[1].rem,
-      ...theme.typography.setText({
-        fontSize: theme.typography.pxToRem(12),
-        lineHeight: 1.6666666667,
-        color: theme.colors.text.secondary
-      })
+      marginTop: theme.spacings.spaces[1].rem
     },
     errored: {
       color: !theme.darkMode

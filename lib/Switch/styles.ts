@@ -9,7 +9,7 @@ const useStyles = makeStyles(
       radius,
       spacings: { spaces },
       mixins: { disableUserSelect },
-      typography: { pxToRem, setText, fontFamily }
+      typography: { pxToRem, variants, fontFamily }
     } = theme;
 
     return {
@@ -23,7 +23,8 @@ const useStyles = makeStyles(
         outline: "none"
       },
       label: {
-        ...setText({ color: colors.text.primary }),
+        ...variants.body,
+        color: colors.text.primary,
         ...(direction === "rtl"
           ? { marginLeft: spaces[1].rem }
           : { marginRight: spaces[1].rem })
@@ -197,7 +198,10 @@ const useStyles = makeStyles(
       },
       large: {
         minHeight: pxToRem(44),
-        "& $label": { fontSize: pxToRem(16), lineHeight: 1.625 },
+        "& $label": {
+          fontSize: variants.body.fontSize,
+          lineHeight: variants.body.lineHeight
+        },
         "& $cell": { width: pxToRem(42), height: pxToRem(24) },
         "& $handle": { width: pxToRem(20), height: pxToRem(20) },
         "& $button": {
@@ -215,7 +219,10 @@ const useStyles = makeStyles(
       },
       medium: {
         minHeight: pxToRem(34),
-        "& $label": { fontSize: pxToRem(14), lineHeight: 1.5714285714 },
+        "& $label": {
+          fontSize: variants.bodySmall.fontSize,
+          lineHeight: variants.bodySmall.lineHeight
+        },
         "& $cell": { width: pxToRem(32), height: pxToRem(18) },
         "& $handle": { width: pxToRem(16), height: pxToRem(16) },
         "& $button": {
@@ -233,7 +240,10 @@ const useStyles = makeStyles(
       },
       small: {
         minHeight: pxToRem(26),
-        "& $label": { fontSize: pxToRem(12), lineHeight: 1.6666666667 },
+        "& $label": {
+          fontSize: variants.caption.fontSize,
+          lineHeight: variants.caption.lineHeight
+        },
         "& $cell": { width: pxToRem(24), height: pxToRem(14) },
         "& $handle": { width: pxToRem(12), height: pxToRem(12) },
         "& $button": {

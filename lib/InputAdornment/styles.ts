@@ -9,7 +9,7 @@ const useStyles = makeStyles(
       spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
-      typography: { pxToRem, setText, fontWeight, fontFamily }
+      typography: { pxToRem, variants, fontWeight, fontFamily }
     } = theme;
 
     return {
@@ -26,7 +26,8 @@ const useStyles = makeStyles(
         color: colors.text.hint
       },
       textAdornment: {
-        ...setText({ color: colors.text.hint }),
+        ...variants.body,
+        color: colors.text.hint,
         display: "inline-flex",
         justifyContent: "center",
         whiteSpace: "nowrap",
@@ -61,8 +62,8 @@ const useStyles = makeStyles(
       large: {
         "&$textAdornment": {
           minWidth: pxToRem(24),
-          fontSize: pxToRem(14),
-          lineHeight: 1.5714285714
+          fontSize: variants.bodySmall.fontSize,
+          lineHeight: variants.bodySmall.lineHeight
         },
         "&$iconAdornment": asIconWrapper(24),
         "& + *": {
@@ -74,9 +75,9 @@ const useStyles = makeStyles(
       medium: {
         "&$textAdornment": {
           minWidth: pxToRem(16),
-          fontSize: pxToRem(10),
-          fontWeight: fontWeight.medium,
-          lineHeight: 1.8
+          fontSize: variants.captionSmall.fontSize,
+          lineHeight: variants.captionSmall.lineHeight,
+          fontWeight: fontWeight.medium
         },
         "&$iconAdornment": asIconWrapper(16),
         "& + *": {
@@ -88,9 +89,9 @@ const useStyles = makeStyles(
       small: {
         "&$textAdornment": {
           minWidth: pxToRem(16),
-          fontSize: pxToRem(10),
-          fontWeight: fontWeight.medium,
-          lineHeight: 1.8
+          fontSize: variants.captionSmall.fontSize,
+          lineHeight: variants.captionSmall.lineHeight,
+          fontWeight: fontWeight.medium
         },
         "&$iconAdornment": asIconWrapper(14),
         "& + *": {

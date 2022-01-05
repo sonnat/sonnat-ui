@@ -10,7 +10,7 @@ const useStyles = makeStyles(
       spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
-      typography: { pxToRem, setText, fontFamily }
+      typography: { pxToRem, variants, fontFamily }
     } = theme;
 
     return {
@@ -86,7 +86,8 @@ const useStyles = makeStyles(
         "& $actionIcon": { color: colors.text.disabled }
       },
       input: {
-        ...setText({ color: colors.text.hint }),
+        ...variants.body,
+        color: colors.text.hint,
         textAlign: "center",
         width: "100%",
         height: "100%",
@@ -123,7 +124,10 @@ const useStyles = makeStyles(
           "&:after,&:before": { height: pxToRem(16) }
         },
         "& $actionIcon": asIconWrapper(14),
-        "& $input": { fontSize: pxToRem(12), lineHeight: 1.6666666667 }
+        "& $input": {
+          fontSize: variants.caption.fontSize,
+          lineHeight: variants.caption.lineHeight
+        }
       },
       medium: {
         height: pxToRem(32),
@@ -133,7 +137,10 @@ const useStyles = makeStyles(
           "&:after,&:before": { height: pxToRem(16) }
         },
         "& $actionIcon": asIconWrapper(16),
-        "& $input": { fontSize: pxToRem(14), lineHeight: 1.5714285714 }
+        "& $input": {
+          fontSize: variants.bodySmall.fontSize,
+          lineHeight: variants.bodySmall.lineHeight
+        }
       },
       large: {
         height: pxToRem(40),
