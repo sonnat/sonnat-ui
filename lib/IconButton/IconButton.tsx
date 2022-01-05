@@ -11,13 +11,13 @@ import {
   useForkedRefs,
   useIsFocusVisible
 } from "../utils";
-import useStyles, { type VariantColorCombo } from "./styles";
+import useStyles, { VariantColorCombo } from "./styles";
 
-interface ButtonBaseProps {
+interface BaseProps {
   /**
-   * The content of the button.
+   * The icon element.
    */
-  label: string;
+  icon: React.ReactNode;
   /**
    * Append to the classNames applied to the component so you can override or
    * extend the styles.
@@ -60,22 +60,14 @@ interface ButtonBaseProps {
    * @default "filled"
    */
   variant?: "filled" | "outlined" | "inlined";
-  /**
-   * The leading icon element placed before the label.
-   */
-  leadingIcon?: React.ReactNode;
-  /**
-   * The trailing icon element placed before the label.
-   */
-  trailingIcon?: React.ReactNode;
   // eslint-disable-next-line no-unused-vars
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export type ButtonProps<T extends React.ElementType = "button"> =
+export type IconButtonProps<T extends React.ElementType = "button"> =
   MergeElementProps<
     T,
-    ButtonBaseProps & {
+    BaseProps & {
       /**
        * The component used for the root node.
        * Either a string to use a HTML element or a component.
@@ -85,8 +77,10 @@ export type ButtonProps<T extends React.ElementType = "button"> =
   >;
 
 type Component = {
-  <T extends React.ElementType = "button">(props: ButtonProps<T>): JSX.Element;
-  propTypes?: React.WeakValidationMap<ButtonProps> | undefined;
+  <T extends React.ElementType = "button">(
+    props: IconButtonProps<T>
+  ): JSX.Element;
+  propTypes?: React.WeakValidationMap<IconButtonProps> | undefined;
   displayName?: string | undefined;
 };
 
@@ -94,15 +88,13 @@ const allowedVariants = ["filled", "inlined", "outlined"] as const;
 const allowedSizes = ["large", "medium", "small"] as const;
 const allowedColors = ["default", "primary", "secondary"] as const;
 
-const ButtonBase = <T extends React.ElementType = "button">(
-  props: ButtonProps<T>,
+const IconButtonBase = <T extends React.ElementType = "button">(
+  props: IconButtonProps<T>,
   ref: React.Ref<HTMLElement>
 ) => {
   const {
-    label,
     className,
-    leadingIcon,
-    trailingIcon,
+    icon,
     onFocus,
     onBlur,
     onKeyDown,
@@ -148,7 +140,7 @@ const ButtonBase = <T extends React.ElementType = "button">(
       console.error(
         [
           `Sonnat: You can not use the \`raised={true}\` and \`variant="${variant}"\` properties ` +
-            "at the same time on `Button` component.",
+            "at the same time on `IconButton` component.",
           `We will fallback to \`raised={false}\` and \`variant="${variant}"\`.`
         ].join("\n")
       );
@@ -160,9 +152,7 @@ const ButtonBase = <T extends React.ElementType = "button">(
   const isNative = RootNode === "button";
   const isLink = RootNode === "a";
 
-  const isLabeled = label != null;
-  const isIconed = leadingIcon != null || trailingIcon != null;
-  const isInvalid = !isLabeled;
+  const isInvalid = icon == null;
 
   const {
     isFocusVisibleRef,
@@ -306,12 +296,13 @@ const ButtonBase = <T extends React.ElementType = "button">(
       className={c(
         className,
         classes.root,
+        classes.iconed,
+        classes.iconButton,
         classes[variant],
         classes[size],
         classes[camelCase(`${variant}-${color}`) as VariantColorCombo],
         {
           [classes.loading]: loading,
-          [classes.iconed]: isIconed,
           [classes.rounded]: rounded,
           [classes.focusVisible]: focusVisible,
           [classes.raised]: invalidUsageOfRaised ? false : raised,
@@ -321,28 +312,23 @@ const ButtonBase = <T extends React.ElementType = "button">(
       {...conditionalProps}
       {...otherProps}
     >
-      {loading && (
+      {loading ? (
         <ClipSpinner
           backgroundColor={spinnerColor.background}
           foregroundColor={spinnerColor.foreground}
           className={c(classes.spinner)}
         />
-      )}
-      {leadingIcon && (
-        <i className={c(classes.leadingIcon, classes.icon)}>{leadingIcon}</i>
-      )}
-      <span className={classes.label}>{label}</span>
-      {trailingIcon && (
-        <i className={c(classes.trailingIcon, classes.icon)}>{trailingIcon}</i>
+      ) : (
+        <i className={c(classes.leadingIcon, classes.icon)}>{icon}</i>
       )}
     </RootNode>
   );
 };
 
-const Button = React.forwardRef(ButtonBase) as Component;
+const IconButton = React.forwardRef(IconButtonBase) as Component;
 
-Button.propTypes = {
-  label: PropTypes.string.isRequired,
+IconButton.propTypes = {
+  icon: PropTypes.node.isRequired,
   className: PropTypes.string,
   rounded: PropTypes.bool,
   disabled: PropTypes.bool,
@@ -354,8 +340,6 @@ Button.propTypes = {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   as: PropTypes.elementType,
-  leadingIcon: PropTypes.node,
-  trailingIcon: PropTypes.node,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   onKeyDown: PropTypes.func,
@@ -363,4 +347,4 @@ Button.propTypes = {
   onClick: PropTypes.func
 };
 
-export default Button;
+export default IconButton;
