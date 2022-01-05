@@ -63,7 +63,7 @@ const useStyles = makeStyles(
         boxShadow: !darkMode ? boxShadow.lightMode : boxShadow.darkMode,
         backgroundColor: !darkMode
           ? colors.background.origin
-          : colors.background.level[1],
+          : colors.background.accents[1],
         outline: "none"
       },
       open: {

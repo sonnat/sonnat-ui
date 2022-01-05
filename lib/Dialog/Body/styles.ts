@@ -13,7 +13,7 @@ const useStyles = makeStyles(
       withOverflow: {
         overflowX: "hidden",
         overflowY: "scroll",
-        backgroundColor: !darkMode ? "inherit" : colors.background.level[2]
+        backgroundColor: !darkMode ? "inherit" : colors.background.accents[2]
       }
     };
   },

@@ -12,7 +12,7 @@ import { blue, green, grey, navy, orange, pink, red } from "./swatches";
 
 export type BackgroundColorType = {
   origin: string;
-  level: { 1: string; 2: string };
+  accents: { 1: string; 2: string };
 };
 
 export type TextColorType = {
@@ -78,7 +78,7 @@ export const dark = {
   divider: "rgba(255, 255, 255, 0.16)",
   background: {
     origin: "#121212",
-    level: { 1: "#242424", 2: "#1B1B1B" }
+    accents: { 1: "#242424", 2: "#1B1B1B" }
   }
 } as const;
 
@@ -92,7 +92,7 @@ export const light = {
   divider: "rgba(0, 0, 0, 0.12)",
   background: {
     origin: "#ffffff",
-    level: { 1: grey[50], 2: grey[100] }
+    accents: { 1: grey[50], 2: grey[100] }
   }
 } as const;
 

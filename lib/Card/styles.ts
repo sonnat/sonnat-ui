@@ -17,7 +17,7 @@ const useStyles = makeStyles(
         borderRadius: radius.small,
         backgroundColor: !darkMode
           ? colors.background.origin
-          : colors.background.level[1]
+          : colors.background.accents[1]
       },
       outlined: { border: `1px solid ${colors.divider}` },
       elevated: {
