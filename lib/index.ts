@@ -32,6 +32,8 @@ export * from "./FormControl";
 export { default as FormControl } from "./FormControl";
 export * from "./Icon";
 export { default as Icon } from "./Icon";
+export * from "./IconButton";
+export { default as IconButton } from "./IconButton";
 export * from "./Image";
 export { default as Image } from "./Image";
 export * from "./InputAdornment";
