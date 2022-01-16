@@ -31,7 +31,7 @@ export interface ThemeInput {
   darkMode: boolean;
 }
 
-export interface Theme {
+export interface ThemeBase {
   mixins: ThemeInput["mixins"] & Mixins;
   zIndexes: ThemeInput["zIndexes"] & ZIndexes;
   spacings: Spacings;
@@ -50,9 +50,9 @@ export interface Theme {
 
 const createTheme = <CustomProps extends AnyObject = EmptyIntersectionObject>(
   themeInput?: Partial<ThemeInput> & {
-    custom?: CustomProps | ((theme: Theme) => CustomProps);
+    custom?: CustomProps | ((theme: ThemeBase) => CustomProps);
   }
-): Theme & { custom: CustomProps } => {
+): ThemeBase & { custom: CustomProps } => {
   const {
     breakpoints: breakpointsInput,
     typography: typographyInput,
@@ -119,5 +119,7 @@ const createTheme = <CustomProps extends AnyObject = EmptyIntersectionObject>(
       : ({} as CustomProps)
   };
 };
+
+export type Theme = ReturnType<typeof createTheme>;
 
 export default createTheme;
