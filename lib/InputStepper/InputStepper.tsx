@@ -75,10 +75,7 @@ interface InputStepperBaseProps {
   /**
    * The Callback fires when the state has changed.
    */
-  onChange?: (
-    event: React.ChangeEvent<HTMLInputElement>,
-    value: number
-  ) => void;
+  onChange?: (value: number) => void;
   /**
    * The Callback fires when the add button has been clicked.
    */
@@ -232,7 +229,7 @@ const InputStepperBase = (
     if (!disabled) {
       const newValue = parseInt(e.target.value);
 
-      if (onChange) onChange(e, newValue);
+      if (onChange) onChange(newValue);
       setValue(newValue);
     }
   };

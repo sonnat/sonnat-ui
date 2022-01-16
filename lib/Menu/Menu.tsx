@@ -28,10 +28,10 @@ interface MenuBaseProps {
   /** The content of the component. */
   children?: React.ReactNode;
   /**
-   * An HTML element, or a function that returns one.
+   * An HTML element.
    * It's used to set the position of the menu.
    */
-  anchorNode?: HTMLElement | null;
+  anchorNode: HTMLElement | null;
   /**
    * Append to the classNames applied to the component so you can override or
    * extend the styles.
@@ -537,7 +537,8 @@ const Menu = React.forwardRef(MenuBase) as Component;
 Menu.propTypes = {
   children: PropTypes.node,
   // @ts-ignore
-  anchorNode: PropTypes.oneOfType([HTMLElementType, PropTypes.element]),
+  anchorNode: PropTypes.oneOfType([HTMLElementType, PropTypes.element])
+    .isRequired,
   placement: PropTypes.oneOf(allowedPlacements),
   minWidth: PropTypes.number,
   style: PropTypes.object,

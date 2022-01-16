@@ -35,11 +35,7 @@ interface SelectBaseProps {
    */
   className?: string;
   /**
-   * The value of the select. Providing an empty string will Select no options.
-   * Set to an empty string `''` if you don't want any of the available options to be selected.
-   *
-   * If the value is an object it must have reference equality with the option in order to be selected.
-   * If the value is not an object, the string representation must match with the string representation of the option in order to be selected.
+   * The value of the select. Providing an empty string/array will select no options.
    */
   value?: string[] | string;
   /** The default value. Use when the component is not controlled. */

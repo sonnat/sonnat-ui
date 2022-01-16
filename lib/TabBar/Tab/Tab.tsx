@@ -37,10 +37,7 @@ interface TabBaseProps {
   /**
    * The Callback fires when the tab has been clicked.
    */
-  onClick?: (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    identifier: number | string
-  ) => void;
+  onClick?: (identifier: number | string) => void;
 }
 
 export type TabProps = MergeElementProps<"div", TabBaseProps>;
@@ -153,10 +150,10 @@ const TabBase = (props: TabProps, ref: React.Ref<HTMLDivElement>) => {
       onFocus={handleFocus}
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
-      onClick={e => {
+      onClick={() => {
         if (!active) {
           if (context?.onChange) context.onChange(identifier!);
-          if (onClick) onClick(e, identifier!);
+          if (onClick) onClick(identifier!);
         }
       }}
       className={c(
