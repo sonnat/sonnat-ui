@@ -8,7 +8,7 @@ import {
   type ColorInputType,
   type HslaInputType
 } from "./colorUtils";
-import { blue, green, grey, navy, orange, pink, red } from "./swatches";
+import { blue, green, navy, orange, pink, red } from "./swatches";
 
 export type BackgroundColorType = {
   origin: string;
@@ -71,28 +71,28 @@ const black = "#000000" as const;
 export const dark = {
   text: {
     primary: white,
-    secondary: "#adadad",
-    hint: "#525252",
-    disabled: "#3d3d3d"
+    secondary: _opaquify(changeColorHsla(white, { alpha: 0.64 }), "#121212"),
+    hint: _opaquify(changeColorHsla(white, { alpha: 0.32 }), "#121212"),
+    disabled: _opaquify(changeColorHsla(white, { alpha: 0.24 }), "#121212")
   },
   divider: "rgba(255, 255, 255, 0.16)",
   background: {
     origin: "#121212",
-    accents: { 1: "#242424", 2: "#1B1B1B" }
+    accents: { 1: "#292929", 2: "#1f1f1f" }
   }
 } as const;
 
 export const light = {
   text: {
-    primary: "#212121",
-    secondary: "#707070",
-    hint: "#adadad",
-    disabled: "#c2c2c2"
+    primary: _opaquify(changeColorHsla(black, { alpha: 0.87 }), "#ffffff"),
+    secondary: _opaquify(changeColorHsla(black, { alpha: 0.56 }), "#ffffff"),
+    hint: _opaquify(changeColorHsla(black, { alpha: 0.32 }), "#ffffff"),
+    disabled: _opaquify(changeColorHsla(black, { alpha: 0.24 }), "#ffffff")
   },
   divider: "rgba(0, 0, 0, 0.12)",
   background: {
     origin: "#ffffff",
-    accents: { 1: grey[50], 2: grey[100] }
+    accents: { 1: "#fafafa", 2: "#ebebeb" }
   }
 } as const;
 
@@ -103,7 +103,7 @@ const defaultSystemColors = {
     dark: pink[700]
   },
   secondary: {
-    light: navy[500],
+    light: navy[400],
     origin: navy[600],
     dark: navy[700]
   },
