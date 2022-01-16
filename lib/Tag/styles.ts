@@ -17,49 +17,43 @@ const useStyles = makeStyles(
       ? colors.primary.origin
       : colors.primary.light;
 
-    const primaryBgColor = colors.createPrimaryColor({ alpha: 0.08 }, true);
-    const primaryMiddleColor = colors.createPrimaryColor({ alpha: 0.12 }, true);
-    const primaryBorderColor = colors.createPrimaryColor({ alpha: 0.24 }, true);
+    const primaryBgColor = colors.createPrimaryColor({ alpha: 0.08 });
+    const primaryMiddleColor = colors.createPrimaryColor({ alpha: 0.12 });
+    const primaryBorderColor = colors.createPrimaryColor({ alpha: 0.24 });
 
     const secondaryColor = !darkMode
       ? colors.secondary.origin
       : colors.secondary.light;
 
-    const secondaryBgColor = colors.createSecondaryColor({ alpha: 0.08 }, true);
-    const secondaryMiddleColor = colors.createSecondaryColor(
-      { alpha: 0.12 },
-      true
-    );
-    const secondaryBorderColor = colors.createSecondaryColor(
-      { alpha: 0.24 },
-      true
-    );
+    const secondaryBgColor = colors.createSecondaryColor({ alpha: 0.08 });
+    const secondaryMiddleColor = colors.createSecondaryColor({ alpha: 0.12 });
+    const secondaryBorderColor = colors.createSecondaryColor({ alpha: 0.24 });
 
     const successColor = !darkMode
       ? colors.success.origin
       : colors.success.light;
 
-    const successBgColor = colors.createSuccessColor({ alpha: 0.08 }, true);
-    const successMiddleColor = colors.createSuccessColor({ alpha: 0.12 }, true);
-    const successBorderColor = colors.createSuccessColor({ alpha: 0.24 }, true);
+    const successBgColor = colors.createSuccessColor({ alpha: 0.08 });
+    const successMiddleColor = colors.createSuccessColor({ alpha: 0.12 });
+    const successBorderColor = colors.createSuccessColor({ alpha: 0.24 });
 
     const errorColor = !darkMode ? colors.error.origin : colors.error.light;
-    const errorBgColor = colors.createErrorColor({ alpha: 0.08 }, true);
-    const errorMiddleColor = colors.createErrorColor({ alpha: 0.12 }, true);
-    const errorBorderColor = colors.createErrorColor({ alpha: 0.24 }, true);
+    const errorBgColor = colors.createErrorColor({ alpha: 0.08 });
+    const errorMiddleColor = colors.createErrorColor({ alpha: 0.12 });
+    const errorBorderColor = colors.createErrorColor({ alpha: 0.24 });
 
     const warningColor = !darkMode
       ? colors.warning.origin
       : colors.warning.light;
 
-    const warningBgColor = colors.createWarningColor({ alpha: 0.08 }, true);
-    const warningMiddleColor = colors.createWarningColor({ alpha: 0.12 }, true);
-    const warningBorderColor = colors.createWarningColor({ alpha: 0.24 }, true);
+    const warningBgColor = colors.createWarningColor({ alpha: 0.08 });
+    const warningMiddleColor = colors.createWarningColor({ alpha: 0.12 });
+    const warningBorderColor = colors.createWarningColor({ alpha: 0.24 });
 
     const infoColor = !darkMode ? colors.info.origin : colors.info.light;
-    const infoBgColor = colors.createInfoColor({ alpha: 0.08 }, true);
-    const infoMiddleColor = colors.createInfoColor({ alpha: 0.12 }, true);
-    const infoBorderColor = colors.createInfoColor({ alpha: 0.24 }, true);
+    const infoBgColor = colors.createInfoColor({ alpha: 0.08 });
+    const infoMiddleColor = colors.createInfoColor({ alpha: 0.12 });
+    const infoBorderColor = colors.createInfoColor({ alpha: 0.24 });
 
     return {
       root: {

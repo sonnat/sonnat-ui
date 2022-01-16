@@ -53,11 +53,7 @@ interface ColorVariants {
 }
 
 const createVariantColors = (theme: DefaultTheme): ColorVariants => {
-  const {
-    colors,
-    darkMode,
-    swatches: { grey }
-  } = theme;
+  const { colors, darkMode } = theme;
 
   const filledDefaultMainBg = colors.text.secondary;
   const filledPrimaryMainBg = !darkMode
@@ -76,7 +72,9 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
       active: !darkMode
         ? colors.createBlackColor({ alpha: 0.64 }, true)
         : colors.createWhiteColor({ alpha: 0.56 }, true),
-      disabled: !darkMode ? grey[50] : grey[900]
+      disabled: !darkMode
+        ? colors.createBlackColor({ alpha: 0.12 }, true)
+        : colors.createWhiteColor({ alpha: 0.12 }, true)
     },
     text: colors.getContrastColorOf(filledDefaultMainBg)
   };
@@ -116,11 +114,11 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
     },
     background: {
       hover: !darkMode
-        ? colors.createBlackColor({ alpha: 0.04 }, true)
-        : colors.createWhiteColor({ alpha: 0.04 }, true),
+        ? colors.createBlackColor({ alpha: 0.04 })
+        : colors.createWhiteColor({ alpha: 0.04 }),
       active: !darkMode
-        ? colors.createBlackColor({ alpha: 0.12 }, true)
-        : colors.createWhiteColor({ alpha: 0.12 }, true)
+        ? colors.createBlackColor({ alpha: 0.12 })
+        : colors.createWhiteColor({ alpha: 0.12 })
     },
     text: {
       main: colors.text.secondary,
@@ -138,8 +136,8 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
       disabled: colors.createPrimaryColor({ alpha: 0.12 }, true)
     },
     background: {
-      hover: colors.createPrimaryColor({ alpha: 0.04 }, true),
-      active: colors.createPrimaryColor({ alpha: 0.12 }, true)
+      hover: colors.createPrimaryColor({ alpha: 0.04 }),
+      active: colors.createPrimaryColor({ alpha: 0.12 })
     },
     text: {
       main: filledPrimaryMainBg,
@@ -157,8 +155,8 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
       disabled: colors.createSecondaryColor({ alpha: 0.12 }, true)
     },
     background: {
-      hover: colors.createSecondaryColor({ alpha: 0.04 }, true),
-      active: colors.createSecondaryColor({ alpha: 0.12 }, true)
+      hover: colors.createSecondaryColor({ alpha: 0.04 }),
+      active: colors.createSecondaryColor({ alpha: 0.12 })
     },
     text: {
       main: filledSecondaryMainBg,
@@ -171,11 +169,11 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
   const inlinedDefault = {
     background: {
       hover: !darkMode
-        ? colors.createBlackColor({ alpha: 0.04 }, true)
-        : colors.createWhiteColor({ alpha: 0.04 }, true),
+        ? colors.createBlackColor({ alpha: 0.04 })
+        : colors.createWhiteColor({ alpha: 0.04 }),
       active: !darkMode
-        ? colors.createBlackColor({ alpha: 0.12 }, true)
-        : colors.createWhiteColor({ alpha: 0.12 }, true)
+        ? colors.createBlackColor({ alpha: 0.12 })
+        : colors.createWhiteColor({ alpha: 0.12 })
     },
     text: {
       main: colors.text.secondary,
@@ -187,8 +185,8 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
 
   const inlinedPrimary = {
     background: {
-      hover: colors.createPrimaryColor({ alpha: 0.04 }, true),
-      active: colors.createPrimaryColor({ alpha: 0.12 }, true)
+      hover: colors.createPrimaryColor({ alpha: 0.04 }),
+      active: colors.createPrimaryColor({ alpha: 0.12 })
     },
     text: {
       main: filledPrimaryMainBg,
@@ -200,8 +198,8 @@ const createVariantColors = (theme: DefaultTheme): ColorVariants => {
 
   const inlinedSecondary = {
     background: {
-      hover: colors.createSecondaryColor({ alpha: 0.04 }, true),
-      active: colors.createSecondaryColor({ alpha: 0.12 }, true)
+      hover: colors.createSecondaryColor({ alpha: 0.04 }),
+      active: colors.createSecondaryColor({ alpha: 0.12 })
     },
     text: {
       main: filledSecondaryMainBg,

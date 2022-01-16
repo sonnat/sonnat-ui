@@ -8,7 +8,7 @@ const useStyles = makeStyles(
       direction,
       radius,
       spacings: { spaces },
-      swatches: { grey, blue },
+      swatches: { blue },
       mixins: { asIconWrapper, disableUserSelect },
       typography: { pxToRem, variants, fontFamily }
     } = theme;
@@ -23,25 +23,27 @@ const useStyles = makeStyles(
     const filledDefault = {
       background: {
         main: !darkMode
-          ? colors.createBlackColor({ alpha: 0.04 }, true)
-          : colors.createWhiteColor({ alpha: 0.04 }, true),
-        disabled: !darkMode ? grey[50] : grey[900]
+          ? colors.createBlackColor({ alpha: 0.04 })
+          : colors.createWhiteColor({ alpha: 0.04 }),
+        disabled: !darkMode
+          ? colors.createBlackColor({ alpha: 0.12 })
+          : colors.createWhiteColor({ alpha: 0.12 })
       },
       text: colors.text.secondary
     };
 
     const filledPrimary = {
       background: {
-        main: colors.createPrimaryColor({ alpha: 0.08 }, true),
-        disabled: colors.createPrimaryColor({ alpha: 0.12 }, true)
+        main: colors.createPrimaryColor({ alpha: 0.08 }),
+        disabled: colors.createPrimaryColor({ alpha: 0.12 })
       },
       text: filledPrimaryMainBg
     };
 
     const filledSecondary = {
       background: {
-        main: colors.createSecondaryColor({ alpha: 0.08 }, true),
-        disabled: colors.createSecondaryColor({ alpha: 0.12 }, true)
+        main: colors.createSecondaryColor({ alpha: 0.08 }),
+        disabled: colors.createSecondaryColor({ alpha: 0.12 })
       },
       text: filledSecondaryMainBg
     };
@@ -203,11 +205,11 @@ const useStyles = makeStyles(
         "&$disabled": {
           color: !darkMode
             ? colors.createBlackColor({ alpha: 0.32 }, true)
-            : colors.createWhiteColor({ alpha: 0.32 }, true),
+            : colors.createWhiteColor({ alpha: 0.24 }, true),
           "& $icon, & $removeButtonIcon": {
             color: !darkMode
               ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.32 }, true)
+              : colors.createWhiteColor({ alpha: 0.24 }, true)
           },
           backgroundColor: filledDefault.background.disabled
         }
@@ -246,8 +248,8 @@ const useStyles = makeStyles(
       },
       outlinedDefault: {
         backgroundColor: !darkMode
-          ? colors.createBlackColor({ alpha: 0.04 }, true)
-          : colors.createWhiteColor({ alpha: 0.04 }, true),
+          ? colors.createBlackColor({ alpha: 0.04 })
+          : colors.createWhiteColor({ alpha: 0.04 }),
         border: `1px solid ${
           !darkMode
             ? colors.createBlackColor({ alpha: 0.64 }, true)
@@ -276,7 +278,7 @@ const useStyles = makeStyles(
         }
       },
       outlinedPrimary: {
-        backgroundColor: colors.createPrimaryColor({ alpha: 0.08 }, true),
+        backgroundColor: colors.createPrimaryColor({ alpha: 0.08 }),
         border: `1px solid ${filledPrimaryMainBg}`,
         color: filledPrimaryMainBg,
         "& $icon, & $removeButtonIcon": { color: filledPrimaryMainBg },
@@ -299,7 +301,7 @@ const useStyles = makeStyles(
         }
       },
       outlinedSecondary: {
-        backgroundColor: colors.createSecondaryColor({ alpha: 0.04 }, true),
+        backgroundColor: colors.createSecondaryColor({ alpha: 0.04 }),
         border: `1px solid ${filledSecondaryMainBg}`,
         color: filledSecondaryMainBg,
         "& $icon, & $removeButtonIcon": { color: filledSecondaryMainBg },

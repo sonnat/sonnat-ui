@@ -18,6 +18,8 @@ const useStyles = makeStyles(
       root: {
         direction,
         display: "inline-flex",
+        flexDirection: "column",
+        position: "relative",
         fontFamily: fontFamily[direction],
         "&:not($errored):not($focused):hover $wrapper:after": {
           borderColor: !darkMode
@@ -147,8 +149,8 @@ const useStyles = makeStyles(
         pointerEvents: "none",
         "& $input": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 }, true)
-            : colors.createWhiteColor({ alpha: 0.04 }, true)
+            ? colors.createBlackColor({ alpha: 0.04 })
+            : colors.createWhiteColor({ alpha: 0.04 })
         }
       },
       disabled: {

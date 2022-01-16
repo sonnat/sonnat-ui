@@ -24,13 +24,13 @@ const useStyles = makeStyles(
         transition: "250ms ease",
         "&:hover": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 }, true)
-            : colors.createWhiteColor({ alpha: 0.04 }, true)
+            ? colors.createBlackColor({ alpha: 0.04 })
+            : colors.createWhiteColor({ alpha: 0.04 })
         },
         "&:active": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.08 }, true)
-            : colors.createWhiteColor({ alpha: 0.08 }, true)
+            ? colors.createBlackColor({ alpha: 0.08 })
+            : colors.createWhiteColor({ alpha: 0.08 })
         },
         "&:after": {
           content: "''",
@@ -122,10 +122,10 @@ const useStyles = makeStyles(
           color: !darkMode ? colors.primary.origin : colors.primary.light
         },
         "&:hover": {
-          backgroundColor: colors.createPrimaryColor({ alpha: 0.04 }, true)
+          backgroundColor: colors.createPrimaryColor({ alpha: 0.04 })
         },
         "&:active": {
-          backgroundColor: colors.createPrimaryColor({ alpha: 0.08 }, true)
+          backgroundColor: colors.createPrimaryColor({ alpha: 0.08 })
         }
       },
       leadingIconed: {},

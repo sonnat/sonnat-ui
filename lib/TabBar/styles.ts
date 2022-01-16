@@ -75,6 +75,7 @@ const useStyles = makeStyles(
         left: 0,
         bottom: 0,
         height: pxToRem(2),
+        zIndex: 2,
         width: "100%",
         content: '""',
         position: "absolute",

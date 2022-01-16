@@ -245,9 +245,7 @@ const SelectBase = (props: SelectProps, ref: React.Ref<HTMLDivElement>) => {
   );
 
   const isFormControlFocused = formControl ? !!formControl.focusedState : false;
-
   const isAutoFocus = isFormControlFocused || autoFocus || focused;
-
   const isRTL = theme.direction === "rtl";
 
   const size = getVar(sizeProp, "medium", !allowedSizes.includes(sizeProp));
@@ -320,8 +318,8 @@ const SelectBase = (props: SelectProps, ref: React.Ref<HTMLDivElement>) => {
 
   const handleOpen = (): void => void onOpen?.();
   const handleClose = (): void => void onClose?.();
-  const closeMenu = (): void => void !isOpenControlled && setOpen(false);
-  const openMenu = (): void => void !isOpenControlled && setOpen(true);
+  const closeMenu = (): void => void (!isOpenControlled && setOpen(false));
+  const openMenu = (): void => void (!isOpenControlled && setOpen(true));
 
   const removeChip = (childValue: string) => {
     const newValue = Array.isArray(value) ? value.slice() : [];

@@ -16,7 +16,7 @@ const useStyles = makeStyles(
       darkMode,
       radius,
       spacings: { spaces },
-      swatches: { blue, grey },
+      swatches: { blue },
       mixins: { asIconWrapper, disableUserSelect },
       typography: { pxToRem, fontFamily, variants }
     } = theme;
@@ -31,35 +31,37 @@ const useStyles = makeStyles(
     const filledDefault = {
       background: {
         main: !darkMode
-          ? colors.createBlackColor({ alpha: 0.04 }, true)
-          : colors.createWhiteColor({ alpha: 0.04 }, true),
+          ? colors.createBlackColor({ alpha: 0.04 })
+          : colors.createWhiteColor({ alpha: 0.04 }),
         hover: !darkMode
-          ? colors.createBlackColor({ alpha: 0.12 }, true)
-          : colors.createWhiteColor({ alpha: 0.12 }, true),
+          ? colors.createBlackColor({ alpha: 0.12 })
+          : colors.createWhiteColor({ alpha: 0.12 }),
         active: !darkMode
-          ? colors.createBlackColor({ alpha: 0.16 }, true)
-          : colors.createWhiteColor({ alpha: 0.16 }, true),
-        disabled: !darkMode ? grey[50] : grey[900]
+          ? colors.createBlackColor({ alpha: 0.16 })
+          : colors.createWhiteColor({ alpha: 0.16 }),
+        disabled: !darkMode
+          ? colors.createBlackColor({ alpha: 0.12 })
+          : colors.createWhiteColor({ alpha: 0.12 })
       },
       text: colors.text.secondary
     };
 
     const filledPrimary = {
       background: {
-        main: colors.createPrimaryColor({ alpha: 0.08 }, true),
-        hover: colors.createPrimaryColor({ alpha: 0.12 }, true),
-        active: colors.createPrimaryColor({ alpha: 0.24 }, true),
-        disabled: colors.createPrimaryColor({ alpha: 0.12 }, true)
+        main: colors.createPrimaryColor({ alpha: 0.08 }),
+        hover: colors.createPrimaryColor({ alpha: 0.12 }),
+        active: colors.createPrimaryColor({ alpha: 0.24 }),
+        disabled: colors.createPrimaryColor({ alpha: 0.12 })
       },
       text: filledPrimaryMainBg
     };
 
     const filledSecondary = {
       background: {
-        main: colors.createSecondaryColor({ alpha: 0.08 }, true),
-        hover: colors.createSecondaryColor({ alpha: 0.12 }, true),
-        active: colors.createSecondaryColor({ alpha: 0.24 }, true),
-        disabled: colors.createSecondaryColor({ alpha: 0.12 }, true)
+        main: colors.createSecondaryColor({ alpha: 0.08 }),
+        hover: colors.createSecondaryColor({ alpha: 0.12 }),
+        active: colors.createSecondaryColor({ alpha: 0.24 }),
+        disabled: colors.createSecondaryColor({ alpha: 0.12 })
       },
       text: filledSecondaryMainBg
     };
@@ -73,14 +75,14 @@ const useStyles = makeStyles(
       },
       background: {
         main: !darkMode
-          ? colors.createBlackColor({ alpha: 0.04 }, true)
-          : colors.createWhiteColor({ alpha: 0.04 }, true),
+          ? colors.createBlackColor({ alpha: 0.04 })
+          : colors.createWhiteColor({ alpha: 0.04 }),
         hover: !darkMode
-          ? colors.createBlackColor({ alpha: 0.08 }, true)
-          : colors.createWhiteColor({ alpha: 0.08 }, true),
+          ? colors.createBlackColor({ alpha: 0.08 })
+          : colors.createWhiteColor({ alpha: 0.08 }),
         active: !darkMode
-          ? colors.createBlackColor({ alpha: 0.12 }, true)
-          : colors.createWhiteColor({ alpha: 0.12 }, true),
+          ? colors.createBlackColor({ alpha: 0.12 })
+          : colors.createWhiteColor({ alpha: 0.12 }),
         disabled: colors.transparent
       },
       text: {
@@ -95,10 +97,10 @@ const useStyles = makeStyles(
         disabled: colors.createPrimaryColor({ alpha: 0.12 }, true)
       },
       background: {
-        main: colors.createPrimaryColor({ alpha: 0.08 }, true),
-        hover: colors.createPrimaryColor({ alpha: 0.12 }, true),
-        active: colors.createPrimaryColor({ alpha: 0.24 }, true),
-        disabled: colors.createPrimaryColor({ alpha: 0.12 }, true)
+        main: colors.createPrimaryColor({ alpha: 0.08 }),
+        hover: colors.createPrimaryColor({ alpha: 0.12 }),
+        active: colors.createPrimaryColor({ alpha: 0.24 }),
+        disabled: colors.createPrimaryColor({ alpha: 0.12 })
       },
       text: {
         main: filledPrimaryMainBg,
@@ -112,10 +114,10 @@ const useStyles = makeStyles(
         disabled: colors.createSecondaryColor({ alpha: 0.12 }, true)
       },
       background: {
-        main: colors.createSecondaryColor({ alpha: 0.08 }, true),
-        hover: colors.createSecondaryColor({ alpha: 0.12 }, true),
-        active: colors.createSecondaryColor({ alpha: 0.24 }, true),
-        disabled: colors.createSecondaryColor({ alpha: 0.12 }, true)
+        main: colors.createSecondaryColor({ alpha: 0.08 }),
+        hover: colors.createSecondaryColor({ alpha: 0.12 }),
+        active: colors.createSecondaryColor({ alpha: 0.24 }),
+        disabled: colors.createSecondaryColor({ alpha: 0.12 })
       },
       text: {
         main: filledSecondaryMainBg,
@@ -223,11 +225,11 @@ const useStyles = makeStyles(
         "&$disabled": {
           color: !darkMode
             ? colors.createBlackColor({ alpha: 0.32 }, true)
-            : colors.createWhiteColor({ alpha: 0.32 }, true),
+            : colors.createWhiteColor({ alpha: 0.24 }, true),
           "& $icon": {
             color: !darkMode
               ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.32 }, true)
+              : colors.createWhiteColor({ alpha: 0.24 }, true)
           },
           backgroundColor: filledDefault.background.disabled
         },

@@ -423,6 +423,7 @@ const TextAreaBase = (props: TextAreaProps, ref: React.Ref<HTMLDivElement>) => {
     >
       <div className={classes.wrapper}>
         <textarea
+          aria-describedby={helperText && `${String(id)}-describer`}
           id={id}
           name={name}
           placeholder={placeholder}
@@ -466,7 +467,7 @@ const TextAreaBase = (props: TextAreaProps, ref: React.Ref<HTMLDivElement>) => {
       {(!!helperText || !!otherInputProps.maxLength) && (
         <div className={classes.helperRow}>
           {helperText && (
-            <p className={classes.helperContent}>
+            <p id={`${String(id)}-describer`} className={classes.helperContent}>
               {helperIcon && <i className={classes.helperIcon}>{helperIcon}</i>}
               <span className={classes.helperText}>{helperText}</span>
             </p>

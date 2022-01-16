@@ -29,7 +29,8 @@ const useStyles = makeStyles(
         ...hacks.safariTransitionRadiusOverflowCombinationFix,
         position: "relative",
         flexShrink: 0,
-        verticalAlign: "middle"
+        verticalAlign: "middle",
+        zIndex: 2
       },
       standalone: {
         transform: "scale(0)",

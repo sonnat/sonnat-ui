@@ -254,12 +254,12 @@ const useStyles = makeStyles(
           "& $label": {
             color: !darkMode
               ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.32 }, true)
+              : colors.createWhiteColor({ alpha: 0.24 }, true)
           },
           "& $icon": {
             color: !darkMode
               ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.32 }, true)
+              : colors.createWhiteColor({ alpha: 0.24 }, true)
           },
           backgroundColor: filledDefault.background.disabled
         }

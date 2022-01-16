@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import * as React from "react";
 import { isFragment } from "react-is";
 import type { MergeElementProps } from "../typings";
+import useIsomorphicLayoutEffect from "../utils/useIsomorphicLayoutEffect";
 import Item, { type BreadcrumbItemProps } from "./Item";
 import useStyles from "./styles";
 
@@ -50,6 +51,8 @@ const BreadcrumbBase = (
 
   const classes = useStyles();
 
+  const listRef = React.useRef<HTMLOListElement>(null);
+
   const children = React.Children.map(childrenProp, child => {
     if (!React.isValidElement(child)) return null;
 
@@ -58,19 +61,50 @@ const BreadcrumbBase = (
       console.error(
         "Sonnat: The Breadcrumb component doesn't accept a Fragment as a child."
       );
+
+      return null;
     }
 
-    if (child.type !== Item) {
+    if ((child as React.ReactElement).type !== Item) {
       // eslint-disable-next-line no-console
       console.error(
         "Sonnat: The Breadcrumb component only accepts `Breadcrumb/Item` as a child."
       );
+
+      return null;
     }
 
-    return React.cloneElement(child, {
-      className: c((child.props as BreadcrumbItemProps).className, classes.item)
+    const item = child as React.ReactElement<BreadcrumbItemProps>;
+
+    return React.cloneElement(item, {
+      className: c(item.props.className, classes.item)
     });
   });
+
+  const getLastItem = () => {
+    if (listRef.current) {
+      const items = listRef.current.children;
+      return items[items.length - 1];
+    }
+
+    return null;
+  };
+
+  useIsomorphicLayoutEffect(() => {
+    const lastItem = getLastItem();
+
+    if (!showOnlyPreviousStep) {
+      lastItem
+        ?.querySelectorAll("a")
+        .forEach(link => link.setAttribute("tabindex", "-1"));
+    }
+
+    return () => {
+      lastItem
+        ?.querySelectorAll("a")
+        .forEach(link => link.removeAttribute("tabindex"));
+    };
+  }, [children, showOnlyPreviousStep]);
 
   return (
     <nav
@@ -80,6 +114,7 @@ const BreadcrumbBase = (
       {...otherProps}
     >
       <ol
+        ref={listRef}
         className={c(classes.list, {
           [classes.onlyPreviousStep]: showOnlyPreviousStep
         })}

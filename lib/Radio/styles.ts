@@ -48,8 +48,8 @@ const useStyles = makeStyles(
           borderRadius: radius.rounded,
           position: "absolute",
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 }, true)
-            : colors.createWhiteColor({ alpha: 0.04 }, true),
+            ? colors.createBlackColor({ alpha: 0.04 })
+            : colors.createWhiteColor({ alpha: 0.04 }),
           transform: "scale(0)",
           opacity: "0",
           transformOrigin: "center",
@@ -74,8 +74,8 @@ const useStyles = makeStyles(
       button: {
         border: `1px solid ${
           !darkMode
-            ? colors.createBlackColor({ alpha: 0.24 }, true)
-            : colors.createWhiteColor({ alpha: 0.24 }, true)
+            ? colors.createBlackColor({ alpha: 0.24 })
+            : colors.createWhiteColor({ alpha: 0.24 })
         }`,
         position: "absolute",
         pointerEvents: "none",
@@ -104,8 +104,8 @@ const useStyles = makeStyles(
           transform: "scale(1)",
           opacity: "1",
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.12 }, true)
-            : colors.createWhiteColor({ alpha: 0.12 }, true)
+            ? colors.createBlackColor({ alpha: 0.12 })
+            : colors.createWhiteColor({ alpha: 0.12 })
         }
       },
       disabled: {
@@ -123,11 +123,11 @@ const useStyles = makeStyles(
       },
       checked: {
         "& $cell:before": {
-          backgroundColor: colors.createPrimaryColor({ alpha: 0.04 }, true)
+          backgroundColor: colors.createPrimaryColor({ alpha: 0.04 })
         },
         "&:not($disabled)": {
           "& $button": {
-            borderColor: colors.createPrimaryColor({ alpha: 0.32 }, true),
+            borderColor: colors.createPrimaryColor({ alpha: 0.32 }),
             "&:after": { opacity: 1, transform: "scale(1)" }
           }
         }
@@ -146,7 +146,7 @@ const useStyles = makeStyles(
       },
       checkedFocused: {
         "& $cell:before": {
-          backgroundColor: colors.createPrimaryColor({ alpha: 0.12 }, true)
+          backgroundColor: colors.createPrimaryColor({ alpha: 0.12 })
         }
       },
       large: {
