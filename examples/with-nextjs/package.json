@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@sonnat/ui": "2.0.0-canary.6",
+    "@sonnat/ui": "latest",
     "@sonnat/icons": "latest",
     "next": "latest",
     "react": "latest",
