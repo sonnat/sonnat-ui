@@ -1,29 +1,33 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "target": "ES6",
-    "lib": ["ES2017", "DOM"],
-    "jsx": "preserve",
+    "allowJs": true,
+    "alwaysStrict": true,
     "strictNullChecks": true,
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "lib": ["dom", "es2017"],
+    "module": "esnext",
     "moduleResolution": "node",
-    "noUnusedParameters": true,
+    "incremental": true,
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noEmit": true,
-    "skipLibCheck": true,
-    "experimentalDecorators": true,
+    "noUnusedParameters": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "allowJs": true,
-    // Otherwise we get react-native typings which conflict with dom.lib.
-    "types": ["node", "react"],
-    "paths": {
-      "@sonnat/ui": ["./packages/sonnat-ui/src"],
-      "@sonnat/ui/*": ["./packages/sonnat-ui/src/*"]
-    }
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "esnext",
+    "types": ["node", "react"]
   },
-  "exclude": ["**/dist", "**/node_modules", "examples", "develop"]
+  "include": [
+    "next-env.d.ts",
+    "pages/**/*.ts",
+    "pages/**/*.tsx",
+    "lib/**/*.ts",
+    "lib/**/*.tsx"
+  ],
+  "exclude": ["node_modules", "dist", "examples"]
 }
