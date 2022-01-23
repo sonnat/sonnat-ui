@@ -96,14 +96,6 @@ const useStyles = makeStyles(
 export default function Home() {
   const classes = useStyles();
 
-  // remove the style tag used by Critical CSS rendered in SSR
-  React.useEffect(() => {
-    const jssServerStyles = document.getElementById("sonnat-jss-ssr");
-
-    if (jssServerStyles)
-      jssServerStyles.parentElement.removeChild(jssServerStyles);
-  }, []);
-
   return (
     <main id="main">
       <Container>
