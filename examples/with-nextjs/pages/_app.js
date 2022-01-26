@@ -37,6 +37,12 @@ export default function App(props) {
   return (
     <SonnatInitializer theme={theme}>
       <Head>
+        <title>Sonnat App</title>
+        <meta
+          name="viewport"
+          content="initial-scale=1.0, width=device-width, maximum-scale=5.0, minimum-scale=1.0"
+          key="viewport"
+        />
         <link rel="preload" as="style" href={googleFontFamily} />
         <link rel="stylesheet" href={googleFontFamily} />
       </Head>
