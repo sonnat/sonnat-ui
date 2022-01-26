@@ -19,7 +19,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "esnext",
+    "target": "es5",
     "types": ["node", "react"]
   },
   "include": [
