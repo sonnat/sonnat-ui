@@ -33,7 +33,7 @@ const useStyles = makeStyles(
       container: {
         paddingLeft: spaces[7].rem,
         marginLeft: spaces[7].rem,
-        borderLeft: `1px solid ${colors.divider}`
+        borderLeft: `1px solid ${colors.divider.dark}`
       },
       link: {
         textDecoration: "none"
@@ -41,7 +41,7 @@ const useStyles = makeStyles(
       card: {
         textAlign: "left",
         marginTop: spaces[7].rem,
-        border: `1px solid ${colors.divider}`,
+        border: `1px solid ${colors.divider.dark}`,
         padding: spaces[7].rem,
         borderRadius: radius.small,
         cursor: "pointer",
@@ -55,12 +55,12 @@ const useStyles = makeStyles(
       cardTitle: {
         display: "flex",
         alignItems: "center",
-        color: colors.text.primary,
+        color: colors.text.dark.primary,
         marginBottom: spaces[3].rem,
         transition: "color 360ms ease"
       },
       cardDescription: {
-        color: colors.text.secondary,
+        color: colors.text.dark.secondary,
         transition: "color 360ms ease"
       },
       mit: {
