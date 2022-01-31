@@ -199,13 +199,13 @@ const useStyles = makeStyles(
         "&$disabled, &[disabled]": {
           "& $label": {
             color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.24 }, true)
+              ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+              : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
           },
           "& $icon": {
             color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.24 }, true)
+              ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+              : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
           },
           boxShadow: "none !important",
           transform: "none !important",
@@ -232,34 +232,54 @@ const useStyles = makeStyles(
           backgroundColor: filledDefault.background.active
         },
         "&$raised": {
-          boxShadow: `0 8px 12px -6px ${colors.createBlackColor({
-            alpha: 0.16
-          })}, 0 12px 16px 0 ${colors.createBlackColor({
-            alpha: 0.12
-          })}, 0 1px 32px 0 ${colors.createBlackColor({
-            alpha: 0.08
-          })}`,
+          boxShadow: [
+            `0 8px 12px -6px ${colors.createBlackColor(
+              { alpha: 0.16 },
+              false,
+              false
+            )}`,
+            `0 12px 16px 0 ${colors.createBlackColor(
+              { alpha: 0.12 },
+              false,
+              false
+            )}`,
+            `0 1px 32px 0 ${colors.createBlackColor(
+              { alpha: 0.08 },
+              false,
+              false
+            )}`
+          ].join(","),
           "&:hover": {
-            boxShadow: `0 2px 6px -1px ${colors.createBlackColor({
-              alpha: 0.24
-            })}, 0 4px 10px 0 ${colors.createBlackColor({
-              alpha: 0.12
-            })}, 0 0 12px 0 ${colors.createBlackColor({
-              alpha: 0.08
-            })}`,
+            boxShadow: [
+              `0 2px 6px -1px ${colors.createBlackColor(
+                { alpha: 0.24 },
+                false,
+                false
+              )}`,
+              `0 4px 10px 0 ${colors.createBlackColor(
+                { alpha: 0.12 },
+                false,
+                false
+              )}`,
+              `0 0 12px 0 ${colors.createBlackColor(
+                { alpha: 0.08 },
+                false,
+                false
+              )}`
+            ].join(","),
             transform: "translateY(2px)"
           }
         },
         "&$disabled": {
           "& $label": {
             color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.24 }, true)
+              ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+              : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
           },
           "& $icon": {
             color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.24 }, true)
+              ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+              : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
           },
           backgroundColor: filledDefault.background.disabled
         }
@@ -274,64 +294,122 @@ const useStyles = makeStyles(
         },
         "&:hover": {
           // Reset on touch devices, it doesn't add specificity
-          "@media (hover: none)": {
-            backgroundColor: colors.transparent
-          }
+          "@media (hover: none)": { backgroundColor: colors.transparent }
         },
         "&:not($disabled):active": {
           backgroundColor: filledPrimary.background.active
         },
         "&$raised": {
           "&$large": {
-            boxShadow: `0 14px 20px -12px ${colors.createPrimaryColor({
-              alpha: 0.32
-            })}, 0 16px 24px 2px ${colors.createPrimaryColor({
-              alpha: 0.14
-            })}, 0 12px 30px -8px ${colors.createPrimaryColor({
-              alpha: 0.12
-            })}`,
+            boxShadow: [
+              `0 14px 20px -12px ${colors.createPrimaryColor(
+                { alpha: 0.32 },
+                false,
+                false
+              )}`,
+              `0 16px 24px 2px ${colors.createPrimaryColor(
+                { alpha: 0.14 },
+                false,
+                false
+              )}`,
+              `0 12px 30px -8px ${colors.createPrimaryColor(
+                { alpha: 0.12 },
+                false,
+                false
+              )}`
+            ].join(","),
             "&:hover": {
-              boxShadow: `0 0 6px -2px ${colors.createPrimaryColor({
-                alpha: 0.56
-              })}, 0 4px 16px 0 ${colors.createPrimaryColor({
-                alpha: 0.14
-              })}, 0 2px 10px 0 ${colors.createPrimaryColor({
-                alpha: 0.12
-              })}`,
+              boxShadow: [
+                `0 0 6px -2px ${colors.createPrimaryColor(
+                  { alpha: 0.56 },
+                  false,
+                  false
+                )}`,
+                `0 4px 16px 0 ${colors.createPrimaryColor(
+                  { alpha: 0.14 },
+                  false,
+                  false
+                )}`,
+                `0 2px 10px 0 ${colors.createPrimaryColor(
+                  { alpha: 0.12 },
+                  false,
+                  false
+                )}`
+              ].join(","),
               transform: "translateY(2px)"
             }
           },
           "&$medium": {
-            boxShadow: `0 8px 9px -4px ${colors.createPrimaryColor({
-              alpha: 0.24
-            })}, 0 14px 16px 2px ${colors.createPrimaryColor({
-              alpha: 0.14
-            })}, 0 5px 20px 4px ${colors.createPrimaryColor({ alpha: 0.12 })}`,
+            boxShadow: [
+              `0 8px 9px -4px ${colors.createPrimaryColor(
+                { alpha: 0.24 },
+                false,
+                false
+              )}`,
+              `0 14px 16px 2px ${colors.createPrimaryColor(
+                { alpha: 0.14 },
+                false,
+                false
+              )}`,
+              `0 5px 20px 4px ${colors.createPrimaryColor(
+                { alpha: 0.12 },
+                false,
+                false
+              )}`
+            ].join(","),
             "&:hover": {
-              boxShadow: `0 0 4px -2px ${colors.createPrimaryColor({
-                alpha: 0.56
-              })}, 0 4px 8px 0 ${colors.createPrimaryColor({
-                alpha: 0.14
-              })}, 0 0 8px 2px ${colors.createPrimaryColor({
-                alpha: 0.12
-              })}`,
+              boxShadow: [
+                `0 0 4px -2px ${colors.createPrimaryColor(
+                  { alpha: 0.56 },
+                  false,
+                  false
+                )}`,
+                `0 4px 8px 0 ${colors.createPrimaryColor(
+                  { alpha: 0.14 },
+                  false,
+                  false
+                )}`,
+                `0 0 8px 2px ${colors.createPrimaryColor(
+                  { alpha: 0.12 },
+                  false,
+                  false
+                )}`
+              ].join(","),
               transform: "translateY(2px)"
             }
           },
           "&$small": {
-            boxShadow: `0 8px 9px -4px ${colors.createPrimaryColor({
-              alpha: 0.24
-            })}, 0 14px 16px 2px ${colors.createPrimaryColor({
-              alpha: 0.14
-            })}, 0 5px 20px 4px ${colors.createPrimaryColor({ alpha: 0.12 })}`,
+            boxShadow: [
+              `0 8px 9px -4px ${colors.createPrimaryColor(
+                { alpha: 0.24 },
+                false,
+                false
+              )}, 0 14px 16px 2px ${colors.createPrimaryColor(
+                { alpha: 0.14 },
+                false,
+                false
+              )}, 0 5px 20px 4px ${colors.createPrimaryColor(
+                { alpha: 0.12 },
+                false,
+                false
+              )}`
+            ].join(","),
             "&:hover": {
-              boxShadow: `0 0 4px -2px ${colors.createPrimaryColor({
-                alpha: 0.56
-              })}, 0 4px 8px 0 ${colors.createPrimaryColor({
-                alpha: 0.14
-              })}, 0 0 8px 2px ${colors.createPrimaryColor({
-                alpha: 0.12
-              })}`,
+              boxShadow: [
+                `0 0 4px -2px ${colors.createPrimaryColor(
+                  { alpha: 0.56 },
+                  false,
+                  false
+                )}, 0 4px 8px 0 ${colors.createPrimaryColor(
+                  { alpha: 0.14 },
+                  false,
+                  false
+                )}, 0 0 8px 2px ${colors.createPrimaryColor(
+                  { alpha: 0.12 },
+                  false,
+                  false
+                )}`
+              ].join(","),
               transform: "translateY(2px)"
             }
           }
@@ -359,66 +437,124 @@ const useStyles = makeStyles(
         },
         "&$raised": {
           "&$large": {
-            boxShadow: `0 14px 20px -12px ${colors.createSecondaryColor({
-              alpha: 0.32
-            })}, 0 16px 24px 2px ${colors.createSecondaryColor({
-              alpha: 0.14
-            })}, 0 12px 30px -8px ${colors.createSecondaryColor({
-              alpha: 0.12
-            })}`,
+            boxShadow: [
+              `0 14px 20px -12px ${colors.createSecondaryColor(
+                { alpha: 0.32 },
+                false,
+                false
+              )}`,
+              `0 16px 24px 2px ${colors.createSecondaryColor(
+                { alpha: 0.14 },
+                false,
+                false
+              )}`,
+              `0 12px 30px -8px ${colors.createSecondaryColor(
+                { alpha: 0.12 },
+                false,
+                false
+              )}`
+            ].join(","),
             "&:hover": {
-              boxShadow: `0 0 6px -2px ${colors.createSecondaryColor({
-                alpha: 0.56
-              })}, 0 4px 16px 0 ${colors.createSecondaryColor({
-                alpha: 0.14
-              })}, 0 2px 10px 0 ${colors.createSecondaryColor({
-                alpha: 0.12
-              })}`,
+              boxShadow: [
+                `0 0 6px -2px ${colors.createSecondaryColor(
+                  { alpha: 0.56 },
+                  false,
+                  false
+                )}`,
+                `0 4px 16px 0 ${colors.createSecondaryColor(
+                  { alpha: 0.14 },
+                  false,
+                  false
+                )}`,
+                `0 2px 10px 0 ${colors.createSecondaryColor(
+                  { alpha: 0.12 },
+                  false,
+                  false
+                )}`
+              ].join(","),
               transform: "translateY(2px)"
             }
           },
           "&$medium": {
-            boxShadow: `0 8px 9px -4px ${colors.createSecondaryColor({
-              alpha: 0.24
-            })}, 0 14px 16px 2px ${colors.createSecondaryColor({
-              alpha: 0.14
-            })}, 0 5px 20px 4px ${colors.createSecondaryColor({
-              alpha: 0.12
-            })}`,
+            boxShadow: [
+              `0 8px 9px -4px ${colors.createSecondaryColor(
+                { alpha: 0.24 },
+                false,
+                false
+              )}`,
+              `0 14px 16px 2px ${colors.createSecondaryColor(
+                { alpha: 0.14 },
+                false,
+                false
+              )}`,
+              `0 5px 20px 4px ${colors.createSecondaryColor(
+                { alpha: 0.12 },
+                false,
+                false
+              )}`
+            ].join(","),
             "&:hover": {
-              boxShadow: `0 0 4px -2px ${colors.createSecondaryColor({
-                alpha: 0.56
-              })}, 0 4px 8px 0 ${colors.createSecondaryColor({
-                alpha: 0.14
-              })}, 0 0 8px 2px ${colors.createSecondaryColor({
-                alpha: 0.12
-              })}`,
+              boxShadow: [
+                `0 0 4px -2px ${colors.createSecondaryColor(
+                  { alpha: 0.56 },
+                  false,
+                  false
+                )}`,
+                `0 4px 8px 0 ${colors.createSecondaryColor(
+                  { alpha: 0.14 },
+                  false,
+                  false
+                )}`,
+                `0 0 8px 2px ${colors.createSecondaryColor(
+                  { alpha: 0.12 },
+                  false,
+                  false
+                )}`
+              ].join(","),
               transform: "translateY(2px)"
             }
           },
           "&$small": {
-            boxShadow: `0 8px 9px -4px ${colors.createSecondaryColor({
-              alpha: 0.24
-            })}, 0 14px 16px 2px ${colors.createSecondaryColor({
-              alpha: 0.14
-            })}, 0 5px 20px 4px ${colors.createSecondaryColor({
-              alpha: 0.12
-            })}`,
+            boxShadow: [
+              `0 8px 9px -4px ${colors.createSecondaryColor(
+                { alpha: 0.24 },
+                false,
+                false
+              )}`,
+              `0 14px 16px 2px ${colors.createSecondaryColor(
+                { alpha: 0.14 },
+                false,
+                false
+              )}`,
+              `0 5px 20px 4px ${colors.createSecondaryColor(
+                { alpha: 0.12 },
+                false,
+                false
+              )}`
+            ].join(","),
             "&:hover": {
-              boxShadow: `0 0 4px -2px ${colors.createSecondaryColor({
-                alpha: 0.56
-              })}, 0 4px 8px 0 ${colors.createSecondaryColor({
-                alpha: 0.14
-              })}, 0 0 8px 2px ${colors.createSecondaryColor({
-                alpha: 0.12
-              })}`,
+              boxShadow: [
+                `0 0 4px -2px ${colors.createSecondaryColor(
+                  { alpha: 0.56 },
+                  false,
+                  false
+                )}`,
+                `0 4px 8px 0 ${colors.createSecondaryColor(
+                  { alpha: 0.14 },
+                  false,
+                  false
+                )}`,
+                `0 0 8px 2px ${colors.createSecondaryColor(
+                  { alpha: 0.12 },
+                  false,
+                  false
+                )}`
+              ].join(","),
               transform: "translateY(2px)"
             }
           }
         },
-        "&$disabled": {
-          backgroundColor: filledSecondary.background.disabled
-        }
+        "&$disabled": { backgroundColor: filledSecondary.background.disabled }
       },
       /* if (variant="outlined") */
       outlined: {

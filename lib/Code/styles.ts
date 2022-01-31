@@ -3,10 +3,10 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
       radius,
+      colors: { divider, text, transparent },
       spacings: { spaces },
       swatches: { grey },
       typography: { fontWeight, setText, fontFamily }
@@ -18,7 +18,7 @@ const useStyles = makeStyles(
           fontSize: "0.875em",
           fontWeight: fontWeight.regular,
           lineHeight: 1.5714285714,
-          color: colors.text.primary
+          color: !darkMode ? text.dark.primary : text.light.primary
         }),
         direction,
         fontFamily: fontFamily.monospace,
@@ -34,8 +34,8 @@ const useStyles = makeStyles(
         direction: "ltr",
         fontSize: "0.875em",
         padding: spaces[7].rem,
-        backgroundColor: colors.transparent,
-        border: `1px solid ${colors.divider}`,
+        backgroundColor: transparent,
+        border: `1px solid ${!darkMode ? divider.dark : divider.light}`,
         borderRadius: radius.small
       }
     };

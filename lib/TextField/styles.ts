@@ -3,10 +3,10 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
       spacings: { spaces },
+      colors: { text, error, transparent },
       mixins: { asIconWrapper },
       typography: { pxToRem, variants, fontFamily }
     } = theme;
@@ -22,7 +22,7 @@ const useStyles = makeStyles(
       base: { cursor: "text" },
       input: {
         ...variants.body,
-        color: colors.text.primary,
+        color: !darkMode ? text.dark.primary : text.light.primary,
         border: "none",
         outline: "none",
         padding: 0,
@@ -31,22 +31,22 @@ const useStyles = makeStyles(
         minWidth: 0,
         height: pxToRem(40),
         appearance: "none !important",
-        backgroundColor: colors.transparent,
+        backgroundColor: transparent,
         "&::-webkit-input-placeholder": {
           ...variants.body,
-          color: colors.text.hint
+          color: !darkMode ? text.dark.hint : text.light.hint
         },
         "&::-moz-placeholder": {
           ...variants.body,
-          color: colors.text.hint
+          color: !darkMode ? text.dark.hint : text.light.hint
         },
         "&:-ms-input-placeholder": {
           ...variants.body,
-          color: colors.text.hint
+          color: !darkMode ? text.dark.hint : text.light.hint
         },
         "&:-moz-placeholder": {
           ...variants.body,
-          color: colors.text.hint
+          color: !darkMode ? text.dark.hint : text.light.hint
         }
       },
       helperRow: {
@@ -66,12 +66,12 @@ const useStyles = makeStyles(
       },
       helperText: {
         ...variants.caption,
-        color: colors.text.secondary
+        color: !darkMode ? text.dark.secondary : text.light.secondary
       },
       helperIcon: {
         ...asIconWrapper(16),
         marginTop: spaces[0].rem,
-        color: colors.text.secondary,
+        color: !darkMode ? text.dark.secondary : text.light.secondary,
         ...(direction === "rtl"
           ? { marginLeft: spaces[1].rem }
           : { marginRight: spaces[1].rem })
@@ -81,7 +81,7 @@ const useStyles = makeStyles(
         ...(direction === "rtl"
           ? { marginRight: "auto" }
           : { marginLeft: "auto" }),
-        color: colors.text.secondary,
+        color: !darkMode ? text.dark.secondary : text.light.secondary,
         minWidth: "7.7ch",
         display: "flex",
         justifyContent: "flex-end",
@@ -90,11 +90,19 @@ const useStyles = makeStyles(
       disabled: {
         pointerEvents: "none",
         "& $input": {
-          color: colors.text.disabled,
-          "&::-webkit-input-placeholder": { color: colors.text.disabled },
-          "&::-moz-placeholder": { color: colors.text.disabled },
-          "&:-ms-input-placeholder": { color: colors.text.disabled },
-          "&:-moz-placeholder": { color: colors.text.disabled }
+          color: !darkMode ? text.dark.disabled : text.light.disabled,
+          "&::-webkit-input-placeholder": {
+            color: !darkMode ? text.dark.disabled : text.light.disabled
+          },
+          "&::-moz-placeholder": {
+            color: !darkMode ? text.dark.disabled : text.light.disabled
+          },
+          "&:-ms-input-placeholder": {
+            color: !darkMode ? text.dark.disabled : text.light.disabled
+          },
+          "&:-moz-placeholder": {
+            color: !darkMode ? text.dark.disabled : text.light.disabled
+          }
         }
       },
       small: {
@@ -154,15 +162,9 @@ const useStyles = makeStyles(
       fluid: { width: "100%" },
       errored: {
         "&:not($disabled)": {
-          "& $charCount": {
-            color: !darkMode ? colors.error.origin : colors.error.light
-          },
-          "& $helperText": {
-            color: !darkMode ? colors.error.origin : colors.error.light
-          },
-          "& $helperIcon": {
-            color: !darkMode ? colors.error.origin : colors.error.light
-          }
+          "& $charCount": { color: !darkMode ? error.origin : error.light },
+          "& $helperText": { color: !darkMode ? error.origin : error.light },
+          "& $helperIcon": { color: !darkMode ? error.origin : error.light }
         }
       }
     };

@@ -3,11 +3,11 @@ import makeStyles from "../../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
       spacings: { spaces },
       swatches: { blue },
+      colors: { text, ...colors },
       mixins: { asIconWrapper },
       typography: { pxToRem, variants, fontWeight }
     } = theme;
@@ -24,13 +24,13 @@ const useStyles = makeStyles(
         transition: "250ms ease",
         "&:hover": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 })
-            : colors.createWhiteColor({ alpha: 0.04 })
+            ? colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.04 }, false, darkMode)
         },
         "&:active": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.08 })
-            : colors.createWhiteColor({ alpha: 0.08 })
+            ? colors.createBlackColor({ alpha: 0.08 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.08 }, false, darkMode)
         },
         "&:after": {
           content: "''",
@@ -53,12 +53,12 @@ const useStyles = makeStyles(
       },
       label: {
         ...variants.body,
-        color: colors.text.secondary,
+        color: !darkMode ? text.dark.secondary : text.light.secondary,
         transition: "color 360ms ease"
       },
       icon: {
         ...asIconWrapper(20),
-        color: colors.text.secondary,
+        color: !darkMode ? text.dark.secondary : text.light.secondary,
         transition: "color 360ms ease",
         "& + $label": {
           ...(direction === "rtl"
@@ -122,10 +122,18 @@ const useStyles = makeStyles(
           color: !darkMode ? colors.primary.origin : colors.primary.light
         },
         "&:hover": {
-          backgroundColor: colors.createPrimaryColor({ alpha: 0.04 })
+          backgroundColor: colors.createPrimaryColor(
+            { alpha: 0.04 },
+            false,
+            darkMode
+          )
         },
         "&:active": {
-          backgroundColor: colors.createPrimaryColor({ alpha: 0.08 })
+          backgroundColor: colors.createPrimaryColor(
+            { alpha: 0.08 },
+            false,
+            darkMode
+          )
         }
       },
       leadingIconed: {},

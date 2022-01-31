@@ -3,8 +3,9 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       direction,
+      darkMode,
+      colors: { text, divider },
       spacings: { spaces },
       typography: { pxToRem, fontWeight, fontFamily }
     } = theme;
@@ -20,7 +21,7 @@ const useStyles = makeStyles(
         "&:not($vertical):not($dotted)": {
           width: "100%",
           height: 1,
-          backgroundColor: colors.divider
+          backgroundColor: !darkMode ? divider.dark : divider.light
         }
       },
       spaced: {
@@ -48,7 +49,7 @@ const useStyles = makeStyles(
           display: "inline-block",
           marginLeft: "0.6em",
           position: "relative",
-          color: colors.text.primary,
+          color: !darkMode ? text.dark.primary : text.light.primary,
           top: pxToRem(-spaces[10].px),
           letterSpacing: "0.6em"
         }
@@ -56,7 +57,7 @@ const useStyles = makeStyles(
       vertical: {
         height: "auto",
         width: 1,
-        backgroundColor: colors.divider,
+        backgroundColor: !darkMode ? divider.dark : divider.light,
         alignSelf: "stretch"
       }
     };

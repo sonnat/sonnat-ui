@@ -3,8 +3,9 @@ import makeStyles from "../../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
+      darkMode,
       direction,
+      colors: { text },
       spacings: { spaces },
       mixins: { asIconWrapper },
       hacks: { backfaceVisibilityFix },
@@ -14,7 +15,7 @@ const useStyles = makeStyles(
     return {
       root: {
         ...variants.caption,
-        color: colors.text.secondary,
+        color: !darkMode ? text.dark.secondary : text.light.secondary,
         maxWidth: pxToRem(120),
         display: "inline-flex",
         alignItems: "center",
@@ -25,9 +26,9 @@ const useStyles = makeStyles(
           ? { marginLeft: spaces[1].rem }
           : { marginRight: spaces[1].rem }),
         "&:hover": {
-          color: colors.text.primary,
+          color: !darkMode ? text.dark.primary : text.light.primary,
           "& > $separator": {
-            color: colors.text.primary,
+            color: !darkMode ? text.dark.primary : text.light.primary,
             transform: "rotate(180deg)"
           },
           "& ~ $root > $separator": { transform: "rotate(180deg)" }
@@ -42,7 +43,7 @@ const useStyles = makeStyles(
       separator: {
         ...asIconWrapper(16),
         ...backfaceVisibilityFix,
-        color: colors.text.secondary,
+        color: !darkMode ? text.dark.secondary : text.light.secondary,
         flexShrink: "0",
         transition: "color 360ms ease, transform 360ms ease"
       }

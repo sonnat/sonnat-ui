@@ -3,12 +3,12 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       zIndexes,
       direction,
       radius,
       spacings: { spaces },
+      colors: { text, divider, background },
       typography: { pxToRem, variants, fontFamily }
     } = theme;
 
@@ -37,8 +37,8 @@ const useStyles = makeStyles(
         borderRadius: radius.small,
         boxShadow: !darkMode ? boxShadow.lightMode : boxShadow.darkMode,
         backgroundColor: !darkMode
-          ? colors.background.origin
-          : colors.background.accents[1],
+          ? background.light.origin
+          : background.dark.accents[1],
         zIndex: 1
       },
       searchRow: {
@@ -59,13 +59,17 @@ const useStyles = makeStyles(
         outline: "none"
       },
       group: {
-        borderBottom: `1px solid ${colors.divider}`,
+        borderBottom: `1px solid ${!darkMode ? divider.dark : divider.light}`,
         "&:last-child": { borderBottom: "none" }
       },
-      option: { "& + $group": { borderTop: `1px solid ${colors.divider}` } },
+      option: {
+        "& + $group": {
+          borderTop: `1px solid ${!darkMode ? divider.dark : divider.light}`
+        }
+      },
       emptyStatement: {
         ...variants.bodySmall,
-        color: colors.text.hint,
+        color: !darkMode ? text.dark.hint : text.light.hint,
         display: "flex",
         alignItems: "center",
         height: pxToRem(40),

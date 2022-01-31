@@ -3,9 +3,9 @@ import makeStyles from "../../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       spacings: { spaces },
+      colors: { text, ...colors },
       mixins: { disableUserSelect },
       typography: { pxToRem, variants }
     } = theme;
@@ -14,7 +14,7 @@ const useStyles = makeStyles(
       root: {
         ...variants.bodySmall,
         ...disableUserSelect(),
-        color: colors.text.secondary,
+        color: !darkMode ? text.dark.secondary : text.light.secondary,
         width: "100%",
         flexShrink: "0",
         paddingRight: spaces[7].rem,
@@ -28,8 +28,8 @@ const useStyles = makeStyles(
         transition: "color 240ms ease, background-color 240ms ease",
         "&:hover": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 }, true)
-            : colors.createWhiteColor({ alpha: 0.04 }, true)
+            ? colors.createBlackColor({ alpha: 0.04 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.04 }, true, darkMode)
         },
         "&:active": {
           color: !darkMode ? colors.primary.origin : colors.primary.light,
@@ -38,12 +38,12 @@ const useStyles = makeStyles(
       },
       focused: {
         backgroundColor: !darkMode
-          ? colors.createBlackColor({ alpha: 0.04 }, true)
-          : colors.createWhiteColor({ alpha: 0.04 }, true)
+          ? colors.createBlackColor({ alpha: 0.04 }, true, darkMode)
+          : colors.createWhiteColor({ alpha: 0.04 }, true, darkMode)
       },
       disabled: {
         pointerEvents: "none",
-        color: colors.text.disabled
+        color: !darkMode ? text.dark.disabled : text.light.disabled
       },
       hide: { display: "none" },
       dense: {

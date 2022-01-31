@@ -3,12 +3,12 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
       spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
+      colors: { text, divider, ...colors },
       typography: { pxToRem, variants, fontWeight, fontFamily }
     } = theme;
 
@@ -18,16 +18,11 @@ const useStyles = makeStyles(
         fontFamily: fontFamily[direction],
         transition: "color 180ms ease"
       },
-      nodeAdornment: {
-        display: "inline-flex",
-        alignItems: "center"
-      },
-      iconAdornment: {
-        color: colors.text.hint
-      },
+      nodeAdornment: { display: "inline-flex", alignItems: "center" },
+      iconAdornment: { color: !darkMode ? text.dark.hint : text.light.hint },
       textAdornment: {
         ...variants.body,
-        color: colors.text.hint,
+        color: !darkMode ? text.dark.hint : text.light.hint,
         display: "inline-flex",
         justifyContent: "center",
         whiteSpace: "nowrap",
@@ -42,8 +37,8 @@ const useStyles = makeStyles(
         cursor: "pointer",
         "&:hover": {
           color: !darkMode
-            ? colors.createBlackColor({ alpha: 0.48 }, true)
-            : colors.createWhiteColor({ alpha: 0.87 }, true),
+            ? colors.createBlackColor({ alpha: 0.48 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.87 }, true, darkMode),
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": {
             backgroundColor: colors.transparent
@@ -51,13 +46,15 @@ const useStyles = makeStyles(
         },
         "&:active": {
           color: !darkMode
-            ? colors.createBlackColor({ alpha: 0.64 }, true)
-            : colors.createWhiteColor({ alpha: 0.56 }, true)
+            ? colors.createBlackColor({ alpha: 0.64 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.56 }, true, darkMode)
         }
       },
       disabled: {
-        "&$textAdornment": { color: colors.text.hint },
-        "&$iconAdornment": { color: colors.divider }
+        "&$textAdornment": {
+          color: !darkMode ? text.dark.hint : text.light.hint
+        },
+        "&$iconAdornment": { color: !darkMode ? divider.dark : divider.light }
       },
       large: {
         "&$textAdornment": {

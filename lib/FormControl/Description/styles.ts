@@ -4,7 +4,9 @@ const useStyles = makeStyles(
   theme => ({
     root: {
       ...theme.typography.variants.bodySmall,
-      color: theme.colors.text.secondary,
+      color: !theme.darkMode
+        ? theme.colors.text.dark.primary
+        : theme.colors.text.light.primary,
       direction: theme.direction,
       fontFamily: theme.typography.fontFamily[theme.direction],
       marginBottom: theme.spacings.spaces[3].rem

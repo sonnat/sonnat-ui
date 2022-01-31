@@ -534,11 +534,18 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
 const Menu = React.forwardRef(MenuBase) as Component;
 
 /* eslint-disable */
+const nullable =
+  <T,>(propType: PropTypes.Requireable<T>) =>
+  (props: Record<string, unknown>, propName: string, ...rest: unknown[]) =>
+    // @ts-ignore
+    props[propName] === null ? null : propType(props, propName, ...rest);
+
 Menu.propTypes = {
   children: PropTypes.node,
-  // @ts-ignore
-  anchorNode: PropTypes.oneOfType([HTMLElementType, PropTypes.element])
-    .isRequired,
+  anchorNode: nullable(
+    // @ts-ignore
+    PropTypes.oneOfType([HTMLElementType, PropTypes.element]).isRequired
+  ),
   placement: PropTypes.oneOf(allowedPlacements),
   minWidth: PropTypes.number,
   style: PropTypes.object,

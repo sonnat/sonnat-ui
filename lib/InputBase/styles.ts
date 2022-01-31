@@ -30,8 +30,8 @@ const useStyles = makeStyles(
           },
           "&$outlined:hover $notchedOutline": {
             borderColor: !darkMode
-              ? colors.createBlackColor({ alpha: 0.48 }, true)
-              : colors.createWhiteColor({ alpha: 0.48 }, true)
+              ? colors.createBlackColor({ alpha: 0.48 }, true, darkMode)
+              : colors.createWhiteColor({ alpha: 0.48 }, true, darkMode)
           }
         }
       },
@@ -63,8 +63,8 @@ const useStyles = makeStyles(
         borderStyle: "solid",
         borderWidth: 1,
         borderColor: !darkMode
-          ? colors.createBlackColor({ alpha: 0.24 }, true)
-          : colors.createWhiteColor({ alpha: 0.24 }, true),
+          ? colors.createBlackColor({ alpha: 0.24 }, true, darkMode)
+          : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode),
         borderRadius: "inherit",
         pointerEvents: "none",
         transition: "background-color 240ms ease, border-color 240ms ease"
@@ -86,13 +86,15 @@ const useStyles = makeStyles(
         pointerEvents: "none",
         "& $wrapper": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 })
-            : colors.createWhiteColor({ alpha: 0.04 })
+            ? colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.04 }, false, darkMode)
         }
       },
       disabled: {
         pointerEvents: "none",
-        "& $notchedOutline": { borderColor: colors.divider }
+        "& $notchedOutline": {
+          borderColor: !darkMode ? colors.divider.dark : colors.divider.light
+        }
       },
       focused: {
         "&:not($errored) $notchedOutline": {

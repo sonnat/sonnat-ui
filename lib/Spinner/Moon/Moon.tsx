@@ -59,12 +59,13 @@ const MoonSpinnerBase = (props: MoonSpinnerProps) => {
   };
 
   const coloring = {
-    background: backgroundColor || colors.divider,
+    background:
+      backgroundColor || !darkMode ? colors.divider.dark : colors.divider.light,
     foreground:
       foregroundColor ||
       (!darkMode
-        ? colors.createBlackColor({ alpha: 0.48 })
-        : colors.createWhiteColor({ alpha: 0.48 }))
+        ? colors.createBlackColor({ alpha: 0.48 }, false, darkMode)
+        : colors.createWhiteColor({ alpha: 0.48 }, false, darkMode))
   };
 
   return (

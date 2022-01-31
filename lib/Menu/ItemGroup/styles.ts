@@ -3,7 +3,8 @@ import makeStyles from "../../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
+      darkMode,
+      colors: { text },
       spacings: { spaces },
       typography: { pxToRem, variants }
     } = theme;
@@ -12,7 +13,7 @@ const useStyles = makeStyles(
       root: {},
       title: {
         ...variants.bodySmall,
-        color: colors.text.primary,
+        color: !darkMode ? text.dark.primary : text.light.primary,
         paddingRight: spaces[7].rem,
         paddingLeft: spaces[7].rem,
         height: pxToRem(40),

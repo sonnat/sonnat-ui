@@ -3,8 +3,8 @@ import makeStyles from "../../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
+      colors: { background },
       spacings: { spaces }
     } = theme;
 
@@ -13,7 +13,7 @@ const useStyles = makeStyles(
       withOverflow: {
         overflowX: "hidden",
         overflowY: "scroll",
-        backgroundColor: !darkMode ? "inherit" : colors.background.accents[2]
+        backgroundColor: !darkMode ? "inherit" : background.dark.accents[2]
       }
     };
   },

@@ -4,13 +4,13 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       hacks,
       radius,
       swatches: { blue, grey },
       mixins: { asIconWrapper },
-      typography: { pxToRem }
+      typography: { pxToRem },
+      colors: { text, divider, background, ...colors }
     } = theme;
 
     return {
@@ -34,7 +34,7 @@ const useStyles = makeStyles(
           zIndex: 0,
           height: pxToRem(2),
           borderRadius: radius.xSmall,
-          backgroundColor: colors.divider,
+          backgroundColor: !darkMode ? divider.dark : divider.light,
           width: "100%",
           position: "absolute"
         }
@@ -55,7 +55,7 @@ const useStyles = makeStyles(
         transition: "right 160ms ease",
         "&:after": {
           content: '""',
-          backgroundColor: colors.text.hint,
+          backgroundColor: !darkMode ? text.dark.hint : text.light.hint,
           width: pxToRem(2),
           height: pxToRem(2),
           borderRadius: radius.rounded,
@@ -99,7 +99,11 @@ const useStyles = makeStyles(
             "transform 240ms ease, opacity 240ms ease, background-color 240ms ease"
         },
         "&:not($focusVisible):hover:after": {
-          backgroundColor: colors.createPrimaryColor({ alpha: 0.04 }),
+          backgroundColor: colors.createPrimaryColor(
+            { alpha: 0.04 },
+            false,
+            darkMode
+          ),
           opacity: 1,
           transform: "scale(1)"
         }
@@ -135,7 +139,7 @@ const useStyles = makeStyles(
       },
       handleIcon: {
         ...asIconWrapper(16),
-        color: colors.createBlackColor({ alpha: 0.56 }, true),
+        color: colors.createBlackColor({ alpha: 0.56 }, true, darkMode),
         transition: "color 360ms ease"
       },
       track: {
@@ -164,14 +168,17 @@ const useStyles = makeStyles(
           transform: "scale(0.8)",
           backgroundColor: !darkMode
             ? "rgba(255, 255, 255, 0.7)"
-            : changeColorHsla(colors.background.origin, { alpha: 0.56 }),
+            : changeColorHsla(
+                !darkMode ? background.light.origin : background.dark.origin,
+                { alpha: 0.56 }
+              ),
           opacity: 1
         },
         "& $handleIcon": { color: !darkMode ? colors.white : colors.black },
         "& $wrapper:after": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.08 }, true)
-            : colors.createWhiteColor({ alpha: 0.08 }, true)
+            ? colors.createBlackColor({ alpha: 0.08 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.08 }, true, darkMode)
         }
       },
       focusVisible: {

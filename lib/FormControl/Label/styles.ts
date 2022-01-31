@@ -4,7 +4,9 @@ const useStyles = makeStyles(
   theme => ({
     root: {
       ...theme.typography.variants.subtitle,
-      color: theme.colors.text.primary,
+      color: !theme.darkMode
+        ? theme.colors.text.dark.primary
+        : theme.colors.text.light.primary,
       direction: theme.direction,
       fontFamily: theme.typography.fontFamily[theme.direction],
       paddingBottom: theme.spacings.spaces[3].rem

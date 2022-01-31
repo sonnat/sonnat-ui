@@ -17,8 +17,8 @@ const useStyles = makeStyles(
   theme => {
     const {
       darkMode,
-      colors,
       direction,
+      colors: { text, ...colors },
       typography: { pxToRem }
     } = theme;
 
@@ -47,10 +47,16 @@ const useStyles = makeStyles(
         minHeight: pxToRem(16)
       },
       inheritColor: { color: "inherit" },
-      textPrimaryColor: { color: colors.text.primary },
-      textSecondaryColor: { color: colors.text.secondary },
-      textHintColor: { color: colors.text.hint },
-      textDisabledColor: { color: colors.text.disabled },
+      textPrimaryColor: {
+        color: !darkMode ? text.dark.primary : text.light.primary
+      },
+      textSecondaryColor: {
+        color: !darkMode ? text.dark.secondary : text.light.secondary
+      },
+      textHintColor: { color: !darkMode ? text.dark.hint : text.light.hint },
+      textDisabledColor: {
+        color: !darkMode ? text.dark.disabled : text.light.disabled
+      },
       primaryColor: {
         color: !darkMode ? colors.primary.origin : colors.primary.light
       },

@@ -3,10 +3,10 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
       radius,
+      colors: { text, divider, ...colors },
       spacings: { spaces },
       typography: { pxToRem, variants, fontFamily }
     } = theme;
@@ -24,7 +24,7 @@ const useStyles = makeStyles(
       },
       label: {
         ...variants.body,
-        color: colors.text.primary
+        color: !darkMode ? text.dark.primary : text.light.primary
       },
       cell: {
         borderRadius: radius.rounded,
@@ -44,8 +44,8 @@ const useStyles = makeStyles(
           borderRadius: radius.rounded,
           position: "absolute",
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 })
-            : colors.createWhiteColor({ alpha: 0.04 }),
+            ? colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.04 }, false, darkMode),
           transform: "scale(0)",
           opacity: "0",
           transformOrigin: "center",
@@ -73,8 +73,8 @@ const useStyles = makeStyles(
       button: {
         border: `1px solid ${
           !darkMode
-            ? colors.createBlackColor({ alpha: 0.24 }, true)
-            : colors.createWhiteColor({ alpha: 0.24 }, true)
+            ? colors.createBlackColor({ alpha: 0.24 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
         }`,
         position: "absolute",
         pointerEvents: "none",
@@ -138,7 +138,7 @@ const useStyles = makeStyles(
           "& $button": {
             pointerEvents: "none",
             borderColor: colors.transparent,
-            backgroundColor: colors.divider
+            backgroundColor: !darkMode ? divider.dark : divider.light
           },
           "& $checkIcon": {
             transform: "rotate(-360deg)",
@@ -156,22 +156,26 @@ const useStyles = makeStyles(
           transform: "scale(1)",
           opacity: "1",
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.12 })
-            : colors.createWhiteColor({ alpha: 0.12 })
+            ? colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.12 }, false, darkMode)
         }
       },
       disabled: {
         cursor: "not-allowed !important",
         "& $label": {
           pointerEvents: "none",
-          color: colors.text.disabled
+          color: !darkMode ? text.dark.disabled : text.light.disabled
         },
         "& $cell, & $input, & $button": { pointerEvents: "none" },
-        "& $button": { borderColor: colors.divider }
+        "& $button": { borderColor: !darkMode ? divider.dark : divider.light }
       },
       checked: {
         "& $cell:before": {
-          backgroundColor: colors.createPrimaryColor({ alpha: 0.04 })
+          backgroundColor: colors.createPrimaryColor(
+            { alpha: 0.04 },
+            false,
+            darkMode
+          )
         },
         "& $button": {
           borderColor: !darkMode ? colors.primary.origin : colors.primary.light,
@@ -189,7 +193,7 @@ const useStyles = makeStyles(
         "& $button": {
           pointerEvents: "none",
           borderColor: colors.transparent,
-          backgroundColor: colors.divider
+          backgroundColor: !darkMode ? divider.dark : divider.light
         },
         "& $checkIcon polyline": {
           stroke: !darkMode ? colors.white : colors.black
@@ -197,7 +201,11 @@ const useStyles = makeStyles(
       },
       checkedFocused: {
         "& $cell:before": {
-          backgroundColor: colors.createPrimaryColor({ alpha: 0.12 })
+          backgroundColor: colors.createPrimaryColor(
+            { alpha: 0.12 },
+            false,
+            darkMode
+          )
         }
       },
       "@keyframes checkAnimation": {

@@ -10,9 +10,9 @@ export type AlignCombo =
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       spacings: { spaces },
+      colors: { text, divider },
       typography: { variants }
     } = theme;
 
@@ -20,23 +20,23 @@ const useStyles = makeStyles(
       root: {
         display: "table-cell",
         verticalAlign: "inherit",
-        borderBottom: `1px solid ${colors.divider}`,
+        borderBottom: `1px solid ${!darkMode ? divider.dark : divider.light}`,
         padding: spaces[7].rem
       },
       bodyCell: {
         ...variants.body,
-        color: colors.text.primary
+        color: !darkMode ? text.dark.primary : text.light.primary
       },
       headerCell: {
         ...variants.subtitle,
-        color: colors.text.primary,
+        color: !darkMode ? text.dark.primary : text.light.primary,
         borderBottomColor: darkMode
           ? "rgba(255, 255, 255, 0.24)"
           : "rgba(0, 0, 0, 0.24)"
       },
       footerCell: {
         ...variants.caption,
-        color: colors.text.secondary
+        color: !darkMode ? text.dark.secondary : text.light.secondary
       },
       textAlignCenter: { textAlign: "center" },
       textAlignInherit: { textAlign: "inherit" },

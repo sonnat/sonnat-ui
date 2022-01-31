@@ -3,10 +3,10 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
       radius,
+      colors: { text, divider, ...colors },
       spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
@@ -23,15 +23,17 @@ const useStyles = makeStyles(
         borderRadius: radius.small,
         border: `1px solid ${
           !darkMode
-            ? colors.createBlackColor({ alpha: 0.24 }, true)
-            : colors.createWhiteColor({ alpha: 0.24 }, true)
+            ? colors.createBlackColor({ alpha: 0.24 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
         }`,
         transition: "border-color 360ms ease",
         "&:not($disabled):hover": {
           borderColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.48 }, true)
-            : colors.createWhiteColor({ alpha: 0.48 }, true),
-          "& $input": { color: colors.text.primary }
+            ? colors.createBlackColor({ alpha: 0.48 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.48 }, true, darkMode),
+          "& $input": {
+            color: !darkMode ? text.dark.primary : text.light.primary
+          }
         }
       },
       action: {
@@ -50,17 +52,17 @@ const useStyles = makeStyles(
         transition: "background-color 360ms ease",
         "&:hover": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 })
-            : colors.createWhiteColor({ alpha: 0.04 }),
+            ? colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.04 }, false, darkMode),
           "&:after, &:before": { opacity: 0 }
         },
         "&:active": {
-          backgroundColor: colors.divider,
+          backgroundColor: !darkMode ? divider.dark : divider.light,
           "&:after, &:before": { opacity: 0 }
         },
         "&:after, &:before": {
           width: 1,
-          backgroundColor: colors.divider,
+          backgroundColor: !darkMode ? divider.dark : divider.light,
           opacity: "1",
           transition: "opacity 360ms ease"
         },
@@ -78,16 +80,18 @@ const useStyles = makeStyles(
         "& $actionIcon": { marginLeft: "auto" }
       },
       actionIcon: {
-        color: colors.text.secondary,
+        color: !darkMode ? text.dark.secondary : text.light.secondary,
         transition: "color 360ms ease"
       },
       disabledAction: {
         pointerEvents: "none",
-        "& $actionIcon": { color: colors.text.disabled }
+        "& $actionIcon": {
+          color: !darkMode ? text.dark.disabled : text.light.disabled
+        }
       },
       input: {
         ...variants.body,
-        color: colors.text.hint,
+        color: !darkMode ? text.dark.hint : text.light.hint,
         textAlign: "center",
         width: "100%",
         height: "100%",
@@ -113,8 +117,10 @@ const useStyles = makeStyles(
       },
       disabled: {
         pointerEvents: "none",
-        borderColor: colors.divider,
-        "& $actionIcon": { color: colors.text.disabled }
+        borderColor: !darkMode ? divider.dark : divider.light,
+        "& $actionIcon": {
+          color: !darkMode ? text.dark.disabled : text.light.disabled
+        }
       },
       small: {
         height: pxToRem(24),

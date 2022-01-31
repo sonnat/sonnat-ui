@@ -3,8 +3,9 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       direction,
+      darkMode,
+      colors: { text },
       spacings: { spaces },
       typography: { pxToRem, fontFamily }
     } = theme;
@@ -28,7 +29,7 @@ const useStyles = makeStyles(
         WebkitOverflowScrolling: "touch",
         "& > $item:last-child": {
           margin: 0,
-          color: colors.text.hint,
+          color: !darkMode ? text.dark.hint : text.light.hint,
           pointerEvents: "none",
           "& > [role='separator']": { display: "none" }
         }
@@ -39,7 +40,7 @@ const useStyles = makeStyles(
           margin: 0,
           "&:hover": {
             "& > [role='separator']": {
-              color: colors.text.primary,
+              color: !darkMode ? text.dark.primary : text.light.primary,
               transform: "rotate(180deg)"
             },
             "& ~ $item > [role='separator']": { transform: "rotate(0)" }

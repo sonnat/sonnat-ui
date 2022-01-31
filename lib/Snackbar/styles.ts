@@ -1,13 +1,12 @@
 import makeStyles from "../styles/makeStyles";
-import { dark, light } from "../styles/createColors";
 
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
       radius,
+      colors: { text, divider, ...colors },
       spacings: { spaces },
       swatches: { grey },
       zIndexes: { popover },
@@ -38,13 +37,13 @@ const useStyles = makeStyles(
       "& $actionButton, & $closeButton": {
         "&:hover": {
           backgroundColor: !darkMode
-            ? colors.createWhiteColor({ alpha: 0.04 })
-            : colors.createBlackColor({ alpha: 0.04 })
+            ? colors.createWhiteColor({ alpha: 0.04 }, false, darkMode)
+            : colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
         },
         "&:active": {
           backgroundColor: !darkMode
-            ? colors.createWhiteColor({ alpha: 0.12 })
-            : colors.createBlackColor({ alpha: 0.12 })
+            ? colors.createWhiteColor({ alpha: 0.12 }, false, darkMode)
+            : colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
         }
       }
     });
@@ -151,7 +150,7 @@ const useStyles = makeStyles(
       closeButtonIcon: {},
       divider: {
         width: 1,
-        backgroundColor: colors.divider,
+        backgroundColor: darkMode ? divider.light : divider.dark,
         margin: `0 ${spaces[3].rem}`,
         alignSelf: "flex-start",
         height: pxToRem(24),
@@ -204,38 +203,46 @@ const useStyles = makeStyles(
       default: {
         backgroundColor: !darkMode ? grey[900] : grey[50],
         "& $divider": {
-          backgroundColor: !darkMode ? dark.divider : light.divider
+          backgroundColor: !darkMode ? divider.dark : divider.light
         },
         "& $icon": {
-          color: !darkMode ? dark.text.primary : light.text.primary
+          color: !darkMode ? text.dark.primary : text.light.primary
         },
         "& $text": {
-          color: !darkMode ? dark.text.primary : light.text.primary
+          color: !darkMode ? text.dark.primary : text.light.primary
         },
         "& $actionLabel": {
           color: !darkMode ? colors.warning.light : colors.warning.origin
         },
         "& $closeButtonIcon": {
-          color: !darkMode ? dark.text.primary : light.text.primary
+          color: !darkMode ? text.dark.primary : text.light.primary
         },
         "& $actionButton": {
           "&:hover": {
-            backgroundColor: colors.createWarningColor({ alpha: 0.08 })
+            backgroundColor: colors.createWarningColor(
+              { alpha: 0.08 },
+              false,
+              darkMode
+            )
           },
           "&:active": {
-            backgroundColor: colors.createWarningColor({ alpha: 0.12 })
+            backgroundColor: colors.createWarningColor(
+              { alpha: 0.12 },
+              false,
+              darkMode
+            )
           }
         },
         "& $closeButton": {
           "&:hover": {
             backgroundColor: !darkMode
-              ? colors.createWhiteColor({ alpha: 0.08 })
-              : colors.createBlackColor({ alpha: 0.08 })
+              ? colors.createWhiteColor({ alpha: 0.08 }, false, darkMode)
+              : colors.createBlackColor({ alpha: 0.08 }, false, darkMode)
           },
           "&:active": {
             backgroundColor: !darkMode
-              ? colors.createWhiteColor({ alpha: 0.12 })
-              : colors.createBlackColor({ alpha: 0.12 })
+              ? colors.createWhiteColor({ alpha: 0.12 }, false, darkMode)
+              : colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
           }
         }
       },

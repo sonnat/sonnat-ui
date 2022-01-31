@@ -16,8 +16,8 @@ const useStyles = makeStyles(
         fontFamily: fontFamily[direction],
         display: "block",
         backgroundColor: !darkMode
-          ? colors.createBlackColor({ alpha: 0.12 }, true)
-          : colors.createWhiteColor({ alpha: 0.12 }, true),
+          ? colors.createBlackColor({ alpha: 0.12 }, true, darkMode)
+          : colors.createWhiteColor({ alpha: 0.12 }, true, darkMode),
         height: "1.2em",
         animation: "$pulse 1.5s ease-in-out 0.5s infinite"
       },

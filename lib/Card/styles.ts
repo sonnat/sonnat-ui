@@ -3,10 +3,10 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
       radius,
+      colors: { divider, background },
       typography: { fontFamily }
     } = theme;
 
@@ -16,10 +16,12 @@ const useStyles = makeStyles(
         fontFamily: fontFamily[direction],
         borderRadius: radius.small,
         backgroundColor: !darkMode
-          ? colors.background.origin
-          : colors.background.accents[1]
+          ? background.light.origin
+          : background.dark.accents[1]
       },
-      outlined: { border: `1px solid ${colors.divider}` },
+      outlined: {
+        border: `1px solid ${!darkMode ? divider.dark : divider.light}`
+      },
       elevated: {
         boxShadow: [
           "0 0 4px 0 rgba(0, 0, 0, 0.04)",

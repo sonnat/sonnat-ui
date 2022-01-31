@@ -3,11 +3,11 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
       radius,
       spacings: { spaces },
+      colors: { text, divider, ...colors },
       typography: { pxToRem, variants, fontFamily }
     } = theme;
 
@@ -25,7 +25,7 @@ const useStyles = makeStyles(
       },
       label: {
         ...variants.body,
-        color: colors.text.primary
+        color: !darkMode ? text.dark.primary : text.light.primary
       },
       cell: {
         ...(direction === "rtl"
@@ -48,8 +48,8 @@ const useStyles = makeStyles(
           borderRadius: radius.rounded,
           position: "absolute",
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 })
-            : colors.createWhiteColor({ alpha: 0.04 }),
+            ? colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.04 }, false, darkMode),
           transform: "scale(0)",
           opacity: "0",
           transformOrigin: "center",
@@ -74,8 +74,8 @@ const useStyles = makeStyles(
       button: {
         border: `1px solid ${
           !darkMode
-            ? colors.createBlackColor({ alpha: 0.24 })
-            : colors.createWhiteColor({ alpha: 0.24 })
+            ? colors.createBlackColor({ alpha: 0.24 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.24 }, false, darkMode)
         }`,
         position: "absolute",
         pointerEvents: "none",
@@ -104,30 +104,38 @@ const useStyles = makeStyles(
           transform: "scale(1)",
           opacity: "1",
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.12 })
-            : colors.createWhiteColor({ alpha: 0.12 })
+            ? colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.12 }, false, darkMode)
         }
       },
       disabled: {
         cursor: "not-allowed !important",
         "& $label": {
           pointerEvents: "none",
-          color: colors.text.disabled
+          color: !darkMode ? text.dark.disabled : text.light.disabled
         },
         "& $cell, & $input, & $button": {
           pointerEvents: "none"
         },
         "& $button": {
-          borderColor: colors.divider
+          borderColor: !darkMode ? divider.dark : divider.light
         }
       },
       checked: {
         "& $cell:before": {
-          backgroundColor: colors.createPrimaryColor({ alpha: 0.04 })
+          backgroundColor: colors.createPrimaryColor(
+            { alpha: 0.04 },
+            false,
+            darkMode
+          )
         },
         "&:not($disabled)": {
           "& $button": {
-            borderColor: colors.createPrimaryColor({ alpha: 0.32 }),
+            borderColor: colors.createPrimaryColor(
+              { alpha: 0.32 },
+              false,
+              darkMode
+            ),
             "&:after": { opacity: 1, transform: "scale(1)" }
           }
         }
@@ -136,7 +144,7 @@ const useStyles = makeStyles(
         "& $button": {
           pointerEvents: "none",
           borderColor: colors.transparent,
-          backgroundColor: colors.divider,
+          backgroundColor: !darkMode ? divider.dark : divider.light,
           "&:after": {
             opacity: 1,
             transform: "scale(1)",
@@ -146,7 +154,11 @@ const useStyles = makeStyles(
       },
       checkedFocused: {
         "& $cell:before": {
-          backgroundColor: colors.createPrimaryColor({ alpha: 0.12 })
+          backgroundColor: colors.createPrimaryColor(
+            { alpha: 0.12 },
+            false,
+            darkMode
+          )
         }
       },
       large: {

@@ -3,10 +3,10 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
       mixins: { asIconWrapper },
+      colors: { text, transparent, primary },
       typography: { pxToRem, fontFamily }
     } = theme;
 
@@ -34,19 +34,19 @@ const useStyles = makeStyles(
         zIndex: "1",
         "&::-webkit-scrollbar-track": {
           display: "none",
-          backgroundColor: colors.transparent
+          backgroundColor: transparent
         },
         "&::-webkit-scrollbar": {
           display: "none",
-          backgroundColor: colors.transparent
+          backgroundColor: transparent
         },
         "&::-webkit-scrollbar-thumb": {
           display: "none",
-          backgroundColor: colors.transparent
+          backgroundColor: transparent
         },
         "&::-webkit-scrollbar-thumb:hover": {
           display: "none",
-          backgroundColor: colors.transparent
+          backgroundColor: transparent
         }
       },
       listContainer: {
@@ -56,19 +56,19 @@ const useStyles = makeStyles(
         justifyContent: "flex-start",
         "&::-webkit-scrollbar-track": {
           display: "none",
-          backgroundColor: colors.transparent
+          backgroundColor: transparent
         },
         "&::-webkit-scrollbar": {
           display: "none",
-          backgroundColor: colors.transparent
+          backgroundColor: transparent
         },
         "&::-webkit-scrollbar-thumb": {
           display: "none",
-          backgroundColor: colors.transparent
+          backgroundColor: transparent
         },
         "&::-webkit-scrollbar-thumb:hover": {
           display: "none",
-          backgroundColor: colors.transparent
+          backgroundColor: transparent
         }
       },
       indicatorSlider: {
@@ -81,11 +81,11 @@ const useStyles = makeStyles(
         position: "absolute",
         transition:
           "transform 250ms cubic-bezier(0.4, 0, 0.2, 1), background-color 125ms ease 250ms, left 250ms cubic-bezier(0.4, 0, 0.2, 1)",
-        backgroundColor: colors.transparent,
+        backgroundColor: transparent,
         transformOrigin: "0% 0%"
       },
       fader: {
-        backgroundColor: colors.transparent,
+        backgroundColor: transparent,
         zIndex: 2,
         display: "flex",
         width: pxToRem(32),
@@ -97,9 +97,7 @@ const useStyles = makeStyles(
         justifyContent: "center",
         flexShrink: "0",
         "&:hover": {
-          "& $faderIcon": {
-            color: !darkMode ? colors.primary.origin : colors.primary.light
-          }
+          "& $faderIcon": { color: !darkMode ? primary.origin : primary.light }
         }
       },
       startFader: {},
@@ -121,7 +119,7 @@ const useStyles = makeStyles(
       },
       faderIcon: {
         ...asIconWrapper(16),
-        color: colors.text.hint,
+        color: !darkMode ? text.dark.hint : text.light.hint,
         transition: "color 360ms ease"
       },
       scrollable: { "& $listWrapper": { overflowX: "auto" } },

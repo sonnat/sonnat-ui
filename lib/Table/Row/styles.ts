@@ -34,8 +34,8 @@ const useStyles = makeStyles(
       hoverable: {
         "&:hover": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 }, true)
-            : colors.createWhiteColor({ alpha: 0.04 }, true)
+            ? colors.createBlackColor({ alpha: 0.04 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.04 }, true, darkMode)
         }
       }
     };

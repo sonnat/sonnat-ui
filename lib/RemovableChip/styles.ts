@@ -3,12 +3,12 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
       radius,
       spacings: { spaces },
       swatches: { blue },
+      colors: { text, divider, ...colors },
       mixins: { asIconWrapper, disableUserSelect },
       typography: { pxToRem, variants, fontFamily }
     } = theme;
@@ -23,27 +23,27 @@ const useStyles = makeStyles(
     const filledDefault = {
       background: {
         main: !darkMode
-          ? colors.createBlackColor({ alpha: 0.04 })
-          : colors.createWhiteColor({ alpha: 0.04 }),
+          ? colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
+          : colors.createWhiteColor({ alpha: 0.04 }, false, darkMode),
         disabled: !darkMode
-          ? colors.createBlackColor({ alpha: 0.12 })
-          : colors.createWhiteColor({ alpha: 0.12 })
+          ? colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
+          : colors.createWhiteColor({ alpha: 0.12 }, false, darkMode)
       },
-      text: colors.text.secondary
+      text: !darkMode ? text.dark.secondary : text.light.secondary
     };
 
     const filledPrimary = {
       background: {
-        main: colors.createPrimaryColor({ alpha: 0.08 }),
-        disabled: colors.createPrimaryColor({ alpha: 0.12 })
+        main: colors.createPrimaryColor({ alpha: 0.08 }, false, darkMode),
+        disabled: colors.createPrimaryColor({ alpha: 0.12 }, false, darkMode)
       },
       text: filledPrimaryMainBg
     };
 
     const filledSecondary = {
       background: {
-        main: colors.createSecondaryColor({ alpha: 0.08 }),
-        disabled: colors.createSecondaryColor({ alpha: 0.12 })
+        main: colors.createSecondaryColor({ alpha: 0.08 }, false, darkMode),
+        disabled: colors.createSecondaryColor({ alpha: 0.12 }, false, darkMode)
       },
       text: filledSecondaryMainBg
     };
@@ -174,12 +174,12 @@ const useStyles = makeStyles(
       filled: {
         "&$disabled": {
           color: !darkMode
-            ? colors.createBlackColor({ alpha: 0.32 }, true)
-            : colors.createWhiteColor({ alpha: 0.24 }, true),
+            ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode),
           "& $icon, & $removeButtonIcon": {
             color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.24 }, true)
+              ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+              : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
           }
         }
       },
@@ -191,25 +191,25 @@ const useStyles = makeStyles(
         "& $removeButton": {
           "&:hover > $removeButtonIcon": {
             backgroundColor: !darkMode
-              ? colors.createBlackColor({ alpha: 0.12 })
-              : colors.createWhiteColor({ alpha: 0.12 }),
+              ? colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
+              : colors.createWhiteColor({ alpha: 0.12 }, false, darkMode),
             // Reset on touch devices, it doesn't add specificity
             "@media (hover: none)": { backgroundColor: colors.transparent }
           },
           "&:active > $removeButtonIcon": {
             backgroundColor: !darkMode
-              ? colors.createBlackColor({ alpha: 0.24 })
-              : colors.createWhiteColor({ alpha: 0.24 })
+              ? colors.createBlackColor({ alpha: 0.24 }, false, darkMode)
+              : colors.createWhiteColor({ alpha: 0.24 }, false, darkMode)
           }
         },
         "&$disabled": {
           color: !darkMode
-            ? colors.createBlackColor({ alpha: 0.32 }, true)
-            : colors.createWhiteColor({ alpha: 0.24 }, true),
+            ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode),
           "& $icon, & $removeButtonIcon": {
             color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.24 }, true)
+              ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+              : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
           },
           backgroundColor: filledDefault.background.disabled
         }
@@ -220,12 +220,20 @@ const useStyles = makeStyles(
         "& $icon, & $removeButtonIcon": { color: filledPrimary.text },
         "& $removeButton": {
           "&:hover > $removeButtonIcon": {
-            backgroundColor: colors.createPrimaryColor({ alpha: 0.12 }),
+            backgroundColor: colors.createPrimaryColor(
+              { alpha: 0.12 },
+              false,
+              darkMode
+            ),
             // Reset on touch devices, it doesn't add specificity
             "@media (hover: none)": { backgroundColor: colors.transparent }
           },
           "&:active > $removeButtonIcon": {
-            backgroundColor: colors.createPrimaryColor({ alpha: 0.24 })
+            backgroundColor: colors.createPrimaryColor(
+              { alpha: 0.24 },
+              false,
+              darkMode
+            )
           }
         },
         "&$disabled": { backgroundColor: filledPrimary.background.disabled }
@@ -236,91 +244,135 @@ const useStyles = makeStyles(
         "& $icon, & $removeButtonIcon": { color: filledSecondary.text },
         "& $removeButton": {
           "&:hover > $removeButtonIcon": {
-            backgroundColor: colors.createSecondaryColor({ alpha: 0.12 }),
+            backgroundColor: colors.createSecondaryColor(
+              { alpha: 0.12 },
+              false,
+              darkMode
+            ),
             // Reset on touch devices, it doesn't add specificity
             "@media (hover: none)": { backgroundColor: colors.transparent }
           },
           "&:active > $removeButtonIcon": {
-            backgroundColor: colors.createSecondaryColor({ alpha: 0.24 })
+            backgroundColor: colors.createSecondaryColor(
+              { alpha: 0.24 },
+              false,
+              darkMode
+            )
           }
         },
         "&$disabled": { backgroundColor: filledSecondary.background.disabled }
       },
       outlinedDefault: {
         backgroundColor: !darkMode
-          ? colors.createBlackColor({ alpha: 0.04 })
-          : colors.createWhiteColor({ alpha: 0.04 }),
+          ? colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
+          : colors.createWhiteColor({ alpha: 0.04 }, false, darkMode),
         border: `1px solid ${
           !darkMode
-            ? colors.createBlackColor({ alpha: 0.64 }, true)
-            : colors.createWhiteColor({ alpha: 0.64 }, true)
+            ? colors.createBlackColor({ alpha: 0.64 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.64 }, true, darkMode)
         }`,
-        color: colors.text.secondary,
-        "& $icon, & $removeButtonIcon": { color: colors.text.secondary },
+        color: !darkMode ? text.dark.secondary : text.light.secondary,
+        "& $icon, & $removeButtonIcon": {
+          color: !darkMode ? text.dark.secondary : text.light.secondary
+        },
         "& $removeButton": {
           "&:hover > $removeButtonIcon": {
             backgroundColor: !darkMode
-              ? colors.createBlackColor({ alpha: 0.12 })
-              : colors.createWhiteColor({ alpha: 0.12 }),
+              ? colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
+              : colors.createWhiteColor({ alpha: 0.12 }, false, darkMode),
             // Reset on touch devices, it doesn't add specificity
             "@media (hover: none)": { backgroundColor: colors.transparent }
           },
           "&:active > $removeButtonIcon": {
             backgroundColor: !darkMode
-              ? colors.createBlackColor({ alpha: 0.24 })
-              : colors.createWhiteColor({ alpha: 0.24 })
+              ? colors.createBlackColor({ alpha: 0.24 }, false, darkMode)
+              : colors.createWhiteColor({ alpha: 0.24 }, false, darkMode)
           }
         },
         "&$disabled, &[disabled]": {
-          borderColor: colors.divider,
-          color: colors.text.disabled,
-          "& $icon, & $removeButtonIcon": { color: colors.text.disabled }
+          borderColor: !darkMode ? divider.dark : divider.light,
+          color: !darkMode ? text.dark.disabled : text.light.disabled,
+          "& $icon, & $removeButtonIcon": {
+            color: !darkMode ? text.dark.disabled : text.light.disabled
+          }
         }
       },
       outlinedPrimary: {
-        backgroundColor: colors.createPrimaryColor({ alpha: 0.08 }),
+        backgroundColor: colors.createPrimaryColor(
+          { alpha: 0.08 },
+          false,
+          darkMode
+        ),
         border: `1px solid ${filledPrimaryMainBg}`,
         color: filledPrimaryMainBg,
         "& $icon, & $removeButtonIcon": { color: filledPrimaryMainBg },
         "& $removeButton": {
           "&:hover > $removeButtonIcon": {
-            backgroundColor: colors.createPrimaryColor({ alpha: 0.12 }),
+            backgroundColor: colors.createPrimaryColor(
+              { alpha: 0.12 },
+              false,
+              darkMode
+            ),
             // Reset on touch devices, it doesn't add specificity
             "@media (hover: none)": { backgroundColor: colors.transparent }
           },
           "&:active > $removeButtonIcon": {
-            backgroundColor: colors.createPrimaryColor({ alpha: 0.24 })
+            backgroundColor: colors.createPrimaryColor(
+              { alpha: 0.24 },
+              false,
+              darkMode
+            )
           }
         },
         "&$disabled": {
-          color: colors.createPrimaryColor({ alpha: 0.32 }, true),
+          color: colors.createPrimaryColor({ alpha: 0.32 }, true, darkMode),
           "& $icon, & $removeButtonIcon": {
-            color: colors.createPrimaryColor({ alpha: 0.32 }, true)
+            color: colors.createPrimaryColor({ alpha: 0.32 }, true, darkMode)
           },
-          borderColor: colors.createPrimaryColor({ alpha: 0.12 }, true)
+          borderColor: colors.createPrimaryColor(
+            { alpha: 0.12 },
+            true,
+            darkMode
+          )
         }
       },
       outlinedSecondary: {
-        backgroundColor: colors.createSecondaryColor({ alpha: 0.04 }),
+        backgroundColor: colors.createSecondaryColor(
+          { alpha: 0.04 },
+          false,
+          darkMode
+        ),
         border: `1px solid ${filledSecondaryMainBg}`,
         color: filledSecondaryMainBg,
         "& $icon, & $removeButtonIcon": { color: filledSecondaryMainBg },
         "& $removeButton": {
           "&:hover > $removeButtonIcon": {
-            backgroundColor: colors.createSecondaryColor({ alpha: 0.12 }),
+            backgroundColor: colors.createSecondaryColor(
+              { alpha: 0.12 },
+              false,
+              darkMode
+            ),
             // Reset on touch devices, it doesn't add specificity
             "@media (hover: none)": { backgroundColor: colors.transparent }
           },
           "&:active > $removeButtonIcon": {
-            backgroundColor: colors.createSecondaryColor({ alpha: 0.24 })
+            backgroundColor: colors.createSecondaryColor(
+              { alpha: 0.24 },
+              false,
+              darkMode
+            )
           }
         },
         "&$disabled": {
-          color: colors.createSecondaryColor({ alpha: 0.32 }, true),
+          color: colors.createSecondaryColor({ alpha: 0.32 }, true, darkMode),
           "& $icon, & $removeButtonIcon": {
-            color: colors.createSecondaryColor({ alpha: 0.32 }, true)
+            color: colors.createSecondaryColor({ alpha: 0.32 }, true, darkMode)
           },
-          borderColor: colors.createSecondaryColor({ alpha: 0.12 }, true)
+          borderColor: colors.createSecondaryColor(
+            { alpha: 0.12 },
+            true,
+            darkMode
+          )
         }
       },
       focusVisible: {

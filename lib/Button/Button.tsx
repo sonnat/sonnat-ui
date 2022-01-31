@@ -277,20 +277,26 @@ const ButtonBase = <T extends React.ElementType = "button">(
         inlined: undefined,
         outlined: {
           default: undefined,
-          primary: createPrimaryColor({ alpha: 0.12 }),
-          secondary: createSecondaryColor({ alpha: 0.12 })
+          primary: createPrimaryColor({ alpha: 0.12 }, false, darkMode),
+          secondary: createSecondaryColor({ alpha: 0.12 }, false, darkMode)
         }[color]
-      }[variant] || (darkMode ? undefined : createBlackColor({ alpha: 0.12 })),
+      }[variant] ||
+      (darkMode
+        ? undefined
+        : createBlackColor({ alpha: 0.12 }, false, darkMode)),
     foreground:
       {
         filled: undefined,
         inlined: undefined,
         outlined: {
           default: undefined,
-          primary: createPrimaryColor({ alpha: 0.48 }),
-          secondary: createSecondaryColor({ alpha: 0.48 })
+          primary: createPrimaryColor({ alpha: 0.48 }, false, darkMode),
+          secondary: createSecondaryColor({ alpha: 0.48 }, false, darkMode)
         }[color]
-      }[variant] || (darkMode ? undefined : createBlackColor({ alpha: 0.48 }))
+      }[variant] ||
+      (darkMode
+        ? undefined
+        : createBlackColor({ alpha: 0.48 }, false, darkMode))
   };
 
   return isInvalid ? null : (

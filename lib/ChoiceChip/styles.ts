@@ -14,17 +14,19 @@ export type VariantUnselectionCombo = "filledUnselected" | "outlinedUnselected";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
       radius,
       spacings: { spaces },
       swatches: { blue },
+      colors: { text, divider, ...colors },
       mixins: { asIconWrapper, disableUserSelect },
       typography: { pxToRem, variants, fontFamily }
     } = theme;
 
-    const filledDefaultMainBg = colors.text.secondary;
+    const filledDefaultMainBg = !darkMode
+      ? text.dark.secondary
+      : text.light.secondary;
     const filledPrimarySelectedMainBg = !darkMode
       ? colors.primary.origin
       : colors.primary.light;
@@ -37,14 +39,14 @@ const useStyles = makeStyles(
       background: {
         main: filledDefaultMainBg,
         hover: !darkMode
-          ? colors.createBlackColor({ alpha: 0.48 }, true)
-          : colors.createWhiteColor({ alpha: 0.87 }, true),
+          ? colors.createBlackColor({ alpha: 0.48 }, true, darkMode)
+          : colors.createWhiteColor({ alpha: 0.87 }, true, darkMode),
         active: !darkMode
-          ? colors.createBlackColor({ alpha: 0.64 }, true)
-          : colors.createWhiteColor({ alpha: 0.56 }, true),
+          ? colors.createBlackColor({ alpha: 0.64 }, true, darkMode)
+          : colors.createWhiteColor({ alpha: 0.56 }, true, darkMode),
         disabled: !darkMode
-          ? colors.createBlackColor({ alpha: 0.12 }, true)
-          : colors.createWhiteColor({ alpha: 0.12 }, true)
+          ? colors.createBlackColor({ alpha: 0.12 }, true, darkMode)
+          : colors.createWhiteColor({ alpha: 0.12 }, true, darkMode)
       },
       text: colors.getContrastColorOf(filledDefaultMainBg)
     };
@@ -54,7 +56,7 @@ const useStyles = makeStyles(
         main: filledPrimarySelectedMainBg,
         hover: lighten(filledPrimarySelectedMainBg, 0.15),
         active: darken(filledPrimarySelectedMainBg, 0.15),
-        disabled: colors.createPrimaryColor({ alpha: 0.12 }, true)
+        disabled: colors.createPrimaryColor({ alpha: 0.12 }, true, darkMode)
       },
       text: colors.getContrastColorOf(filledPrimarySelectedMainBg)
     };
@@ -64,7 +66,7 @@ const useStyles = makeStyles(
         main: filledSecondarySelectedMainBg,
         hover: lighten(filledSecondarySelectedMainBg, 0.15),
         active: darken(filledSecondarySelectedMainBg, 0.15),
-        disabled: colors.createSecondaryColor({ alpha: 0.12 }, true)
+        disabled: colors.createSecondaryColor({ alpha: 0.12 }, true, darkMode)
       },
       text: colors.getContrastColorOf(filledSecondarySelectedMainBg)
     };
@@ -158,25 +160,25 @@ const useStyles = makeStyles(
         "&$disabled": {
           "&:not($selected)": {
             backgroundColor: !darkMode
-              ? colors.createBlackColor({ alpha: 0.12 }, true)
-              : colors.createWhiteColor({ alpha: 0.12 }, true),
+              ? colors.createBlackColor({ alpha: 0.12 }, true, darkMode)
+              : colors.createWhiteColor({ alpha: 0.12 }, true, darkMode),
             color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 })
-              : colors.createWhiteColor({ alpha: 0.16 }),
+              ? colors.createBlackColor({ alpha: 0.32 }, false, darkMode)
+              : colors.createWhiteColor({ alpha: 0.16 }, false, darkMode),
             "& $icon": {
               color: !darkMode
-                ? colors.createBlackColor({ alpha: 0.32 })
-                : colors.createWhiteColor({ alpha: 0.16 })
+                ? colors.createBlackColor({ alpha: 0.32 }, false, darkMode)
+                : colors.createWhiteColor({ alpha: 0.16 }, false, darkMode)
             }
           },
           "&$selected": {
             color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.24 }, true),
+              ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+              : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode),
             "& $icon": {
               color: !darkMode
-                ? colors.createBlackColor({ alpha: 0.32 }, true)
-                : colors.createWhiteColor({ alpha: 0.24 }, true)
+                ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+                : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
             }
           }
         }
@@ -186,62 +188,68 @@ const useStyles = makeStyles(
           backgroundColor: colors.transparent,
           "&$selected": {
             color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.24 }, true),
+              ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+              : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode),
             "& $icon": {
               color: !darkMode
-                ? colors.createBlackColor({ alpha: 0.32 }, true)
-                : colors.createWhiteColor({ alpha: 0.24 }, true)
+                ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+                : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
             }
           }
         }
       },
       filledUnselected: {
         backgroundColor: !darkMode
-          ? colors.createBlackColor({ alpha: 0.04 })
-          : colors.createWhiteColor({ alpha: 0.04 }),
-        color: colors.text.secondary,
-        "& $icon": { color: colors.text.secondary },
+          ? colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
+          : colors.createWhiteColor({ alpha: 0.04 }, false, darkMode),
+        color: !darkMode ? text.dark.secondary : text.light.secondary,
+        "& $icon": {
+          color: !darkMode ? text.dark.secondary : text.light.secondary
+        },
         "&:hover": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.12 })
-            : colors.createWhiteColor({ alpha: 0.12 }),
+            ? colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.12 }, false, darkMode),
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": { backgroundColor: colors.transparent }
         },
         "&:active": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.16 })
-            : colors.createWhiteColor({ alpha: 0.16 })
+            ? colors.createBlackColor({ alpha: 0.16 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.16 }, false, darkMode)
         }
       },
       outlinedUnselected: {
         backgroundColor: !darkMode
-          ? colors.createBlackColor({ alpha: 0.04 })
-          : colors.createWhiteColor({ alpha: 0.04 }),
+          ? colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
+          : colors.createWhiteColor({ alpha: 0.04 }, false, darkMode),
         border: `1px solid ${
           !darkMode
-            ? colors.createBlackColor({ alpha: 0.24 }, true)
-            : colors.createWhiteColor({ alpha: 0.24 }, true)
+            ? colors.createBlackColor({ alpha: 0.24 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
         }`,
-        color: colors.text.secondary,
-        "& $icon": { color: colors.text.secondary },
+        color: !darkMode ? text.dark.secondary : text.light.secondary,
+        "& $icon": {
+          color: !darkMode ? text.dark.secondary : text.light.secondary
+        },
         "&:hover": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.08 })
-            : colors.createWhiteColor({ alpha: 0.08 }),
+            ? colors.createBlackColor({ alpha: 0.08 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.08 }, false, darkMode),
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": { backgroundColor: colors.transparent }
         },
         "&:active": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.12 })
-            : colors.createWhiteColor({ alpha: 0.12 })
+            ? colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.12 }, false, darkMode)
         },
         "&$disabled": {
-          borderColor: colors.divider,
-          color: colors.text.disabled,
-          "& $icon": { color: colors.text.disabled }
+          borderColor: !darkMode ? divider.dark : divider.light,
+          color: !darkMode ? text.dark.disabled : text.light.disabled,
+          "& $icon": {
+            color: !darkMode ? text.dark.disabled : text.light.disabled
+          }
         }
       },
       filledDefaultSelected: {
@@ -256,12 +264,12 @@ const useStyles = makeStyles(
         "&:active": { backgroundColor: filledDefault.background.active },
         "&$disabled": {
           color: !darkMode
-            ? colors.createBlackColor({ alpha: 0.32 }, true)
-            : colors.createWhiteColor({ alpha: 0.24 }, true),
+            ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode),
           "& $icon": {
             color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.24 }, true)
+              ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+              : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
           },
           backgroundColor: filledDefault.background.disabled
         }
@@ -300,19 +308,21 @@ const useStyles = makeStyles(
       },
       outlinedDefaultSelected: {
         backgroundColor: !darkMode
-          ? colors.createBlackColor({ alpha: 0.12 })
-          : colors.createWhiteColor({ alpha: 0.12 }),
+          ? colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
+          : colors.createWhiteColor({ alpha: 0.12 }, false, darkMode),
         border: `1px solid ${
           !darkMode
-            ? colors.createBlackColor({ alpha: 0.48 }, true)
-            : colors.createWhiteColor({ alpha: 0.48 }, true)
+            ? colors.createBlackColor({ alpha: 0.48 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.48 }, true, darkMode)
         }`,
-        color: colors.text.secondary,
-        "& $icon": { color: colors.text.secondary },
+        color: !darkMode ? text.dark.secondary : text.light.secondary,
+        "& $icon": {
+          color: !darkMode ? text.dark.secondary : text.light.secondary
+        },
         "&:hover": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.16 })
-            : colors.createWhiteColor({ alpha: 0.16 }),
+            ? colors.createBlackColor({ alpha: 0.16 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.16 }, false, darkMode),
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": {
             backgroundColor: colors.transparent
@@ -320,60 +330,100 @@ const useStyles = makeStyles(
         },
         "&:active": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.24 })
-            : colors.createWhiteColor({ alpha: 0.24 })
+            ? colors.createBlackColor({ alpha: 0.24 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.24 }, false, darkMode)
         },
         "&$disabled": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.12 })
-            : colors.createWhiteColor({ alpha: 0.12 }),
+            ? colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.12 }, false, darkMode),
           color: !darkMode
-            ? colors.createBlackColor({ alpha: 0.32 }, true)
-            : colors.createWhiteColor({ alpha: 0.32 }, true),
+            ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.32 }, true, darkMode),
           "& $icon": {
             color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.32 }, true)
+              ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+              : colors.createWhiteColor({ alpha: 0.32 }, true, darkMode)
           },
           borderColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.12 }, true)
-            : colors.createWhiteColor({ alpha: 0.16 }, true)
+            ? colors.createBlackColor({ alpha: 0.12 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.16 }, true, darkMode)
         }
       },
       outlinedPrimarySelected: {
-        backgroundColor: colors.createPrimaryColor({ alpha: 0.08 }),
+        backgroundColor: colors.createPrimaryColor(
+          { alpha: 0.08 },
+          false,
+          darkMode
+        ),
         border: `1px solid ${filledPrimarySelectedMainBg}`,
         color: filledPrimarySelectedMainBg,
         "& $icon": { color: filledPrimarySelectedMainBg },
         "&:hover": {
-          backgroundColor: colors.createPrimaryColor({ alpha: 0.12 }),
+          backgroundColor: colors.createPrimaryColor(
+            { alpha: 0.12 },
+            false,
+            darkMode
+          ),
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": { backgroundColor: colors.transparent }
         },
         "&:active": {
-          backgroundColor: colors.createPrimaryColor({ alpha: 0.24 })
+          backgroundColor: colors.createPrimaryColor(
+            { alpha: 0.24 },
+            false,
+            darkMode
+          )
         },
         "&$disabled": {
-          backgroundColor: colors.createPrimaryColor({ alpha: 0.12 }),
-          borderColor: colors.createPrimaryColor({ alpha: 0.12 }, true)
+          backgroundColor: colors.createPrimaryColor(
+            { alpha: 0.12 },
+            false,
+            darkMode
+          ),
+          borderColor: colors.createPrimaryColor(
+            { alpha: 0.12 },
+            true,
+            darkMode
+          )
         }
       },
       outlinedSecondarySelected: {
-        backgroundColor: colors.createSecondaryColor({ alpha: 0.08 }),
+        backgroundColor: colors.createSecondaryColor(
+          { alpha: 0.08 },
+          false,
+          darkMode
+        ),
         border: `1px solid ${filledSecondarySelectedMainBg}`,
         color: filledSecondarySelectedMainBg,
         "& $icon": { color: filledSecondarySelectedMainBg },
         "&:hover": {
-          backgroundColor: colors.createSecondaryColor({ alpha: 0.12 }),
+          backgroundColor: colors.createSecondaryColor(
+            { alpha: 0.12 },
+            false,
+            darkMode
+          ),
           // Reset on touch devices, it doesn't add specificity
           "@media (hover: none)": { backgroundColor: colors.transparent }
         },
         "&:active": {
-          backgroundColor: colors.createSecondaryColor({ alpha: 0.24 })
+          backgroundColor: colors.createSecondaryColor(
+            { alpha: 0.24 },
+            false,
+            darkMode
+          )
         },
         "&$disabled": {
-          backgroundColor: colors.createSecondaryColor({ alpha: 0.12 }),
-          borderColor: colors.createSecondaryColor({ alpha: 0.12 }, true)
+          backgroundColor: colors.createSecondaryColor(
+            { alpha: 0.12 },
+            false,
+            darkMode
+          ),
+          borderColor: colors.createSecondaryColor(
+            { alpha: 0.12 },
+            true,
+            darkMode
+          )
         }
       },
       focusVisible: {

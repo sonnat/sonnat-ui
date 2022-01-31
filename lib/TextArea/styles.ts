@@ -4,13 +4,13 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
       radius,
       spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
+      colors: { text, divider, ...colors },
       typography: { variants, fontFamily }
     } = theme;
 
@@ -23,8 +23,8 @@ const useStyles = makeStyles(
         fontFamily: fontFamily[direction],
         "&:not($errored):not($focused):hover $wrapper:after": {
           borderColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.48 }, true)
-            : colors.createWhiteColor({ alpha: 0.48 }, true)
+            ? colors.createBlackColor({ alpha: 0.48 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.48 }, true, darkMode)
         }
       },
       wrapper: {
@@ -46,8 +46,8 @@ const useStyles = makeStyles(
           borderStyle: "solid",
           borderWidth: 1,
           borderColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.24 }, true)
-            : colors.createWhiteColor({ alpha: 0.24 }, true),
+            ? colors.createBlackColor({ alpha: 0.24 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode),
           borderRadius: radius.small,
           pointerEvents: "none",
           transition: "border-color 240ms ease"
@@ -55,7 +55,7 @@ const useStyles = makeStyles(
       },
       shadow: {
         ...variants.body,
-        color: colors.text.primary,
+        color: !darkMode ? text.dark.primary : text.light.primary,
         visibility: "hidden",
 
         // Remove from the content flow
@@ -75,7 +75,7 @@ const useStyles = makeStyles(
       },
       input: {
         ...variants.body,
-        color: colors.text.primary,
+        color: !darkMode ? text.dark.primary : text.light.primary,
         minWidth: 0,
         outline: "none",
         border: "none",
@@ -85,10 +85,18 @@ const useStyles = makeStyles(
         borderRadius: radius.small,
         boxShadow: `0 0 0 0 ${colors.transparent}`,
         appearance: "none !important",
-        "&::-webkit-input-placeholder": { color: colors.text.hint },
-        "&::-moz-placeholder": { color: colors.text.hint },
-        "&:-ms-input-placeholder": { color: colors.text.hint },
-        "&:-moz-placeholder": { color: colors.text.hint }
+        "&::-webkit-input-placeholder": {
+          color: !darkMode ? text.dark.hint : text.light.hint
+        },
+        "&::-moz-placeholder": {
+          color: !darkMode ? text.dark.hint : text.light.hint
+        },
+        "&:-ms-input-placeholder": {
+          color: !darkMode ? text.dark.hint : text.light.hint
+        },
+        "&:-moz-placeholder": {
+          color: !darkMode ? text.dark.hint : text.light.hint
+        }
       },
       helperRow: {
         display: "flex",
@@ -107,12 +115,12 @@ const useStyles = makeStyles(
       },
       helperText: {
         ...variants.caption,
-        color: colors.text.secondary
+        color: !darkMode ? text.dark.secondary : text.light.secondary
       },
       helperIcon: {
         ...asIconWrapper(16),
         marginTop: spaces[0].rem,
-        color: colors.text.secondary,
+        color: !darkMode ? text.dark.secondary : text.light.secondary,
         ...(direction === "rtl"
           ? { marginLeft: spaces[1].rem }
           : { marginRight: spaces[1].rem })
@@ -122,7 +130,7 @@ const useStyles = makeStyles(
         ...(direction === "rtl"
           ? { marginRight: "auto" }
           : { marginLeft: "auto" }),
-        color: colors.text.secondary,
+        color: !darkMode ? text.dark.secondary : text.light.secondary,
         minWidth: "7.7ch",
         display: "flex",
         justifyContent: "flex-end",
@@ -149,19 +157,29 @@ const useStyles = makeStyles(
         pointerEvents: "none",
         "& $input": {
           backgroundColor: !darkMode
-            ? colors.createBlackColor({ alpha: 0.04 })
-            : colors.createWhiteColor({ alpha: 0.04 })
+            ? colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
+            : colors.createWhiteColor({ alpha: 0.04 }, false, darkMode)
         }
       },
       disabled: {
         pointerEvents: "none",
-        "& $wrapper:after": { borderColor: colors.divider },
+        "& $wrapper:after": {
+          borderColor: !darkMode ? divider.dark : divider.light
+        },
         "& $input": {
-          color: colors.text.disabled,
-          "&::-webkit-input-placeholder": { color: colors.text.disabled },
-          "&::-moz-placeholder": { color: colors.text.disabled },
-          "&:-ms-input-placeholder": { color: colors.text.disabled },
-          "&:-moz-placeholder": { color: colors.text.disabled }
+          color: !darkMode ? text.dark.disabled : text.light.disabled,
+          "&::-webkit-input-placeholder": {
+            color: !darkMode ? text.dark.disabled : text.light.disabled
+          },
+          "&::-moz-placeholder": {
+            color: !darkMode ? text.dark.disabled : text.light.disabled
+          },
+          "&:-ms-input-placeholder": {
+            color: !darkMode ? text.dark.disabled : text.light.disabled
+          },
+          "&:-moz-placeholder": {
+            color: !darkMode ? text.dark.disabled : text.light.disabled
+          }
         }
       },
       focused: {

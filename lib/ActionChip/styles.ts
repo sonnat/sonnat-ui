@@ -11,10 +11,10 @@ export type VariantColorCombo =
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       direction,
       darkMode,
       radius,
+      colors: { text, divider, ...colors },
       spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper, disableUserSelect },
@@ -31,37 +31,37 @@ const useStyles = makeStyles(
     const filledDefault = {
       background: {
         main: !darkMode
-          ? colors.createBlackColor({ alpha: 0.04 })
-          : colors.createWhiteColor({ alpha: 0.04 }),
+          ? colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
+          : colors.createWhiteColor({ alpha: 0.04 }, false, darkMode),
         hover: !darkMode
-          ? colors.createBlackColor({ alpha: 0.12 })
-          : colors.createWhiteColor({ alpha: 0.12 }),
+          ? colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
+          : colors.createWhiteColor({ alpha: 0.12 }, false, darkMode),
         active: !darkMode
-          ? colors.createBlackColor({ alpha: 0.16 })
-          : colors.createWhiteColor({ alpha: 0.16 }),
+          ? colors.createBlackColor({ alpha: 0.16 }, false, darkMode)
+          : colors.createWhiteColor({ alpha: 0.16 }, false, darkMode),
         disabled: !darkMode
-          ? colors.createBlackColor({ alpha: 0.12 })
-          : colors.createWhiteColor({ alpha: 0.12 })
+          ? colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
+          : colors.createWhiteColor({ alpha: 0.12 }, false, darkMode)
       },
-      text: colors.text.secondary
+      text: !darkMode ? text.dark.secondary : text.light.secondary
     };
 
     const filledPrimary = {
       background: {
-        main: colors.createPrimaryColor({ alpha: 0.08 }),
-        hover: colors.createPrimaryColor({ alpha: 0.12 }),
-        active: colors.createPrimaryColor({ alpha: 0.24 }),
-        disabled: colors.createPrimaryColor({ alpha: 0.12 })
+        main: colors.createPrimaryColor({ alpha: 0.08 }, false, darkMode),
+        hover: colors.createPrimaryColor({ alpha: 0.12 }, false, darkMode),
+        active: colors.createPrimaryColor({ alpha: 0.24 }, false, darkMode),
+        disabled: colors.createPrimaryColor({ alpha: 0.12 }, false, darkMode)
       },
       text: filledPrimaryMainBg
     };
 
     const filledSecondary = {
       background: {
-        main: colors.createSecondaryColor({ alpha: 0.08 }),
-        hover: colors.createSecondaryColor({ alpha: 0.12 }),
-        active: colors.createSecondaryColor({ alpha: 0.24 }),
-        disabled: colors.createSecondaryColor({ alpha: 0.12 })
+        main: colors.createSecondaryColor({ alpha: 0.08 }, false, darkMode),
+        hover: colors.createSecondaryColor({ alpha: 0.12 }, false, darkMode),
+        active: colors.createSecondaryColor({ alpha: 0.24 }, false, darkMode),
+        disabled: colors.createSecondaryColor({ alpha: 0.12 }, false, darkMode)
       },
       text: filledSecondaryMainBg
     };
@@ -69,59 +69,59 @@ const useStyles = makeStyles(
     const outlinedDefault = {
       border: {
         main: !darkMode
-          ? colors.createBlackColor({ alpha: 0.64 }, true)
-          : colors.createWhiteColor({ alpha: 0.64 }, true),
-        disabled: colors.divider
+          ? colors.createBlackColor({ alpha: 0.64 }, true, darkMode)
+          : colors.createWhiteColor({ alpha: 0.64 }, true, darkMode),
+        disabled: !darkMode ? divider.dark : divider.light
       },
       background: {
         main: !darkMode
-          ? colors.createBlackColor({ alpha: 0.04 })
-          : colors.createWhiteColor({ alpha: 0.04 }),
+          ? colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
+          : colors.createWhiteColor({ alpha: 0.04 }, false, darkMode),
         hover: !darkMode
-          ? colors.createBlackColor({ alpha: 0.08 })
-          : colors.createWhiteColor({ alpha: 0.08 }),
+          ? colors.createBlackColor({ alpha: 0.08 }, false, darkMode)
+          : colors.createWhiteColor({ alpha: 0.08 }, false, darkMode),
         active: !darkMode
-          ? colors.createBlackColor({ alpha: 0.12 })
-          : colors.createWhiteColor({ alpha: 0.12 }),
+          ? colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
+          : colors.createWhiteColor({ alpha: 0.12 }, false, darkMode),
         disabled: colors.transparent
       },
       text: {
-        main: colors.text.secondary,
-        disabled: colors.text.disabled
+        main: !darkMode ? text.dark.secondary : text.light.secondary,
+        disabled: !darkMode ? text.dark.disabled : text.light.disabled
       }
     };
 
     const outlinedPrimary = {
       border: {
         main: filledPrimaryMainBg,
-        disabled: colors.createPrimaryColor({ alpha: 0.12 }, true)
+        disabled: colors.createPrimaryColor({ alpha: 0.12 }, true, darkMode)
       },
       background: {
-        main: colors.createPrimaryColor({ alpha: 0.08 }),
-        hover: colors.createPrimaryColor({ alpha: 0.12 }),
-        active: colors.createPrimaryColor({ alpha: 0.24 }),
-        disabled: colors.createPrimaryColor({ alpha: 0.12 })
+        main: colors.createPrimaryColor({ alpha: 0.08 }, false, darkMode),
+        hover: colors.createPrimaryColor({ alpha: 0.12 }, false, darkMode),
+        active: colors.createPrimaryColor({ alpha: 0.24 }, false, darkMode),
+        disabled: colors.createPrimaryColor({ alpha: 0.12 }, false, darkMode)
       },
       text: {
         main: filledPrimaryMainBg,
-        disabled: colors.createPrimaryColor({ alpha: 0.32 }, true)
+        disabled: colors.createPrimaryColor({ alpha: 0.32 }, true, darkMode)
       }
     };
 
     const outlinedSecondary = {
       border: {
         main: filledSecondaryMainBg,
-        disabled: colors.createSecondaryColor({ alpha: 0.12 }, true)
+        disabled: colors.createSecondaryColor({ alpha: 0.12 }, true, darkMode)
       },
       background: {
-        main: colors.createSecondaryColor({ alpha: 0.08 }),
-        hover: colors.createSecondaryColor({ alpha: 0.12 }),
-        active: colors.createSecondaryColor({ alpha: 0.24 }),
-        disabled: colors.createSecondaryColor({ alpha: 0.12 })
+        main: colors.createSecondaryColor({ alpha: 0.08 }, false, darkMode),
+        hover: colors.createSecondaryColor({ alpha: 0.12 }, false, darkMode),
+        active: colors.createSecondaryColor({ alpha: 0.24 }, false, darkMode),
+        disabled: colors.createSecondaryColor({ alpha: 0.12 }, false, darkMode)
       },
       text: {
         main: filledSecondaryMainBg,
-        disabled: colors.createSecondaryColor({ alpha: 0.32 }, true)
+        disabled: colors.createSecondaryColor({ alpha: 0.32 }, true, darkMode)
       }
     };
 
@@ -208,12 +208,12 @@ const useStyles = makeStyles(
       filled: {
         "&$disabled": {
           color: !darkMode
-            ? colors.createBlackColor({ alpha: 0.32 }, true)
-            : colors.createWhiteColor({ alpha: 0.24 }, true),
+            ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode),
           "& $icon": {
             color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.24 }, true)
+              ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+              : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
           }
         }
       },
@@ -224,12 +224,12 @@ const useStyles = makeStyles(
         "& $icon": { color: filledDefault.text },
         "&$disabled": {
           color: !darkMode
-            ? colors.createBlackColor({ alpha: 0.32 }, true)
-            : colors.createWhiteColor({ alpha: 0.24 }, true),
+            ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+            : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode),
           "& $icon": {
             color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 }, true)
-              : colors.createWhiteColor({ alpha: 0.24 }, true)
+              ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
+              : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
           },
           backgroundColor: filledDefault.background.disabled
         },
@@ -268,7 +268,9 @@ const useStyles = makeStyles(
         backgroundColor: outlinedDefault.background.main,
         border: `1px solid ${outlinedDefault.border.main}`,
         color: outlinedDefault.text.main,
-        "& $icon": { color: colors.text.secondary },
+        "& $icon": {
+          color: !darkMode ? text.dark.secondary : text.light.secondary
+        },
         "&:hover": {
           backgroundColor: outlinedDefault.background.hover,
           // Reset on touch devices, it doesn't add specificity

@@ -182,9 +182,9 @@ const generateStyles = (variants: Variants) => {
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
+      colors: { text, ...colors },
       typography: { variants, fontFamily, fontWeight }
     } = theme;
 
@@ -199,10 +199,16 @@ const useStyles = makeStyles(
         overflow: "hidden"
       },
       inheritColor: { color: "inherit" },
-      textPrimaryColor: { color: colors.text.primary },
-      textSecondaryColor: { color: colors.text.secondary },
-      textHintColor: { color: colors.text.hint },
-      textDisabledColor: { color: colors.text.disabled },
+      textPrimaryColor: {
+        color: !darkMode ? text.dark.primary : text.light.primary
+      },
+      textSecondaryColor: {
+        color: !darkMode ? text.dark.secondary : text.light.secondary
+      },
+      textHintColor: { color: !darkMode ? text.dark.hint : text.light.hint },
+      textDisabledColor: {
+        color: !darkMode ? text.dark.disabled : text.light.disabled
+      },
       primaryColor: {
         color: !darkMode ? colors.primary.origin : colors.primary.light
       },

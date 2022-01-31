@@ -3,11 +3,11 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       direction,
       darkMode,
       zIndexes,
       radius,
+      colors: { background },
       typography: { pxToRem, fontFamily }
     } = theme;
 
@@ -62,8 +62,8 @@ const useStyles = makeStyles(
         borderRadius: radius.small,
         boxShadow: !darkMode ? boxShadow.lightMode : boxShadow.darkMode,
         backgroundColor: !darkMode
-          ? colors.background.origin
-          : colors.background.accents[1],
+          ? background.light.origin
+          : background.dark.accents[1],
         outline: "none"
       },
       open: {

@@ -20,8 +20,12 @@ const reset = (theme: DefaultTheme) => ({
   },
   body: {
     margin: "0",
-    color: theme.colors.text.primary,
-    backgroundColor: theme.colors.background.origin,
+    color: !theme.darkMode
+      ? theme.colors.text.dark.primary
+      : theme.colors.text.light.primary,
+    backgroundColor: !theme.darkMode
+      ? theme.colors.background.light.origin
+      : theme.colors.background.dark.origin,
     '&[dir="rtl"]': {
       fontFamily: theme.typography.fontFamily.rtl,
       direction: "rtl"

@@ -3,13 +3,13 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
       radius,
       spacings: { spaces },
       swatches: { blue },
       mixins: { asIconWrapper },
+      colors: { text, divider, ...colors },
       typography: { pxToRem, variants, fontFamily }
     } = theme;
 
@@ -17,43 +17,115 @@ const useStyles = makeStyles(
       ? colors.primary.origin
       : colors.primary.light;
 
-    const primaryBgColor = colors.createPrimaryColor({ alpha: 0.08 });
-    const primaryMiddleColor = colors.createPrimaryColor({ alpha: 0.12 });
-    const primaryBorderColor = colors.createPrimaryColor({ alpha: 0.24 });
+    const primaryBgColor = colors.createPrimaryColor(
+      { alpha: 0.08 },
+      false,
+      darkMode
+    );
+    const primaryMiddleColor = colors.createPrimaryColor(
+      { alpha: 0.12 },
+      false,
+      darkMode
+    );
+    const primaryBorderColor = colors.createPrimaryColor(
+      { alpha: 0.24 },
+      false,
+      darkMode
+    );
 
     const secondaryColor = !darkMode
       ? colors.secondary.origin
       : colors.secondary.light;
 
-    const secondaryBgColor = colors.createSecondaryColor({ alpha: 0.08 });
-    const secondaryMiddleColor = colors.createSecondaryColor({ alpha: 0.12 });
-    const secondaryBorderColor = colors.createSecondaryColor({ alpha: 0.24 });
+    const secondaryBgColor = colors.createSecondaryColor(
+      { alpha: 0.08 },
+      false,
+      darkMode
+    );
+    const secondaryMiddleColor = colors.createSecondaryColor(
+      { alpha: 0.12 },
+      false,
+      darkMode
+    );
+    const secondaryBorderColor = colors.createSecondaryColor(
+      { alpha: 0.24 },
+      false,
+      darkMode
+    );
 
     const successColor = !darkMode
       ? colors.success.origin
       : colors.success.light;
 
-    const successBgColor = colors.createSuccessColor({ alpha: 0.08 });
-    const successMiddleColor = colors.createSuccessColor({ alpha: 0.12 });
-    const successBorderColor = colors.createSuccessColor({ alpha: 0.24 });
+    const successBgColor = colors.createSuccessColor(
+      { alpha: 0.08 },
+      false,
+      darkMode
+    );
+    const successMiddleColor = colors.createSuccessColor(
+      { alpha: 0.12 },
+      false,
+      darkMode
+    );
+    const successBorderColor = colors.createSuccessColor(
+      { alpha: 0.24 },
+      false,
+      darkMode
+    );
 
     const errorColor = !darkMode ? colors.error.origin : colors.error.light;
-    const errorBgColor = colors.createErrorColor({ alpha: 0.08 });
-    const errorMiddleColor = colors.createErrorColor({ alpha: 0.12 });
-    const errorBorderColor = colors.createErrorColor({ alpha: 0.24 });
+    const errorBgColor = colors.createErrorColor(
+      { alpha: 0.08 },
+      false,
+      darkMode
+    );
+    const errorMiddleColor = colors.createErrorColor(
+      { alpha: 0.12 },
+      false,
+      darkMode
+    );
+    const errorBorderColor = colors.createErrorColor(
+      { alpha: 0.24 },
+      false,
+      darkMode
+    );
 
     const warningColor = !darkMode
       ? colors.warning.origin
       : colors.warning.light;
 
-    const warningBgColor = colors.createWarningColor({ alpha: 0.08 });
-    const warningMiddleColor = colors.createWarningColor({ alpha: 0.12 });
-    const warningBorderColor = colors.createWarningColor({ alpha: 0.24 });
+    const warningBgColor = colors.createWarningColor(
+      { alpha: 0.08 },
+      false,
+      darkMode
+    );
+    const warningMiddleColor = colors.createWarningColor(
+      { alpha: 0.12 },
+      false,
+      darkMode
+    );
+    const warningBorderColor = colors.createWarningColor(
+      { alpha: 0.24 },
+      false,
+      darkMode
+    );
 
     const infoColor = !darkMode ? colors.info.origin : colors.info.light;
-    const infoBgColor = colors.createInfoColor({ alpha: 0.08 });
-    const infoMiddleColor = colors.createInfoColor({ alpha: 0.12 });
-    const infoBorderColor = colors.createInfoColor({ alpha: 0.24 });
+    const infoBgColor = colors.createInfoColor(
+      { alpha: 0.08 },
+      false,
+      darkMode
+    );
+    const infoMiddleColor = colors.createInfoColor(
+      { alpha: 0.12 },
+      false,
+      darkMode
+    );
+    const infoBorderColor = colors.createInfoColor(
+      { alpha: 0.24 },
+      false,
+      darkMode
+    );
 
     return {
       root: {
@@ -130,25 +202,29 @@ const useStyles = makeStyles(
       },
       default: {
         backgroundColor: !darkMode
-          ? colors.createBlackColor({ alpha: 0.04 })
-          : colors.createWhiteColor({ alpha: 0.04 }),
-        "& $label": { color: colors.text.secondary },
-        "& $icon": { color: colors.text.secondary },
+          ? colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
+          : colors.createWhiteColor({ alpha: 0.04 }, false, darkMode),
+        "& $label": {
+          color: !darkMode ? text.dark.secondary : text.light.secondary
+        },
+        "& $icon": {
+          color: !darkMode ? text.dark.secondary : text.light.secondary
+        },
         "&$outlined": {
-          border: `1px solid ${colors.divider}`,
+          border: `1px solid ${!darkMode ? divider.dark : divider.light}`,
           backgroundColor: colors.transparent
         },
         "& $removeBtn": {
-          color: colors.text.secondary,
+          color: !darkMode ? text.dark.secondary : text.light.secondary,
           "&:hover > $removeBtnIcon": {
             backgroundColor: !darkMode
-              ? colors.createBlackColor({ alpha: 0.12 })
-              : colors.createWhiteColor({ alpha: 0.12 })
+              ? colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
+              : colors.createWhiteColor({ alpha: 0.12 }, false, darkMode)
           },
           "&:active > $removeBtnIcon": {
             backgroundColor: !darkMode
-              ? colors.createBlackColor({ alpha: 0.24 })
-              : colors.createWhiteColor({ alpha: 0.24 })
+              ? colors.createBlackColor({ alpha: 0.24 }, false, darkMode)
+              : colors.createWhiteColor({ alpha: 0.24 }, false, darkMode)
           }
         }
       },

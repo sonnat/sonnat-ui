@@ -3,12 +3,12 @@ import makeStyles from "../styles/makeStyles";
 const useStyles = makeStyles(
   theme => {
     const {
-      colors,
       darkMode,
       direction,
       spacings: { spaces },
       mixins: { asIconWrapper },
-      typography: { variants, fontFamily }
+      typography: { variants, fontFamily },
+      colors: { text, transparent, primary, error }
     } = theme;
 
     return {
@@ -23,7 +23,7 @@ const useStyles = makeStyles(
       base: { cursor: "pointer" },
       input: {
         ...variants.body,
-        color: colors.text.primary,
+        color: !darkMode ? text.dark.primary : text.light.primary,
         border: "none",
         outline: "none",
         padding: 0,
@@ -32,7 +32,7 @@ const useStyles = makeStyles(
         minWidth: 0,
         height: "100%",
         appearance: "none !important",
-        backgroundColor: colors.transparent
+        backgroundColor: transparent
       },
       helperRow: {
         display: "flex",
@@ -46,19 +46,19 @@ const useStyles = makeStyles(
       },
       helperText: {
         ...variants.caption,
-        color: colors.text.secondary
+        color: !darkMode ? text.dark.secondary : text.light.secondary
       },
       helperIcon: {
         ...asIconWrapper(16),
         marginTop: spaces[0].rem,
-        color: colors.text.secondary,
+        color: !darkMode ? text.dark.secondary : text.light.secondary,
         ...(direction === "rtl"
           ? { marginLeft: spaces[1].rem }
           : { marginRight: spaces[1].rem })
       },
       placeholder: {
         ...variants.body,
-        color: colors.text.hint,
+        color: !darkMode ? text.dark.hint : text.light.hint,
         flexGrow: "1",
         overflow: "hidden",
         alignSelf: "center",
@@ -68,7 +68,7 @@ const useStyles = makeStyles(
       display: { display: "flex", height: "100%" },
       displaySingle: {
         extend: "placeholder",
-        color: colors.text.primary
+        color: !darkMode ? text.dark.primary : text.light.primary
       },
       displayMultiple: {
         display: "flex",
@@ -87,12 +87,12 @@ const useStyles = makeStyles(
       optionGroup: {},
       optionIcon: asIconWrapper(16),
       caretIcon: {},
-      selected: {
-        color: !darkMode ? colors.primary.origin : colors.primary.light
-      },
+      selected: { color: !darkMode ? primary.origin : primary.light },
       disabled: {
         pointerEvents: "none",
-        "& $placeholder, & $displaySingle": { color: colors.text.disabled }
+        "& $placeholder, & $displaySingle": {
+          color: !darkMode ? text.dark.disabled : text.light.disabled
+        }
       },
       open: { "& $caretIcon": { transform: "rotate(180deg)" } },
       small: {
@@ -118,12 +118,8 @@ const useStyles = makeStyles(
       fluid: { width: "100%" },
       errored: {
         "&:not($disabled)": {
-          "& $helperText": {
-            color: !darkMode ? colors.error.origin : colors.error.light
-          },
-          "& $helperIcon": {
-            color: !darkMode ? colors.error.origin : colors.error.light
-          }
+          "& $helperText": { color: !darkMode ? error.origin : error.light },
+          "& $helperIcon": { color: !darkMode ? error.origin : error.light }
         }
       },
       native: {},
