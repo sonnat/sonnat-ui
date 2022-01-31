@@ -9,13 +9,12 @@ type Observer = {
   elements: Map<HTMLElement, ObserveCallback>;
 };
 
-/* eslint-disable */
 const requestIdleCallback =
   (typeof self !== "undefined" &&
     self.requestIdleCallback &&
     self.requestIdleCallback.bind(window)) ||
   function (cb: IdleRequestCallback): number {
-    let start = Date.now();
+    const start = Date.now();
     return setTimeout(function () {
       cb({
         didTimeout: false,
@@ -33,7 +32,6 @@ const cancelIdleCallback =
   function (id: number) {
     return clearTimeout(id);
   };
-/* eslint-enable */
 
 const hasIntersectionObserver = typeof IntersectionObserver !== "undefined";
 
@@ -128,10 +126,8 @@ const useIntersection = <T extends HTMLElement = HTMLElement>({
   React.useEffect(() => {
     if (!hasIntersectionObserver) {
       if (!visible) {
-        /* eslint-disable */
         const idleCallback = requestIdleCallback(() => setVisible(true));
         return () => cancelIdleCallback(idleCallback);
-        /* eslint-enable */
       }
     }
   }, [visible]);
