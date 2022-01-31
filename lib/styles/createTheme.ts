@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { AnyObject, EmptyIntersectionObject } from "../typings";
+import type { EmptyIntersectionObject } from "../typings";
 import createBreakpoints, {
   type Breakpoints,
   type BreakpointsInput
@@ -48,7 +48,7 @@ export interface ThemeBase {
   };
 }
 
-const createTheme = <CustomProps extends AnyObject = EmptyIntersectionObject>(
+const createTheme = <CustomProps = EmptyIntersectionObject>(
   themeInput?: Partial<ThemeInput> & {
     custom?: CustomProps | ((theme: ThemeBase) => CustomProps);
   }
@@ -66,16 +66,16 @@ const createTheme = <CustomProps extends AnyObject = EmptyIntersectionObject>(
   } = themeInput || {};
 
   const breakpoints = createBreakpoints(breakpointsInput);
-  const colors = createColors(colorsInput, isDarkMode);
+  const colors = createColors(colorsInput);
   const typography = createTypography(typographyInput);
+  const radius = createRadius({ pxToRem: typography.pxToRem });
+  const zIndexes = createZIndexes(zIndexesInput);
   const spacings = createSpacings(spacingsInput, {
     pxToRem: typography.pxToRem
   });
   const mixins = createMixins(mixinsInput, {
     pxToRem: typography.pxToRem
   });
-  const radius = createRadius({ pxToRem: typography.pxToRem });
-  const zIndexes = createZIndexes(zIndexesInput);
 
   const backfaceVisibilityFix: React.CSSProperties = {
     WebkitBackfaceVisibility: "hidden",
@@ -114,9 +114,9 @@ const createTheme = <CustomProps extends AnyObject = EmptyIntersectionObject>(
     ...thisTheme,
     custom: customInput
       ? typeof customInput === "function"
-        ? customInput(thisTheme)
+        ? (<(theme: ThemeBase) => CustomProps>customInput)(thisTheme)
         : customInput
-      : ({} as CustomProps)
+      : <CustomProps>{}
   };
 };
 

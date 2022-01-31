@@ -37,19 +37,51 @@ export interface Colors {
   success: ColorVariant;
   transparent: string;
   contrastThreshold: number;
-  text: TextColorType;
-  divider: string;
+  text: { light: TextColorType; dark: TextColorType };
+  divider: { light: string; dark: string };
+  background: { light: BackgroundColorType; dark: BackgroundColorType };
   white: string;
   black: string;
-  background: BackgroundColorType;
-  createPrimaryColor: (hsla: HslaInputType, opaquify?: boolean) => string;
-  createSecondaryColor: (hsla: HslaInputType, opaquify?: boolean) => string;
-  createBlackColor: (hsla: HslaInputType, opaquify?: boolean) => string;
-  createWhiteColor: (hsla: HslaInputType, opaquify?: boolean) => string;
-  createErrorColor: (hsla: HslaInputType, opaquify?: boolean) => string;
-  createWarningColor: (hsla: HslaInputType, opaquify?: boolean) => string;
-  createSuccessColor: (hsla: HslaInputType, opaquify?: boolean) => string;
-  createInfoColor: (hsla: HslaInputType, opaquify?: boolean) => string;
+  createPrimaryColor: (
+    hsla: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => string;
+  createSecondaryColor: (
+    hsla: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => string;
+  createBlackColor: (
+    hsla: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => string;
+  createWhiteColor: (
+    hsla: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => string;
+  createErrorColor: (
+    hsla: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => string;
+  createWarningColor: (
+    hsla: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => string;
+  createSuccessColor: (
+    hsla: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => string;
+  createInfoColor: (
+    hsla: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => string;
   getContrastColorOf: (background: ColorInputType) => string;
 }
 
@@ -68,33 +100,30 @@ const contrastThreshold = 3;
 const white = "#ffffff" as const;
 const black = "#000000" as const;
 
-export const dark = {
-  text: {
+const text = {
+  light: {
     primary: white,
     secondary: _opaquify(changeColorHsla(white, { alpha: 0.64 }), "#121212"),
     hint: _opaquify(changeColorHsla(white, { alpha: 0.32 }), "#121212"),
     disabled: _opaquify(changeColorHsla(white, { alpha: 0.24 }), "#121212")
   },
-  divider: "rgba(255, 255, 255, 0.16)",
-  background: {
-    origin: "#121212",
-    accents: { 1: "#292929", 2: "#1f1f1f" }
-  }
-} as const;
-
-export const light = {
-  text: {
+  dark: {
     primary: _opaquify(changeColorHsla(black, { alpha: 0.87 }), "#ffffff"),
     secondary: _opaquify(changeColorHsla(black, { alpha: 0.56 }), "#ffffff"),
     hint: _opaquify(changeColorHsla(black, { alpha: 0.32 }), "#ffffff"),
     disabled: _opaquify(changeColorHsla(black, { alpha: 0.24 }), "#ffffff")
-  },
-  divider: "rgba(0, 0, 0, 0.12)",
-  background: {
-    origin: "#ffffff",
-    accents: { 1: "#fafafa", 2: "#ebebeb" }
   }
-} as const;
+};
+
+const divider = {
+  dark: "rgba(0, 0, 0, 0.12)",
+  light: "rgba(255, 255, 255, 0.16)"
+};
+
+const background = {
+  light: { origin: "#ffffff", accents: { 1: "#fafafa", 2: "#ebebeb" } },
+  dark: { origin: "#121212", accents: { 1: "#292929", 2: "#1f1f1f" } }
+};
 
 const defaultSystemColors = {
   primary: {
@@ -178,10 +207,7 @@ const completeSystemColor = (variantInput: string | ColorVariant) => {
   return pairing;
 };
 
-const createColors = (
-  colorsInput?: ColorsInput,
-  isDarkMode?: boolean
-): Colors => {
+const createColors = (colorsInput?: ColorsInput): Colors => {
   const {
     primary: primaryInput = defaultSystemColors.primary,
     secondary: secondaryInput = defaultSystemColors.secondary,
@@ -192,8 +218,6 @@ const createColors = (
     contrastThreshold: contrastThresholdInput = contrastThreshold
   } = colorsInput || {};
 
-  const isDark = isDarkMode;
-
   const transparent = Color.rgb([255, 255, 255]).alpha(0).toString();
 
   const primary = completeSystemColor(primaryInput);
@@ -203,111 +227,146 @@ const createColors = (
   const info = completeSystemColor(infoInput);
   const success = completeSystemColor(successInput);
 
-  const createBlackColor = (change: HslaInputType, opaquify = false) => {
+  const createBlackColor = (
+    change: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => {
     const color = changeColorHsla(black, change);
 
     return opaquify
       ? _opaquify(
           color,
-          isDark ? dark.background.origin : light.background.origin
+          darkMode ? background.dark.origin : background.light.origin
         )
       : color;
   };
-  const createWhiteColor = (change: HslaInputType, opaquify = false) => {
+  const createWhiteColor = (
+    change: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => {
     const color = changeColorHsla(white, change);
 
     return opaquify
       ? _opaquify(
           color,
-          isDark ? dark.background.origin : light.background.origin
+          darkMode ? background.dark.origin : background.light.origin
         )
       : color;
   };
 
-  const createPrimaryColor = (change: HslaInputType, opaquify = false) => {
+  const createPrimaryColor = (
+    change: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => {
     const color = changeColorHsla(
-      !isDark ? primary.origin : primary.light,
+      !darkMode ? primary.origin : primary.light,
       change
     );
 
     return opaquify
       ? _opaquify(
           color,
-          isDark ? dark.background.origin : light.background.origin
+          darkMode ? background.dark.origin : background.light.origin
         )
       : color;
   };
 
-  const createSecondaryColor = (change: HslaInputType, opaquify = false) => {
+  const createSecondaryColor = (
+    change: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => {
     const color = changeColorHsla(
-      !isDark ? secondary.origin : secondary.light,
+      !darkMode ? secondary.origin : secondary.light,
       change
     );
 
     return opaquify
       ? _opaquify(
           color,
-          isDark ? dark.background.origin : light.background.origin
+          darkMode ? background.dark.origin : background.light.origin
         )
       : color;
   };
 
-  const createErrorColor = (change: HslaInputType, opaquify = false) => {
-    const color = changeColorHsla(!isDark ? error.origin : error.light, change);
-
-    return opaquify
-      ? _opaquify(
-          color,
-          isDark ? dark.background.origin : light.background.origin
-        )
-      : color;
-  };
-
-  const createSuccessColor = (change: HslaInputType, opaquify = false) => {
+  const createErrorColor = (
+    change: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => {
     const color = changeColorHsla(
-      !isDark ? success.origin : success.light,
+      !darkMode ? error.origin : error.light,
       change
     );
 
     return opaquify
       ? _opaquify(
           color,
-          isDark ? dark.background.origin : light.background.origin
+          darkMode ? background.dark.origin : background.light.origin
         )
       : color;
   };
 
-  const createWarningColor = (change: HslaInputType, opaquify = false) => {
+  const createSuccessColor = (
+    change: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => {
     const color = changeColorHsla(
-      !isDark ? warning.origin : warning.light,
+      !darkMode ? success.origin : success.light,
       change
     );
 
     return opaquify
       ? _opaquify(
           color,
-          isDark ? dark.background.origin : light.background.origin
+          darkMode ? background.dark.origin : background.light.origin
         )
       : color;
   };
 
-  const createInfoColor = (change: HslaInputType, opaquify = false) => {
-    const color = changeColorHsla(!isDark ? info.origin : info.light, change);
+  const createWarningColor = (
+    change: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => {
+    const color = changeColorHsla(
+      !darkMode ? warning.origin : warning.light,
+      change
+    );
 
     return opaquify
       ? _opaquify(
           color,
-          isDark ? dark.background.origin : light.background.origin
+          darkMode ? background.dark.origin : background.light.origin
+        )
+      : color;
+  };
+
+  const createInfoColor = (
+    change: HslaInputType,
+    opaquify: boolean,
+    darkMode: boolean
+  ) => {
+    const color = changeColorHsla(!darkMode ? info.origin : info.light, change);
+
+    return opaquify
+      ? _opaquify(
+          color,
+          darkMode ? background.dark.origin : background.light.origin
         )
       : color;
   };
 
   const getContrastColorOf = (background: ColorInputType) => {
     const contrastForeground =
-      calculateContrastRatio(background, dark.text.primary) >=
+      calculateContrastRatio(background, text.dark.primary) >=
       contrastThresholdInput
-        ? dark.text.primary
-        : light.text.primary;
+        ? text.dark.primary
+        : text.light.primary;
 
     if (process.env.NODE_ENV !== "production") {
       const contrast = calculateContrastRatio(background, contrastForeground);
@@ -339,6 +398,9 @@ const createColors = (
     transparent,
     white,
     black,
+    text,
+    divider,
+    background,
     contrastThreshold: contrastThresholdInput,
     createErrorColor,
     createSuccessColor,
@@ -348,8 +410,7 @@ const createColors = (
     createBlackColor,
     createSecondaryColor,
     createWhiteColor,
-    getContrastColorOf,
-    ...(isDark ? dark : light)
+    getContrastColorOf
   };
 };
 

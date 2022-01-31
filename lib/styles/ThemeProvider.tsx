@@ -3,12 +3,12 @@ import React from "react";
 import { ThemeProvider as JssThemeProvider } from "react-jss";
 import type { DefaultTheme } from "./defaultTheme";
 
-interface ThemeProviderProps<T = DefaultTheme> {
+interface ThemeProviderProps<T = Partial<DefaultTheme>> {
   children: React.ReactNode;
   theme: NonNullable<T> | ((outerTheme: T) => NonNullable<T>);
 }
 
-interface IThemeProvider<T = DefaultTheme> {
+interface IThemeProvider<T = Partial<DefaultTheme>> {
   (props: ThemeProviderProps<T>): JSX.Element;
   propTypes?: React.WeakValidationMap<ThemeProviderProps<T>> | undefined;
 }
