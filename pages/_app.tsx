@@ -2,7 +2,7 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import * as React from "react";
 import CssBaseline from "../lib/CssBaseline";
-import { useDarkMode, makeStyles, SonnatInitializer } from "../lib/styles";
+import { makeStyles, SonnatInitializer, useDarkMode } from "../lib/styles";
 
 interface IAppContext {
   setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -43,10 +43,10 @@ const App = (props: AppProps) => {
 
   const [isDarkMode, setIsDarkMode] = React.useState(false);
 
-  const theme = useDarkMode(isDarkMode);
+  const newTheme = useDarkMode(isDarkMode);
 
   return (
-    <SonnatInitializer theme={theme} injectFirst>
+    <SonnatInitializer theme={newTheme} injectFirst>
       <Head>
         <meta
           name="viewport"
