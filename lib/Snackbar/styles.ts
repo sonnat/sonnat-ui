@@ -150,7 +150,7 @@ const useStyles = makeStyles(
       closeButtonIcon: {},
       divider: {
         width: 1,
-        backgroundColor: darkMode ? divider.light : divider.dark,
+        backgroundColor: darkMode ? divider.dark : divider.light,
         margin: `0 ${spaces[3].rem}`,
         alignSelf: "flex-start",
         height: pxToRem(24),
@@ -203,19 +203,19 @@ const useStyles = makeStyles(
       default: {
         backgroundColor: !darkMode ? grey[900] : grey[50],
         "& $divider": {
-          backgroundColor: !darkMode ? divider.dark : divider.light
+          backgroundColor: !darkMode ? divider.light : divider.dark
         },
         "& $icon": {
-          color: !darkMode ? text.dark.primary : text.light.primary
+          color: !darkMode ? text.light.primary : text.dark.primary
         },
         "& $text": {
-          color: !darkMode ? text.dark.primary : text.light.primary
+          color: !darkMode ? text.light.primary : text.dark.primary
         },
         "& $actionLabel": {
           color: !darkMode ? colors.warning.light : colors.warning.origin
         },
         "& $closeButtonIcon": {
-          color: !darkMode ? text.dark.primary : text.light.primary
+          color: !darkMode ? text.light.primary : text.dark.primary
         },
         "& $actionButton": {
           "&:hover": {
