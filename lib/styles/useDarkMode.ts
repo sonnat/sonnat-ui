@@ -1,9 +1,12 @@
 import * as React from "react";
 import usePreviousValue from "../utils/usePreviousValue";
-import { type Theme } from "./createTheme";
-import defaultTheme from "./defaultTheme";
+import defaultTheme, { type DefaultTheme } from "./defaultTheme";
+import type { Theme } from "./createTheme";
 
-const useDarkMode = (isDarkMode = false, theme = defaultTheme): Theme => {
+const useDarkMode = <T extends Theme = DefaultTheme>(
+  isDarkMode = false,
+  theme: T = defaultTheme as T
+): T => {
   const cachedTheme = React.useRef(theme);
   const prevState = usePreviousValue(isDarkMode);
 

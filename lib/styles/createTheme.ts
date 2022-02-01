@@ -1,11 +1,11 @@
 import * as React from "react";
-import type { EmptyIntersectionObject } from "../typings";
 import createBreakpoints, {
   type Breakpoints,
   type BreakpointsInput
 } from "./createBreakpoints";
 import createColors, { type Colors, type ColorsInput } from "./createColors";
 import createMixins, { type Mixins } from "./createMixins";
+import createRadius, { type Radius } from "./createRadius";
 import createSpacings, {
   type Spacings,
   type SpacingsInput
@@ -15,7 +15,6 @@ import createTypography, {
   type TypographyInput
 } from "./createTypography";
 import createZIndexes, { type ZIndexes } from "./createZIndexes";
-import createRadius, { type Radius } from "./createRadius";
 import swatches, { type Swatches } from "./swatches";
 
 export type Direction = "ltr" | "rtl";
@@ -48,7 +47,7 @@ export interface ThemeBase {
   };
 }
 
-const createTheme = <CustomProps = EmptyIntersectionObject>(
+const createTheme = <CustomProps = unknown>(
   themeInput?: Partial<ThemeInput> & {
     custom?: CustomProps | ((theme: ThemeBase) => CustomProps);
   }
