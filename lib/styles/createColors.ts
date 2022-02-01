@@ -100,21 +100,6 @@ const contrastThreshold = 3;
 const white = "#ffffff" as const;
 const black = "#000000" as const;
 
-const text = {
-  light: {
-    primary: white,
-    secondary: _opaquify(changeColorHsla(white, { alpha: 0.64 }), "#121212"),
-    hint: _opaquify(changeColorHsla(white, { alpha: 0.32 }), "#121212"),
-    disabled: _opaquify(changeColorHsla(white, { alpha: 0.24 }), "#121212")
-  },
-  dark: {
-    primary: _opaquify(changeColorHsla(black, { alpha: 0.87 }), "#ffffff"),
-    secondary: _opaquify(changeColorHsla(black, { alpha: 0.56 }), "#ffffff"),
-    hint: _opaquify(changeColorHsla(black, { alpha: 0.32 }), "#ffffff"),
-    disabled: _opaquify(changeColorHsla(black, { alpha: 0.24 }), "#ffffff")
-  }
-};
-
 const divider = {
   dark: "rgba(0, 0, 0, 0.12)",
   light: "rgba(255, 255, 255, 0.16)"
@@ -123,6 +108,42 @@ const divider = {
 const background = {
   light: { origin: "#ffffff", accents: { 1: "#fafafa", 2: "#ebebeb" } },
   dark: { origin: "#121212", accents: { 1: "#292929", 2: "#1f1f1f" } }
+};
+
+const text = {
+  light: {
+    primary: white,
+    secondary: _opaquify(
+      changeColorHsla(white, { alpha: 0.64 }),
+      background.dark.origin
+    ),
+    hint: _opaquify(
+      changeColorHsla(white, { alpha: 0.32 }),
+      background.dark.origin
+    ),
+    disabled: _opaquify(
+      changeColorHsla(white, { alpha: 0.24 }),
+      background.dark.origin
+    )
+  },
+  dark: {
+    primary: _opaquify(
+      changeColorHsla(black, { alpha: 0.87 }),
+      background.light.origin
+    ),
+    secondary: _opaquify(
+      changeColorHsla(black, { alpha: 0.56 }),
+      background.light.origin
+    ),
+    hint: _opaquify(
+      changeColorHsla(black, { alpha: 0.32 }),
+      background.light.origin
+    ),
+    disabled: _opaquify(
+      changeColorHsla(black, { alpha: 0.24 }),
+      background.light.origin
+    )
+  }
 };
 
 const defaultSystemColors = {
@@ -363,10 +384,10 @@ const createColors = (colorsInput?: ColorsInput): Colors => {
 
   const getContrastColorOf = (background: ColorInputType) => {
     const contrastForeground =
-      calculateContrastRatio(background, text.dark.primary) >=
+      calculateContrastRatio(background, text.light.primary) >=
       contrastThresholdInput
-        ? text.dark.primary
-        : text.light.primary;
+        ? text.light.primary
+        : text.dark.primary;
 
     if (process.env.NODE_ENV !== "production") {
       const contrast = calculateContrastRatio(background, contrastForeground);
