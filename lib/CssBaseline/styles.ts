@@ -222,39 +222,32 @@ const cssVariables = (theme: DefaultTheme) => {
       if (whiteListProps.includes(key)) {
         if (!colors[key as keyof Colors]) return variables;
 
-        const rootColor = colors[key as keyof Colors];
-
-        type VKey = keyof typeof rootColor;
+        const rootColor = <string | Record<string, string>>(
+          colors[key as keyof Colors]
+        );
 
         if (typeof rootColor !== "string") {
-          return {
-            ...variables,
-            ...Object.keys(rootColor).reduce((variants, vkey) => {
-              if (typeof rootColor[vkey as VKey] !== "string") {
-                return {
-                  ...variables,
-                  ...Object.keys(rootColor[vkey as VKey]).reduce(
-                    (subVariants, vvkey) => {
-                      return {
-                        ...subVariants,
-                        [`--snt-${key}-${vkey}-${vvkey}-color`]:
-                          rootColor[vkey as VKey][vvkey]
-                      };
-                    },
-                    {}
-                  )
-                };
-              } else {
-                return {
-                  ...variants,
-                  [`--snt-${key}-${vkey}-color`]: rootColor[vkey as VKey]
-                };
-              }
-            }, {})
+          const recursion = (
+            root: string | Record<string, string>,
+            prefix = `--snt-${key}`
+          ): Record<string, string> => {
+            return Object.keys(root).reduce((vars, vkey) => {
+              const _var = <typeof root>root[<keyof typeof root>vkey];
+
+              if (typeof _var === "string")
+                return { ...vars, [`${prefix}-${vkey}-color`]: _var };
+
+              return {
+                ...vars,
+                ...recursion(_var, `${prefix}-${vkey}`)
+              };
+            }, {} as Record<string, string>);
           };
+
+          return { ...variables, ...recursion(rootColor) };
         } else return { ...variables, [`--snt-${key}-color`]: rootColor };
       } else return variables;
-    }, {});
+    }, {} as Record<string, string>);
   };
 
   const swatchesVariables = (swatches: Swatches) => {
@@ -301,7 +294,8 @@ const cssVariables = (theme: DefaultTheme) => {
       "--snt-html-font-size": `${typography.htmlFontSize}px`,
       "--snt-base-font-size": `${typography.fontSize}px`,
       "--snt-ltr-font-family": typography.fontFamily.ltr,
-      "--snt-rtl-font-family": typography.fontFamily.rtl
+      "--snt-rtl-font-family": typography.fontFamily.rtl,
+      "--snt-monospace-font-family": typography.fontFamily.monospace
     };
   };
 
