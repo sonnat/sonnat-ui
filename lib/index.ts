@@ -50,6 +50,8 @@ export * from "./NoSsr";
 export { default as NoSsr } from "./NoSsr";
 export * from "./PageLoader";
 export { default as PageLoader } from "./PageLoader";
+export * from "./Popper";
+export { default as Popper } from "./Popper";
 export * from "./Portal";
 export { default as Portal } from "./Portal";
 export * from "./PortalDestination";

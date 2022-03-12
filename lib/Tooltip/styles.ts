@@ -5,7 +5,6 @@ const useStyles = makeStyles(
     const {
       colors,
       darkMode,
-      zIndexes,
       direction,
       radius,
       spacings: { spaces },
@@ -17,20 +16,16 @@ const useStyles = makeStyles(
       root: {
         direction,
         fontFamily: fontFamily[direction],
-        opacity: 0,
         maxWidth: pxToRem(192),
         minWidth: pxToRem(56),
-        display: "inline-flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: zIndexes.popover,
-        position: "absolute",
         MozBackfaceVisibility: "hidden",
         WebkitBackfaceVisibility: "hidden",
-        backfaceVisibility: "hidden",
-        transform: "translate(0, 0) scale(0.8)",
-        transition:
-          "transform 360ms cubic-bezier(0, 0, 0.2, 1) 100ms, opacity 200ms ease 100ms"
+        backfaceVisibility: "hidden"
+      },
+      content: {
+        display: "inline-flex",
+        justifyContent: "center",
+        alignItems: "center"
       },
       container: {
         padding: [[spaces[3].rem, spaces[5].rem]],
@@ -81,15 +76,6 @@ const useStyles = makeStyles(
           zIndex: -1
         }
       },
-      open: {
-        opacity: 1,
-        "&$tailed": {
-          "&$top": { transform: `translate(0, ${pxToRem(-16)}) scale(1)` },
-          "&$bottom": { transform: `translate(0, ${pxToRem(16)}) scale(1)` },
-          "&$right": { transform: `translate(${pxToRem(16)}, 0) scale(1)` },
-          "&$left": { transform: `translate(${pxToRem(-16)}, 0) scale(1)` }
-        }
-      },
       tailed: {
         "& $container:after, & $container:before": { content: '""' },
         "& $tail": {
@@ -97,7 +83,8 @@ const useStyles = makeStyles(
           visibility: "visible",
           "&:before": { content: '""' }
         },
-        "&$top": {
+        "& $top": {
+          transform: `translate(0, ${pxToRem(-8)}) scale(1)`,
           "& $container:after": {
             borderRadius: "0",
             borderBottomRightRadius: pxToRem(2),
@@ -113,7 +100,8 @@ const useStyles = makeStyles(
             }
           }
         },
-        "&$right": {
+        "& $right": {
+          transform: `translate(${pxToRem(8)}, 0) scale(1)`,
           "& $container:after": {
             borderRadius: "0",
             borderBottomLeftRadius: pxToRem(2),
@@ -129,7 +117,8 @@ const useStyles = makeStyles(
             }
           }
         },
-        "&$left": {
+        "& $left": {
+          transform: `translate(${pxToRem(-8)}, 0) scale(1)`,
           "& $container:after": {
             borderRadius: "0",
             borderTopRightRadius: pxToRem(2),
@@ -145,7 +134,8 @@ const useStyles = makeStyles(
             }
           }
         },
-        "&$bottom": {
+        "& $bottom": {
+          transform: `translate(0, ${pxToRem(8)}) scale(1)`,
           "& $container:after": {
             borderRadius: "0",
             borderTopLeftRadius: pxToRem(2),
@@ -162,11 +152,10 @@ const useStyles = makeStyles(
           }
         }
       },
-      floated: { transform: `translate(0, ${pxToRem(-8)}) scale(1)` },
-      top: { transform: `translate(0, ${pxToRem(-8)}) scale(1)` },
-      left: { transform: `translate(${pxToRem(-8)}, 0) scale(1)` },
-      right: { transform: `translate(${pxToRem(8)}, 0) scale(1)` },
-      bottom: { transform: `translate(0, ${pxToRem(8)}) scale(1)` }
+      top: {},
+      left: {},
+      right: {},
+      bottom: {}
     };
   },
   { name: "SonnatTooltip" }

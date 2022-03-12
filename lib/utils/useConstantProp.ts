@@ -6,6 +6,7 @@ interface Options {
   componentName: string;
   propName: string;
   errorHandler?: () => string;
+  notNullable?: boolean;
 }
 
 type R<T1, T2> = T2 extends undefined ? T1 | undefined : NotUndefined<T1 | T2>;
@@ -15,10 +16,19 @@ const useConstantProp = <T1, T2>(
   defaultValue: T2,
   options: Options
 ): R<T1, T2> => {
-  const { componentName, propName, errorHandler } = options;
+  const {
+    componentName,
+    propName,
+    errorHandler,
+    notNullable = false
+  } = options;
+
+  const fallbackCondition = notNullable
+    ? initialValue == null
+    : isUndef(initialValue);
 
   const { current: value } = React.useRef(
-    !isUndef(initialValue) ? initialValue : defaultValue
+    !fallbackCondition ? initialValue : defaultValue
   );
 
   React.useEffect(() => {
