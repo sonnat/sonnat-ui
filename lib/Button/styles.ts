@@ -162,8 +162,8 @@ const useStyles = makeStyles(
         "&$iconButton": {
           height: pxToRem(24),
           width: pxToRem(24),
-          "& > $icon": asIconWrapper(16),
-          "& > $spinner": { width: pxToRem(16), height: pxToRem(16) }
+          "& > $icon": asIconWrapper(14),
+          "& > $spinner": { width: pxToRem(14), height: pxToRem(14) }
         },
         "& $label": {
           fontSize: variants.caption.fontSize,

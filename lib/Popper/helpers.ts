@@ -2,6 +2,7 @@
 
 import type { RequireOnlyOne } from "../typings";
 import {
+  clamp,
   contains,
   getBoundingClientRect,
   getDocumentElement,
@@ -410,12 +411,58 @@ const getElementRects = (
   }
 });
 
-const calcCoordinatesFromPlacement = (
-  placement: Placement,
-  offset: OffsetMiddleware,
-  elementRects: ElementRects,
-  isRtl: boolean
-): Coordinates => {
+/**
+ * Resolves with an object of overflow side offsets that determine how much the
+ * element is overflowing clipping boundary.
+ *
+ * - positive = overflowing the boundary by that number of pixels
+ * - negative = how many pixels left before it will overflow
+ * - 0 = lies flush with the boundary
+ *
+ * @see https://floating-ui.com/docs/detectOverflow
+ */
+const detectBoundaryOverflow = (args: {
+  coordinates: Coordinates;
+  elements: Elements;
+  elementRects: ElementRects;
+  strategy: Strategy;
+}) => {
+  const padding = 0;
+
+  const element = args.elements.popperElement;
+
+  const clippingRect = getClippingRect(element);
+  const clientClippingRect = rectToClientRect(clippingRect);
+
+  const elementClientRect = rectToClientRect(
+    getOffsetParentRectRelativeToViewport({
+      popperRect: {
+        ...args.elementRects.popperRect,
+        x: args.coordinates.x,
+        y: args.coordinates.y
+      },
+      offsetParent: getOffsetParent(element),
+      strategy: args.strategy
+    })
+  );
+
+  return {
+    top: clientClippingRect.top - elementClientRect.top + padding,
+    bottom: elementClientRect.bottom - clientClippingRect.bottom + padding,
+    left: clientClippingRect.left - elementClientRect.left + padding,
+    right: elementClientRect.right - clientClippingRect.right + padding
+  };
+};
+
+const calcCoordinatesFromPlacement = (args: {
+  placement: Placement;
+  offset: OffsetMiddleware;
+  elements: Elements;
+  elementRects: ElementRects;
+  strategy: Strategy;
+  isRtl: boolean;
+}): Coordinates => {
+  const { placement, offset, elementRects, elements, strategy, isRtl } = args;
   const { anchorRect, popperRect } = elementRects;
 
   const commonX = anchorRect.x + (anchorRect.width - popperRect.width) / 2;
@@ -459,74 +506,67 @@ const calcCoordinatesFromPlacement = (
     default:
   }
 
-  const mainAxisCoef = ["left", "top"].includes(side) ? -1 : 1;
-  let crossAxisCoef = 1;
-  if (alignment === "end") crossAxisCoef = -1;
-  if (isRtl && isVertical) crossAxisCoef *= -1;
+  let { x, y } = coordinates;
 
-  let mainAxisOffset = 0;
-  let crossAxisOffset = 0;
+  // Shift internal middleware
+  ({ x, y } = (() => {
+    const overflow = detectBoundaryOverflow({
+      coordinates,
+      elementRects,
+      elements,
+      strategy
+    });
 
-  if (typeof offset === "number") {
-    mainAxisOffset = offset;
-  } else if (typeof offset === "object") {
-    const { crossAxis = 0, mainAxis = 0 } = offset;
+    const crossAxis = mainAxis === "x" ? "y" : ("x" as keyof Coordinates);
 
-    mainAxisOffset = mainAxis;
-    crossAxisOffset = crossAxis;
-  }
+    const mainAxisCoord = coordinates[mainAxis];
+    const minSide = mainAxis === "y" ? "top" : "left";
+    const maxSide = mainAxis === "y" ? "bottom" : "right";
+    const min = mainAxisCoord + overflow[minSide];
+    const max = mainAxisCoord - overflow[maxSide];
 
-  const diffCoordinates = isVertical
-    ? { x: crossAxisOffset * crossAxisCoef, y: mainAxisOffset * mainAxisCoef }
-    : { x: mainAxisOffset * mainAxisCoef, y: crossAxisOffset * crossAxisCoef };
+    return {
+      [crossAxis]: coordinates[crossAxis],
+      [mainAxis]: clamp(mainAxisCoord, min, max)
+    } as Coordinates;
+  })());
 
-  return {
-    x: coordinates.x + diffCoordinates.x,
-    y: coordinates.y + diffCoordinates.y
-  };
-};
+  // Offset internal middleware
+  const diffCoordinates = (() => {
+    const mainAxisCoef = ["left", "top"].includes(side) ? -1 : 1;
 
-/**
- * Resolves with an object of overflow side offsets that determine how much the
- * element is overflowing clipping boundary.
- *
- * - positive = overflowing the boundary by that number of pixels
- * - negative = how many pixels left before it will overflow
- * - 0 = lies flush with the boundary
- *
- * @see https://floating-ui.com/docs/detectOverflow
- */
-const detectBoundaryOverflow = (args: {
-  coordinates: Coordinates;
-  elements: Elements;
-  elementRects: ElementRects;
-  strategy: Strategy;
-}) => {
-  const padding = 0;
+    let crossAxisCoef = 1;
+    if (alignment === "end") crossAxisCoef = -1;
+    if (isRtl && isVertical) crossAxisCoef *= -1;
 
-  const element = args.elements.popperElement;
+    let mainAxisOffset = 0;
+    let crossAxisOffset = 0;
 
-  const clippingRect = getClippingRect(element);
-  const clientClippingRect = rectToClientRect(clippingRect);
+    if (typeof offset === "number") mainAxisOffset = offset;
+    else if (typeof offset === "object") {
+      const { crossAxis = 0, mainAxis = 0 } = offset;
 
-  const elementClientRect = rectToClientRect(
-    getOffsetParentRectRelativeToViewport({
-      popperRect: {
-        ...args.elementRects.popperRect,
-        x: args.coordinates.x,
-        y: args.coordinates.y
-      },
-      offsetParent: getOffsetParent(element),
-      strategy: args.strategy
-    })
-  );
+      mainAxisOffset = mainAxis;
+      crossAxisOffset = crossAxis;
+    }
 
-  return {
-    top: clientClippingRect.top - elementClientRect.top + padding,
-    bottom: elementClientRect.bottom - clientClippingRect.bottom + padding,
-    left: clientClippingRect.left - elementClientRect.left + padding,
-    right: elementClientRect.right - clientClippingRect.right + padding
-  };
+    return (
+      isVertical
+        ? {
+            x: crossAxisOffset * crossAxisCoef,
+            y: mainAxisOffset * mainAxisCoef
+          }
+        : {
+            x: mainAxisOffset * mainAxisCoef,
+            y: crossAxisOffset * crossAxisCoef
+          }
+    ) as Coordinates;
+  })();
+
+  x += diffCoordinates.x;
+  y += diffCoordinates.y;
+
+  return { x, y };
 };
 
 const suppressViewportOverflow = (
@@ -664,12 +704,14 @@ export const computePosition = (
   const elements: Elements = { anchorElement, popperElement };
   const elementRects = getElementRects(elements, strategy);
 
-  let { x, y } = calcCoordinatesFromPlacement(
-    placement,
+  let { x, y } = calcCoordinatesFromPlacement({
+    isRtl,
     offset,
-    elementRects,
-    isRtl
-  );
+    strategy,
+    elements,
+    placement,
+    elementRects
+  });
 
   const middlewares = (
     computationMiddlewareOrder === "afterAutoPlacement"
@@ -708,17 +750,19 @@ export const computePosition = (
       default:
     }
 
-    if (result) {
-      if (result.placement) {
-        placement = result.placement ?? placement;
-        ({ x, y } = calcCoordinatesFromPlacement(
-          placement,
-          offset,
-          elementRects,
-          isRtl
-        ));
-      } else ({ x = x, y = y } = result.coordinates);
-    }
+    if (!result) return;
+
+    if (result.placement) {
+      placement = result.placement ?? placement;
+      ({ x, y } = calcCoordinatesFromPlacement({
+        isRtl,
+        offset,
+        strategy,
+        elements,
+        placement,
+        elementRects
+      }));
+    } else ({ x = x, y = y } = result.coordinates);
   });
 
   return { x, y, placement };
