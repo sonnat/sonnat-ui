@@ -779,7 +779,8 @@ const SelectBase = (props: SelectProps, ref: React.Ref<HTMLDivElement>) => {
         )}
         <Menu
           role="listbox"
-          anchorNode={inputBaseRef.current}
+          style={{ width: rootRef.current?.offsetWidth }}
+          anchorNodeReference={inputBaseRef}
           ref={menuRef}
           className={classes.menu}
           preventPageScrolling={preventPageScrolling}

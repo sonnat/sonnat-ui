@@ -5,7 +5,8 @@ import * as React from "react";
 import { isFragment } from "react-is";
 import InputAdornment from "../InputAdornment";
 import Magnifier from "../internals/icons/Magnifier";
-import PortalDestination from "../PortalDestination";
+import Popper, { type PopperProps } from "../Popper";
+import { alignments } from "../Popper/helpers";
 import useTheme from "../styles/useTheme";
 import TextField from "../TextField";
 import type { MergeElementProps } from "../typings";
@@ -13,11 +14,11 @@ import {
   clamp,
   detectScrollBarWidth,
   generateUniqueString,
-  getOffsetFromWindow,
   getVar,
   HTMLElementType,
   useEventListener,
-  useForkedRefs
+  useForkedRefs,
+  useOnChange
 } from "../utils";
 import MenuContext from "./context";
 import Item from "./Item";
@@ -31,19 +32,28 @@ interface MenuBaseProps {
    * An HTML element.
    * It's used to set the position of the menu.
    */
-  anchorNode: HTMLElement | null;
+  anchorNodeReference: React.RefObject<HTMLElement>;
   /**
    * Append to the classNames applied to the component so you can override or
    * extend the styles.
    */
   className?: string;
-  /** The placement of the menu. (start from "left" or "right") */
-  placement?: "left" | "right";
-  /** The `min-width` property of the menu. */
+  /**
+   * The menu positioning alignment.
+   * @default "start"
+   */
+  alignment?: PopperProps["alignment"];
+  /**
+   * The `min-width` property of the menu.
+   */
   minWidth?: number;
-  /** The `placeholder` property of the search field. */
+  /**
+   * The `placeholder` property of the search field.
+   */
   searchPlaceholder?: string;
-  /** The empty statement text when search results are empty. */
+  /**
+   * The empty statement text when search results are empty.
+   */
   searchEmptyStatementText?: string;
   /**
    * If `true`, the menu will be disabled.
@@ -70,9 +80,13 @@ interface MenuBaseProps {
    * @default false
    */
   open?: boolean;
-  /** The Callback fires when the menu has opened. */
+  /**
+   * The Callback fires when the menu has opened.
+   */
   onOpen?: () => void;
-  /** The Callback fires when the menu has closed. */
+  /**
+   * The Callback fires when the menu has closed.
+   */
   onClose?: () => void;
   /**
    * The callback fires when the `Escape` key is released.
@@ -99,9 +113,9 @@ type Component = {
   displayName?: string | undefined;
 };
 
-const isSSR = typeof window === "undefined";
+const getDocument = () => (typeof document === "undefined" ? null : document);
 
-const allowedPlacements = ["left", "right"] as const;
+const allowedAlignments = [...alignments, "middle"] as const;
 
 const checkGroupChildren = (children?: React.ReactNode) => {
   const valids: React.ReactElement[] = [];
@@ -138,16 +152,16 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
     className,
     onOpen,
     onClose,
+    style,
     minWidth,
     onOutsideClick,
     outsideClickDetector,
     onEscapeKeyDown,
-    anchorNode,
+    anchorNodeReference,
     children: childrenProp,
     searchPlaceholder: searchPlaceholderProp,
     searchEmptyStatementText: searchEmptyStatementTextProp,
-    placement: placementProp,
-    style = {},
+    alignment: alignmentProp,
     role = "menu",
     open: openState = false,
     dense = false,
@@ -162,9 +176,7 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
   const [searchResult, setSearchResult] = React.useState<number[] | null>(null);
   const [searchValue, setSearchValue] = React.useState("");
 
-  const [meta, setMeta] = React.useState({ left: 0, top: 0, width: 0 });
-
-  const isFirstRender = React.useRef(true);
+  const [anchorNode, setAnchorNode] = React.useState<HTMLElement | null>(null);
 
   const focusIndex = React.useRef(-1);
   const focusedNode = React.useRef<HTMLDivElement | null>(null);
@@ -185,30 +197,11 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
     searchEmptyStatementTextProp ||
     (isRTL ? "هیچ موردی یافت نشد!" : "There is no such option!");
 
-  const placement = getVar(
-    placementProp,
-    isRTL ? "right" : "left",
-    !allowedPlacements.includes(placementProp || isRTL ? "right" : "left")
+  const alignment = getVar(
+    alignmentProp,
+    "start",
+    !allowedAlignments.includes(alignmentProp ?? "start")
   );
-
-  const getAnchorMeta = () => {
-    let meta;
-
-    if (anchorNode) {
-      const { left, top } = getOffsetFromWindow(anchorNode);
-
-      meta = {
-        offsetWidth: anchorNode.offsetWidth,
-        offsetHeight: anchorNode.offsetHeight,
-        top,
-        left,
-        right: left + anchorNode.offsetWidth,
-        bottom: top + anchorNode.offsetHeight
-      };
-    }
-
-    return meta;
-  };
 
   const resetFocus = () => {
     focusIndex.current = -1;
@@ -261,6 +254,25 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [onOutsideClick, outsideClickDetector]
   );
+
+  const handleOpen = () => {
+    if (onOpen) onOpen();
+    if (preventPageScrolling) preventPageScroll();
+  };
+
+  const handleClose = () => {
+    if (onClose) onClose();
+    if (preventPageScrolling) allowPageScroll();
+  };
+
+  useOnChange(openState, isOpen => {
+    if (isOpen) handleOpen();
+    else handleClose();
+    reset();
+  });
+
+  const registerNode = (index: number, node: HTMLDivElement) =>
+    void indexToNode.current.set(index, node);
 
   let itemIndex = 0;
   const children = React.Children.map(childrenProp, child => {
@@ -315,53 +327,6 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
       ...(isGroup ? { visibleChilds: searchResult } : { hide: isHidden })
     });
   });
-
-  const handleOpen = () => {
-    if (onOpen) onOpen();
-    if (preventPageScrolling) preventPageScroll();
-  };
-
-  const handleClose = () => {
-    if (onClose) onClose();
-    if (preventPageScrolling) allowPageScroll();
-  };
-
-  React.useEffect(() => {
-    const shouldCalc = isSSR ? false : !isFirstRender.current;
-
-    if (shouldCalc) {
-      if (openState) handleOpen();
-      else handleClose();
-
-      const anchorMeta = getAnchorMeta();
-
-      if (anchorMeta) {
-        let newMeta: typeof meta = {
-          width: clamp(
-            anchorMeta.offsetWidth,
-            minWidth || 0,
-            document.body.offsetWidth - anchorMeta.left
-          ),
-          top: anchorMeta.top + anchorMeta.offsetHeight,
-          left: 0
-        };
-
-        if (placement === "left") {
-          newMeta = { ...newMeta, left: anchorMeta.left };
-        } else if (placement === "right") {
-          newMeta = { ...newMeta, left: anchorMeta.right - newMeta.width };
-        }
-
-        setMeta(newMeta);
-      }
-      reset();
-    } else if (!isSSR) isFirstRender.current = false;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openState]);
-
-  const registerNode = (index: number, node: HTMLDivElement) => {
-    indexToNode.current.set(index, node);
-  };
 
   const arrowDownListener = React.useCallback(() => {
     const hasValidResults = searchResult !== null;
@@ -455,79 +420,78 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
     [arrowDownListener, arrowUpListener, onEscapeKeyDown]
   );
 
-  /* eslint-disable react-hooks/rules-of-hooks */
-  if (!isSSR) {
-    useEventListener(
-      {
-        target: document,
-        eventType: "mousedown",
-        handler: outsideClickHandler,
-        options: { capture: true }
-      },
-      openState && onOutsideClick != null
-    );
+  useEventListener(
+    {
+      target: getDocument(),
+      eventType: "mousedown",
+      handler: outsideClickHandler,
+      options: { capture: true }
+    },
+    openState && onOutsideClick != null
+  );
 
-    useEventListener(
-      {
-        target: document,
-        eventType: "keydown",
-        handler: keyboardListener
-      },
-      openState
-    );
-  }
-  /* eslint-enable react-hooks/rules-of-hooks */
+  useEventListener(
+    {
+      target: getDocument(),
+      eventType: "keydown",
+      handler: keyboardListener
+    },
+    openState
+  );
 
-  return (
-    <MenuContext.Provider value={{ registerNode, dense }}>
-      <PortalDestination aria-hidden={!openState}>
-        <div
-          tabIndex={-1}
-          ref={ref}
-          className={c(classes.root, className, {
-            [classes.dense]: dense,
-            [classes.searchable]: searchable
-          })}
-          style={{
-            ...style,
-            ...meta
-          }}
-          {...otherProps}
-        >
-          {openState && (
-            <div className={classes.container}>
-              {searchable && (
-                <div className={classes.searchRow}>
-                  <TextField
-                    fluid
-                    variant="filled"
-                    placeholder={searchPlaceholder}
-                    value={searchValue}
-                    size={dense ? "medium" : "large"}
-                    onChange={throttle((v: string) => {
-                      searchChangeListener(v);
-                    }, 250)}
-                    leadingAdornment={
-                      <InputAdornment variant="icon">
-                        <Magnifier />
-                      </InputAdornment>
-                    }
-                  />
-                </div>
-              )}
-              <div className={classes.list} role={role} tabIndex={-1}>
-                {isSearchResultEmpty && (
-                  <div className={classes.emptyStatement}>
-                    {searchEmptyStatementText}
-                  </div>
-                )}
-                {children}
-              </div>
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  React.useEffect(() => {
+    const reference = anchorNodeReference.current;
+    if (reference && reference !== anchorNode) setAnchorNode(reference);
+  });
+
+  return !anchorNode ? null : (
+    <Popper
+      {...otherProps}
+      ref={ref}
+      className={c(classes.root, className, {
+        [classes.dense]: dense,
+        [classes.searchable]: searchable
+      })}
+      alignment={alignment}
+      autoPlacement={{ excludeSides: ["left", "right"] }}
+      virtualAnchor={anchorNode}
+      open={openState}
+      style={{ ...style, minWidth }}
+      renderPopperContent={() => (
+        <div className={classes.container}>
+          {searchable && (
+            <div className={classes.searchRow}>
+              <TextField
+                fluid
+                variant="filled"
+                placeholder={searchPlaceholder}
+                value={searchValue}
+                size={dense ? "medium" : "large"}
+                onChange={throttle((v: string) => {
+                  searchChangeListener(v);
+                }, 250)}
+                leadingAdornment={
+                  <InputAdornment variant="icon">
+                    <Magnifier />
+                  </InputAdornment>
+                }
+              />
             </div>
           )}
+          <div className={classes.list} role={role} tabIndex={-1}>
+            {isSearchResultEmpty && (
+              <div className={classes.emptyStatement}>
+                {searchEmptyStatementText}
+              </div>
+            )}
+            <MenuContext.Provider value={{ registerNode, dense }}>
+              {children}
+            </MenuContext.Provider>
+          </div>
         </div>
-      </PortalDestination>
-    </MenuContext.Provider>
+      )}
+    />
   );
 };
 
@@ -540,13 +504,17 @@ const nullable =
     // @ts-ignore
     props[propName] === null ? null : propType(props, propName, ...rest);
 
+type InferredTypeMap = React.WeakValidationMap<MenuProps>;
+
 Menu.propTypes = {
   children: PropTypes.node,
-  anchorNode: nullable(
-    // @ts-ignore
-    PropTypes.oneOfType([HTMLElementType, PropTypes.element]).isRequired
-  ),
-  placement: PropTypes.oneOf(allowedPlacements),
+  anchorNodeReference: PropTypes.exact({
+    current: nullable(
+      // @ts-ignore
+      PropTypes.oneOfType([HTMLElementType, PropTypes.element]).isRequired
+    )
+  }) as InferredTypeMap["anchorNodeReference"],
+  alignment: PropTypes.oneOf(allowedAlignments),
   minWidth: PropTypes.number,
   style: PropTypes.object,
   className: PropTypes.string,
