@@ -69,3 +69,26 @@ export type MergeElementProps<
   T extends React.ElementType,
   P = EmptyIntersectionObject
 > = Overwrite<React.ComponentPropsWithRef<T>, P>;
+
+/**
+ * Helps create a type where at least one of the properties of an interface is required to exist.
+ */
+export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<
+  T,
+  Diff<keyof T, Keys>
+> &
+  {
+    [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Diff<Keys, K>>>;
+  }[Keys];
+
+/**
+ * Helps create a type where only one of the properties of an interface is required to exist.
+ */
+export type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<
+  T,
+  Diff<keyof T, Keys>
+> &
+  {
+    [K in Keys]-?: Required<Pick<T, K>> &
+      Partial<Record<Diff<Keys, K>, undefined>>;
+  }[Keys];
