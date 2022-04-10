@@ -87,7 +87,9 @@
     "build:copy-typings:esm": "cp -r lib/typings dist/esm/typings",
     "build:packages": "node scripts/build-packages.js",
     "build:npm-files": "node scripts/build-npm-files.js",
-    "build:minify": "node scripts/minify.js"
+    "build:minify": "node scripts/minify.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "husky": {
     "hooks": {

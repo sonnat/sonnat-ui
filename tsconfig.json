@@ -27,7 +27,10 @@
     "pages/**/*.ts",
     "pages/**/*.tsx",
     "lib/**/*.ts",
-    "lib/**/*.tsx"
+    "lib/**/*.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "tests/jest.d.ts"
   ],
   "exclude": ["node_modules", "dist", "examples"]
 }
