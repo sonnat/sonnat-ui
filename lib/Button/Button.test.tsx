@@ -4,7 +4,8 @@ import Button from ".";
 import {
   render,
   describeConformance,
-  testClassNamesMatch
+  testClassNamesMatch,
+  screen
 } from "../../tests/utils";
 
 const label = "Hello World!";
@@ -54,14 +55,14 @@ describe("@sonnat-ui/Button", () => {
   describeConformance(Button, HTMLButtonElement, { label });
 
   it("label must be rendered", () => {
-    const { getByText } = render(<Button label={label} />);
-    const labelElement = getByText(label);
+    render(<Button label={label} />);
+    const labelElement = screen.getByText(label);
     expect(labelElement).toBeInTheDocument();
   });
 
   it("should render with the root, filled, medium & filledDefault classes but no others", () => {
-    const { getByRole } = render(<Button label={label} />);
-    const button = getByRole("button");
+    render(<Button label={label} />);
+    const button = screen.getByRole("button");
 
     const allowedClassnameKeys: ButtonClassnames = [
       "root",
@@ -74,8 +75,8 @@ describe("@sonnat-ui/Button", () => {
   });
 
   it("should render with the root, filled, medium & filledDefault classes but no others", () => {
-    const { getByRole } = render(<Button variant="filled" label={label} />);
-    const button = getByRole("button");
+    render(<Button variant="filled" label={label} />);
+    const button = screen.getByRole("button");
 
     const allowedClassnameKeys: ButtonClassnames = [
       "root",
@@ -88,10 +89,8 @@ describe("@sonnat-ui/Button", () => {
   });
 
   it("should render with the root, filled, medium & filledDefault classes but no others", () => {
-    const { getByRole } = render(
-      <Button variant="filled" color="default" label={label} />
-    );
-    const button = getByRole("button");
+    render(<Button variant="filled" color="default" label={label} />);
+    const button = screen.getByRole("button");
 
     const allowedClassnameKeys: ButtonClassnames = [
       "root",
@@ -104,10 +103,8 @@ describe("@sonnat-ui/Button", () => {
   });
 
   it("should render with the root, filled, medium & filledPrimary classes but no others", () => {
-    const { getByRole } = render(
-      <Button variant="filled" color="primary" label={label} />
-    );
-    const button = getByRole("button");
+    render(<Button variant="filled" color="primary" label={label} />);
+    const button = screen.getByRole("button");
 
     const allowedClassnameKeys: ButtonClassnames = [
       "root",
@@ -120,25 +117,21 @@ describe("@sonnat-ui/Button", () => {
   });
 
   it("should render leading icon", () => {
-    const { getByLabelText } = render(
-      <Button label={label} leadingIcon={<icons.leading />} />
-    );
+    render(<Button label={label} leadingIcon={<icons.leading />} />);
 
-    const leadingIcon = getByLabelText("leading-icon");
+    const leadingIcon = screen.getByLabelText("leading-icon");
     expect(leadingIcon).toBeInTheDocument();
   });
 
   it("should render trailing icon", () => {
-    const { getByLabelText } = render(
-      <Button label={label} trailingIcon={<icons.trailing />} />
-    );
+    render(<Button label={label} trailingIcon={<icons.trailing />} />);
 
-    const trailingIcon = getByLabelText("trailing-icon");
+    const trailingIcon = screen.getByLabelText("trailing-icon");
     expect(trailingIcon).toBeInTheDocument();
   });
 
   it("should render leading and trailing icons together", () => {
-    const { getByLabelText } = render(
+    render(
       <Button
         label={label}
         leadingIcon={<icons.leading />}
@@ -146,45 +139,45 @@ describe("@sonnat-ui/Button", () => {
       />
     );
 
-    const leadingIcon = getByLabelText("leading-icon");
+    const leadingIcon = screen.getByLabelText("leading-icon");
     expect(leadingIcon).toBeInTheDocument();
 
-    const trailingIcon = getByLabelText("trailing-icon");
+    const trailingIcon = screen.getByLabelText("trailing-icon");
     expect(trailingIcon).toBeInTheDocument();
   });
 
   it("should get disabled", () => {
-    const { getByRole } = render(<Button disabled label={label} />);
-    const button = getByRole("button");
+    render(<Button disabled label={label} />);
+    const button = screen.getByRole("button");
     expect(button).toBeDisabled();
   });
 
   it("label must be invisible when loading is true", () => {
-    const { getByText } = render(<Button loading label={label} />);
-    const labelElement = getByText(label);
+    render(<Button loading label={label} />);
+    const labelElement = screen.getByText(label);
     expect(labelElement).toBeInTheDocument();
   });
 
   it("callback must be fired onClick", () => {
-    const { getByRole } = render(<Button label={label} onClick={callback} />);
-    const button = getByRole("button");
+    render(<Button label={label} onClick={callback} />);
+    const button = screen.getByRole("button");
     button.click();
     expect(callback).toBeCalledTimes(1);
   });
 
   it("callback must be fired onBlur", () => {
-    const { getByRole } = render(<Button label={label} onBlur={callback} />);
-    const button = getByRole("button");
+    render(<Button label={label} onBlur={callback} />);
+    const button = screen.getByRole("button");
 
-    fireEvent.focus(button);
-    fireEvent.blur(button);
+    button.focus();
+    button.blur();
 
     expect(callback).toBeCalledTimes(1);
   });
 
   it("callback must be fired onKeyDown", () => {
-    const { getByRole } = render(<Button label={label} onKeyDown={callback} />);
-    const button = getByRole("button");
+    render(<Button label={label} onKeyDown={callback} />);
+    const button = screen.getByRole("button");
 
     button.focus();
     fireEvent.keyDown(document.activeElement || document.body);
@@ -193,8 +186,8 @@ describe("@sonnat-ui/Button", () => {
   });
 
   it("callback must be fired onKeyUp", () => {
-    const { getByRole } = render(<Button label={label} onKeyUp={callback} />);
-    const button = getByRole("button");
+    render(<Button label={label} onKeyUp={callback} />);
+    const button = screen.getByRole("button");
 
     button.focus();
     fireEvent.keyUp(document.activeElement || document.body);
