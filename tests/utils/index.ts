@@ -9,3 +9,4 @@ export { default as itGeneratesJssClassNames } from "./itGeneratesJssClassNames"
 export { default as describeConformance } from "./describeConformance";
 export { default as render } from "./render";
 export { default as testClassNamesMatch } from "./testClassNamesMatch";
+export * from "./screen";
