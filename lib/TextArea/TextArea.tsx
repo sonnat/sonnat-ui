@@ -140,6 +140,16 @@ const getOwnerDocument = (node?: Node | null) =>
 const getOwnerWindow = (node?: Node | null) =>
   getOwnerDocument(node).defaultView || window;
 
+const getStyleValue = (
+  computedStyle: CSSStyleDeclaration,
+  property: keyof CSSStyleDeclaration
+) => {
+  const style = computedStyle[property] as string | null | undefined;
+
+  if (!style) return 0;
+  return parseInt(style, 10);
+};
+
 const TextAreaBase = (props: TextAreaProps, ref: React.Ref<HTMLDivElement>) => {
   const {
     placeholder,
@@ -323,7 +333,7 @@ const TextAreaBase = (props: TextAreaProps, ref: React.Ref<HTMLDivElement>) => {
     if (!inputShadow) return;
 
     inputShadow.style.width = computedStyle.width;
-    inputShadow.value = input.value || placeholder || "x";
+    inputShadow.value = input.value || placeholder || " ";
     if (inputShadow.value.slice(-1) === "\n") {
       // Certain fonts which overflow the line height will cause the textarea
       // to report a different scrollHeight depending on whether the last line
@@ -331,11 +341,21 @@ const TextAreaBase = (props: TextAreaProps, ref: React.Ref<HTMLDivElement>) => {
       inputShadow.value += " ";
     }
 
+    const boxSizing = computedStyle.boxSizing;
+
+    const padding =
+      getStyleValue(computedStyle, "paddingBottom") +
+      getStyleValue(computedStyle, "paddingTop");
+
+    const border =
+      getStyleValue(computedStyle, "borderBottomWidth") +
+      getStyleValue(computedStyle, "borderTopWidth");
+
     // The height of the inner content
     const innerHeight = inputShadow.scrollHeight;
 
     // Measure height of a textarea with a single row
-    inputShadow.value = "x";
+    inputShadow.value = " ";
     const singleRowHeight = inputShadow.scrollHeight;
 
     // The height of the outer content
@@ -347,7 +367,9 @@ const TextAreaBase = (props: TextAreaProps, ref: React.Ref<HTMLDivElement>) => {
       outerHeight = Math.min(Number(maxRows) * singleRowHeight, outerHeight);
     outerHeight = Math.max(outerHeight, singleRowHeight);
 
-    const outerHeightStyle = outerHeight;
+    // Take the box sizing into account for applying this value as a style.
+    const outerHeightStyle =
+      outerHeight + (boxSizing === "border-box" ? padding + border : 0);
     const overflow = Math.abs(outerHeight - innerHeight) <= 1;
 
     setStyleState(prevState => {
@@ -399,13 +421,8 @@ const TextAreaBase = (props: TextAreaProps, ref: React.Ref<HTMLDivElement>) => {
     }
   }, [syncHeight, autoResize]);
 
-  useIsomorphicLayoutEffect(() => {
-    if (autoResize) syncHeight();
-  });
-
-  React.useEffect(() => {
-    renders.current = 0;
-  }, [value]);
+  useIsomorphicLayoutEffect(() => void (autoResize && syncHeight()));
+  React.useEffect(() => void (renders.current = 0), [value]);
 
   return (
     <div
@@ -443,25 +460,22 @@ const TextAreaBase = (props: TextAreaProps, ref: React.Ref<HTMLDivElement>) => {
             // Need a large enough difference to allow scrolling.
             // This prevents infinite rendering loop.
             overflow: styleState.overflow ? "hidden" : undefined,
-
             ...style,
             ...inputStyleProp
           }}
           ref={node => {
             if (inputRefProp) setRef(inputRefProp, node);
+            setRef(inputRef, node);
           }}
           {...otherInputProps}
         />
         <textarea
           aria-hidden
-          className={c(classes.shadow, inputClassNameProp)}
           readOnly
+          className={c(classes.shadow, inputClassNameProp)}
           ref={shadowRef}
           tabIndex={-1}
-          style={{
-            ...style,
-            ...inputStyleProp
-          }}
+          style={{ ...style, ...inputStyleProp }}
         />
       </div>
       {(!!helperText || !!otherInputProps.maxLength) && (
