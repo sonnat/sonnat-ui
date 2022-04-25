@@ -9,7 +9,8 @@ import {
   getVar,
   useEventCallback,
   useForkedRefs,
-  useIsFocusVisible
+  useIsFocusVisible,
+  useIsomorphicLayoutEffect
 } from "../utils";
 import useStyles, { type VariantColorCombo } from "./styles";
 
@@ -116,6 +117,7 @@ const ButtonBase = <T extends React.ElementType = "button">(
     disabled = false,
     raised = false,
     loading = false,
+    autoFocus = false,
     ...otherProps
   } = props;
 
@@ -175,16 +177,24 @@ const ButtonBase = <T extends React.ElementType = "button">(
 
   const handleRef = useForkedRefs(ref, focusVisibleRef, buttonRef);
 
-  const [focusVisible, setFocusVisible] = React.useState(false);
+  const [focusVisible, setFocusVisible] = React.useState(autoFocus);
 
-  if (disabled && focusVisible) {
-    setFocusVisible(false);
-  }
+  // prevent component from being focused if it is disabled
+  React.useEffect(() => {
+    if (disabled && focusVisible) {
+      setFocusVisible(false);
+    }
+  }, [disabled, focusVisible]);
 
   React.useEffect(() => {
     isFocusVisibleRef.current = focusVisible;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusVisible]);
+
+  // initially focus the component
+  useIsomorphicLayoutEffect(() => {
+    if (!disabled && autoFocus && buttonRef.current) buttonRef.current.focus();
+  }, [disabled, autoFocus]);
 
   const handleFocus = useEventCallback(
     (event: React.FocusEvent<HTMLButtonElement>) => {
