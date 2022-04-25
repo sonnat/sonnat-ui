@@ -34,7 +34,9 @@ const DialogBodyBase = (
   const classes = useStyles();
   const context = React.useContext(DialogContext);
 
-  const height = context?.bodyHeight || heightStyle || "auto";
+  const height = context?.hasOverflow
+    ? context?.bodyHeight || heightStyle || "auto"
+    : "auto";
 
   return (
     <div
