@@ -55,7 +55,6 @@ const useStyles = makeStyles(
       },
       shadow: {
         ...variants.body,
-        color: !darkMode ? text.dark.primary : text.light.primary,
         visibility: "hidden",
 
         // Remove from the content flow
@@ -65,10 +64,10 @@ const useStyles = makeStyles(
         overflow: "hidden",
 
         border: "none",
+        padding: 0,
         top: 0,
         left: 0,
         height: 0,
-        padding: [[spaces[3].rem, spaces[7].rem]],
 
         // Create a new layer, increase the isolation of the computed values
         transform: "translateZ(0)"
@@ -201,7 +200,6 @@ const useStyles = makeStyles(
           ...asIconWrapper(14)
         },
         "& $input, & $shadow": {
-          padding: [[spaces[0].rem, spaces[3].rem]],
           fontSize: variants.caption.fontSize!,
           lineHeight: variants.caption.lineHeight!,
           "&::-webkit-input-placeholder": {
@@ -220,11 +218,11 @@ const useStyles = makeStyles(
             fontSize: variants.caption.fontSize,
             lineHeight: variants.caption.lineHeight
           }
-        }
+        },
+        "& $input": { padding: [[spaces[0].rem, spaces[3].rem]] }
       },
       medium: {
         "& $input, & $shadow": {
-          padding: [[spaces[2].rem, spaces[3].rem]],
           fontSize: variants.caption.fontSize!,
           lineHeight: variants.caption.lineHeight!,
           "&::-webkit-input-placeholder": {
@@ -243,7 +241,8 @@ const useStyles = makeStyles(
             fontSize: variants.caption.fontSize,
             lineHeight: variants.caption.lineHeight
           }
-        }
+        },
+        "& $input": { padding: [[spaces[2].rem, spaces[3].rem]] }
       },
       large: {},
       resizable: { "& $input": { resize: "vertical" } }
