@@ -1,3 +1,4 @@
+import { createChipsVariantStyles } from "../ChoiceChip/styles";
 import makeStyles from "../styles/makeStyles";
 
 const useStyles = makeStyles(
@@ -8,45 +9,19 @@ const useStyles = makeStyles(
       radius,
       spacings: { spaces },
       swatches: { blue },
-      colors: { text, divider, ...colors },
+      colors: { text, ...colors },
       mixins: { asIconWrapper, disableUserSelect },
       typography: { pxToRem, variants, fontFamily }
     } = theme;
 
-    const filledPrimaryMainBg = !darkMode
-      ? colors.primary.origin
-      : colors.primary.light;
-    const filledSecondaryMainBg = !darkMode
-      ? colors.secondary.origin
-      : colors.secondary.light;
-
-    const filledDefault = {
-      background: {
-        main: !darkMode
-          ? colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
-          : colors.createWhiteColor({ alpha: 0.04 }, false, darkMode),
-        disabled: !darkMode
-          ? colors.createBlackColor({ alpha: 0.12 }, false, darkMode)
-          : colors.createWhiteColor({ alpha: 0.12 }, false, darkMode)
-      },
-      text: !darkMode ? text.dark.secondary : text.light.secondary
-    };
-
-    const filledPrimary = {
-      background: {
-        main: colors.createPrimaryColor({ alpha: 0.08 }, false, darkMode),
-        disabled: colors.createPrimaryColor({ alpha: 0.12 }, false, darkMode)
-      },
-      text: filledPrimaryMainBg
-    };
-
-    const filledSecondary = {
-      background: {
-        main: colors.createSecondaryColor({ alpha: 0.08 }, false, darkMode),
-        disabled: colors.createSecondaryColor({ alpha: 0.12 }, false, darkMode)
-      },
-      text: filledSecondaryMainBg
-    };
+    const {
+      filledDefaultUnselected,
+      filledPrimaryUnselected,
+      filledSecondaryUnselected,
+      outlinedDefaultUnselected,
+      outlinedPrimaryUnselected,
+      outlinedSecondaryUnselected
+    } = createChipsVariantStyles(theme);
 
     return {
       root: {
@@ -173,21 +148,19 @@ const useStyles = makeStyles(
       },
       filled: {
         "&$disabled": {
-          color: !darkMode
-            ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
-            : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode),
+          color: filledDefaultUnselected.text.disabled,
           "& $icon, & $removeButtonIcon": {
-            color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
-              : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
+            color: filledDefaultUnselected.text.disabled
           }
         }
       },
       outlined: { "&$disabled": { backgroundColor: colors.transparent } },
       filledDefault: {
-        backgroundColor: filledDefault.background.main,
-        color: filledDefault.text,
-        "& $icon, & $removeButtonIcon": { color: filledDefault.text },
+        backgroundColor: filledDefaultUnselected.background.main,
+        color: filledDefaultUnselected.text.main,
+        "& $icon, & $removeButtonIcon": {
+          color: filledDefaultUnselected.text.main
+        },
         "& $removeButton": {
           "&:hover > $removeButtonIcon": {
             backgroundColor: !darkMode
@@ -203,21 +176,15 @@ const useStyles = makeStyles(
           }
         },
         "&$disabled": {
-          color: !darkMode
-            ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
-            : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode),
-          "& $icon, & $removeButtonIcon": {
-            color: !darkMode
-              ? colors.createBlackColor({ alpha: 0.32 }, true, darkMode)
-              : colors.createWhiteColor({ alpha: 0.24 }, true, darkMode)
-          },
-          backgroundColor: filledDefault.background.disabled
+          backgroundColor: filledDefaultUnselected.background.disabled
         }
       },
       filledPrimary: {
-        backgroundColor: filledPrimary.background.main,
-        color: filledPrimary.text,
-        "& $icon, & $removeButtonIcon": { color: filledPrimary.text },
+        backgroundColor: filledPrimaryUnselected.background.main,
+        color: filledPrimaryUnselected.text.main,
+        "& $icon, & $removeButtonIcon": {
+          color: filledPrimaryUnselected.text.main
+        },
         "& $removeButton": {
           "&:hover > $removeButtonIcon": {
             backgroundColor: colors.createPrimaryColor(
@@ -236,12 +203,16 @@ const useStyles = makeStyles(
             )
           }
         },
-        "&$disabled": { backgroundColor: filledPrimary.background.disabled }
+        "&$disabled": {
+          backgroundColor: filledPrimaryUnselected.background.disabled
+        }
       },
       filledSecondary: {
-        backgroundColor: filledSecondary.background.main,
-        color: filledSecondary.text,
-        "& $icon, & $removeButtonIcon": { color: filledSecondary.text },
+        backgroundColor: filledSecondaryUnselected.background.main,
+        color: filledSecondaryUnselected.text.main,
+        "& $icon, & $removeButtonIcon": {
+          color: filledSecondaryUnselected.text.main
+        },
         "& $removeButton": {
           "&:hover > $removeButtonIcon": {
             backgroundColor: colors.createSecondaryColor(
@@ -260,17 +231,13 @@ const useStyles = makeStyles(
             )
           }
         },
-        "&$disabled": { backgroundColor: filledSecondary.background.disabled }
+        "&$disabled": {
+          backgroundColor: filledSecondaryUnselected.background.disabled
+        }
       },
       outlinedDefault: {
-        backgroundColor: !darkMode
-          ? colors.createBlackColor({ alpha: 0.04 }, false, darkMode)
-          : colors.createWhiteColor({ alpha: 0.04 }, false, darkMode),
-        border: `1px solid ${
-          !darkMode
-            ? colors.createBlackColor({ alpha: 0.64 }, true, darkMode)
-            : colors.createWhiteColor({ alpha: 0.64 }, true, darkMode)
-        }`,
+        backgroundColor: outlinedDefaultUnselected.background.main,
+        border: `1px solid ${outlinedDefaultUnselected.border.main}`,
         color: !darkMode ? text.dark.secondary : text.light.secondary,
         "& $icon, & $removeButtonIcon": {
           color: !darkMode ? text.dark.secondary : text.light.secondary
@@ -289,23 +256,21 @@ const useStyles = makeStyles(
               : colors.createWhiteColor({ alpha: 0.24 }, false, darkMode)
           }
         },
-        "&$disabled, &[disabled]": {
-          borderColor: !darkMode ? divider.dark : divider.light,
-          color: !darkMode ? text.dark.disabled : text.light.disabled,
+        "&$disabled": {
+          borderColor: outlinedDefaultUnselected.border.disabled,
+          color: outlinedDefaultUnselected.text.disabled,
           "& $icon, & $removeButtonIcon": {
-            color: !darkMode ? text.dark.disabled : text.light.disabled
+            color: outlinedDefaultUnselected.text.disabled
           }
         }
       },
       outlinedPrimary: {
-        backgroundColor: colors.createPrimaryColor(
-          { alpha: 0.08 },
-          false,
-          darkMode
-        ),
-        border: `1px solid ${filledPrimaryMainBg}`,
-        color: filledPrimaryMainBg,
-        "& $icon, & $removeButtonIcon": { color: filledPrimaryMainBg },
+        backgroundColor: outlinedPrimaryUnselected.background.main,
+        border: `1px solid ${outlinedPrimaryUnselected.border.main}`,
+        color: outlinedPrimaryUnselected.text.main,
+        "& $icon, & $removeButtonIcon": {
+          color: outlinedPrimaryUnselected.text.main
+        },
         "& $removeButton": {
           "&:hover > $removeButtonIcon": {
             backgroundColor: colors.createPrimaryColor(
@@ -325,26 +290,20 @@ const useStyles = makeStyles(
           }
         },
         "&$disabled": {
-          color: colors.createPrimaryColor({ alpha: 0.32 }, true, darkMode),
+          color: outlinedPrimaryUnselected.text.disabled,
           "& $icon, & $removeButtonIcon": {
-            color: colors.createPrimaryColor({ alpha: 0.32 }, true, darkMode)
+            color: outlinedPrimaryUnselected.text.disabled
           },
-          borderColor: colors.createPrimaryColor(
-            { alpha: 0.12 },
-            true,
-            darkMode
-          )
+          borderColor: outlinedPrimaryUnselected.border.disabled
         }
       },
       outlinedSecondary: {
-        backgroundColor: colors.createSecondaryColor(
-          { alpha: 0.04 },
-          false,
-          darkMode
-        ),
-        border: `1px solid ${filledSecondaryMainBg}`,
-        color: filledSecondaryMainBg,
-        "& $icon, & $removeButtonIcon": { color: filledSecondaryMainBg },
+        backgroundColor: outlinedSecondaryUnselected.background.main,
+        border: `1px solid ${outlinedSecondaryUnselected.border.main}`,
+        color: outlinedSecondaryUnselected.text.main,
+        "& $icon, & $removeButtonIcon": {
+          color: outlinedSecondaryUnselected.text.main
+        },
         "& $removeButton": {
           "&:hover > $removeButtonIcon": {
             backgroundColor: colors.createSecondaryColor(
@@ -364,15 +323,11 @@ const useStyles = makeStyles(
           }
         },
         "&$disabled": {
-          color: colors.createSecondaryColor({ alpha: 0.32 }, true, darkMode),
+          color: outlinedSecondaryUnselected.text.disabled,
           "& $icon, & $removeButtonIcon": {
-            color: colors.createSecondaryColor({ alpha: 0.32 }, true, darkMode)
+            color: outlinedSecondaryUnselected.text.disabled
           },
-          borderColor: colors.createSecondaryColor(
-            { alpha: 0.12 },
-            true,
-            darkMode
-          )
+          borderColor: outlinedSecondaryUnselected.border.disabled
         }
       },
       focusVisible: {
