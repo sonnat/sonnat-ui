@@ -233,7 +233,7 @@ const ChoiceChipBase = (
         [classes.selected]: isSelected,
         [classes.focusVisible]: focusVisible,
         [classes[
-          camelCase(`${variant}-unselected`) as VariantUnselectionCombo
+          camelCase(`${variant}-${color}-unselected`) as VariantUnselectionCombo
         ]]: !isSelected,
         [classes[
           camelCase(
