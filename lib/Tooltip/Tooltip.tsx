@@ -178,7 +178,7 @@ const TooltipBase = (props: TooltipProps, ref: React.Ref<HTMLDivElement>) => {
           onMouseLeave: e =>
             void (onClose?.(e), setOpen(false), childProps.onMouseLeave?.(e)),
           onMouseMove: e => {
-            setCoordinates({ x: e.pageX, y: e.pageY });
+            setCoordinates({ x: e.clientX, y: e.clientY });
             popperActions.current?.recompute();
 
             childProps.onMouseMove?.(e);
@@ -213,7 +213,7 @@ const TooltipBase = (props: TooltipProps, ref: React.Ref<HTMLDivElement>) => {
       role="tooltip"
       side={placement}
       actions={popperActions}
-      autoPlacement={autoPlacement}
+      autoPlacement={triggersOn === "mouseMove" ? false : autoPlacement}
       className={c(className, classes.root, { [classes.tailed]: tailed })}
       offset={triggersOn === "mouseMove" ? 32 : undefined}
       virtualAnchor={
