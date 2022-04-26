@@ -3,7 +3,13 @@ import PropTypes from "prop-types";
 import * as React from "react";
 import PortalDestination from "../PortalDestination";
 import type { MergeElementProps } from "../typings";
-import { detectScrollBarWidth, useEventListener, useId } from "../utils";
+import {
+  detectScrollBarWidth,
+  useEventListener,
+  useId,
+  useOnChange,
+  useResizeSensor
+} from "../utils";
 import DialogContext from "./context";
 import useStyles from "./styles";
 
@@ -86,7 +92,10 @@ const DialogBase = (props: DialogProps, ref: React.Ref<HTMLDivElement>) => {
   const classes = useStyles();
 
   const nodesMap = new Map<string, HTMLDivElement>();
-  const dialogRef = React.useRef<HTMLDivElement>(null);
+  const dialogRef = React.useRef<HTMLDivElement | null>(null);
+
+  const { height: resizeSensorHeight, registerNode: registerResizeSensor } =
+    useResizeSensor();
 
   const [state, setState] = React.useState({
     hasOverflow: false,
@@ -127,25 +136,34 @@ const DialogBase = (props: DialogProps, ref: React.Ref<HTMLDivElement>) => {
     }
   };
 
+  const setOverflowState = () => {
+    const status = getStatus();
+
+    if (status) {
+      setState({
+        bodyHeight: status.bodyHeight,
+        hasOverflow: status.hasOverflow
+      });
+    }
+  };
+
   React.useEffect(() => {
     if (openState) {
       if (onOpen) onOpen();
       preventPageScroll();
-
-      const status = getStatus();
-
-      if (status) {
-        setState({
-          bodyHeight: status.bodyHeight,
-          hasOverflow: status.hasOverflow
-        });
-      }
+      setOverflowState();
     } else {
       if (onClose) onClose();
       allowPageScroll();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openState, onOpen, onClose]);
+
+  useOnChange(resizeSensorHeight, currentSensorHeight => {
+    if (currentSensorHeight <= 0) return;
+
+    setOverflowState();
+  });
 
   const backdropClickHandler: DialogProps["onBackdropClick"] = e => {
     if (onBackdropClick) onBackdropClick(e);
@@ -189,7 +207,10 @@ const DialogBase = (props: DialogProps, ref: React.Ref<HTMLDivElement>) => {
           aria-describedby={ariaDescribedBy}
           aria-labelledby={ariaLabelledby}
           role="dialog"
-          ref={dialogRef}
+          ref={node => {
+            registerResizeSensor(node);
+            dialogRef.current = node;
+          }}
           className={classes.dialog}
           style={{ maxWidth }}
         >
