@@ -232,7 +232,7 @@ const SelectBase = (props: SelectProps, ref: React.Ref<HTMLDivElement>) => {
 
   const theme = useTheme();
 
-  const { current: isOpenControlled } = React.useRef(openProp != null);
+  const [open, setOpen] = useControlledProp(openProp, false, false);
 
   const [value, setValue] = useControlledProp(
     valueProp,
@@ -254,7 +254,6 @@ const SelectBase = (props: SelectProps, ref: React.Ref<HTMLDivElement>) => {
 
   const isMounted = useIsMounted();
 
-  const [isOpen, setOpen] = React.useState(false);
   const [isFocused, setFocused] = React.useState(isAutoFocus);
 
   const placeholder =
@@ -273,8 +272,7 @@ const SelectBase = (props: SelectProps, ref: React.Ref<HTMLDivElement>) => {
 
   let computeDisplay = false;
 
-  const openState =
-    inputRef.current !== null && (isOpenControlled ? openProp : isOpen);
+  const openState = inputRef.current !== null && open;
 
   // No need to display any value if the field is empty.
   if (!isEmpty(value)) computeDisplay = true;
@@ -314,8 +312,9 @@ const SelectBase = (props: SelectProps, ref: React.Ref<HTMLDivElement>) => {
 
   const handleOpen = (): void => void onOpen?.();
   const handleClose = (): void => void onClose?.();
-  const closeMenu = (): void => void (!isOpenControlled && setOpen(false));
-  const openMenu = (): void => void (!isOpenControlled && setOpen(true));
+
+  const closeMenu = (): void => void (setOpen(false), handleClose());
+  const openMenu = (): void => void (setOpen(true), handleOpen());
 
   const removeChip = (childValue: string) => {
     const newValue = Array.isArray(value) ? value.slice() : [];
@@ -352,10 +351,7 @@ const SelectBase = (props: SelectProps, ref: React.Ref<HTMLDivElement>) => {
       controlProps.onChange(newValue);
     }
 
-    if (!multiple) {
-      closeMenu();
-      keepFocus();
-    }
+    if (!multiple) void (closeMenu(), keepFocus());
   };
 
   const shouldSelectChild = (childValue: string) => {
@@ -716,10 +712,9 @@ const SelectBase = (props: SelectProps, ref: React.Ref<HTMLDivElement>) => {
 
   const outsideClickHandler = useEventCallback(() => void closeMenu());
 
-  const handleEscapeKeyDown = useEventCallback(() => {
-    closeMenu();
-    keepFocus();
-  });
+  const handleEscapeKeyDown = useEventCallback(
+    () => void (closeMenu(), keepFocus())
+  );
 
   return (
     <div
@@ -782,6 +777,7 @@ const SelectBase = (props: SelectProps, ref: React.Ref<HTMLDivElement>) => {
           style={{ width: rootRef.current?.offsetWidth }}
           anchorNodeReference={inputBaseRef}
           ref={menuRef}
+          maxWidth="anchorWidth"
           className={classes.menu}
           preventPageScrolling={preventPageScrolling}
           onOutsideClick={outsideClickHandler}

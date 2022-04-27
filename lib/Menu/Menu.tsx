@@ -44,9 +44,13 @@ interface MenuBaseProps {
    */
   alignment?: PopperProps["alignment"];
   /**
-   * The `min-width` property of the menu.
+   * The `min-width` css property of the menu.
    */
-  minWidth?: number;
+  minWidth?: "anchorWidth" | number;
+  /**
+   * The `max-width` css property of the menu.
+   */
+  maxWidth?: "anchorWidth" | number;
   /**
    * The `placeholder` property of the search field.
    */
@@ -153,7 +157,8 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
     onOpen,
     onClose,
     style,
-    minWidth,
+    minWidth: minWidthProp,
+    maxWidth: maxWidthProp,
     onOutsideClick,
     outsideClickDetector,
     onEscapeKeyDown,
@@ -256,18 +261,19 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
   );
 
   const handleOpen = () => {
-    if (onOpen) onOpen();
+    onOpen?.();
     if (preventPageScrolling) preventPageScroll();
   };
 
   const handleClose = () => {
-    if (onClose) onClose();
+    onClose?.();
     if (preventPageScrolling) allowPageScroll();
   };
 
   useOnChange(openState, isOpen => {
     if (isOpen) handleOpen();
     else handleClose();
+
     reset();
   });
 
@@ -445,6 +451,11 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
     if (reference && reference !== anchorNode) setAnchorNode(reference);
   });
 
+  const minWidth =
+    minWidthProp === "anchorWidth" ? anchorNode?.offsetWidth : minWidthProp;
+  const maxWidth =
+    maxWidthProp === "anchorWidth" ? anchorNode?.offsetWidth : maxWidthProp;
+
   return !anchorNode ? null : (
     <Popper
       {...otherProps}
@@ -454,10 +465,11 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
         [classes.searchable]: searchable
       })}
       alignment={alignment}
+      offset={0}
       autoPlacement={{ excludeSides: ["left", "right"] }}
       virtualAnchor={anchorNode}
       open={openState}
-      style={{ ...style, minWidth }}
+      style={{ ...style, minWidth, maxWidth }}
       renderPopperContent={() => (
         <div className={classes.container}>
           {searchable && (
@@ -515,7 +527,14 @@ Menu.propTypes = {
     )
   }) as InferredTypeMap["anchorNodeReference"],
   alignment: PropTypes.oneOf(allowedAlignments),
-  minWidth: PropTypes.number,
+  minWidth: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf(["anchorWidth"])
+  ]) as InferredTypeMap["minWidth"],
+  maxWidth: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf(["anchorWidth"])
+  ]) as InferredTypeMap["maxWidth"],
   style: PropTypes.object,
   className: PropTypes.string,
   role: PropTypes.string,
