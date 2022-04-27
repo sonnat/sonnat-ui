@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import * as React from "react";
 import CloseLarge from "../internals/icons/CloseLarge";
 import type { MergeElementProps } from "../typings";
-import onNextFrame from "../utils/onNextFrame";
+import { onNextFrame, useOnChange } from "../utils";
 import useStyles from "./styles";
 
 interface SnackbarBaseProps {
@@ -139,6 +139,8 @@ const SnackbarBase = (props: SnackbarProps, ref: React.Ref<HTMLDivElement>) => {
     onTransitionEnd?.(e);
     if (!isOpen) setHidden(true);
   };
+
+  useOnChange(isOpen, currentOpen => void (!currentOpen && onClose?.()));
 
   return !isHidden ? (
     <div
