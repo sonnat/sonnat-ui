@@ -28,7 +28,7 @@ interface TooltipBaseProps {
    */
   text: string;
   /**
-   * Tooltip placement. It will be auto updated when it collide with the window.
+   * Tooltip placement. It will be auto updated when `autoPlacement={true}`.
    *
    * @default "top"
    */
