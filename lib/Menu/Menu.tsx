@@ -465,7 +465,7 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
         [classes.searchable]: searchable
       })}
       alignment={alignment}
-      offset={0}
+      offset={4}
       autoPlacement={{ excludeSides: ["left", "right"] }}
       virtualAnchor={anchorNode}
       open={openState}

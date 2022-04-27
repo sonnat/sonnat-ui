@@ -31,7 +31,6 @@ const useStyles = makeStyles(
         outline: "none"
       },
       container: {
-        marginTop: spaces[1].rem,
         width: "100%",
         height: "100%",
         borderRadius: radius.small,
