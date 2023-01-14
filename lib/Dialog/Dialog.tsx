@@ -95,7 +95,7 @@ const DialogBase = (props: DialogProps, ref: React.Ref<HTMLDivElement>) => {
   const dialogRef = React.useRef<HTMLDivElement | null>(null);
 
   const { height: resizeSensorHeight, registerNode: registerResizeSensor } =
-    useResizeSensor();
+    useResizeSensor({ mode: "debounce" });
 
   const [state, setState] = React.useState({
     hasOverflow: false,
