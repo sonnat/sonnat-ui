@@ -16,7 +16,7 @@ const makeStyles = <T = DefaultTheme, P = unknown, N extends string = string>(
   const classNamePrefix = name || classNamePrefixOption || "Sonnat";
   const meta = metaOption || classNamePrefix;
 
-  return createUseStyles<N, P, T>(styles, {
+  return createUseStyles(styles, {
     classNamePrefix,
     name,
     meta,
