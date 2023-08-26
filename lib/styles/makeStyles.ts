@@ -1,4 +1,4 @@
-import { createUseStyles } from "react-jss";
+import createUseStyles from "./createUseStyles";
 import type { Classes, MakeStylesOptions, Styles } from "../typings";
 import type { DefaultTheme } from "./defaultTheme";
 
