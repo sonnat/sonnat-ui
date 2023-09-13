@@ -192,6 +192,8 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
   const rootRef = React.useRef<HTMLDivElement>();
   const ref = useForkedRefs(refProp, rootRef);
 
+  const searchInputFocused = React.useRef(false);
+
   const isRTL = theme.direction === "rtl";
   const isSearchResultEmpty = !!searchResult && searchResult.length === 0;
 
@@ -334,7 +336,20 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
     });
   });
 
+  const handleSearchFocus = React.useCallback(() => {
+    searchInputFocused.current = true;
+  }, []);
+
+  const handleSearchBlur = React.useCallback(() => {
+    searchInputFocused.current = false;
+  }, []);
+
   const arrowDownListener = React.useCallback(() => {
+    if (searchInputFocused.current) {
+      focusIndex.current = -1;
+      focusedNode.current = null;
+    }
+
     const hasValidResults = searchResult !== null;
 
     const itemsSize = hasValidResults
@@ -360,6 +375,11 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
   }, [searchResult]);
 
   const arrowUpListener = React.useCallback(() => {
+    if (searchInputFocused.current) {
+      focusIndex.current = -1;
+      focusedNode.current = null;
+    }
+
     const hasValidResults = searchResult !== null;
 
     const itemsSize = hasValidResults
@@ -414,10 +434,12 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
           if (onEscapeKeyDown) onEscapeKeyDown(e);
           break;
         case " ":
+          if (searchInputFocused.current) return;
+
           // preventing the default behaviour
           e.preventDefault();
 
-          if (focusedNode.current) focusedNode.current.click();
+          focusedNode.current?.click();
           break;
         default:
           return;
@@ -480,6 +502,8 @@ const MenuBase = (props: MenuProps, refProp: React.Ref<HTMLDivElement>) => {
                 placeholder={searchPlaceholder}
                 value={searchValue}
                 size={dense ? "medium" : "large"}
+                onFocus={handleSearchFocus}
+                onBlur={handleSearchBlur}
                 onChange={throttle((v: string) => {
                   searchChangeListener(v);
                 }, 250)}
